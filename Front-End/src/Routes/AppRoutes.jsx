@@ -13,12 +13,17 @@ import ViewCenterInfo from '../pages/Superadmin/ViewCenterInfo';
 import EditCenterAdmin from '../pages/Superadmin/EditCenterAdmin';
 import ForgotPassword from '../pages/ForgotPassword';
 import PrivateRoute from '../components/PrivateRoute';
+import CenterAdminDashboard from '../pages/CenterAdmin/Dashboard';
+import AddPatient from '../pages/CenterAdmin/patients/AddPatient';
+import PatientList from '../pages/CenterAdmin/patients/PatientList';
+import ManagePatients from '../pages/CenterAdmin/patients/ManagePatients';
+import EditPatient from '../pages/CenterAdmin/patients/EditPatient';
 
 export default function AppRoutes() {
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
@@ -39,6 +44,17 @@ export default function AppRoutes() {
         <Route path="/superadmin/edit-center/:id" element={<EditCenter />} />
         <Route path="/superadmin/view-center/:id" element={<ViewCenterInfo />} />
         <Route path="/superadmin/edit-admin/:id" element={<EditCenterAdmin />} />
+
+        <Route path="/CenterAdmin/Dashboard" element={<CenterAdminDashboard />} />
+        <Route path='/CenterAdmin/patients/addpatient' element={<AddPatient />} />
+        <Route path='/CenterAdmin/patients/PatientList' element={<PatientList />} />
+        <Route path='CenterAdmin/patients/ManagePatients' element={<ManagePatients />} />
+        <Route path='CenterAdmin/patients/EditPatient/:id' element={<EditPatient/>} />
+
+
+
+
+
       </Route>
     </Routes>
   );

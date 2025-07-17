@@ -36,7 +36,7 @@ export default function ForgotPassword() {
 
 
             alert('✅ Password updated successfully');
-            navigate('/');
+            navigate('/login');
         } catch (err) {
             alert(err.response?.data?.message || '❌ Failed to reset password');
         }

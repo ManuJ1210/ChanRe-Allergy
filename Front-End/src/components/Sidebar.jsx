@@ -7,12 +7,15 @@ import {
   FaUserShield,
   FaUsers,
   FaUserCheck,
+  FaUserMd,
+  FaUserTie,
+  FaVials,
+  FaHome,
 } from 'react-icons/fa';
 
 export default function Sidebar() {
   const location = useLocation();
-  const [centerOpen, setCenterOpen] = useState(false);
-  const [followUpOpen, setFollowUpOpen] = useState(false);
+  const [centerOpen, setCenterOpen] = useState(null); // can be 'doctors', 'receptionists', or 'lab'
 
   const userInfo = useSelector((state) => state.user?.userInfo);
   const role = userInfo?.role || '';
@@ -43,8 +46,8 @@ export default function Sidebar() {
             <SidebarGroup
               label="Center Admin"
               icon={<FaUserShield />}
-              open={centerOpen}
-              toggle={() => setCenterOpen(!centerOpen)}
+              open={centerOpen === 'center'}
+              toggle={() => setCenterOpen(centerOpen === 'center' ? null : 'center')}
               links={[
                 { to: "/superadmin/centers", label: "Manage Center" },
                 { to: "/superadmin/centers/add", label: "Add Center" },
@@ -56,31 +59,82 @@ export default function Sidebar() {
             <SidebarGroup
               label="Follow Up"
               icon={<FaUserCheck />}
-              open={followUpOpen}
-              toggle={() => setFollowUpOpen(!followUpOpen)}
+              open={centerOpen === 'followup'}
+              toggle={() => setCenterOpen(centerOpen === 'followup' ? null : 'followup')}
               links={[
                 { to: "/superadmin/follow-up/view", label: "View FollowUp" },
-                { to: "/superadmin/follow-up/manage", label: "Manage FollowUp" }
+                { to: "/superadmin/follow-up/manage", label: "Manage FollowUp" },
               ]}
               currentPath={location.pathname}
             />
 
-            <SidebarLink
-              to="/superadmin/patients"
-              label="Patients"
-              icon={<FaUsers />}
-              isActive={isActive("/superadmin/patients")}
+             <SidebarGroup
+              label="Manage Lab Staff"
+              icon={<FaVials />}
+              open={centerOpen === 'lab'}
+              toggle={() => setCenterOpen(centerOpen === 'lab' ? null : 'lab')}
+              links={[
+                { to: "/centeradmin/lab/add", label: "Add Lab Staff" },
+                { to: "/centeradmin/lab", label: "Lab Staff List" },
+              ]}
+              currentPath={location.pathname}
             />
           </>
         )}
 
         {role === 'centeradmin' && (
-          <SidebarLink
-            to="/centeradmin/dashboard"
-            label="Center Dashboard"
-            icon={<FaHospitalAlt />}
-            isActive={isActive("/centeradmin/dashboard")}
-          />
+          <>
+            <SidebarLink
+              to="/centeradmin/dashboard"
+              label="Dashboard"
+              icon={<FaHome />}
+              isActive={isActive("/centeradmin/dashboard")}
+            />
+
+            <SidebarGroup
+              label="Doctors"
+              icon={<FaUserMd />}
+              open={centerOpen === 'doctors'}
+              toggle={() => setCenterOpen(centerOpen === 'doctors' ? null : 'doctors')}
+              links={[
+                { to: "/centeradmin/doctors/add", label: "Add Doctor" },
+                { to: "/centeradmin/doctors", label: "Doctor List" },
+              ]}
+              currentPath={location.pathname}
+            />
+
+            <SidebarGroup
+              label="Receptionists"
+              icon={<FaUserTie />}
+              open={centerOpen === 'receptionists'}
+              toggle={() => setCenterOpen(centerOpen === 'receptionists' ? null : 'receptionists')}
+              links={[
+                { to: "/centeradmin/receptionists/add", label: "Add Receptionist" },
+                { to: "/centeradmin/receptionists", label: "Receptionist List" },
+              ]}
+              currentPath={location.pathname}
+            />
+
+            <SidebarGroup
+              label="Patients"
+              icon={<FaVials />}
+              open={centerOpen === 'patients'}
+              toggle={() => setCenterOpen(centerOpen === 'patients' ? null : 'patients')}
+              links={[
+                { to: "/CenterAdmin/patients/addpatient", label: "Add patients" },
+                { to: "/CenterAdmin/patients/PatientList", label: "Patients List" },
+                 { to: "/CenterAdmin/patients/ManagePatients", label: "Manage patients" },
+              ]}
+              currentPath={location.pathname}
+            />
+
+            <SidebarLink
+              to="/centeradmin/center-info"
+              label="Center Profile"
+              icon={<FaHospitalAlt />}
+              isActive={isActive("/centeradmin/center-info")}
+            />
+          </>
         )}
       </nav>
     </aside>
