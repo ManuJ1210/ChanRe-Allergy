@@ -1,82 +1,36 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setCenterField, setAdminField, resetForm, createCenterWithAdmin } from "../../redux/slices/centerSlice";
+
 import { useNavigate } from "react-router-dom";
-import API from "../../services/api";
 import {
   FaHospital, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaPlusCircle,
-  FaUserAlt, FaUserMd, FaIdBadge, FaCode, FaPhone, FaUserCircle, FaKey, FaUserCog
+  FaUserAlt, FaUserMd, FaIdBadge, FaCode, FaPhone, FaUserCircle, FaKey, FaUserCog, FaEye, FaEyeSlash
 } from "react-icons/fa";
 
 export default function AddCenterWithAdmin() {
-  const [center, setCenter] = useState({
-    name: '',
-    location: '',
-    address: '',
-    email: '',
-    phone: ''
-  });
-
-  const [admin, setAdmin] = useState({
-    name: "",
-    qualification: "",
-    designation: "",
-    kmcNo: "",
-    hospitalName: "",
-    centerCode: "",
-    phone: "",
-    email: "",
-    username: "",
-    password: "",
-    userType: "centeradmin"
-  });
-
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { center, admin, success, error, loading } = useSelector((state) => state.center);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleCenterChange = (e) => {
-    setCenter({ ...center, [e.target.name]: e.target.value });
+    dispatch(setCenterField({ name: e.target.name, value: e.target.value }));
   };
 
   const handleAdminChange = (e) => {
-    setAdmin({ ...admin, [e.target.name]: e.target.value });
+    dispatch(setAdminField({ name: e.target.name, value: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const payload = {
-        center: {
-          centername: center.name,
-          location: center.location,
-          fulladdress: center.address,
-          email: center.email,
-          phone: center.phone
-        },
-        admin
-      };
+    const result = await dispatch(createCenterWithAdmin({ center, admin }));
 
-      await API.post("/centers/create-with-admin", payload);
-      setSuccess(true);
-      setError('');
-      setCenter({ name: '', location: '', address: '', email: '', phone: '' });
-      setAdmin({
-        name: "",
-        qualification: "",
-        designation: "",
-        kmcNo: "",
-        hospitalName: "",
-        centerCode: "",
-        phone: "",
-        email: "",
-        username: "",
-        password: "",
-        userType: "centeradmin"
-      });
-
-      setTimeout(() => navigate("/superadmin/centers"), 1500);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to create center and admin");
-      setSuccess(false);
+    if (createCenterWithAdmin.fulfilled.match(result)) {
+      setTimeout(() => {
+        dispatch(resetForm());
+        navigate("/superadmin/centers");
+      }, 1500);
     }
   };
 
@@ -115,10 +69,33 @@ export default function AddCenterWithAdmin() {
               <Input label="KMC No" name="kmcNo" value={admin.kmcNo} onChange={handleAdminChange} icon={<FaIdBadge />} />
               <Input label="Hospital Name" name="hospitalName" value={admin.hospitalName} onChange={handleAdminChange} icon={<FaHospital />} />
               <Input label="Center Code" name="centerCode" value={admin.centerCode} onChange={handleAdminChange} icon={<FaCode />} />
-              <Input label="Phone" name="mobile" value={admin.phone} onChange={handleAdminChange} icon={<FaPhone />} />
+              <Input label="Phone" name="phone" value={admin.phone} onChange={handleAdminChange} icon={<FaPhone />} />
               <Input label="Email" name="email" type="email" value={admin.email} onChange={handleAdminChange} icon={<FaEnvelope />} />
               <Input label="Username" name="username" value={admin.username} onChange={handleAdminChange} icon={<FaUserCircle />} />
-              <Input label="Password" name="password" type="password" value={admin.password} onChange={handleAdminChange} icon={<FaKey />} />
+
+              {/* Password with eye toggle */}
+              <div>
+                <label className="mb-2 text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FaKey className="text-gray-500" />
+                  Password *
+                </label>
+                <div className="relative">
+                  <input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    value={admin.password}
+                    onChange={handleAdminChange}
+                    required
+                    className="w-full border border-gray-300 p-3 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span
+                    className="absolute right-3 top-3 text-gray-500 cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
+              </div>
 
               {/* User Type */}
               <div className="col-span-1 md:col-span-2">
@@ -145,9 +122,10 @@ export default function AddCenterWithAdmin() {
           <div className="pt-4 flex justify-end">
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold shadow transition"
+              disabled={loading}
+              className={`px-8 py-3 rounded-lg font-semibold shadow transition text-white ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'}`}
             >
-              Submit Both
+              {loading ? "Submitting..." : "Submit Both"}
             </button>
           </div>
         </form>
@@ -156,6 +134,7 @@ export default function AddCenterWithAdmin() {
   );
 }
 
+// Reusable components
 function Input({ label, name, value, onChange, type = "text", icon }) {
   return (
     <div>

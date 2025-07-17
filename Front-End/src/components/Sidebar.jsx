@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   FaHospitalAlt,
   FaChevronDown,
@@ -13,57 +14,74 @@ export default function Sidebar() {
   const [centerOpen, setCenterOpen] = useState(false);
   const [followUpOpen, setFollowUpOpen] = useState(false);
 
+  const userInfo = useSelector((state) => state.user?.userInfo);
+  const role = userInfo?.role || '';
+
   const isActive = (path) => location.pathname === path;
 
   return (
-    <aside className="w-64 h-screen bg-white border-r border-gray-200 shadow-sm text-gray-700">
+    <aside className="w-74 h-screen bg-white border-r border-gray-200 shadow-sm text-gray-700">
       <div className="p-4 border-b border-gray-200">
         <h2 className="text-2xl font-bold tracking-wide text-blue-800">
           Chanre<span className="text-blue-500">Allergy</span>
         </h2>
-        <p className="text-sm text-gray-400 mt-1">Superadmin Panel</p>
+        <p className="text-sm text-gray-400 mt-1 capitalize">
+          {role ? `${role} Panel` : 'User Panel'}
+        </p>
       </div>
 
       <nav className="flex flex-col p-4 space-y-1 text-sm">
-        <SidebarLink
-          to="/superadmin/dashboard"
-          label="Dashboard"
-          icon={<FaHospitalAlt />}
-          isActive={isActive("/superadmin/dashboard")}
-        />
+        {role === 'superadmin' && (
+          <>
+            <SidebarLink
+              to="/superadmin/dashboard"
+              label="Dashboard"
+              icon={<FaHospitalAlt />}
+              isActive={isActive("/superadmin/dashboard")}
+            />
 
-        <SidebarGroup
-          label="Center Admin"
-          icon={<FaUserShield />}
-          open={centerOpen}
-          toggle={() => setCenterOpen(!centerOpen)}
-          links={[
-            { to: "/superadmin/centers", label: "Manage Center" },
-            { to: "/superadmin/centers/add", label: "Add Center" },
-            { to: "/superadmin/manage-admins", label: "Manage Admins" },
-           
-          ]}
-          currentPath={location.pathname}
-        />
+            <SidebarGroup
+              label="Center Admin"
+              icon={<FaUserShield />}
+              open={centerOpen}
+              toggle={() => setCenterOpen(!centerOpen)}
+              links={[
+                { to: "/superadmin/centers", label: "Manage Center" },
+                { to: "/superadmin/centers/add", label: "Add Center" },
+                { to: "/superadmin/manage-admins", label: "Manage Admins" },
+              ]}
+              currentPath={location.pathname}
+            />
 
-        <SidebarGroup
-          label="Follow Up"
-          icon={<FaUserCheck />}
-          open={followUpOpen}
-          toggle={() => setFollowUpOpen(!followUpOpen)}
-          links={[
-            { to: "/superadmin/follow-up/view", label: "View FollowUp" },
-            { to: "/superadmin/follow-up/manage", label: "Manage FollowUp" }
-          ]}
-          currentPath={location.pathname}
-        />
+            <SidebarGroup
+              label="Follow Up"
+              icon={<FaUserCheck />}
+              open={followUpOpen}
+              toggle={() => setFollowUpOpen(!followUpOpen)}
+              links={[
+                { to: "/superadmin/follow-up/view", label: "View FollowUp" },
+                { to: "/superadmin/follow-up/manage", label: "Manage FollowUp" }
+              ]}
+              currentPath={location.pathname}
+            />
 
-        <SidebarLink
-          to="/superadmin/patients"
-          label="Patients"
-          icon={<FaUsers />}
-          isActive={isActive("/superadmin/patients")}
-        />
+            <SidebarLink
+              to="/superadmin/patients"
+              label="Patients"
+              icon={<FaUsers />}
+              isActive={isActive("/superadmin/patients")}
+            />
+          </>
+        )}
+
+        {role === 'centeradmin' && (
+          <SidebarLink
+            to="/centeradmin/dashboard"
+            label="Center Dashboard"
+            icon={<FaHospitalAlt />}
+            isActive={isActive("/centeradmin/dashboard")}
+          />
+        )}
       </nav>
     </aside>
   );

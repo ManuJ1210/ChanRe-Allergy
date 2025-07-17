@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import API from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../redux/slices/userSlice'; // ✅ Updated import
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -14,9 +17,17 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await API.post('/auth/login', form);
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
-      navigateRole(res.data.user.role.toLowerCase());
+      const { token, user } = res.data;
+
+      // Save in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Update Redux state
+      dispatch(setUser(user)); // ✅ Correct Redux Toolkit usage
+
+      // Navigate based on role
+      navigateRole(user.role.toLowerCase());
     } catch (err) {
       alert(err.response?.data?.message || 'Login failed');
     }
@@ -56,6 +67,15 @@ export default function Login() {
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
+        <div className="text-right">
+          <button
+            type="button"
+            onClick={() => navigate('/forgot-password')}
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Forgot Password?
+          </button>
+        </div>
         <button
           type="submit"
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg shadow transition duration-300"

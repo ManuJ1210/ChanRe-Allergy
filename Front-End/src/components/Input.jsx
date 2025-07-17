@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Input({ label, icon, type = 'text', name, value, onChange }) {
+export default function Input({ label, icon, type = 'text', name, value, onChange, required = true }) {
   return (
     <div>
       <label className="block text-gray-700 font-medium mb-1">{label}</label>
@@ -12,7 +12,7 @@ export default function Input({ label, icon, type = 'text', name, value, onChang
           value={value}
           onChange={onChange}
           className="w-full outline-none border-none bg-transparent text-gray-800"
-          required={name !== 'password'} // Make password optional
+          required={required}
         />
       </div>
     </div>

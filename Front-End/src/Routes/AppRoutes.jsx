@@ -11,19 +11,25 @@ import ManageFollowUp from '../pages/Superadmin/ManageFollowUp';
 import EditCenter from '../pages/Superadmin/EditCenter';
 import ViewCenterInfo from '../pages/Superadmin/ViewCenterInfo';
 import EditCenterAdmin from '../pages/Superadmin/EditCenterAdmin';
-
-
-
+import ForgotPassword from '../pages/ForgotPassword';
+import PrivateRoute from '../components/PrivateRoute';
 
 export default function AppRoutes() {
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
-      {/* Protected routes with layout */}
-      <Route element={<DashboardLayout />}>
+      {/* Protected routes */}
+      <Route
+        element={
+          <PrivateRoute>
+            <DashboardLayout />
+          </PrivateRoute>
+        }
+      >
         <Route path="/superadmin/dashboard" element={<SuperadminDashboard />} />
         <Route path="/superadmin/centers" element={<CentersList />} />
         <Route path="/superadmin/centers/add" element={<AddCenter />} />
@@ -32,8 +38,7 @@ export default function AppRoutes() {
         <Route path="/superadmin/follow-up/manage" element={<ManageFollowUp />} />
         <Route path="/superadmin/edit-center/:id" element={<EditCenter />} />
         <Route path="/superadmin/view-center/:id" element={<ViewCenterInfo />} />
-       <Route path="/superadmin/edit-admin/:id" element={<EditCenterAdmin />} />
-
+        <Route path="/superadmin/edit-admin/:id" element={<EditCenterAdmin />} />
       </Route>
     </Routes>
   );

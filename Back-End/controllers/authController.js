@@ -12,7 +12,7 @@ const generateToken = (user) => {
 
 // Register Controller
 export const register = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, phone, centerId } = req.body;
 
   try {
     const existing = await User.findOne({ email });
@@ -20,16 +20,25 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    const user = await User.create({ name, email, password, role });
+    const user = await User.create({
+      name,
+      email,
+      password,
+      role,
+      phone,
+      centerId: centerId || null,
+    });
 
     res.status(201).json({
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        phone: user.phone || 'N/A',
+        centerId: user.centerId || 'N/A',
       },
-      token: generateToken(user)
+      token: generateToken(user),
     });
   } catch (err) {
     res.status(500).json({ message: 'Registration failed', error: err.message });
@@ -52,11 +61,37 @@ export const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        phone: user.phone || 'N/A',
+        centerId: user.centerId || 'N/A',
       },
-      token: generateToken(user)
+      token: generateToken(user),
     });
   } catch (err) {
     res.status(500).json({ message: 'Login failed', error: err.message });
+  }
+};
+
+// Forgot Password Controller
+export const forgotPassword = async (req, res) => {
+  const { email, newPassword, confirmPassword } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User with this email does not exist' });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: 'Passwords do not match' });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({ message: 'Password updated successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Password reset failed', error: err.message });
   }
 };
