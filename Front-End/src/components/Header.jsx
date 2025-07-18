@@ -7,31 +7,45 @@ import { logout } from '../redux/slices/userSlice';
 export default function Header() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const user = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-
-    // Clear Redux state
     dispatch(logout());
-
-    // Redirect to login page
     navigate('/');
+  };
+
+  const handleSearch = () => {
+    if (!searchTerm.trim()) return;
+    // Example: Navigate to a search results page or trigger a filter
+    navigate(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
   };
 
   return (
     <>
-      <header className="flex items-center justify-between bg-white px-6 py-3 border-b border-gray-200 shadow-sm sticky top-0 z-50">
+      <header className="flex items-center justify-between bg-white px-6 py-5.5 border-b border-gray-200 shadow-sm sticky top-0 z-50">
         {/* Search bar */}
         <div className="flex items-center gap-2 w-full max-w-md">
-          <FaSearch className="text-gray-400" />
+          <FaSearch
+            className="text-gray-400 cursor-pointer"
+            onClick={handleSearch}
+          />
           <input
             type="text"
             placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={handleKeyDown}
             className="w-full px-2 py-1 bg-gray-50 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
           />
         </div>
@@ -73,7 +87,7 @@ export default function Header() {
 
       {/* Profile Modal */}
       {showProfile && (
-        <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50 bg-black">
           <div className="bg-white rounded-lg w-full max-w-sm p-6 shadow-lg relative">
             <button
               onClick={() => setShowProfile(false)}

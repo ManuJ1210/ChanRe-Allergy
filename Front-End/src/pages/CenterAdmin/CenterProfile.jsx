@@ -12,7 +12,7 @@ const CenterProfile = () => {
     const fetchCenterData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5000/api/centers/my-center", {
+        const response = await axios.get("http://localhost:5000/api/centers/create-with-admin", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

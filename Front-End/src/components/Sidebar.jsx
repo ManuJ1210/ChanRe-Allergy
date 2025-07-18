@@ -23,7 +23,7 @@ export default function Sidebar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <aside className="w-74 h-screen bg-white border-r border-gray-200 shadow-sm text-gray-700">
+    <aside className="fixed top-0 left-0 h-screen w-[18.5rem] bg-white border-r border-gray-200 shadow-sm text-gray-700 z-50 overflow-y-auto">
       <div className="p-4 border-b border-gray-200">
         <h2 className="text-2xl font-bold tracking-wide text-blue-800">
           Chanre<span className="text-blue-500">Allergy</span>
@@ -68,7 +68,7 @@ export default function Sidebar() {
               currentPath={location.pathname}
             />
 
-             <SidebarGroup
+            <SidebarGroup
               label="Manage Lab Staff"
               icon={<FaVials />}
               open={centerOpen === 'lab'}
@@ -123,7 +123,7 @@ export default function Sidebar() {
               links={[
                 { to: "/CenterAdmin/patients/addpatient", label: "Add patients" },
                 { to: "/CenterAdmin/patients/PatientList", label: "Patients List" },
-                 { to: "/CenterAdmin/patients/ManagePatients", label: "Manage patients" },
+                { to: "/CenterAdmin/patients/ManagePatients", label: "Manage patients" },
               ]}
               currentPath={location.pathname}
             />

@@ -20,6 +20,7 @@ import ManagePatients from '../pages/CenterAdmin/patients/ManagePatients';
 import EditPatient from '../pages/CenterAdmin/patients/EditPatient';
 import AddTest from '../pages/CenterAdmin/patients/AddTest';
 import ShowTests from '../pages/CenterAdmin/patients/ShowTests';
+import AddHistory from '../pages/CenterAdmin/patients/AddHistory/AddHistory';
 import CenterProfile from '../pages/CenterAdmin/CenterProfile';
 import Home from '../pages/Homepage';
 import Contact from '../pages/Contact';
@@ -63,6 +64,7 @@ export default function AppRoutes() {
         <Route path='CenterAdmin/patients/EditPatient/:id' element={<EditPatient/>} />
         <Route path="/CenterAdmin/patients/AddTest/:id" element={<AddTest />} />
         <Route path="/CenterAdmin/patients/show-tests/:id" element={<ShowTests />} />
+        <Route path="/CenterAdmin/patients/AddHistory/:id" element={<AddHistory />} />
         <Route path="/CenterAdmin/center-profile" element={<CenterProfile />} />
 
 

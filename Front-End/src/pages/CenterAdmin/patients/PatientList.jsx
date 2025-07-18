@@ -103,10 +103,17 @@ export default function PatientList() {
                     </button>
                   
                     <button
-                      className="bg-orange-300 text-orange-800 px-2 py-1 rounded-md hover:bg-orange-400 transition"
+                      className="bg-orange-100 text-orange-800 px-2 py-1 rounded-md hover:bg-orange-200 transition"
                       onClick={() => navigate(`/CenterAdmin/patients/AddTest/${patient._id}`)}
                     >
                       Add Test
+                    </button>
+
+                    <button
+                      className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-md hover:bg-yellow-200 transition"
+                      onClick={() => navigate(`/CenterAdmin/patients/AddHistory/${patient._id}`)}
+                    >
+                      Add History
                     </button>
                   </td>
                 </tr>

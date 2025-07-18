@@ -8,6 +8,7 @@ import authRoutes from './routes/authRoutes.js';
 import centerRoutes from './routes/centerRoutes.js';
 import centerAdminRoutes from './routes/centerAdminRoutes.js';
 import patientRoutes from './routes/patientRoutes.js';
+import historyRoutes from './routes/historyRoutes.js';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/centers', centerRoutes);
 app.use('/api/center-admins', centerAdminRoutes);
 app.use('/api/patients', patientRoutes);
+app.use('/api/history', historyRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
