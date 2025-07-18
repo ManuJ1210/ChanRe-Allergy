@@ -129,10 +129,10 @@ export default function Sidebar() {
             />
 
             <SidebarLink
-              to="/centeradmin/center-info"
+              to="/CenterAdmin/center-profile"
               label="Center Profile"
               icon={<FaHospitalAlt />}
-              isActive={isActive("/centeradmin/center-info")}
+              isActive={isActive("/CenterAdmin/center-profile")}
             />
           </>
         )}

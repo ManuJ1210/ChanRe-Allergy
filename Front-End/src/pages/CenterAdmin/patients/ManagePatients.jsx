@@ -1,113 +1,91 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function ManagePatients() {
   const [patients, setPatients] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const navigate = useNavigate();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const patientsPerPage = 5;
-
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get("/api/patients", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setPatients(response.data.patients || []);
-      } catch (error) {
-        console.error("Error fetching patients:", error);
-        setPatients([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPatients();
-  }, []);
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this patient?")) return;
-
+  const fetchPatients = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`/api/patients/${id}`, {
+      const response = await axios.get("http://localhost:5000/api/patients", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setPatients((prev) => prev.filter((p) => p._id !== id));
+      const data = response.data;
+      const list = Array.isArray(data) ? data : data.patients || [];
+      setPatients(list);
     } catch (error) {
-      console.error("Failed to delete patient:", error);
+      console.error("Error fetching patients:", error);
+      setPatients([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Search filtering
-  const filteredPatients = patients.filter((p) =>
-    `${p.name} ${p.email}`.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    fetchPatients();
+  }, []);
 
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
-  const indexOfLast = currentPage * patientsPerPage;
-  const indexOfFirst = indexOfLast - patientsPerPage;
-  const currentPatients = filteredPatients.slice(indexOfFirst, indexOfLast);
-
-  const changePage = (page) => {
-    if (page >= 1 && page <= totalPages) setCurrentPage(page);
-  };
+  if (loading) {
+    return <div className="text-center py-10">Loading patients...</div>;
+  }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold text-blue-700 mb-4">Manage Patients</h1>
+    <div className="p-4 sm:p-6 lg:p-8">
+      <h1 className="text-2xl font-semibold text-gray-800 mb-6">Manage Patients</h1>
 
-      <input
-        type="text"
-        placeholder="Search by name or email..."
-        className="mb-4 p-2 w-full md:w-1/3 border border-gray-300 rounded shadow-sm"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-
-      <div className="overflow-x-auto bg-white rounded-xl shadow border">
-        <table className="min-w-full divide-y divide-gray-200 text-sm">
+      <div className="overflow-x-auto bg-white rounded-xl shadow-md">
+        <table className="min-w-full divide-y divide-gray-200 text-sm text-gray-700">
           <thead className="bg-gray-100">
             <tr>
-              <th className="px-6 py-3 text-left font-medium text-gray-700">Name</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-700">Email</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-700">Phone</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-700">Actions</th>
+              <th className="px-4 py-3 text-left font-medium">S.No</th>
+              <th className="px-4 py-3 text-left font-medium">Name</th>
+              <th className="px-4 py-3 text-left font-medium">Email</th>
+              <th className="px-4 py-3 text-left font-medium">Phone</th>
+              <th className="px-4 py-3 text-left font-medium">Age</th>
+              <th className="px-4 py-3 text-left font-medium">Gender</th>
+              <th className="px-4 py-3 text-left font-medium">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
-            {loading ? (
+          <tbody className="divide-y divide-gray-100">
+            {patients.length === 0 ? (
               <tr>
-                <td colSpan="4" className="text-center py-6 text-gray-500">
-                  Loading patients...
-                </td>
-              </tr>
-            ) : currentPatients.length === 0 ? (
-              <tr>
-                <td colSpan="4" className="text-center py-6 text-gray-500">
+                <td colSpan="7" className="text-center py-6 text-gray-500">
                   No patients found.
                 </td>
               </tr>
             ) : (
-              currentPatients.map((patient) => (
-                <tr key={patient._id}>
-                  <td className="px-6 py-4">{patient.name}</td>
-                  <td className="px-6 py-4">{patient.email}</td>
-                  <td className="px-6 py-4">{patient.phone}</td>
-                  <td className="px-6 py-4 space-x-2">
-                    <button className="text-blue-600 hover:underline">View</button>
-                    <button className="text-green-600 hover:underline">Edit</button>
+              patients.map((patient, index) => (
+                <tr key={patient._id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3">{index + 1}</td>
+                  <td className="px-4 py-3">{patient.name}</td>
+                  <td className="px-4 py-3">{patient.email}</td>
+                  <td className="px-4 py-3">{patient.contact || patient.phone}</td>
+                  <td className="px-4 py-3">{patient.age}</td>
+                  <td className="px-4 py-3 capitalize">{patient.gender}</td>
+                  <td className="px-4 py-3 space-x-1 whitespace-nowrap">
                     <button
-                      onClick={() => handleDelete(patient._id)}
-                      className="text-red-600 hover:underline"
+                      onClick={() => navigate(`/CenterAdmin/patients/EditPatient/${patient._id}`)}
+                      className="bg-green-100 text-green-700 px-2 py-1 rounded-md hover:bg-green-200 transition"
                     >
-                      Delete
+                      Edit
+                    </button>
+                    <button
+                    onClick={() => navigate(`/CenterAdmin/patients/show-tests/${patient._id}`)}
+
+                      className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md hover:bg-blue-200 transition"
+                    >
+                      Show Tests
+                    </button>
+                    <button
+                      onClick={() => setSelectedPatient(patient)}
+                      className="bg-gray-100 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-200 transition"
+                    >
+                      View History
                     </button>
                   </td>
                 </tr>
@@ -117,36 +95,27 @@ export default function ManagePatients() {
         </table>
       </div>
 
-      {/* Pagination Controls */}
-      {totalPages > 1 && (
-        <div className="mt-6 flex justify-center space-x-2">
-          <button
-            onClick={() => changePage(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-          >
-            Prev
-          </button>
-          {Array.from({ length: totalPages }, (_, i) => (
+      {/* Modal */}
+      {selectedPatient && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">Patient History</h2>
             <button
-              key={i + 1}
-              onClick={() => changePage(i + 1)}
-              className={`px-3 py-1 border rounded ${
-                currentPage === i + 1
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 hover:bg-gray-200"
-              }`}
+              onClick={() => setSelectedPatient(null)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-lg font-bold"
             >
-              {i + 1}
+              ×
             </button>
-          ))}
-          <button
-            onClick={() => changePage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-          >
-            Next
-          </button>
+            <div className="space-y-2 text-gray-700 text-sm">
+              <p><strong>Name:</strong> {selectedPatient.name}</p>
+              <p><strong>Email:</strong> {selectedPatient.email}</p>
+              <p><strong>Phone:</strong> {selectedPatient.contact || selectedPatient.phone}</p>
+              <p><strong>Age:</strong> {selectedPatient.age}</p>
+              <p><strong>Gender:</strong> {selectedPatient.gender}</p>
+              {selectedPatient.address && <p><strong>Address:</strong> {selectedPatient.address}</p>}
+              {selectedPatient.centerId?.name && <p><strong>Center:</strong> {selectedPatient.centerId.name}</p>}
+            </div>
+          </div>
         </div>
       )}
     </div>

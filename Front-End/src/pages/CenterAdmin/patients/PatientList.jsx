@@ -84,7 +84,7 @@ export default function PatientList() {
                   <td className="px-4 py-3 capitalize">{patient.gender}</td>
                   <td className="px-4 py-3 space-x-1 whitespace-nowrap">
                     <button
-                      onClick={() => setSelectedPatient(patient)} // 👈 open modal
+                      onClick={() => setSelectedPatient(patient)} 
                       className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md hover:bg-blue-200 transition"
                     >
                       View
@@ -100,6 +100,13 @@ export default function PatientList() {
                       className="bg-red-100 text-red-700 px-2 py-1 rounded-md hover:bg-red-200 transition"
                     >
                       Delete
+                    </button>
+                  
+                    <button
+                      className="bg-orange-300 text-orange-800 px-2 py-1 rounded-md hover:bg-orange-400 transition"
+                      onClick={() => navigate(`/CenterAdmin/patients/AddTest/${patient._id}`)}
+                    >
+                      Add Test
                     </button>
                   </td>
                 </tr>

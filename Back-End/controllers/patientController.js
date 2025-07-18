@@ -1,7 +1,7 @@
-import Patient from '../models/patient.js';
+import Patient from '../models/Patient.js';
 
-// ✅ Create Patient
-export const addPatient = async (req, res) => {
+// ✅ Add New Patient
+const addPatient = async (req, res) => {
   try {
     const {
       name,
@@ -14,7 +14,6 @@ export const addPatient = async (req, res) => {
     } = req.body;
 
     const centerId = req.user.centerId;
-
     if (!centerId) {
       return res.status(400).json({ message: "Center ID is missing from user." });
     }
@@ -23,7 +22,7 @@ export const addPatient = async (req, res) => {
       name,
       gender,
       age,
-      contact,
+      phone: contact,
       email,
       address,
       referringPhysician,
@@ -39,7 +38,7 @@ export const addPatient = async (req, res) => {
 };
 
 // ✅ Get All Patients
-export const getPatients = async (req, res) => {
+const getPatients = async (req, res) => {
   try {
     const patients = await Patient.find({ centerId: req.user.centerId }).populate('centerId', 'name');
     res.json(patients);
@@ -49,15 +48,13 @@ export const getPatients = async (req, res) => {
 };
 
 // ✅ Get Single Patient by ID
-export const getPatientById = async (req, res) => {
+const getPatientById = async (req, res) => {
   try {
     const { id } = req.params;
     const patient = await Patient.findById(id);
-
     if (!patient) {
       return res.status(404).json({ message: 'Patient not found' });
     }
-
     res.json(patient);
   } catch (error) {
     console.error("Get patient by ID error:", error);
@@ -65,8 +62,8 @@ export const getPatientById = async (req, res) => {
   }
 };
 
-// ✅ Update Patient (Edit)
-export const updatePatient = async (req, res) => {
+// ✅ Update Patient
+const updatePatient = async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -85,7 +82,7 @@ export const updatePatient = async (req, res) => {
         name,
         gender,
         age,
-        contact,
+        phone: contact,
         email,
         address,
         referringPhysician
@@ -105,12 +102,11 @@ export const updatePatient = async (req, res) => {
 };
 
 // ✅ Delete Patient
-export const deletePatient = async (req, res) => {
+const deletePatient = async (req, res) => {
   try {
     const { id } = req.params;
 
     const deletedPatient = await Patient.findByIdAndDelete(id);
-
     if (!deletedPatient) {
       return res.status(404).json({ message: "Patient not found" });
     }
@@ -120,4 +116,53 @@ export const deletePatient = async (req, res) => {
     console.error("Delete patient error:", error);
     res.status(500).json({ message: "Failed to delete patient" });
   }
+};
+
+// ✅ Add Test to Patient
+const addTestToPatient = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const testData = req.body;
+
+    const patient = await Patient.findById(id);
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+
+    patient.tests.push(testData);
+    await patient.save();
+
+    res.status(200).json({ message: 'Test added successfully', tests: patient.tests });
+  } catch (error) {
+    console.error('Add test error:', error);
+    res.status(500).json({ message: 'Failed to add test' });
+  }
+};
+
+// ✅ Get Tests by Patient
+const getTestsByPatient = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const patient = await Patient.findById(id);
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+
+    res.status(200).json({ tests: patient.tests });
+  } catch (error) {
+    console.error('Get tests error:', error);
+    res.status(500).json({ message: 'Failed to fetch tests' });
+  }
+};
+
+// ✅ Named exports (required for ESM import)
+export {
+  addPatient,
+  getPatients,
+  getPatientById,
+  updatePatient,
+  deletePatient,
+  addTestToPatient,
+  getTestsByPatient
 };

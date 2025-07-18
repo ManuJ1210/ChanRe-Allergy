@@ -18,12 +18,23 @@ import AddPatient from '../pages/CenterAdmin/patients/AddPatient';
 import PatientList from '../pages/CenterAdmin/patients/PatientList';
 import ManagePatients from '../pages/CenterAdmin/patients/ManagePatients';
 import EditPatient from '../pages/CenterAdmin/patients/EditPatient';
+import AddTest from '../pages/CenterAdmin/patients/AddTest';
+import ShowTests from '../pages/CenterAdmin/patients/ShowTests';
+import CenterProfile from '../pages/CenterAdmin/CenterProfile';
+import Home from '../pages/Homepage';
+import Contact from '../pages/Contact';
+import About from '../pages/About';
+
 
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<Login />} />
+
+       <Route path='/' element={<Home/>}/>
+       <Route path='/Contact' element={<Contact/>}/>
+       <Route path='/About' element={<About/>}/>
+
+      <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
@@ -50,6 +61,13 @@ export default function AppRoutes() {
         <Route path='/CenterAdmin/patients/PatientList' element={<PatientList />} />
         <Route path='CenterAdmin/patients/ManagePatients' element={<ManagePatients />} />
         <Route path='CenterAdmin/patients/EditPatient/:id' element={<EditPatient/>} />
+        <Route path="/CenterAdmin/patients/AddTest/:id" element={<AddTest />} />
+        <Route path="/CenterAdmin/patients/show-tests/:id" element={<ShowTests />} />
+        <Route path="/CenterAdmin/center-profile" element={<CenterProfile />} />
+
+
+
+
 
 
 
