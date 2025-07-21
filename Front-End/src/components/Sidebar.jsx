@@ -97,8 +97,8 @@ export default function Sidebar() {
               open={centerOpen === 'doctors'}
               toggle={() => setCenterOpen(centerOpen === 'doctors' ? null : 'doctors')}
               links={[
-                { to: "/centeradmin/doctors/add", label: "Add Doctor" },
-                { to: "/centeradmin/doctors", label: "Doctor List" },
+                { to: "/CenterAdmin/Docters/AddDocter", label: "Add Doctor" },
+                { to: "/CenterAdmin/Docters/DocterList", label: "Doctor List" },
               ]}
               currentPath={location.pathname}
             />

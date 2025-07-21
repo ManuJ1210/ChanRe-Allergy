@@ -23,7 +23,7 @@ export default function EditCenterAdmin() {
     name: '',
     qualification: '',
     designation: '',
-    kmcNo: '',
+    kmcNumber: '',
     hospitalName: '',
     centerCode: '',
     phone: '',
@@ -72,7 +72,7 @@ export default function EditCenterAdmin() {
           <Input label="Full Name" name="name" value={admin.name} onChange={handleAdminChange} icon={<FaUserAlt />} />
           <Input label="Qualification" name="qualification" value={admin.qualification} onChange={handleAdminChange} icon={<FaUserMd />} />
           <Input label="Designation" name="designation" value={admin.designation} onChange={handleAdminChange} icon={<FaIdBadge />} />
-          <Input label="KMC No" name="kmcNo" value={admin.kmcNo} onChange={handleAdminChange} icon={<FaIdBadge />} />
+          <Input label="KMC No" name="kmcNo" value={admin.kmcNumber} onChange={handleAdminChange} icon={<FaIdBadge />} />
           <Input label="Hospital Name" name="hospitalName" value={admin.hospitalName} onChange={handleAdminChange} icon={<FaHospital />} />
           <Input label="Center Code" name="centerCode" value={admin.centerCode} onChange={handleAdminChange} icon={<FaCode />} />
           <Input label="Phone" name="phone" value={admin.phone} onChange={handleAdminChange} icon={<FaPhone />} />

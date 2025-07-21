@@ -35,7 +35,7 @@ export const createCenterWithAdmin = async (req, res) => {
       role: admin.userType || "centeradmin",
       qualification: admin.qualification,
       designation: admin.designation,
-      kmcNo: admin.kmcNo,
+      kmcNumber: admin.kmcNumber,
       hospitalName: admin.hospitalName,
       centerCode: admin.centerCode,
       phone: admin.phone,

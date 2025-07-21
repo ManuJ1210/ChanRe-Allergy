@@ -50,7 +50,7 @@ export const updateCenterAdmin = async (req, res) => {
       'name',
       'qualification',
       'designation',
-      'kmcNo',
+      'kmcNumber',
       'hospitalName',
       'centerCode',
       'phone',

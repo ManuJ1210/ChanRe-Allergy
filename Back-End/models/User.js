@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String, 
-    default: 'N/A'
+    default: ''
   },
   role: {
     type: String,
@@ -28,7 +28,13 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Center',
     default: null
-  }
+  },
+  qualification: { type: String, default: '' },
+  designation: { type: String, default: '' },
+  kmcNumber: { type: String, default: '' },
+  centerCode :{type: String, default: '' },
+  hospitalName: { type: String, default: '' },
+  username: { type: String, unique: true, sparse: true }, 
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {

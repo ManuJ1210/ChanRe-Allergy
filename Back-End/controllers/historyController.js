@@ -1,44 +1,42 @@
 import History from '../models/historyModel.js';
-import asyncHandler from 'express-async-handler';
 
-// @desc    Add patient history
-// @route   POST /api/history
-// @access  Private
-export const addHistory = asyncHandler(async (req, res) => {
-  const {
-    patientId,
-    sectionOne,
-    sectionTwo,
-    sectionThree,
-    sectionFour,
-    sectionFive,
-    sectionSix,
-  } = req.body;
+export const createHistory = async (req, res) => {
+  try {
+    console.log("Request body:", req.body.formData);
+    console.log("Uploaded file:", req.file);
 
-  const history = await History.create({
-    patientId,
+    // Parse JSON string
+    const parsedData = JSON.parse(req.body.formData);
+    const fileName = req.file ? req.file.filename : null;
 
-    // Section One
-    ...sectionOne,
+    // Validate required fields
+    if (
+      !parsedData.sectionOne ||
+      !parsedData.sectionOne.conditions ||
+      !Object.values(parsedData.sectionOne.conditions).some(Boolean)
+    ) {
+      return res.status(400).json({ message: "Please select at least one condition in Section One" });
+    }
 
-    // Section Two
-    complaints: sectionTwo?.complaints || [],
+    const history = await History.create({
+      patientId: req.user._id,
+      sectionOne: parsedData.sectionOne,
+      sectionTwo: parsedData.sectionTwo || {},
+      sectionThree: parsedData.sectionThree || {},
+      sectionFour: parsedData.sectionFour || {},
+      sectionFive: parsedData.sectionFive || {},
+      sectionSix: {
+        ...parsedData.sectionSix,
+        reportFile: fileName,
+      },
+    });
 
-    // Section Three
-    ...sectionThree,
-
-    // Section Four
-    skinAllergy: sectionFour?.skinAllergy || {},
-    medicalHistory: sectionFour?.medicalHistory || {},
-
-    // Section Five
-    drugs: sectionFive?.drugs || {},
-    exposure: sectionFive?.exposure || {},
-
-    // Section Six
-    examination: sectionSix?.examination || {},
-    reportFile: sectionSix?.reportFile || '',
-  });
-
-  res.status(201).json({ success: true, history });
-});
+    res.status(201).json({
+      message: 'History saved successfully',
+      data: history,
+    });
+  } catch (err) {
+    console.error('Error saving history:', err.message);
+    res.status(500).json({ message: 'Failed to save history', error: err.message });
+  }
+};

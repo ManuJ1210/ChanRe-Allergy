@@ -1,84 +1,66 @@
 import mongoose from 'mongoose';
 
 const historySchema = new mongoose.Schema({
-  patientId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // assuming patients are stored in User model
-    required: true,
+  patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+
+  sectionOne: {
+    conditions: { type: Map, of: String } // e.g., { "Asthma": "yes", ... }
   },
 
-  // Section One: General Info
-  patientName: String,
-  age: String,
-  sex: String,
-  referredBy: String,
-  centerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Center',
+  sectionTwo: {
+    feverGrade: String,
+    itchingThroat: String,
+    specificDay: String,
+    asthmaType: String,
+    asthmaFrequency: String,
   },
 
-  // Section Two: Chief complaints
-  complaints: [String],
-
-  // Section Three: History Duration
-  onset: String,
-  duration: String,
-  frequency: String,
-
-  // Section Four: Skin Allergy and Medical History
-  skinAllergy: {
-    hives: Boolean,
-    hivesDistribution: String,
-    eczema: Boolean,
-    eczemaDistribution: String,
-    ulcer: Boolean,
-    ulcerDistribution: String,
-    papuloRashes: Boolean,
-    papuloRashesDistribution: String,
-    itching: Boolean,
-    itchingDistribution: String,
-  },
-  medicalHistory: {
-    hypertension: Boolean,
-    diabetes: Boolean,
-    epilepsy: Boolean,
-    ihd: Boolean,
+  sectionThree: {
+    questions: { type: Map, of: String }, // e.g., { "Admission to hospital": "yes" }
+    triggers: [String],
+    otherTrigger: String,
   },
 
-  // Section Five: Drug & Exposure
-  drugs: {
-    drugAllergyKnown: String,
-    probable: String,
-    definite: String,
-  },
-  exposure: {
-    occupation: String,
-    probableChemicalExposure: String,
-    location: String,
-    familyHistory: String,
+  sectionFour: {
+    rhinitisType: String,
+    symptoms: { type: Map, of: String } // e.g., { Sneezing: "Mild", ... }
   },
 
-  // Section Six: Examination + Report
-  examination: {
-    oralCavity: String,
-    skin: String,
-    ent: String,
-    eye: String,
-    respiratorySystem: String,
-    cvs: String,
-    cns: String,
-    abdomen: String,
-    otherFindings: String,
+  sectionFive: {
+    allergyType: String,
+    skinAllergy: {
+      type: Map,
+      of: new mongoose.Schema({
+        answer: String, // "Yes" or "No"
+        distribution: String
+      }, { _id: false })
+    },
+    history: { type: Map, of: String } // e.g., { Hypertension: "Yes" }
   },
 
-  reportFile: {
-    type: String, // store filename or file path
-  },
+  sectionSix: {
+    DrugAllergyKnown: String,
+    Probable: String,
+    Definite: String,
 
-  createdAt: {
-    type: Date,
-    default: Date.now,
+    Occupation: String,
+    ProbableChemicalExposure: String,
+    Location: String,
+    FamilyHistory: String,
+
+    OralCavity: String,
+    Skin: String,
+    ENT: String,
+    Eye: String,
+    RespiratorySystem: String,
+    CVS: String,
+    CNS: String,
+    Abdomen: String,
+    AnyOtherFindings: String,
+
+    reportFile: String, // path or filename of uploaded report
   }
-});
+}, { timestamps: true });
 
-export default mongoose.model('History', historySchema);
+const History = mongoose.model("History", historySchema);
+export default History;

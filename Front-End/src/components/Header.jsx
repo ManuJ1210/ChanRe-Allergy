@@ -21,7 +21,7 @@ export default function Header() {
 
   const handleSearch = () => {
     if (!searchTerm.trim()) return;
-    // Example: Navigate to a search results page or trigger a filter
+ 
     navigate(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
   };
 
