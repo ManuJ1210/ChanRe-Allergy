@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { Pencil, Trash2 } from 'lucide-react';
 
 const DoctorList = () => {
@@ -22,24 +23,26 @@ const DoctorList = () => {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this doctor?');
-    if (!confirmDelete) return;
+  const confirmDelete = window.confirm('Are you sure you want to delete this doctor?');
+  if (!confirmDelete) return;
 
-    try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/doctors/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setDoctors(doctors.filter((doc) => doc._id !== id));
-    } catch (err) {
-      alert('Failed to delete doctor');
-    }
-  };
+  try {
+    const token = localStorage.getItem('token');
+    await axios.delete(`http://localhost:5000/api/doctors/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setDoctors(doctors.filter((doc) => doc._id !== id)); 
+  } catch (err) {
+    alert('Failed to delete doctor');
+  }
+};
 
-  const handleEdit = (id) => {
-    alert(`Edit doctor with ID: ${id}`);
- 
-  };
+
+  const navigate = useNavigate();
+
+const handleEdit = (id) => {
+  navigate(`/CenterAdmin/Docters/EditDoctor/${id}`);
+};
 
   useEffect(() => {
     fetchDoctors();

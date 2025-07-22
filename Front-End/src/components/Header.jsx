@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaSearch, FaUserCircle, FaSignOutAlt, FaUser, FaTimes } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,9 +12,26 @@ export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Get center name from localStorage (set by CenterProfile after fetch)
+  const [centerName, setCenterName] = useState(() => {
+    return localStorage.getItem('centerName') || '';
+  });
+
+  // Optionally, update centerName if it changes in localStorage (e.g., after CenterProfile fetch)
+  useEffect(() => {
+    const handleStorage = () => {
+      setCenterName(localStorage.getItem('centerName') || '');
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
+  const isSuperadmin = user?.role?.toLowerCase() === 'superadmin';
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('centerName');
     dispatch(logout());
     navigate('/');
   };
@@ -34,6 +51,14 @@ export default function Header() {
   return (
     <>
       <header className="flex items-center justify-between bg-white px-6 py-5.5 border-b border-gray-200 shadow-sm sticky top-0 z-50">
+        {/* Center name on the left */}
+        {!isSuperadmin && (
+          <div className="flex items-center gap-4 min-w-[180px]">
+            <span className="text-lg font-bold text-blue-700 whitespace-nowrap">
+              {centerName || 'Center'}
+            </span>
+          </div>
+        )}
         {/* Search bar */}
         <div className="flex items-center gap-2 w-full max-w-md">
           <FaSearch

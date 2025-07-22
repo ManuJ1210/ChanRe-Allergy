@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // ✅ include useNavigate
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { submitPatientTests } from "../../../features/patient/patientThunks"; // ✅ Correct import
+import { resetPatientState } from "../../../features/patient/patientSlice";
 
 const testFields = [
   "CBC", "Hb", "TC", "DC", "Neutrophils", "Eosinophil", "Lymphocytes",
@@ -9,18 +11,24 @@ const testFields = [
 ];
 
 const AddTest = () => {
-  const { id } = useParams(); // Patient ID
-  const navigate = useNavigate(); // ✅ hook for redirection
+  const { id: patientId } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [reports, setReports] = useState({});
-  const [submitting, setSubmitting] = useState(false);
+
+  const {
+    testSubmitting,
+    testSubmitSuccess,
+    testSubmitError,
+  } = useSelector((state) => state.patient);
 
   const handleChange = (testName, value) => {
     setReports((prev) => ({ ...prev, [testName]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitting(true);
 
     const filledReports = Object.fromEntries(
       Object.entries(reports).filter(([_, val]) => val && val.trim() !== "")
@@ -28,33 +36,25 @@ const AddTest = () => {
 
     if (Object.keys(filledReports).length === 0) {
       alert("Please fill in at least one test report.");
-      setSubmitting(false);
       return;
     }
 
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(
-        `http://localhost:5000/api/patients/${id}/tests`,
-        filledReports,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      alert("Test reports submitted successfully!");
-      setReports({});
-      navigate("/CenterAdmin/patients/PatientList"); // ✅ redirect
-    } catch (error) {
-      console.error("Submission failed:", error);
-      alert("Failed to submit test reports.");
-    } finally {
-      setSubmitting(false);
-    }
+    dispatch(submitPatientTests({ patientId, testData: filledReports })); // ✅ Correct usage
   };
+
+  useEffect(() => {
+    if (testSubmitSuccess) {
+      alert("Test reports submitted successfully!");
+      dispatch(resetPatientState());
+      navigate("/CenterAdmin/patients/PatientList");
+    }
+  }, [testSubmitSuccess, dispatch, navigate]);
+
+  useEffect(() => {
+    if (testSubmitError) {
+      alert(testSubmitError);
+    }
+  }, [testSubmitError]);
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -90,10 +90,10 @@ const AddTest = () => {
           <div className="mt-6 text-right">
             <button
               type="submit"
-              disabled={submitting}
+              disabled={testSubmitting}
               className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
             >
-              {submitting ? "Submitting..." : "Submit"}
+              {testSubmitting ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>
@@ -113,7 +113,7 @@ const AddTest = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Test history to be added here */}
+            {/* Test history display can go here in the future */}
           </tbody>
         </table>
       </div>

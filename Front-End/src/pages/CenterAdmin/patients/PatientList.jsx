@@ -1,51 +1,28 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getPatients } from "../../../features/patient/patientThunks";
 import { useNavigate } from "react-router-dom";
+import { deletePatient } from '../../../features/patient/patientThunks';
 
 export default function PatientList() {
-  const [patients, setPatients] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedPatient, setSelectedPatient] = useState(null); // 👈 Modal state
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [selectedPatient, setSelectedPatient] = useState(null);
 
-  const fetchPatients = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/api/patients", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const data = response.data;
-      const list = Array.isArray(data) ? data : data.patients || [];
-      setPatients(list);
-    } catch (error) {
-      console.error("Error fetching patients:", error);
-      setPatients([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this patient?")) return;
-
-    try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/patients/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setPatients(patients.filter((p) => p._id !== id));
-    } catch (error) {
-      console.error("Delete failed:", error);
-    }
-  };
+  const { patients, getLoading } = useSelector((state) => state.patient);
 
   useEffect(() => {
-    fetchPatients();
-  }, []);
+    dispatch(getPatients());
+  }, [dispatch]);
 
-  if (loading) {
+  const handleDelete = (id) => {
+    console.log("Deleting patient:", id);
+    if (window.confirm('Are you sure you want to delete this patient?')) {
+      dispatch(deletePatient(id));
+    }
+  };
+
+  if (getLoading) {
     return <div className="text-center py-10">Loading patients...</div>;
   }
 
@@ -84,13 +61,13 @@ export default function PatientList() {
                   <td className="px-4 py-3 capitalize">{patient.gender}</td>
                   <td className="px-4 py-3 space-x-1 whitespace-nowrap">
                     <button
-                      onClick={() => setSelectedPatient(patient)} 
+                      onClick={() => setSelectedPatient(patient)}
                       className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md hover:bg-blue-200 transition"
                     >
                       View
                     </button>
                     <button
-                     onClick={() => navigate(`/CenterAdmin/patients/EditPatient/${patient._id}`)}
+                      onClick={() => navigate(`/CenterAdmin/patients/EditPatient/${patient._id}`)}
                       className="bg-green-100 text-green-700 px-2 py-1 rounded-md hover:bg-green-200 transition"
                     >
                       Edit
@@ -101,17 +78,15 @@ export default function PatientList() {
                     >
                       Delete
                     </button>
-                  
                     <button
-                      className="bg-orange-100 text-orange-800 px-2 py-1 rounded-md hover:bg-orange-200 transition"
                       onClick={() => navigate(`/CenterAdmin/patients/AddTest/${patient._id}`)}
+                      className="bg-orange-100 text-orange-800 px-2 py-1 rounded-md hover:bg-orange-200 transition"
                     >
                       Add Test
                     </button>
-
                     <button
-                      className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-md hover:bg-yellow-200 transition"
                       onClick={() => navigate(`/CenterAdmin/patients/AddHistory/${patient._id}`)}
+                      className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-md hover:bg-yellow-200 transition"
                     >
                       Add History
                     </button>
@@ -123,7 +98,7 @@ export default function PatientList() {
         </table>
       </div>
 
-      {/* Modal Component */}
+      {/* Modal */}
       {selectedPatient && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
@@ -142,7 +117,6 @@ export default function PatientList() {
               <p><strong>Gender:</strong> {selectedPatient.gender}</p>
               {selectedPatient.address && <p><strong>Address:</strong> {selectedPatient.address}</p>}
               {selectedPatient.centerName && <p><strong>Center:</strong> {selectedPatient.centerName}</p>}
-              {/* Add more fields as needed */}
             </div>
           </div>
         </div>

@@ -6,7 +6,7 @@ import {
   updatePatient,
   deletePatient,
   addTestToPatient,
-  getTestsByPatient
+  getPatientAndTests
 } from '../controllers/patientController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -21,6 +21,7 @@ router.delete('/:id', protect, deletePatient);
 
 // Test Routes for Patient
 router.post('/:id/tests', protect, addTestToPatient);
-router.get('/:id/tests', protect, getTestsByPatient);
+
+router.get('/:id/show-tests', protect, getPatientAndTests);
 
 export default router;

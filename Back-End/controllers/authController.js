@@ -63,7 +63,7 @@ export const login = async (req, res) => {
         email: user.email,
         role: user.role,
         phone: user.phone || 'N/A',
-        centerId: user.centerId || 'N/A',
+        centerId: user.centerId || null, // <-- always return null if not set
       },
       token: generateToken(user),
     });

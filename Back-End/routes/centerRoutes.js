@@ -6,6 +6,7 @@ import {
   updateCenter,
   getCenterById,
   getCenterWithAdmin,
+  getCenterStats
 } from '../controllers/centerController.js';
 
 import { protect } from '../middleware/authMiddleware.js';
@@ -20,5 +21,7 @@ router.get('/', getAllCenters);
 router.delete('/:id', deleteCenter);
 router.put('/:id', updateCenter);
 router.get('/:id', getCenterById);
+// Get center stats
+router.get('/:id/stats', protect, getCenterStats);
 
 export default router;

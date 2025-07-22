@@ -1,40 +1,36 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { FaDownload, FaArrowLeft } from "react-icons/fa";
 import { useReactToPrint } from "react-to-print";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getSinglePatient,
+  fetchPatientTests,
+} from "../../../features/patient/patientThunks";
+
 
 const ShowTests = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const componentRef = useRef();
-  const [patient, setPatient] = useState(null);
-  const [tests, setTests] = useState([]);
+
+  const { singlePatient, testReports = [], loading, error } = useSelector(
+    (state) => state.patient
+  );
+
+  const hasReports = Array.isArray(testReports) && testReports.length > 0;
 
   useEffect(() => {
-    const fetchPatientData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const patientRes = await axios.get(`http://localhost:5000/api/patients/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setPatient(patientRes.data);
-
-        const testsRes = await axios.get(`http://localhost:5000/api/patients/${id}/tests`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setTests(testsRes.data.tests || []);
-      } catch (error) {
-        console.error("Failed to fetch patient/test data:", error);
-      }
-    };
-
-    fetchPatientData();
-  }, [id]);
+    if (id) {
+      dispatch(getSinglePatient(id));
+      dispatch(fetchPatientTests(id));
+    }
+  }, [dispatch, id]);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: `Patient-${patient?.name}-Tests`,
+    documentTitle: `Patient-${singlePatient?.name}-Tests`,
   });
 
   return (
@@ -57,40 +53,51 @@ const ShowTests = () => {
         </div>
       </div>
 
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+
       <div ref={componentRef} className="bg-white p-6 rounded shadow">
-        {patient && (
+        {singlePatient && (
           <div className="mb-6 text-gray-700">
             <h3 className="text-lg font-bold mb-2">Patient Details</h3>
-            <p><strong>Name:</strong> {patient.name}</p>
-            <p><strong>Age:</strong> {patient.age}</p>
-            <p><strong>Gender:</strong> {patient.gender}</p>
-            <p><strong>Phone:</strong> {patient.phone}</p>
-            {patient.email && <p><strong>Email:</strong> {patient.email}</p>}
-            {patient.address && <p><strong>Address:</strong> {patient.address}</p>}
+            <p><strong>Name:</strong> {singlePatient.name}</p>
+            <p><strong>Age:</strong> {singlePatient.age}</p>
+            <p><strong>Gender:</strong> {singlePatient.gender}</p>
+            <p><strong>Phone:</strong> {singlePatient.phone}</p>
+            {singlePatient.email && <p><strong>Email:</strong> {singlePatient.email}</p>}
+            {singlePatient.address && <p><strong>Address:</strong> {singlePatient.address}</p>}
           </div>
         )}
 
         <h3 className="text-lg font-bold text-gray-700 mb-3">Test Reports</h3>
-        {tests.length === 0 ? (
-          <p className="text-gray-500">No tests available.</p>
+        {!hasReports ? (
+          <p className="text-gray-500">No test reports found.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full border text-sm text-left">
               <thead className="bg-gray-100">
                 <tr>
                   <th className="border px-3 py-2">Date</th>
-                  {Object.keys(tests[0] || {}).filter(key => key !== "_id" && key !== "date").map((key, idx) => (
-                    <th key={idx} className="border px-3 py-2">{key}</th>
-                  ))}
+                  {Object.keys(testReports[0])
+                    .filter((key) => key !== "_id" && key !== "date" && key !== "patient" && key !== "__v")
+                    .map((key, idx) => (
+                      <th key={idx} className="border px-3 py-2">{key}</th>
+                    ))}
                 </tr>
               </thead>
               <tbody>
-                {tests.map((test, idx) => (
+                {testReports.map((test, idx) => (
                   <tr key={idx} className="hover:bg-gray-50">
-                    <td className="border px-3 py-2">{new Date(test.date).toLocaleDateString()}</td>
-                    {Object.keys(test).filter(k => k !== "_id" && k !== "date").map((key, i) => (
-                      <td key={i} className="border px-3 py-2">{test[key]}</td>
-                    ))}
+                    <td className="border px-3 py-2">
+                      {test.date ? new Date(test.date).toLocaleDateString() : ""}
+                    </td>
+                    {Object.keys(test)
+                      .filter((key) => key !== "_id" && key !== "date" && key !== "patient" && key !== "__v")
+                      .map((key, i) => (
+                        <td key={i} className="border px-3 py-2">
+                          {test[key]}
+                        </td>
+                      ))}
                   </tr>
                 ))}
               </tbody>

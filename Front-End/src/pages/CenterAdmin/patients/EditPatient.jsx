@@ -1,71 +1,78 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getSinglePatient,
+  updatePatient,
+} from "../../../features/patient/patientThunks";
+import { resetPatientState } from "../../../features/patient/patientSlice";
 
 export default function EditPatient() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [patient, setPatient] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+
+  const {
+    singlePatient,
+    patientLoading,
+    patientError,
+    editSuccess,
+  } = useSelector((state) => state.patient);
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    contact: "",
+    phone: "",
     age: "",
     gender: "",
     address: "",
   });
 
   useEffect(() => {
-    const fetchPatient = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(`http://localhost:5000/api/patients/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+    dispatch(getSinglePatient(id));
+  }, [dispatch, id]);
 
-        setPatient(response.data);
-        setFormData({
-          name: response.data.name || "",
-          email: response.data.email || "",
-          contact: response.data.contact || "",
-          age: response.data.age || "",
-          gender: response.data.gender || "",
-          address: response.data.address || "",
-        });
-      } catch (error) {
-        console.error("Failed to fetch patient:", error);
-        alert("Patient not found or server error.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  useEffect(() => {
+    if (singlePatient) {
+      setFormData({
+        name: singlePatient.name || "",
+        email: singlePatient.email || "",
+        phone: singlePatient.phone || "",
+        age: singlePatient.age || "",
+        gender: singlePatient.gender || "",
+        address: singlePatient.address || "",
+      });
+    }
+  }, [singlePatient]);
 
-    fetchPatient();
-  }, [id]);
+  useEffect(() => {
+    if (editSuccess) {
+      alert("Patient updated successfully!");
+      dispatch(resetPatientState());
+      navigate("/CenterAdmin/patients/PatientList");
+    }
+  }, [editSuccess, dispatch, navigate]);
+
+  useEffect(() => {
+    if (patientError) {
+      alert(patientError);
+    }
+  }, [patientError]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/patients/${id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      alert("Patient updated successfully!");
-    navigate("/CenterAdmin/patients/PatientList")
-    } catch (error) {
-      console.error("Failed to update patient:", error);
-      alert("Error updating patient.");
-    }
+    console.log("Submitting patient update:", formData);
+    dispatch(updatePatient({ id, updatedData: formData }));
   };
 
-  if (loading) return <div className="text-center py-10">Loading patient data...</div>;
+  if (patientLoading) {
+    return <div className="text-center py-10">Loading patient data...</div>;
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-6">
@@ -96,9 +103,9 @@ export default function EditPatient() {
           <div>
             <label className="block text-sm font-medium text-gray-700">Contact</label>
             <input
-              type="text"
-              name="contact"
-              value={formData.contact}
+              type="number"
+              name="phone"
+              value={formData.phone}
               onChange={handleChange}
               className="mt-1 block w-full border rounded-md p-2 text-sm"
             />

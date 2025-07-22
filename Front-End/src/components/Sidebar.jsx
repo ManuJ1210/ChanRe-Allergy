@@ -109,8 +109,8 @@ export default function Sidebar() {
               open={centerOpen === 'receptionists'}
               toggle={() => setCenterOpen(centerOpen === 'receptionists' ? null : 'receptionists')}
               links={[
-                { to: "/centeradmin/receptionists/add", label: "Add Receptionist" },
-                { to: "/centeradmin/receptionists", label: "Receptionist List" },
+                { to: "/CenterAdmin/Receptionist/AddReceptionist", label: "Add Receptionist" },
+                { to: "/CenterAdmin/Receptionist/ManageReceptionists", label: "Receptionist List" },
               ]}
               currentPath={location.pathname}
             />

@@ -1,33 +1,22 @@
-import { useEffect, useState } from 'react';
-import API from '../../services/api';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAdmins, deleteAdmin } from '../../features/admin/adminThunks';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 export default function ManageAdmins() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [admins, setAdmins] = useState([]);
+
+  const { admins = [], loading, deletingId } = useSelector((state) => state.admin || {});
 
   useEffect(() => {
-    fetchAdmins();
-  }, []);
+    dispatch(fetchAdmins());
+  }, [dispatch]);
 
-  const fetchAdmins = async () => {
-    try {
-      const res = await API.get('/center-admins');
-      setAdmins(res.data);
-    } catch (error) {
-      console.error('Error fetching admins:', error);
-    }
-  };
-
-  const handleDelete = async (adminId) => {
+  const handleDelete = (adminId) => {
     if (window.confirm('Are you sure you want to delete this admin?')) {
-      try {
-        await API.delete(`/center-admins/${adminId}`);
-        fetchAdmins(); // refresh
-      } catch (error) {
-        console.error('Failed to delete admin:', error);
-      }
+      dispatch(deleteAdmin(adminId));
     }
   };
 
@@ -49,39 +38,43 @@ export default function ManageAdmins() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {admins.map((admin, idx) => (
-              <tr key={idx} className="hover:bg-gray-50 transition">
-                <td className="px-4 py-2">{admin.adminName}</td>
-                <td className="px-4 py-2">{admin.centerName}</td>
-                <td className="px-4 py-2">{admin.centerCode}</td>
-                <td className="px-4 py-2">{admin.email}</td>
-                <td className="px-4 py-2">{admin.phone}</td>
-                <td className="px-4 py-2">{new Date(admin.createdAt).toLocaleString()}</td>
-                <td className="px-4 py-2 text-center">
-                  <div className="flex justify-center items-center gap-2">
-                    <button
-                      onClick={() => navigate(`/superadmin/edit-admin/${admin._id}`)}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded flex items-center gap-1"
-                    >
-                      <FaEdit /> Edit
-                    </button>
-
-                    <button
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded flex items-center gap-1"
-                      onClick={() => handleDelete(admin._id)}
-                    >
-                      <FaTrash /> Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {admins.length === 0 && (
+            {loading ? (
               <tr>
-                <td colSpan="7" className="text-center text-gray-500 py-6">
-                  No admins found.
-                </td>
+                <td colSpan="7" className="text-center py-6 text-gray-500">Loading...</td>
               </tr>
+            ) : admins.length === 0 ? (
+              <tr>
+                <td colSpan="7" className="text-center py-6 text-gray-500">No admins found.</td>
+              </tr>
+            ) : (
+              admins.map((admin) => (
+                <tr key={admin._id} className="hover:bg-gray-50 transition">
+                  <td className="px-4 py-2">{admin.adminName}</td>
+                  <td className="px-4 py-2">{admin.centerName}</td>
+                  <td className="px-4 py-2">{admin.centerCode}</td>
+                  <td className="px-4 py-2">{admin.email}</td>
+                  <td className="px-4 py-2">{admin.phone}</td>
+                  <td className="px-4 py-2">{new Date(admin.createdAt).toLocaleString()}</td>
+                  <td className="px-4 py-2 text-center">
+                    <div className="flex justify-center items-center gap-2">
+                      <button
+                        onClick={() => navigate(`/superadmin/edit-admin/${admin._id}`)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded flex items-center gap-1"
+                      >
+                        <FaEdit /> Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(admin._id)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded flex items-center gap-1"
+                        disabled={deletingId === admin._id}
+                      >
+                        <FaTrash />
+                        {deletingId === admin._id ? 'Deleting...' : 'Delete'}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>

@@ -1,4 +1,5 @@
 import Patient from '../models/Patient.js';
+import Test from '../models/Test.js'; // Make sure this import is correct
 
 // ✅ Add New Patient
 const addPatient = async (req, res) => {
@@ -122,17 +123,46 @@ const deletePatient = async (req, res) => {
 const addTestToPatient = async (req, res) => {
   try {
     const { id } = req.params;
-    const testData = req.body;
+    // Map frontend keys to schema keys (as before)
+    const fieldMap = {
+      "CBC": "CBC",
+      "Hb": "Hb",
+      "TC": "TC",
+      "DC": "DC",
+      "Neutrophils": "Neutrophils",
+      "Eosinophil": "Eosinophil",
+      "Lymphocytes": "Lymphocytes",
+      "Monocytes": "Monocytes",
+      "Platelets": "Platelets",
+      "ESR": "ESR",
+      "Serum Creatinine": "SerumCreatinine",
+      "Serum IgE Levels": "SerumIgELevels",
+      "C3, C4 Levels": "C3C4Levels",
+      "ANA (IF)": "ANA_IF",
+      "Urine Routine": "UrineRoutine",
+      "Allergy Panel": "AllergyPanel"
+    };
+    const testData = {};
+    for (const [frontendKey, value] of Object.entries(req.body)) {
+      if (fieldMap[frontendKey]) {
+        testData[fieldMap[frontendKey]] = value;
+      }
+    }
+    testData.date = new Date();
+    testData.patient = id; // Add patient reference
 
+    // Save to Test collection
+    const newTest = await Test.create(testData);
+
+    // Optionally, also push to embedded array
     const patient = await Patient.findById(id);
     if (!patient) {
       return res.status(404).json({ message: 'Patient not found' });
     }
-
     patient.tests.push(testData);
     await patient.save();
 
-    res.status(200).json({ message: 'Test added successfully', tests: patient.tests });
+    res.status(200).json({ message: 'Test added successfully', test: newTest });
   } catch (error) {
     console.error('Add test error:', error);
     res.status(500).json({ message: 'Failed to add test' });
@@ -153,6 +183,20 @@ const getTestsByPatient = async (req, res) => {
   } catch (error) {
     console.error('Get tests error:', error);
     res.status(500).json({ message: 'Failed to fetch tests' });
+  }
+};
+
+export const getPatientAndTests = async (req, res) => {
+  try {
+    const patient = await Patient.findById(req.params.id);
+    if (!patient) return res.status(404).json({ message: "Patient not found" });
+
+    // Fetch tests from Test collection
+    const tests = await Test.find({ patient: patient._id });
+
+    res.json({ patient, tests });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch patient tests", error: err.message });
   }
 };
 

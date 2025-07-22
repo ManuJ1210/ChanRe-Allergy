@@ -1,6 +1,7 @@
 import Center from '../models/Center.js';
 import User from '../models/User.js';
 import asyncHandler from 'express-async-handler';
+import Patient from '../models/Patient.js';
 
 // Create center with admin
 export const createCenterWithAdmin = async (req, res) => {
@@ -25,6 +26,7 @@ export const createCenterWithAdmin = async (req, res) => {
       address: center.fulladdress,
       email: center.email,
       phone: center.phone,
+      code: admin.centerCode || center.code, // Use admin.centerCode if provided, else center.code
     });
 
     const newAdmin = await User.create({
@@ -56,7 +58,7 @@ export const createCenterWithAdmin = async (req, res) => {
   }
 };
 
-// Get all centers with admin name
+// Get all centers with admin name and code
 export const getAllCenters = async (req, res) => {
   try {
     const centers = await Center.find().populate({
@@ -70,6 +72,7 @@ export const getAllCenters = async (req, res) => {
       location: center.location,
       centerAdminId: center.centerAdminId?._id || null,
       centerAdminName: center.centerAdminId?.name || null,
+      centerCode: center.code || '',
     }));
 
     res.status(200).json(centersWithAdmin);
@@ -140,14 +143,27 @@ export const updateCenter = asyncHandler(async (req, res) => {
     throw new Error("Center not found");
   }
 
-  center.name = req.body.name || center.name;
-  center.location = req.body.location || center.location;
-  center.address = req.body.address || center.address;
-  center.email = req.body.email || center.email;
-  center.phone = req.body.phone || center.phone;
+  // Validate required fields
+  const requiredFields = ['name', 'location', 'email', 'code'];
+  for (const field of requiredFields) {
+    if (!req.body[field]) {
+      return res.status(400).json({ message: `Field '${field}' is required.` });
+    }
+  }
 
-  const updatedCenter = await center.save();
-  res.json(updatedCenter);
+  center.name = req.body.name;
+  center.location = req.body.location;
+  center.address = req.body.address || '';
+  center.email = req.body.email;
+  center.phone = req.body.phone || '';
+  center.code = req.body.code;
+
+  try {
+    const updatedCenter = await center.save();
+    res.json(updatedCenter);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to update center', error: err.message });
+  }
 });
 
 // Optionally export if you still use this somewhere
@@ -171,5 +187,35 @@ export const getAllCenterAdmins = async (req, res) => {
   } catch (error) {
     console.error('Failed to fetch center admins:', error);
     res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// Get center stats (name, admin, doctorCount, receptionistCount, labCount, patientCount)
+export const getCenterStats = async (req, res) => {
+  try {
+    const center = await Center.findById(req.params.id);
+    if (!center) return res.status(404).json({ message: "Center not found" });
+
+    const [doctorCount, receptionistCount, labCount, patientCount, admin] = await Promise.all([
+      User.countDocuments({ centerId: center._id, role: 'doctor' }),
+      User.countDocuments({ centerId: center._id, role: 'receptionist' }),
+      User.countDocuments({ centerId: center._id, role: 'lab' }),
+      Patient.countDocuments({ centerId: center._id }),
+      User.findOne({ centerId: center._id, role: 'centeradmin' }).select('-password')
+    ]);
+
+    res.json({
+      name: center.name,
+      address: center.address,
+      email: center.email,
+      phone: center.phone,
+      doctorCount,
+      receptionistCount,
+      labCount,
+      patientCount,
+      admin
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch center stats", error: err.message });
   }
 };

@@ -16,7 +16,7 @@ import {
 } from 'react-icons/fa';
 
 export default function EditCenterAdmin() {
-  const { id } = useParams();
+  const { id } = useParams(); // id is centerId when assigning
   const navigate = useNavigate();
 
   const [admin, setAdmin] = useState({
@@ -31,14 +31,23 @@ export default function EditCenterAdmin() {
     username: '',
     password: '',
   });
+  const [isNewAdmin, setIsNewAdmin] = useState(false);
 
   // Load admin data on mount
   useEffect(() => {
     API.get(`/center-admins/${id}`)
-      .then((res) => setAdmin(res.data))
+      .then((res) => {
+        setAdmin(res.data);
+        setIsNewAdmin(false);
+      })
       .catch((err) => {
-        console.error('Error loading admin:', err);
-        alert('❌ Failed to load admin info');
+        if (err.response && err.response.status === 404) {
+          // No admin exists for this center, allow creation
+          setIsNewAdmin(true);
+        } else {
+          console.error('Error loading admin:', err);
+          alert('❌ Failed to load admin info');
+        }
       });
   }, [id]);
 
@@ -51,19 +60,27 @@ export default function EditCenterAdmin() {
     try {
       const dataToSend = { ...admin };
       if (!admin.password) delete dataToSend.password; // Only send password if filled
-
-      await API.put(`/center-admins/${id}`, dataToSend);
-      alert('✅ Admin updated successfully');
+      if (isNewAdmin) {
+        // Create new admin for this center
+        await API.post('/center-admins', { ...dataToSend, centerId: id });
+        alert('✅ Admin created successfully');
+      } else {
+        // Update existing admin
+        await API.put(`/center-admins/${id}`, dataToSend);
+        alert('✅ Admin updated successfully');
+      }
       navigate('/superadmin/manage-admins');
     } catch (err) {
-      console.error('Error updating admin:', err);
-      alert('❌ Failed to update admin');
+      console.error(isNewAdmin ? 'Error creating admin:' : 'Error updating admin:', err);
+      alert(`❌ Failed to ${isNewAdmin ? 'create' : 'update'} admin`);
     }
   };
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10 bg-white rounded-xl shadow-md">
-      <h2 className="text-3xl font-bold mb-6 text-blue-800">Edit Center Admin</h2>
+      <h2 className="text-3xl font-bold mb-6 text-blue-800">
+        {isNewAdmin ? 'Assign Center Admin' : 'Edit Center Admin'}
+      </h2>
 
       <form onSubmit={handleSubmit}>
         <h3 className="text-2xl font-semibold text-gray-700 mb-4">👤 Admin Information</h3>
@@ -72,9 +89,9 @@ export default function EditCenterAdmin() {
           <Input label="Full Name" name="name" value={admin.name} onChange={handleAdminChange} icon={<FaUserAlt />} />
           <Input label="Qualification" name="qualification" value={admin.qualification} onChange={handleAdminChange} icon={<FaUserMd />} />
           <Input label="Designation" name="designation" value={admin.designation} onChange={handleAdminChange} icon={<FaIdBadge />} />
-          <Input label="KMC No" name="kmcNo" value={admin.kmcNumber} onChange={handleAdminChange} icon={<FaIdBadge />} />
+          <Input label="kmcNumber" name="kmcNumber" value={admin.kmcNumber} onChange={handleAdminChange} icon={<FaIdBadge />} />
           <Input label="Hospital Name" name="hospitalName" value={admin.hospitalName} onChange={handleAdminChange} icon={<FaHospital />} />
-          <Input label="Center Code" name="centerCode" value={admin.centerCode} onChange={handleAdminChange} icon={<FaCode />} />
+          <Input label="centrCode" name="centerCode" value={admin.centerCode} onChange={handleAdminChange} icon={<FaCode />} />
           <Input label="Phone" name="phone" value={admin.phone} onChange={handleAdminChange} icon={<FaPhone />} />
           <Input label="Email" type="email" name="email" value={admin.email} onChange={handleAdminChange} icon={<FaEnvelope />} />
           <Input label="Username" name="username" value={admin.username} onChange={handleAdminChange} icon={<FaUserCircle />} />
@@ -85,7 +102,7 @@ export default function EditCenterAdmin() {
           type="submit"
           className="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded text-lg font-medium"
         >
-          Save Changes
+          {isNewAdmin ? 'Assign Admin' : 'Save Changes'}
         </button>
       </form>
     </div>

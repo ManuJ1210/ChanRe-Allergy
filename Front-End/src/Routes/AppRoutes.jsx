@@ -7,7 +7,6 @@ import AddCenter from '../pages/Superadmin/AddCenter';
 import DashboardLayout from '../layouts/DashboardLayout';
 import ManageAdmins from '../pages/Superadmin/ManageAdmins';
 import ViewFollowUpPatients from '../pages/Superadmin/ViewFollowUpPatients';
-import ManageFollowUp from '../pages/Superadmin/ManageFollowUp';
 import EditCenter from '../pages/Superadmin/EditCenter';
 import ViewCenterInfo from '../pages/Superadmin/ViewCenterInfo';
 import EditCenterAdmin from '../pages/Superadmin/EditCenterAdmin';
@@ -23,6 +22,10 @@ import ShowTests from '../pages/CenterAdmin/patients/ShowTests';
 import AddHistory from '../pages/CenterAdmin/patients/AddHistory/AddHistory';
 import AddDoctor from '../pages/CenterAdmin/Docters/AddDocter';
 import DoctorList from '../pages/CenterAdmin/Docters/DoctorList';
+import EditDoctor from '../pages/CenterAdmin/Docters/EditDoctor';
+import ManageReceptionists from '../pages/CenterAdmin/Receptionist/ManageReceptionists';
+import AddReceptionist from '../pages/CenterAdmin/Receptionist/AddReceptionist';
+import EditReceptionist from '../pages/CenterAdmin/Receptionist/EditReceptionist';
 import CenterProfile from '../pages/CenterAdmin/CenterProfile';
 
 import Home from '../pages/Homepage';
@@ -55,7 +58,7 @@ export default function AppRoutes() {
         <Route path="/superadmin/centers/add" element={<AddCenter />} />
         <Route path="/superadmin/manage-admins" element={<ManageAdmins />} />
         <Route path="/superadmin/follow-up/view" element={<ViewFollowUpPatients />} />
-        <Route path="/superadmin/follow-up/manage" element={<ManageFollowUp />} />
+        
         <Route path="/superadmin/edit-center/:id" element={<EditCenter />} />
         <Route path="/superadmin/view-center/:id" element={<ViewCenterInfo />} />
         <Route path="/superadmin/edit-admin/:id" element={<EditCenterAdmin />} />
@@ -69,7 +72,11 @@ export default function AppRoutes() {
         <Route path="/CenterAdmin/patients/show-tests/:id" element={<ShowTests />} />
         <Route path="/CenterAdmin/patients/AddHistory/:id" element={<AddHistory />} />
         <Route path="/CenterAdmin/Docters/AddDocter" element={<AddDoctor/>} />
-         <Route path="/CenterAdmin/Docters/DocterList" element={<DoctorList/>} />
+        <Route path="/CenterAdmin/Docters/DocterList" element={<DoctorList/>} />
+        <Route path="/CenterAdmin/Docters/EditDoctor/:id" element={<EditDoctor/>} />
+        <Route path="/CenterAdmin/Receptionist/ManageReceptionists" element={<ManageReceptionists/>} />
+        <Route path="/CenterAdmin/Receptionist/AddReceptionist" element={<AddReceptionist/>} />
+        <Route path="/CenterAdmin/Receptionist/EditReceptionist/:id" element={<EditReceptionist/>} />
         <Route path="/CenterAdmin/center-profile" element={<CenterProfile />} />
 
 

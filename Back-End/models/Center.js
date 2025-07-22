@@ -20,6 +20,11 @@ const centerSchema = new mongoose.Schema({
   phone: {
     type: String
   },
+  code: {
+    type: String,
+    unique: true,
+    required: true
+  },
   centerAdminId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

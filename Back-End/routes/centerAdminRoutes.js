@@ -3,7 +3,8 @@ import {
   getAllCenterAdmins,
   getCenterAdminById,
   updateCenterAdmin,
-  deleteCenterAdmin
+  deleteCenterAdmin,
+  createCenterAdmin
 } from '../controllers/centerAdminController.js';
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.get('/', getAllCenterAdmins);
 router.get('/:id', getCenterAdminById);
 router.put('/:id', updateCenterAdmin);
 router.delete('/:id', deleteCenterAdmin);
+router.post('/', createCenterAdmin);
 
 export default router;

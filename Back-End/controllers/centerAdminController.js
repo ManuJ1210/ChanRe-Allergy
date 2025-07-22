@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import Center from '../models/Center.js';
 
 // ✅ Get all center admins
 export const getAllCenterAdmins = async (req, res) => {
@@ -86,5 +87,35 @@ export const deleteCenterAdmin = async (req, res) => {
   } catch (error) {
     console.error('Failed to delete center admin:', error);
     res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// Create a new center admin for an existing center
+export const createCenterAdmin = async (req, res) => {
+  try {
+    console.log('createCenterAdmin req.body:', req.body);
+    const { name, email, password, username, centerId, ...rest } = req.body;
+    // Check if admin already exists for this center
+    const existing = await User.findOne({ centerId, role: 'centeradmin' });
+    if (existing) {
+      return res.status(400).json({ message: 'Admin already exists for this center' });
+    }
+    const newAdmin = await User.create({
+      name,
+      email,
+      password,
+      username,
+      role: 'centeradmin',
+      centerId,
+      ...rest,
+    });
+    console.log('✅ New center admin created:', newAdmin._id, newAdmin.email);
+    // Update the Center's centerAdminId field
+    const updatedCenter = await Center.findByIdAndUpdate(centerId, { centerAdminId: newAdmin._id }, { new: true });
+    console.log('✅ Center updated with new centerAdminId:', updatedCenter?._id, '->', updatedCenter?.centerAdminId);
+    res.status(201).json(newAdmin);
+  } catch (err) {
+    console.error('❌ Error in createCenterAdmin:', err);
+    res.status(500).json({ message: 'Failed to create admin', error: err.message });
   }
 };

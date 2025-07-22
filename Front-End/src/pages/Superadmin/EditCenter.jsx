@@ -16,6 +16,7 @@ export default function EditCenter() {
     address: "",
     email: "",
     phone: "",
+    code: "",
   });
 
   const [loading, setLoading] = useState(true);
@@ -115,19 +116,29 @@ export default function EditCenter() {
           />
         </div>
 
+        <div>
+          <label className="font-medium text-gray-700 mb-1 block">Center Code</label>
+          <input
+            type="text"
+            name="code"
+            value={form.code}
+            onChange={handleChange}
+            required
+            className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+            placeholder="Unique Center Code"
+          />
+        </div>
+
         <div className="md:col-span-2">
-          <label className="font-medium text-gray-700 mb-1 block">
-            Full Address
-          </label>
-          <textarea
+          <label className="font-medium text-gray-700 mb-1 block">Full Address</label>
+          <input
+            type="text"
             name="address"
             value={form.address}
             onChange={handleChange}
-            required
-            rows="3"
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none resize-none"
-            placeholder="123 Street, Near XYZ Hospital, Bangalore"
-          ></textarea>
+            className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+            placeholder="123 Main St, Area, City, State, Pincode"
+          />
         </div>
 
         <div>
@@ -139,7 +150,7 @@ export default function EditCenter() {
             onChange={handleChange}
             required
             className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-            placeholder="center@example.com"
+            placeholder="center@email.com"
           />
         </div>
 
@@ -150,18 +161,17 @@ export default function EditCenter() {
             name="phone"
             value={form.phone}
             onChange={handleChange}
-            required
             className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-            placeholder="+91 98765 43210"
+            placeholder="1234567890"
           />
         </div>
 
-        <div className="md:col-span-2 flex justify-end mt-6">
+        <div className="md:col-span-2 flex justify-end">
           <button
             type="submit"
-            className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold shadow"
           >
-            Update Center
+            Save Changes
           </button>
         </div>
       </form>

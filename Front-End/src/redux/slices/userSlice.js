@@ -1,30 +1,25 @@
+// src/redux/slices/userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
-// Safely retrieve user from localStorage
-let userFromStorage = null;
-try {
-  const stored = localStorage.getItem('user');
-  userFromStorage = stored && stored !== 'undefined' ? JSON.parse(stored) : null;
-} catch (error) {
-  userFromStorage = null;
-}
-
-const initialState = {
-  userInfo: userFromStorage,
-};
+const userInfoFromStorage = JSON.parse(localStorage.getItem('user')) || null;
 
 const userSlice = createSlice({
   name: 'user',
-  initialState,
+  initialState: {
+    userInfo: userInfoFromStorage,
+  },
   reducers: {
-    setUser: (state, action) => {
+    loginSuccess: (state, action) => {
       state.userInfo = action.payload;
     },
     logout: (state) => {
       state.userInfo = null;
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
     },
   },
 });
 
-export const { setUser, logout } = userSlice.actions;
+export const { loginSuccess, logout } = userSlice.actions; // 👈 MAKE SURE this line exists
+
 export default userSlice.reducer;

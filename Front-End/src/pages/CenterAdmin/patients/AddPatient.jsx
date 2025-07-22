@@ -1,9 +1,14 @@
-import React, { useState } from "react";
-import API from "../../../services/api"; 
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createPatient } from "../../../features/patient/patientThunks";
+import { resetPatientState } from "../../../features/patient/patientSlice";
 import { useNavigate } from "react-router-dom";
 
 const AddPatient = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { loading, success, error } = useSelector((state) => state.patient);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -19,25 +24,21 @@ const AddPatient = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      const token = localStorage.getItem("token");
-
-      const res = await API.post("/patients", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      alert("Patient added successfully!");
-      navigate("/CenterAdmin/patients/PatientList"); 
-    } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.message || "Failed to add patient.");
-    }
+    dispatch(createPatient(formData));
   };
+
+  useEffect(() => {
+    if (success) {
+      alert("Patient added successfully!");
+      dispatch(resetPatientState());
+      navigate("/CenterAdmin/patients/PatientList");
+    }
+    if (error) {
+      alert(error);
+    }
+  }, [success, error, dispatch, navigate]);
 
   return (
     <div className="p-6">
@@ -140,8 +141,9 @@ const AddPatient = () => {
           <button
             type="submit"
             className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg shadow-md"
+            disabled={loading}
           >
-            Submit
+            {loading ? "Submitting..." : "Submit"}
           </button>
         </div>
       </form>

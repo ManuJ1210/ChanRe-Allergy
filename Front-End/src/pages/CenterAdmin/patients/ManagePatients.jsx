@@ -1,38 +1,21 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchPatients } from "../../../features/patient/patientThunks";
 import { useNavigate } from "react-router-dom";
 
 export default function ManagePatients() {
-  const [patients, setPatients] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedPatient, setSelectedPatient] = useState(null);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const fetchPatients = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/api/patients", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const data = response.data;
-      const list = Array.isArray(data) ? data : data.patients || [];
-      setPatients(list);
-    } catch (error) {
-      console.error("Error fetching patients:", error);
-      setPatients([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { patients, loading, error } = useSelector((state) => state.patient);
+  const [selectedPatient, setSelectedPatient] = useState(null);
 
   useEffect(() => {
-    fetchPatients();
-  }, []);
+    dispatch(fetchPatients());
+  }, [dispatch]);
 
-  if (loading) {
-    return <div className="text-center py-10">Loading patients...</div>;
-  }
+  if (loading) return <div className="text-center py-10">Loading patients...</div>;
+  if (error) return <div className="text-center py-10 text-red-600">{error}</div>;
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
@@ -75,8 +58,7 @@ export default function ManagePatients() {
                       Edit
                     </button>
                     <button
-                    onClick={() => navigate(`/CenterAdmin/patients/show-tests/${patient._id}`)}
-
+                      onClick={() => navigate(`/CenterAdmin/patients/show-tests/${patient._id}`)}
                       className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md hover:bg-blue-200 transition"
                     >
                       Show Tests
@@ -95,7 +77,7 @@ export default function ManagePatients() {
         </table>
       </div>
 
-      {/* Modal */}
+      {/* View History Modal */}
       {selectedPatient && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
