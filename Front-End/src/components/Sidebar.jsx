@@ -16,14 +16,11 @@ import {
 export default function Sidebar() {
   const location = useLocation();
   const [centerOpen, setCenterOpen] = useState(null); // can be 'doctors', 'receptionists', or 'lab'
-
   const userInfo = useSelector((state) => state.user?.userInfo);
   const role = userInfo?.role || '';
-
   const isActive = (path) => location.pathname === path;
-
   return (
-    <aside className="fixed top-0 left-0 h-screen w-[18.5rem] bg-white border-r border-gray-200 shadow-sm text-gray-700 z-50 overflow-y-auto">
+    <aside className="fixed top-0 left-0 h-screen w-[18.5rem] bg-white border-r border-gray-200 shadow-sm text-gray-700 z-40 overflow-y-auto">
       <div className="p-4 border-b border-gray-200">
         <h2 className="text-2xl font-bold tracking-wide text-blue-800">
           Chanre<span className="text-blue-500">Allergy</span>
@@ -42,7 +39,6 @@ export default function Sidebar() {
               icon={<FaHospitalAlt />}
               isActive={isActive("/superadmin/dashboard")}
             />
-
             <SidebarGroup
               label="Center Admin"
               icon={<FaUserShield />}
@@ -55,7 +51,6 @@ export default function Sidebar() {
               ]}
               currentPath={location.pathname}
             />
-
             <SidebarGroup
               label="Follow Up"
               icon={<FaUserCheck />}
@@ -67,7 +62,6 @@ export default function Sidebar() {
               ]}
               currentPath={location.pathname}
             />
-
             <SidebarGroup
               label="Manage Lab Staff"
               icon={<FaVials />}
@@ -90,7 +84,6 @@ export default function Sidebar() {
               icon={<FaHome />}
               isActive={isActive("/centeradmin/dashboard")}
             />
-
             <SidebarGroup
               label="Doctors"
               icon={<FaUserMd />}
@@ -102,7 +95,6 @@ export default function Sidebar() {
               ]}
               currentPath={location.pathname}
             />
-
             <SidebarGroup
               label="Receptionists"
               icon={<FaUserTie />}
@@ -114,7 +106,6 @@ export default function Sidebar() {
               ]}
               currentPath={location.pathname}
             />
-
             <SidebarGroup
               label="Patients"
               icon={<FaVials />}
@@ -127,7 +118,6 @@ export default function Sidebar() {
               ]}
               currentPath={location.pathname}
             />
-
             <SidebarLink
               to="/CenterAdmin/center-profile"
               label="Center Profile"

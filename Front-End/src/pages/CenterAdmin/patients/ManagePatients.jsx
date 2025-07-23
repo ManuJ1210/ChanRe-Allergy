@@ -52,22 +52,22 @@ export default function ManagePatients() {
                   <td className="px-4 py-3 capitalize">{patient.gender}</td>
                   <td className="px-4 py-3 space-x-1 whitespace-nowrap">
                     <button
-                      onClick={() => navigate(`/CenterAdmin/patients/EditPatient/${patient._id}`)}
-                      className="bg-green-100 text-green-700 px-2 py-1 rounded-md hover:bg-green-200 transition"
+                      onClick={() => navigate(`/CenterAdmin/patients/AddTest/${patient._id}`)}
+                      className="bg-orange-100 text-orange-800 px-2 py-1 rounded-md hover:bg-orange-200 transition"
                     >
-                      Edit
+                      Add Test
                     </button>
                     <button
-                      onClick={() => navigate(`/CenterAdmin/patients/show-tests/${patient._id}`)}
-                      className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md hover:bg-blue-200 transition"
+                      onClick={() => navigate(`/CenterAdmin/patients/AddHistory/${patient._id}`)}
+                      className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-md hover:bg-yellow-200 transition"
                     >
-                      Show Tests
+                      Add History
                     </button>
                     <button
-                      onClick={() => setSelectedPatient(patient)}
-                      className="bg-gray-100 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-200 transition"
+                      onClick={() => navigate(`/CenterAdmin/patients/AddMedications/${patient._id}`)}
+                      className="bg-purple-100 text-purple-700 px-2 py-1 rounded-md hover:bg-purple-200 transition"
                     >
-                      View History
+                      Add Medications
                     </button>
                   </td>
                 </tr>
@@ -76,30 +76,6 @@ export default function ManagePatients() {
           </tbody>
         </table>
       </div>
-
-      {/* View History Modal */}
-      {selectedPatient && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">Patient History</h2>
-            <button
-              onClick={() => setSelectedPatient(null)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-lg font-bold"
-            >
-              ×
-            </button>
-            <div className="space-y-2 text-gray-700 text-sm">
-              <p><strong>Name:</strong> {selectedPatient.name}</p>
-              <p><strong>Email:</strong> {selectedPatient.email}</p>
-              <p><strong>Phone:</strong> {selectedPatient.contact || selectedPatient.phone}</p>
-              <p><strong>Age:</strong> {selectedPatient.age}</p>
-              <p><strong>Gender:</strong> {selectedPatient.gender}</p>
-              {selectedPatient.address && <p><strong>Address:</strong> {selectedPatient.address}</p>}
-              {selectedPatient.centerId?.name && <p><strong>Center:</strong> {selectedPatient.centerId.name}</p>}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

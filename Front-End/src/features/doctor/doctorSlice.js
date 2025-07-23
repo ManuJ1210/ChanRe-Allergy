@@ -1,6 +1,6 @@
 // src/features/doctor/doctorSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { createDoctor, updateDoctor, fetchDoctorById } from './doctorThunks'; // 👈 import fetchDoctorById
+import { createDoctor, updateDoctor, fetchDoctorById, fetchAllDoctors } from './doctorThunks'; // 👈 import fetchAllDoctors
 
 const initialState = {
   loading: false,
@@ -8,6 +8,7 @@ const initialState = {
   error: null,
   updateSuccess: false, // ✅ for tracking doctor update status
   doctorData: null, // Store fetched doctor details
+  doctors: [], // Store all doctors for dropdowns
 };
 
 const doctorSlice = createSlice({
@@ -20,6 +21,7 @@ const doctorSlice = createSlice({
       state.error = null;
       state.updateSuccess = false;
       state.doctorData = null;
+      state.doctors = [];
     },
     // ✅ Add this reducer for update reset
     resetUpdateStatus: (state) => {
@@ -81,6 +83,21 @@ const doctorSlice = createSlice({
         state.loading = false;
         state.doctorData = null;
         state.error = action.payload || 'Failed to fetch doctor';
+      })
+      // Fetch all doctors
+      .addCase(fetchAllDoctors.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllDoctors.fulfilled, (state, action) => {
+        state.loading = false;
+        state.doctors = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchAllDoctors.rejected, (state, action) => {
+        state.loading = false;
+        state.doctors = [];
+        state.error = action.payload || 'Failed to fetch doctors';
       });
   },
 });

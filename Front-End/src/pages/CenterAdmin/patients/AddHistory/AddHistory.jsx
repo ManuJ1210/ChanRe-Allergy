@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const conditions = [
   "Hay fever (itching of nose, sneezing, stuffy nose, running nose)",
@@ -48,6 +49,7 @@ const skinConditions = ["Hives", "Eczema", "Ulcer", "Papualo-squamous rashes", "
 const historyConditions = ["Hypertension", "Diabetes", "Epilepsy", "IHD"];
 
 const AddHistory = () => {
+  const { id: patientId } = useParams(); // get patientId from URL
   const [formData, setFormData] = useState({
     sectionOne: { conditions: {} },
     sectionTwo: {},
@@ -166,7 +168,7 @@ const AddHistory = () => {
 
     try {
       const data = new FormData();
-      const formCopy = { ...formData };
+      const formCopy = { ...formData, patientId }; // add patientId to form data
       const file = formCopy.sectionSix.reportFile;
       delete formCopy.sectionSix.reportFile;
 

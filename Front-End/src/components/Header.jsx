@@ -12,12 +12,10 @@ export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Get center name from localStorage (set by CenterProfile after fetch)
   const [centerName, setCenterName] = useState(() => {
     return localStorage.getItem('centerName') || '';
   });
 
-  // Optionally, update centerName if it changes in localStorage (e.g., after CenterProfile fetch)
   useEffect(() => {
     const handleStorage = () => {
       setCenterName(localStorage.getItem('centerName') || '');
@@ -38,7 +36,6 @@ export default function Header() {
 
   const handleSearch = () => {
     if (!searchTerm.trim()) return;
- 
     navigate(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
   };
 
@@ -50,17 +47,17 @@ export default function Header() {
 
   return (
     <>
-      <header className="flex items-center justify-between bg-white px-6 py-5.5 border-b border-gray-200 shadow-sm sticky top-0 z-50">
-        {/* Center name on the left */}
-        {!isSuperadmin && (
-          <div className="flex items-center gap-4 min-w-[180px]">
-            <span className="text-lg font-bold text-blue-700 whitespace-nowrap">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white h-22 border-b border-gray-200 shadow-sm flex flex-wrap items-center px-2 md:px-6 transition-all duration-300 md:ml-[18.5rem] gap-2 md:gap-0">
+        {/* Left: Center name */}
+        <div className="flex items-center min-w-[100px] max-w-[160px] truncate flex-shrink-0 text-sm md:min-w-[180px] md:max-w-[220px] md:text-lg">
+          {!isSuperadmin && (
+            <span className="font-bold text-blue-700 whitespace-nowrap truncate">
               {centerName || 'Center'}
             </span>
-          </div>
-        )}
-        {/* Search bar */}
-        <div className="flex items-center gap-2 w-full max-w-md">
+          )}
+        </div>
+        {/* Center: Search bar (responsive) */}
+        <div className="flex items-center gap-2 flex-1 min-w-0 max-w-full order-3 md:order-none md:justify-center">
           <FaSearch
             className="text-gray-400 cursor-pointer"
             onClick={handleSearch}
@@ -71,23 +68,21 @@ export default function Header() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full px-2 py-1 bg-gray-50 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+            className="w-full px-2 py-1 bg-gray-50 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm min-w-0"
           />
         </div>
-
-        {/* Profile section */}
-        <div className="relative">
+        {/* Right: Profile section */}
+        <div className="relative flex-shrink-0 ml-auto order-2 md:order-none">
           <button
-            className="flex items-center gap-2 px-3 py-1 hover:bg-gray-100 rounded cursor-pointer"
+            className="flex items-center gap-2 px-2 md:px-3 py-1 hover:bg-gray-100 rounded cursor-pointer"
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
             <FaUserCircle className="text-blue-600 text-xl" />
-            <div className="text-left hidden sm:block">
-              <p className="text-sm font-medium text-gray-800">{user?.name || "Admin"}</p>
-              <p className="text-xs text-gray-500 capitalize">{user?.role || "superadmin"}</p>
+            <div className="text-left hidden sm:block max-w-[100px] md:max-w-none truncate">
+              <p className="text-xs md:text-sm font-medium text-gray-800 truncate">{user?.name || "Admin"}</p>
+              <p className="text-[10px] md:text-xs text-gray-500 capitalize truncate">{user?.role || "superadmin"}</p>
             </div>
           </button>
-
           {dropdownOpen && (
             <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-lg z-10">
               <button
@@ -109,7 +104,6 @@ export default function Header() {
           )}
         </div>
       </header>
-
       {/* Profile Modal */}
       {showProfile && (
         <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50 bg-black">

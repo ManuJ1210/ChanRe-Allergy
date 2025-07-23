@@ -60,3 +60,19 @@ export const fetchDoctorById = createAsyncThunk(
     }
   }
 );
+
+// Fetch all doctors
+export const fetchAllDoctors = createAsyncThunk(
+  'doctor/fetchAllDoctors',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/doctors', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch doctors');
+    }
+  }
+);

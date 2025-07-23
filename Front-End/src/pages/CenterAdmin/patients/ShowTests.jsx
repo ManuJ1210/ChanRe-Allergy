@@ -15,11 +15,11 @@ const ShowTests = () => {
   const dispatch = useDispatch();
   const componentRef = useRef();
 
-  const { singlePatient, testReports = [], loading, error } = useSelector(
+  const { selectedPatient, selectedTests = [], viewLoading, viewError } = useSelector(
     (state) => state.patient
   );
 
-  const hasReports = Array.isArray(testReports) && testReports.length > 0;
+  const hasReports = Array.isArray(selectedTests) && selectedTests.length > 0;
 
   useEffect(() => {
     if (id) {
@@ -30,7 +30,7 @@ const ShowTests = () => {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: `Patient-${singlePatient?.name}-Tests`,
+    documentTitle: `Patient-${selectedPatient?.name}-Tests`,
   });
 
   return (
@@ -53,19 +53,19 @@ const ShowTests = () => {
         </div>
       </div>
 
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {viewLoading && <p>Loading...</p>}
+      {viewError && <p className="text-red-500">{viewError}</p>}
 
       <div ref={componentRef} className="bg-white p-6 rounded shadow">
-        {singlePatient && (
+        {selectedPatient && (
           <div className="mb-6 text-gray-700">
             <h3 className="text-lg font-bold mb-2">Patient Details</h3>
-            <p><strong>Name:</strong> {singlePatient.name}</p>
-            <p><strong>Age:</strong> {singlePatient.age}</p>
-            <p><strong>Gender:</strong> {singlePatient.gender}</p>
-            <p><strong>Phone:</strong> {singlePatient.phone}</p>
-            {singlePatient.email && <p><strong>Email:</strong> {singlePatient.email}</p>}
-            {singlePatient.address && <p><strong>Address:</strong> {singlePatient.address}</p>}
+            <p><strong>Name:</strong> {selectedPatient.name}</p>
+            <p><strong>Age:</strong> {selectedPatient.age}</p>
+            <p><strong>Gender:</strong> {selectedPatient.gender}</p>
+            <p><strong>Phone:</strong> {selectedPatient.phone}</p>
+            {selectedPatient.email && <p><strong>Email:</strong> {selectedPatient.email}</p>}
+            {selectedPatient.address && <p><strong>Address:</strong> {selectedPatient.address}</p>}
           </div>
         )}
 
@@ -78,7 +78,7 @@ const ShowTests = () => {
               <thead className="bg-gray-100">
                 <tr>
                   <th className="border px-3 py-2">Date</th>
-                  {Object.keys(testReports[0])
+                  {Object.keys(selectedTests[0])
                     .filter((key) => key !== "_id" && key !== "date" && key !== "patient" && key !== "__v")
                     .map((key, idx) => (
                       <th key={idx} className="border px-3 py-2">{key}</th>
@@ -86,7 +86,7 @@ const ShowTests = () => {
                 </tr>
               </thead>
               <tbody>
-                {testReports.map((test, idx) => (
+                {selectedTests.map((test, idx) => (
                   <tr key={idx} className="hover:bg-gray-50">
                     <td className="border px-3 py-2">
                       {test.date ? new Date(test.date).toLocaleDateString() : ""}

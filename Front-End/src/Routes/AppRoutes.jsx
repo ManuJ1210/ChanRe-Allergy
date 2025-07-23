@@ -26,7 +26,15 @@ import EditDoctor from '../pages/CenterAdmin/Docters/EditDoctor';
 import ManageReceptionists from '../pages/CenterAdmin/Receptionist/ManageReceptionists';
 import AddReceptionist from '../pages/CenterAdmin/Receptionist/AddReceptionist';
 import EditReceptionist from '../pages/CenterAdmin/Receptionist/EditReceptionist';
+import ViewHistory from '../pages/CenterAdmin/patients/ViewHistory';
+import AddMedications from '../pages/CenterAdmin/patients/AddMedications';
+import ViewProfile from '../pages/CenterAdmin/patients/ViewProfile';
+import FollowUp from '../pages/CenterAdmin/patients/FollowUp/FollowUp';
+import AddAllergicRhinitis from '../pages/CenterAdmin/patients/FollowUp/AddAllergicRhinitis';
 import CenterProfile from '../pages/CenterAdmin/CenterProfile';
+import ViewAllergicRhinitis from "../pages/CenterAdmin/patients/FollowUp/ViewAllergicRhinitis";
+import AtopicDermatitis from '../pages/CenterAdmin/patients/FollowUp/AtopicDermatitis';
+import ViewAtopicDermatitis from '../pages/CenterAdmin/patients/FollowUp/ViewAtopicDermatitis';
 
 import Home from '../pages/Homepage';
 import Contact from '../pages/Contact';
@@ -37,9 +45,9 @@ export default function AppRoutes() {
   return (
     <Routes>
 
-       <Route path='/' element={<Home/>}/>
-       <Route path='/Contact' element={<Contact/>}/>
-       <Route path='/About' element={<About/>}/>
+      <Route path='/' element={<Home />} />
+      <Route path='/Contact' element={<Contact />} />
+      <Route path='/About' element={<About />} />
 
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -58,7 +66,7 @@ export default function AppRoutes() {
         <Route path="/superadmin/centers/add" element={<AddCenter />} />
         <Route path="/superadmin/manage-admins" element={<ManageAdmins />} />
         <Route path="/superadmin/follow-up/view" element={<ViewFollowUpPatients />} />
-        
+
         <Route path="/superadmin/edit-center/:id" element={<EditCenter />} />
         <Route path="/superadmin/view-center/:id" element={<ViewCenterInfo />} />
         <Route path="/superadmin/edit-admin/:id" element={<EditCenterAdmin />} />
@@ -67,18 +75,28 @@ export default function AppRoutes() {
         <Route path='/CenterAdmin/patients/addpatient' element={<AddPatient />} />
         <Route path='/CenterAdmin/patients/PatientList' element={<PatientList />} />
         <Route path='CenterAdmin/patients/ManagePatients' element={<ManagePatients />} />
-        <Route path='CenterAdmin/patients/EditPatient/:id' element={<EditPatient/>} />
+        <Route path='CenterAdmin/patients/EditPatient/:id' element={<EditPatient />} />
         <Route path="/CenterAdmin/patients/AddTest/:id" element={<AddTest />} />
         <Route path="/CenterAdmin/patients/show-tests/:id" element={<ShowTests />} />
         <Route path="/CenterAdmin/patients/AddHistory/:id" element={<AddHistory />} />
-        <Route path="/CenterAdmin/Docters/AddDocter" element={<AddDoctor/>} />
-        <Route path="/CenterAdmin/Docters/DocterList" element={<DoctorList/>} />
-        <Route path="/CenterAdmin/Docters/EditDoctor/:id" element={<EditDoctor/>} />
-        <Route path="/CenterAdmin/Receptionist/ManageReceptionists" element={<ManageReceptionists/>} />
-        <Route path="/CenterAdmin/Receptionist/AddReceptionist" element={<AddReceptionist/>} />
-        <Route path="/CenterAdmin/Receptionist/EditReceptionist/:id" element={<EditReceptionist/>} />
+        <Route path="/CenterAdmin/patients/ViewHistory/:patientId" element={<ViewHistory />} />
+        <Route path="/CenterAdmin/Docters/AddDocter" element={<AddDoctor />} />
+        <Route path="/CenterAdmin/Docters/DocterList" element={<DoctorList />} />
+        <Route path="/CenterAdmin/Docters/EditDoctor/:id" element={<EditDoctor />} />
+        <Route path="/CenterAdmin/Receptionist/ManageReceptionists" element={<ManageReceptionists />} />
+        <Route path="/CenterAdmin/Receptionist/AddReceptionist" element={<AddReceptionist />} />
+        <Route path="/CenterAdmin/Receptionist/EditReceptionist/:id" element={<EditReceptionist />} />
         <Route path="/CenterAdmin/center-profile" element={<CenterProfile />} />
-
+        <Route path="/CenterAdmin/patients/AddMedications/:id" element={<AddMedications />} />
+        <Route path="/CenterAdmin/patients/ViewProfile/:id" element={<ViewProfile />} />
+        <Route path="/CenterAdmin/patients/FollowUp/:id" element={<FollowUp />} />
+        <Route
+          path="/CenterAdmin/patients/FollowUp/AddAllergicRhinitis/:patientId"
+          element={<AddAllergicRhinitis />}
+        />
+        <Route path="/CenterAdmin/patients/FollowUp/ViewAllergicRhinitis/:allergicRhinitisId" element={<ViewAllergicRhinitis />} />
+        <Route path="/CenterAdmin/patients/FollowUp/AtopicDermatitis/:patientId" element={<AtopicDermatitis />} />
+        <Route path="/CenterAdmin/patients/FollowUp/ViewAtopicDermatitis/:atopicDermatitisId" element={<ViewAtopicDermatitis />} />
 
 
 

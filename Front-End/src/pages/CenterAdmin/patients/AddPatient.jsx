@@ -3,22 +3,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { createPatient } from "../../../features/patient/patientThunks";
 import { resetPatientState } from "../../../features/patient/patientSlice";
 import { useNavigate } from "react-router-dom";
+import { fetchAllDoctors } from "../../../features/doctor/doctorThunks";
 
 const AddPatient = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { loading, success, error } = useSelector((state) => state.patient);
+  const doctorState = useSelector((state) => state.doctor);
+  const { loading: doctorLoading, error: doctorError, doctors = [] } = doctorState;
 
   const [formData, setFormData] = useState({
     name: "",
     age: "",
     gender: "",
-    referringPhysician: "",
     address: "",
     contact: "",
     email: "",
+    centerCode: "",
+    assignedDoctor: "",
   });
+
+  useEffect(() => {
+    dispatch(fetchAllDoctors());
+  }, [dispatch]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -88,18 +96,6 @@ const AddPatient = () => {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Referring Physician</label>
-            <input
-              type="text"
-              name="referringPhysician"
-              value={formData.referringPhysician}
-              onChange={handleChange}
-              placeholder="Enter physician name"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
             <textarea
@@ -134,6 +130,40 @@ const AddPatient = () => {
               placeholder="Enter email"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Center Code</label>
+            <input
+              type="text"
+              name="centerCode"
+              value={formData.centerCode}
+              onChange={handleChange}
+              placeholder="Enter center code"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Assign Doctor</label>
+            {doctorLoading ? (
+              <div className="text-blue-600">Loading doctors...</div>
+            ) : doctorError ? (
+              <div className="text-red-600">Failed to load doctors</div>
+            ) : (
+              <select
+                name="assignedDoctor"
+                value={formData.assignedDoctor}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="">Select Doctor</option>
+                {doctors && doctors.length > 0 && doctors.map((doc) => (
+                  <option key={doc._id} value={doc._id}>{doc.name}</option>
+                ))}
+              </select>
+            )}
           </div>
         </div>
 

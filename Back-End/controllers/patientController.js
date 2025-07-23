@@ -11,7 +11,8 @@ const addPatient = async (req, res) => {
       contact,
       email,
       address,
-      referringPhysician
+      assignedDoctor,
+      centerCode
     } = req.body;
 
     const centerId = req.user.centerId;
@@ -26,8 +27,9 @@ const addPatient = async (req, res) => {
       phone: contact,
       email,
       address,
-      referringPhysician,
       centerId,
+      assignedDoctor,
+      centerCode,
     });
 
     const savedPatient = await newPatient.save();
@@ -41,7 +43,9 @@ const addPatient = async (req, res) => {
 // ✅ Get All Patients
 const getPatients = async (req, res) => {
   try {
-    const patients = await Patient.find({ centerId: req.user.centerId }).populate('centerId', 'name');
+    const patients = await Patient.find({ centerId: req.user.centerId })
+      .populate('centerId', 'name code')
+      .populate('assignedDoctor', 'name'); // populate doctor name
     res.json(patients);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch patients', error: err.message });
@@ -52,7 +56,7 @@ const getPatients = async (req, res) => {
 const getPatientById = async (req, res) => {
   try {
     const { id } = req.params;
-    const patient = await Patient.findById(id);
+    const patient = await Patient.findById(id).populate('assignedDoctor', 'name');
     if (!patient) {
       return res.status(404).json({ message: 'Patient not found' });
     }
