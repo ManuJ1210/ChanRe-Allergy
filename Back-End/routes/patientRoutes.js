@@ -6,7 +6,8 @@ import {
   updatePatient,
   deletePatient,
   addTestToPatient,
-  getPatientAndTests
+  getPatientAndTests,
+  getPatientsByReceptionist
 } from '../controllers/patientController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -15,6 +16,7 @@ const router = express.Router();
 // Patient Routes
 router.post('/', protect, addPatient);
 router.get('/', protect, getPatients);
+router.get('/receptionist/mine', protect, getPatientsByReceptionist);
 router.get('/:id', protect, getPatientById);
 router.put('/:id', protect, updatePatient);
 router.delete('/:id', protect, deletePatient);

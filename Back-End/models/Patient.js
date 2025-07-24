@@ -34,6 +34,7 @@ const patientSchema = new mongoose.Schema({
     required: true,
   },
   assignedDoctor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  registeredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   centerCode: { type: String },
   tests: [testSchema]
 }, { timestamps: true });

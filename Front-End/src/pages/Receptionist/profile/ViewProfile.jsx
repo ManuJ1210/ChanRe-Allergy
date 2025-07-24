@@ -4,7 +4,8 @@ import {
   FaUserCircle, FaEdit, FaHistory, FaAllergies, FaNotesMedical, FaVial, FaUserMd, FaSyringe
 } from "react-icons/fa";
 import axios from "axios";
-import FollowUp from "./FollowUp/FollowUp";
+import FollowUp from "../FollowUp/FollowUp";
+import PrescriptionList from '../FollowUp/Prescription/PrescriptionList';
 
 const TABS = ["Overview", "Follow Up", "Prescription"];
 
@@ -419,11 +420,7 @@ const ViewProfile = () => {
         </>
       )}
       {activeTab === "Follow Up" && <FollowUp />}
-      {activeTab === "Prescription" && (
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 text-center text-gray-400">
-          Prescription section coming soon...
-        </div>
-      )}
+      {activeTab === "Prescription" && <PrescriptionList patientId={patient?._id || params.patientId || params.id} />}
     </div>
   );
 };

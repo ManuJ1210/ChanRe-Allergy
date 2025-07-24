@@ -20,7 +20,7 @@ const addPatient = async (req, res) => {
       return res.status(400).json({ message: "Center ID is missing from user." });
     }
 
-    const newPatient = new Patient({
+    const patientData = {
       name,
       gender,
       age,
@@ -30,8 +30,12 @@ const addPatient = async (req, res) => {
       centerId,
       assignedDoctor,
       centerCode,
-    });
+    };
+    if (req.user.role === 'receptionist') {
+      patientData.registeredBy = req.user._id;
+    }
 
+    const newPatient = new Patient(patientData);
     const savedPatient = await newPatient.save();
     res.status(201).json({ message: "Patient created successfully", patient: savedPatient });
   } catch (error) {
@@ -204,6 +208,18 @@ export const getPatientAndTests = async (req, res) => {
   }
 };
 
+// Get patients registered by the logged-in receptionist
+const getPatientsByReceptionist = async (req, res) => {
+  try {
+    const patients = await Patient.find({ registeredBy: req.user._id })
+      .populate('centerId', 'name code')
+      .populate('assignedDoctor', 'name');
+    res.json(patients);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch patients', error: err.message });
+  }
+};
+
 // ✅ Named exports (required for ESM import)
 export {
   addPatient,
@@ -212,5 +228,6 @@ export {
   updatePatient,
   deletePatient,
   addTestToPatient,
-  getTestsByPatient
+  getTestsByPatient,
+  getPatientsByReceptionist
 };

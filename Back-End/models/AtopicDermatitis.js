@@ -12,8 +12,7 @@ const atopicDermatitisSchema = new mongoose.Schema({
   localApplications: String,
   otherMedications: String,
   skinExamination: String,
-  createdAt: { type: Date, default: Date.now },
   updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-});
+}, { timestamps: true });
 
 export default mongoose.model('AtopicDermatitis', atopicDermatitisSchema); 

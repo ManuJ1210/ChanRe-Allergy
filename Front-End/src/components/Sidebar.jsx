@@ -13,10 +13,12 @@ import {
   FaHome,
 } from 'react-icons/fa';
 
-export default function Sidebar() {
+export default function Sidebar({ userInfo: propUserInfo }) {
   const location = useLocation();
   const [centerOpen, setCenterOpen] = useState(null); // can be 'doctors', 'receptionists', or 'lab'
-  const userInfo = useSelector((state) => state.user?.userInfo);
+  // Use prop if provided, otherwise Redux
+  const reduxUserInfo = useSelector((state) => state.user?.userInfo);
+  const userInfo = propUserInfo || reduxUserInfo;
   const role = userInfo?.role || '';
   const isActive = (path) => location.pathname === path;
   return (
@@ -123,6 +125,35 @@ export default function Sidebar() {
               label="Center Profile"
               icon={<FaHospitalAlt />}
               isActive={isActive("/CenterAdmin/center-profile")}
+            />
+          </>
+        )}
+
+        {role === 'receptionist' && (
+          <>
+            <SidebarLink
+              to="/receptionist/dashboard"
+              label="Dashboard"
+              icon={<FaHome />}
+              isActive={isActive("/receptionist/dashboard")}
+            />
+            <SidebarLink
+              to="/receptionist/add-patient"
+              label="Add Patient"
+              icon={<FaUserMd />}
+              isActive={isActive("/receptionist/add-patient")}
+            />
+            <SidebarLink
+              to="/receptionist/patients"
+              label="Patient List"
+              icon={<FaUsers />}
+              isActive={isActive("/receptionist/patients")}
+            />
+            <SidebarLink
+              to="/receptionist/manage-patients"
+              label="Manage Patients"
+              icon={<FaUsers />}
+              isActive={isActive("/receptionist/manage-patients")}
             />
           </>
         )}

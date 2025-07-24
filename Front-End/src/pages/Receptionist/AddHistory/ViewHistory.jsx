@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import api from "../../../services/api";
+import api from "../../../../services/api";
 import { useReactToPrint } from "react-to-print";
 import { FaDownload, FaListAlt, FaAllergies, FaNotesMedical, FaVial, FaUserMd, FaSyringe } from "react-icons/fa";
 

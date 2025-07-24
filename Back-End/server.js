@@ -15,6 +15,10 @@ import medicationRoutes from './routes/medicationRoutes.js';
 import followUpRoutes from './routes/followUpRoutes.js';
 import allergicRhinitisRoutes from './routes/allergicRhinitisRoutes.js';
 import atopicDermatitisRoutes from './routes/atopicDermatitisRoutes.js';
+import allergicConjunctivitisRoutes from './routes/allergicConjunctivitisRoutes.js';
+import allergicBronchitisRoutes from './routes/allergicBronchitisRoutes.js';
+import gpeRoutes from './routes/gpeRoutes.js';
+import prescriptionRoutes from './routes/prescriptionRoutes.js';
 
 dotenv.config();
 
@@ -38,6 +42,10 @@ app.use('/api/medications', medicationRoutes);
 app.use('/api/followups', followUpRoutes);
 app.use('/api/allergic-rhinitis', allergicRhinitisRoutes);
 app.use('/api/atopic-dermatitis', atopicDermatitisRoutes);
+app.use('/api/allergic-conjunctivitis', allergicConjunctivitisRoutes);
+app.use('/api/allergic-bronchitis', allergicBronchitisRoutes);
+app.use('/api/gpe', gpeRoutes);
+app.use('/api/prescriptions', prescriptionRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

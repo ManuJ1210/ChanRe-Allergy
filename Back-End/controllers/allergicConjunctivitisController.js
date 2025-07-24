@@ -1,43 +1,41 @@
-import AtopicDermatitis from '../models/AtopicDermatitis.js';
+import AllergicConjunctivitis from '../models/AllergicConjunctivitis.js';
 
-export const createAtopicDermatitis = async (req, res) => {
+export const createAllergicConjunctivitis = async (req, res) => {
   try {
-    const { patientId, ...rest } = req.body;
+    const { patientId, symptoms, type, grading } = req.body;
     const updatedBy = req.user._id;
     if (!patientId) {
       return res.status(400).json({ message: 'patientId is required' });
     }
-    const record = await AtopicDermatitis.create({ patientId, ...rest, updatedBy });
-    res.status(201).json({ message: 'Atopic Dermatitis record added', data: record });
+    const record = await AllergicConjunctivitis.create({ patientId, symptoms, type, grading, updatedBy });
+    res.status(201).json({ message: 'Allergic Conjunctivitis record added', data: record });
   } catch (err) {
     res.status(500).json({ message: 'Failed to add record', error: err.message });
   }
 };
 
-export const getAtopicDermatitisByPatient = async (req, res) => {
+export const getAllergicConjunctivitisByPatient = async (req, res) => {
   try {
     const { patientId } = req.query;
     let records;
     if (patientId) {
-      records = await AtopicDermatitis.find({ patientId })
+      records = await AllergicConjunctivitis.find({ patientId })
         .populate('patientId', 'name age centerCode phone gender')
         .sort({ createdAt: -1 });
     } else {
-      // Fallback: fetch all records if no patientId is provided
-      records = await AtopicDermatitis.find()
+      records = await AllergicConjunctivitis.find()
         .populate('patientId', 'name age centerCode phone gender')
         .sort({ createdAt: -1 });
     }
-    console.log('Fetched Atopic Dermatitis records:', records);
     res.status(200).json(records);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch records', error: err.message });
   }
 };
 
-export const getAtopicDermatitisById = async (req, res) => {
+export const getAllergicConjunctivitisById = async (req, res) => {
   try {
-    const record = await AtopicDermatitis.findById(req.params.id)
+    const record = await AllergicConjunctivitis.findById(req.params.id)
       .populate('patientId', 'name age centerCode phone gender');
     if (!record) {
       return res.status(404).json({ message: 'Not found' });
