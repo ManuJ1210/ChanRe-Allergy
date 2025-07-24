@@ -224,18 +224,18 @@ const FollowUp = ({ patientId: propPatientId }) => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6 text-blue-800">Follow Up</h2>
+      <h2 className="text-3xl font-extrabold mb-8 text-blue-500 tracking-tight">Follow Up</h2>
       {loading ? (
         <div>Loading...</div>
       ) : error ? (
         <div className="text-red-600">{error}</div>
       ) : (
         FOLLOWUP_TYPES.map(type => (
-          <div key={type} className="mb-8 bg-white rounded-xl shadow p-6">
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-lg font-semibold text-gray-700">{type}</h3>
+          <div key={type} className="mb-10 bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-blue-700">{type}</h3>
               <button
-                className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+                className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-5 py-2 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all"
                 onClick={() => {
                   if (type === "Allergic Rhinitis") {
                     navigate(`/CenterAdmin/patients/FollowUp/AddAllergicRhinitis/${patientId}`);
@@ -255,12 +255,12 @@ const FollowUp = ({ patientId: propPatientId }) => {
                 Add Follow Up
               </button>
             </div>
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm border">
-                <thead className="bg-gray-100">
+            <div className="overflow-x-auto rounded-xl">
+              <table className="min-w-full text-sm border rounded-xl overflow-hidden">
+                <thead className="bg-blue-50">
                   <tr>
                     {getHeaders(type).map(h => (
-                      <th key={h} className="border px-2 py-1">{h}</th>
+                      <th key={h} className="border px-3 py-2 text-slate-700 font-semibold">{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -269,7 +269,7 @@ const FollowUp = ({ patientId: propPatientId }) => {
                     grouped[type].map(fu => renderRow(type, fu))
                   ) : (
                     <tr>
-                      <td colSpan={getHeaders(type).length} className="text-center text-gray-400 py-2">No follow ups found.</td>
+                      <td colSpan={getHeaders(type).length} className="text-center text-slate-400 py-3">No follow ups found.</td>
                     </tr>
                   )}
                 </tbody>
@@ -278,11 +278,11 @@ const FollowUp = ({ patientId: propPatientId }) => {
           </div>
         ))
       )}
-      <div className="mb-8 bg-white rounded-xl shadow p-6">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="text-lg font-semibold text-gray-700">Atopic Dermatitis</h3>
+      <div className="mb-10 bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-bold text-blue-700">Atopic Dermatitis</h3>
           <button
-            className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+            className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-5 py-2 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all"
             onClick={() => navigate(`/CenterAdmin/patients/FollowUp/AtopicDermatitis/${patientId}`)}
           >
             Add Follow Up
@@ -290,7 +290,7 @@ const FollowUp = ({ patientId: propPatientId }) => {
         </div>
         {/* Patient details for Atopic Dermatitis */}
         {patientDetails && (
-          <div className="mb-4 p-4 bg-blue-50 rounded flex flex-wrap gap-6">
+          <div className="mb-4 p-4 bg-blue-50 rounded-xl flex flex-wrap gap-6">
             <div><span className="font-semibold">Name:</span> {patientDetails.name || '-'}</div>
             <div><span className="font-semibold">Age:</span> {patientDetails.age || '-'}</div>
             <div><span className="font-semibold">Gender:</span> {patientDetails.gender || '-'}</div>
@@ -298,15 +298,15 @@ const FollowUp = ({ patientId: propPatientId }) => {
             <div><span className="font-semibold">Phone:</span> {patientDetails.phone || patientDetails.contact || '-'}</div>
           </div>
         )}
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm border">
-            <thead className="bg-gray-100">
+        <div className="overflow-x-auto rounded-xl">
+          <table className="min-w-full text-sm border rounded-xl overflow-hidden">
+            <thead className="bg-blue-50">
               <tr>
-                <th className="border px-2 py-1">Patient Name</th>
-                <th className="border px-2 py-1">Age</th>
-                <th className="border px-2 py-1">Date</th>
-                <th className="border px-2 py-1">Symptoms</th>
-                <th className="border px-2 py-1">Action</th>
+                <th className="border px-3 py-2 text-slate-700 font-semibold">Patient Name</th>
+                <th className="border px-3 py-2 text-slate-700 font-semibold">Age</th>
+                <th className="border px-3 py-2 text-slate-700 font-semibold">Date</th>
+                <th className="border px-3 py-2 text-slate-700 font-semibold">Symptoms</th>
+                <th className="border px-3 py-2 text-slate-700 font-semibold">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -315,13 +315,13 @@ const FollowUp = ({ patientId: propPatientId }) => {
                   const patient = record.patientId || {};
                   return (
                     <tr key={record._id}>
-                      <td className="border px-2 py-1">{patient.name || "-"}</td>
-                      <td className="border px-2 py-1">{patient.age || "-"}</td>
-                      <td className="border px-2 py-1">{record.createdAt ? new Date(record.createdAt).toLocaleDateString() : "-"}</td>
-                      <td className="border px-2 py-1">{record.symptoms || "-"}</td>
-                      <td className="border px-2 py-1 text-center">
+                      <td className="border px-3 py-2">{patient.name || "-"}</td>
+                      <td className="border px-3 py-2">{patient.age || "-"}</td>
+                      <td className="border px-3 py-2">{record.createdAt ? new Date(record.createdAt).toLocaleDateString() : "-"}</td>
+                      <td className="border px-3 py-2">{record.symptoms || "-"}</td>
+                      <td className="border px-3 py-2 text-center">
                         <button
-                          className="bg-blue-100 text-blue-700 px-2 py-1 rounded"
+                          className="bg-blue-100 text-blue-700 px-3 py-1 rounded font-semibold"
                           onClick={() => navigate(`/CenterAdmin/patients/FollowUp/ViewAtopicDermatitis/${record._id}`)}
                         >
                           View
@@ -332,7 +332,7 @@ const FollowUp = ({ patientId: propPatientId }) => {
                 })
               ) : (
                 <tr>
-                  <td colSpan={5} className="text-center text-gray-400 py-2">No records found.</td>
+                  <td colSpan={5} className="text-center text-slate-400 py-3">No records found.</td>
                 </tr>
               )}
             </tbody>

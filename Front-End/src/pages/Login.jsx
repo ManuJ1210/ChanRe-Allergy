@@ -36,12 +36,12 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-slate-100 to-blue-50 px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl space-y-6 border border-gray-200"
+        className="w-full max-w-md bg-white p-8 rounded-3xl shadow-2xl space-y-7 border border-blue-100"
       >
-        <h2 className="text-3xl font-bold text-center text-gray-800">Login</h2>
+        <h2 className="text-3xl font-extrabold text-center text-blue-500 mb-2 tracking-tight">Login</h2>
 
         <input
           name="email"
@@ -49,7 +49,7 @@ export default function Login() {
           placeholder="Email"
           value={form.email}
           onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 border border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50 text-blue-700 placeholder-blue-400 transition"
           required
         />
         <input
@@ -58,7 +58,7 @@ export default function Login() {
           placeholder="Password"
           value={form.password}
           onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 border border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50 text-blue-700 placeholder-blue-400 transition"
           required
         />
 
@@ -66,17 +66,17 @@ export default function Login() {
           <button
             type="button"
             onClick={() => navigate('/forgot-password')}
-            className="text-sm text-blue-600 hover:underline"
+            className="text-sm text-blue-500 hover:underline font-medium"
           >
             Forgot Password?
           </button>
         </div>
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {error && <p className="text-red-600 text-sm text-center font-medium">{error}</p>}
 
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg shadow transition duration-300"
+          className="w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white py-3 rounded-xl shadow-lg font-semibold text-lg transition-all duration-200 disabled:opacity-60"
           disabled={loading}
         >
           {loading ? 'Logging in...' : 'Login'}

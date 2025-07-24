@@ -36,26 +36,26 @@ const ViewGPE = () => {
   const patient = record.patientId || {};
 
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white rounded-xl shadow">
-      <h2 className="text-2xl font-bold mb-4 text-blue-800">GPE Details</h2>
-      <div className="mb-4 p-4 bg-blue-50 rounded flex flex-wrap gap-6">
+    <div className="p-8 max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-blue-100">
+      <h2 className="text-3xl font-extrabold mb-8 text-blue-500 tracking-tight">GPE Details</h2>
+      <div className="mb-8 p-4 bg-blue-50 rounded-xl flex flex-wrap gap-6 border border-blue-100">
         <div><span className="font-semibold">Name:</span> {patient.name || '-'}</div>
         <div><span className="font-semibold">Age:</span> {patient.age || '-'}</div>
         <div><span className="font-semibold">Gender:</span> {patient.gender || '-'}</div>
         <div><span className="font-semibold">Center Code:</span> {patient.centerCode || '-'}</div>
         <div><span className="font-semibold">Phone:</span> {patient.phone || '-'}</div>
       </div>
-      <div className="mb-4 flex flex-wrap gap-6 items-center">
-        <div><span className="font-semibold">Weight:</span> {record.weight || '-'}</div>
-        <div><span className="font-semibold">Pulse:</span> {record.pulse || '-'}</div>
-        <div><span className="font-semibold">Bp:</span> {record.bp || '-'}</div>
-        <div><span className="font-semibold">RR:</span> {record.rr || '-'}</div>
-        <div><span className="font-semibold">Temp:</span> {record.temp || '-'}</div>
-        <div><span className="font-semibold">SPO₂%:</span> {record.spo2 || '-'}</div>
+      <div className="mb-6 flex flex-wrap gap-6 items-center">
+        <div><span className="font-semibold text-blue-700">Weight:</span> {record.weight || '-'}</div>
+        <div><span className="font-semibold text-blue-700">Pulse:</span> {record.pulse || '-'}</div>
+        <div><span className="font-semibold text-blue-700">Bp:</span> {record.bp || '-'}</div>
+        <div><span className="font-semibold text-blue-700">RR:</span> {record.rr || '-'}</div>
+        <div><span className="font-semibold text-blue-700">Temp:</span> {record.temp || '-'}</div>
+        <div><span className="font-semibold text-blue-700">SPO 2%:</span> {record.spo2 || '-'}</div>
       </div>
-      <div className="mb-4"><span className="font-semibold">ENT Examination:</span> {record.entExamination || '-'}</div>
-      <div className="mb-4">
-        <h3 className="text-xl font-semibold mb-2">Systematic Examination</h3>
+      <div className="mb-6"><span className="font-semibold text-blue-700">ENT Examination:</span> {record.entExamination || '-'}</div>
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold mb-2 text-blue-700">Systematic Examination</h3>
         <div className="flex flex-wrap gap-6 items-center">
           <div><span className="font-semibold">CNS:</span> {record.cns || '-'}</div>
           <div><span className="font-semibold">CVS:</span> {record.cvs || '-'}</div>
@@ -63,13 +63,13 @@ const ViewGPE = () => {
           <div><span className="font-semibold">P/A:</span> {record.pa || '-'}</div>
         </div>
       </div>
-      <div className="mb-4 flex flex-wrap gap-6 items-center">
-        <div><span className="font-semibold">Drug Adverse Notion:</span> {record.drugAdverseNotion || '-'}</div>
-        <div><span className="font-semibold">Drug Compliance:</span> {record.drugCompliance || '-'}</div>
-        <div><span className="font-semibold">Advise to be followed up till next visit:</span> {record.followUpAdvice || '-'}</div>
-        <div><span className="font-semibold">Eye Medication:</span> {record.eyeMedication || '-'}</div>
+      <div className="mb-6 flex flex-wrap gap-6 items-center">
+        <div><span className="font-semibold text-blue-700">Drug Adverse Notion:</span> {record.drugAdverseNotion || '-'}</div>
+        <div><span className="font-semibold text-blue-700">Drug Compliance:</span> {record.drugCompliance || '-'}</div>
+        <div><span className="font-semibold text-blue-700">Advise to be followed up till next visit:</span> {record.followUpAdvice || '-'}</div>
+        <div><span className="font-semibold text-blue-700">Eye Medication:</span> {record.eyeMedication || '-'}</div>
       </div>
-      <button className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700" onClick={() => navigate(-1)}>Back</button>
+      <button className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-8 py-2 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all" onClick={() => navigate(-1)}>Back</button>
     </div>
   );
 };

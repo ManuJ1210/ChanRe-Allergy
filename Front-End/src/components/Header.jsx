@@ -47,11 +47,11 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white h-22 border-b border-gray-200 shadow-sm flex flex-wrap items-center px-2 md:px-6 transition-all duration-300 md:ml-[18.5rem] gap-2 md:gap-0">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-br from-slate-50 to-purple-50 h-22 border-b border-slate-200 shadow-md flex flex-wrap items-center px-2 md:px-6 transition-all duration-300 md:ml-[18.5rem] gap-2 md:gap-0">
         {/* Left: Center name */}
         <div className="flex items-center min-w-[100px] max-w-[160px] truncate flex-shrink-0 text-sm md:min-w-[180px] md:max-w-[220px] md:text-lg">
           {!isSuperadmin && (
-            <span className="font-bold text-blue-700 whitespace-nowrap truncate">
+            <span className="font-bold text-purple-700 whitespace-nowrap truncate">
               {centerName || 'Center'}
             </span>
           )}
@@ -59,7 +59,7 @@ export default function Header() {
         {/* Center: Search bar (responsive) */}
         <div className="flex items-center gap-2 flex-1 min-w-0 max-w-full order-3 md:order-none md:justify-center">
           <FaSearch
-            className="text-gray-400 cursor-pointer"
+            className="text-slate-400 cursor-pointer hover:text-purple-400 transition"
             onClick={handleSearch}
           />
           <input
@@ -68,25 +68,25 @@ export default function Header() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full px-2 py-1 bg-gray-50 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm min-w-0"
+            className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-purple-300 text-sm min-w-0 text-slate-700 placeholder-slate-400 transition"
           />
         </div>
         {/* Right: Profile section */}
         <div className="relative flex-shrink-0 ml-auto order-2 md:order-none">
           <button
-            className="flex items-center gap-2 px-2 md:px-3 py-1 hover:bg-gray-100 rounded cursor-pointer"
+            className="flex items-center gap-2 px-2 md:px-3 py-1 hover:bg-purple-50 rounded-xl cursor-pointer transition"
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
-            <FaUserCircle className="text-blue-600 text-xl" />
+            <FaUserCircle className="text-purple-500 text-xl" />
             <div className="text-left hidden sm:block max-w-[100px] md:max-w-none truncate">
-              <p className="text-xs md:text-sm font-medium text-gray-800 truncate">{user?.name || "Admin"}</p>
-              <p className="text-[10px] md:text-xs text-gray-500 capitalize truncate">{user?.role || "superadmin"}</p>
+              <p className="text-xs md:text-sm font-semibold text-slate-800 truncate">{user?.name || "Admin"}</p>
+              <p className="text-[10px] md:text-xs text-slate-500 capitalize truncate">{user?.role || "superadmin"}</p>
             </div>
           </button>
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-lg z-10">
+            <div className="absolute right-0 mt-2 w-40 bg-white border border-slate-200 rounded-xl shadow-lg z-10">
               <button
-                className="flex items-center gap-2 px-4 py-2 w-full text-sm hover:bg-gray-100"
+                className="flex items-center gap-2 px-4 py-2 w-full text-sm hover:bg-purple-50 text-slate-700"
                 onClick={() => {
                   setShowProfile(true);
                   setDropdownOpen(false);
@@ -95,7 +95,7 @@ export default function Header() {
                 <FaUser /> View Profile
               </button>
               <button
-                className="flex items-center gap-2 px-4 py-2 w-full text-sm text-red-600 hover:bg-gray-100"
+                className="flex items-center gap-2 px-4 py-2 w-full text-sm text-red-600 hover:bg-purple-50"
                 onClick={handleLogout}
               >
                 <FaSignOutAlt /> Logout
@@ -107,14 +107,14 @@ export default function Header() {
       {/* Profile Modal */}
       {showProfile && (
         <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50 bg-black">
-          <div className="bg-white rounded-lg w-full max-w-sm p-6 shadow-lg relative">
+          <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl relative">
             <button
               onClick={() => setShowProfile(false)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-red-600"
+              className="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-xl"
             >
               <FaTimes />
             </button>
-            <h2 className="text-xl font-bold mb-4 text-center text-blue-600">User Profile</h2>
+            <h2 className="text-xl font-bold mb-4 text-center text-purple-600">User Profile</h2>
             <div className="space-y-2 text-sm">
               <p><strong>Name:</strong> {user?.name || '-'}</p>
               <p><strong>Email:</strong> {user?.email || '-'}</p>

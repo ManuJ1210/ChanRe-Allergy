@@ -32,24 +32,24 @@ const PrescriptionList = ({ patientId: propPatientId }) => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Prescription</h2>
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-3xl font-extrabold text-blue-500 tracking-tight">Prescription</h2>
         <button
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-5 py-2 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all"
           onClick={() => navigate(`/CenterAdmin/patients/FollowUp/AddPrescription/${patientId}`)}
         >
           Add Prescription
         </button>
       </div>
-      <div className="bg-white rounded-xl shadow p-4">
-        <table className="min-w-full text-sm border">
-          <thead className="bg-gray-100">
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
+        <table className="min-w-full text-sm border rounded-xl overflow-hidden">
+          <thead className="bg-blue-50">
             <tr>
-              <th className="border px-2 py-1">Date</th>
-              <th className="border px-2 py-1">Visit</th>
-              <th className="border px-2 py-1">Patient Name</th>
-              <th className="border px-2 py-1">Updated By</th>
-              <th className="border px-2 py-1">Action</th>
+              <th className="border px-3 py-2 text-slate-700 font-semibold">Date</th>
+              <th className="border px-3 py-2 text-slate-700 font-semibold">Visit</th>
+              <th className="border px-3 py-2 text-slate-700 font-semibold">Patient Name</th>
+              <th className="border px-3 py-2 text-slate-700 font-semibold">Updated By</th>
+              <th className="border px-3 py-2 text-slate-700 font-semibold">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -58,17 +58,17 @@ const PrescriptionList = ({ patientId: propPatientId }) => {
             ) : error ? (
               <tr><td colSpan={5} className="text-center text-red-600 py-4">{error}</td></tr>
             ) : prescriptions.length === 0 ? (
-              <tr><td colSpan={5} className="text-center text-gray-400 py-4">No prescriptions found.</td></tr>
+              <tr><td colSpan={5} className="text-center text-slate-400 py-4">No prescriptions found.</td></tr>
             ) : (
               prescriptions.map(p => (
                 <tr key={p._id}>
-                  <td className="border px-2 py-1">{p.date ? new Date(p.date).toLocaleDateString() : '-'}</td>
-                  <td className="border px-2 py-1">{p.visit || '-'}</td>
-                  <td className="border px-2 py-1">{p.patientId?.name || '-'}</td>
-                  <td className="border px-2 py-1">{p.updatedBy?.name || '-'}</td>
-                  <td className="border px-2 py-1 text-center">
+                  <td className="border px-3 py-2">{p.date ? new Date(p.date).toLocaleDateString() : '-'}</td>
+                  <td className="border px-3 py-2">{p.visit || '-'}</td>
+                  <td className="border px-3 py-2">{p.patientId?.name || '-'}</td>
+                  <td className="border px-3 py-2">{p.updatedBy?.name || '-'}</td>
+                  <td className="border px-3 py-2 text-center">
                     <button
-                      className="bg-blue-100 text-blue-700 px-2 py-1 rounded"
+                      className="bg-blue-100 text-blue-700 px-3 py-1 rounded font-semibold"
                       onClick={() => navigate(`/CenterAdmin/patients/FollowUp/ViewPrescription/${p._id}`)}
                     >
                       View

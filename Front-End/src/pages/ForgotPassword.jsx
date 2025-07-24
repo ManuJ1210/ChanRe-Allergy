@@ -43,12 +43,12 @@ export default function ForgotPassword() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-blue-50 px-4">
             <form
                 onSubmit={handleSubmit}
-                className="w-full max-w-md bg-white p-8 rounded-xl shadow-md space-y-6"
+                className="w-full max-w-md bg-white p-8 rounded-3xl shadow-2xl space-y-7 border border-blue-100"
             >
-                <h2 className="text-2xl font-bold text-center text-gray-800">
+                <h2 className="text-2xl font-extrabold text-center text-blue-500 mb-2 tracking-tight">
                     Forgot Password
                 </h2>
 
@@ -59,7 +59,7 @@ export default function ForgotPassword() {
                     value={form.email}
                     onChange={handleChange}
                     required
-                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    className="w-full p-3 border border-blue-100 rounded-xl bg-slate-50 text-blue-700 placeholder-blue-400 transition"
                 />
 
                 <div className="relative">
@@ -70,12 +70,12 @@ export default function ForgotPassword() {
                         value={form.password}
                         onChange={handleChange}
                         required
-                        className="w-full p-3 border border-gray-300 rounded-lg pr-10"
+                        className="w-full p-3 border border-blue-100 rounded-xl pr-10 bg-slate-50 text-blue-700 placeholder-blue-400 transition"
                     />
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500"
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 text-blue-400 hover:text-blue-500"
                     >
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -89,12 +89,12 @@ export default function ForgotPassword() {
                         value={form.confirmPassword}
                         onChange={handleChange}
                         required
-                        className="w-full p-3 border border-gray-300 rounded-lg pr-10"
+                        className="w-full p-3 border border-blue-100 rounded-xl pr-10 bg-slate-50 text-blue-700 placeholder-blue-400 transition"
                     />
                     <button
                         type="button"
                         onClick={() => setShowConfirm(!showConfirm)}
-                        className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500"
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 text-blue-400 hover:text-blue-500"
                     >
                         {showConfirm ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -102,7 +102,7 @@ export default function ForgotPassword() {
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+                    className="w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white py-3 rounded-xl shadow-lg font-semibold text-lg transition-all duration-200 disabled:opacity-60"
                 >
                     Reset Password
                 </button>

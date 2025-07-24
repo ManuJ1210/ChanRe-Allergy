@@ -4,12 +4,12 @@ import axios from "axios";
 import { FaVial, FaRegSmile, FaPills, FaStethoscope } from "react-icons/fa";
 
 const Section = ({ icon, title, children }) => (
-  <div className="mb-6">
+  <div className="mb-8">
     <div className="flex items-center mb-2">
-      {icon && <span className="text-blue-600 mr-2">{icon}</span>}
-      <h3 className="font-semibold text-lg text-blue-700">{title}</h3>
+      {icon && <span className="text-blue-500 mr-2 text-xl">{icon}</span>}
+      <h3 className="font-bold text-lg text-blue-700">{title}</h3>
     </div>
-    <div className="bg-blue-50 rounded-lg p-4">{children}</div>
+    <div className="bg-blue-50 rounded-xl p-6 border border-blue-100 shadow-sm">{children}</div>
   </div>
 );
 
@@ -67,16 +67,16 @@ const ViewAllergicRhinitis = () => {
         }}
       >
         <button
-          className="absolute top-4 right-4 text-gray-400 hover:text-blue-700 text-2xl md:hidden"
+          className="absolute top-4 right-4 text-slate-400 hover:text-blue-500 text-2xl md:hidden"
           onClick={() => setShowDrawer(false)}
         >
           &times;
         </button>
         <div className="p-8 md:p-8">
-          <h2 className="text-3xl font-extrabold mb-8 text-blue-800 text-center tracking-tight">Allergic Rhinitis Details</h2>
+          <h2 className="text-3xl font-extrabold mb-8 text-blue-500 text-center tracking-tight">Allergic Rhinitis Details</h2>
           {/* Patient details */}
           {patient && (
-            <div className="mb-8 p-4 bg-blue-50 rounded flex flex-wrap gap-6 justify-center">
+            <div className="mb-8 p-4 bg-blue-50 rounded-xl flex flex-wrap gap-6 justify-center border border-blue-100">
               <div><span className="font-semibold">Name:</span> {patient.name}</div>
               <div><span className="font-semibold">Age:</span> {patient.age}</div>
               <div><span className="font-semibold">Gender:</span> {patient.gender}</div>

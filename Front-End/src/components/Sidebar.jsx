@@ -22,12 +22,12 @@ export default function Sidebar({ userInfo: propUserInfo }) {
   const role = userInfo?.role || '';
   const isActive = (path) => location.pathname === path;
   return (
-    <aside className="fixed top-0 left-0 h-screen w-[18.5rem] bg-white border-r border-gray-200 shadow-sm text-gray-700 z-40 overflow-y-auto">
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="text-2xl font-bold tracking-wide text-blue-800">
-          Chanre<span className="text-blue-500">Allergy</span>
+    <aside className="fixed top-0 left-0 h-screen w-[18.5rem] bg-gradient-to-br from-slate-50 to-blue-50 border-r border-blue-100 shadow-lg text-slate-700 z-40 overflow-y-auto rounded-r-3xl">
+      <div className="p-5 border-b border-blue-100">
+        <h2 className="text-2xl font-extrabold tracking-wide text-blue-500">
+          Chanre<span className="text-blue-400">Allergy</span>
         </h2>
-        <p className="text-sm text-gray-400 mt-1 capitalize">
+        <p className="text-sm text-slate-400 mt-1 capitalize">
           {role ? `${role} Panel` : 'User Panel'}
         </p>
       </div>
@@ -166,13 +166,13 @@ function SidebarLink({ to, label, icon, isActive }) {
   return (
     <Link
       to={to}
-      className={`flex items-center gap-3 px-3 py-2 rounded-md transition-all border-l-4 ${
-        isActive
-          ? 'bg-blue-50 border-blue-600 text-blue-700 font-medium'
-          : 'hover:bg-blue-50 border-transparent text-gray-600'
-      }`}
+      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all border-l-4 font-medium shadow-none
+        ${isActive
+          ? 'bg-blue-100 border-blue-500 text-blue-700'
+          : 'hover:bg-blue-50 border-transparent text-slate-600'}
+      `}
     >
-      <span className={`text-lg ${isActive ? 'text-blue-600' : 'text-gray-400'}`}>
+      <span className={`text-lg ${isActive ? 'text-blue-500' : 'text-slate-400'}`}>
         {icon}
       </span>
       {label}
@@ -185,14 +185,14 @@ function SidebarGroup({ label, icon, open, toggle, links, currentPath }) {
     <div className="space-y-1">
       <button
         onClick={toggle}
-        className="flex items-center justify-between w-full px-3 py-2 rounded-md text-gray-700 hover:bg-blue-50"
+        className="flex items-center justify-between w-full px-3 py-2 rounded-lg text-slate-700 hover:bg-blue-50 font-medium"
       >
         <div className="flex items-center gap-3">
-          <span className="text-gray-400">{icon}</span>
+          <span className="text-blue-500">{icon}</span>
           {label}
         </div>
         <FaChevronDown
-          className={`text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`text-blue-400 transition-transform ${open ? 'rotate-180' : ''}`}
         />
       </button>
       {open && (
@@ -201,11 +201,11 @@ function SidebarGroup({ label, icon, open, toggle, links, currentPath }) {
             <Link
               key={to}
               to={to}
-              className={`block py-1 text-sm rounded ${
-                currentPath === to
-                  ? 'text-blue-700 font-medium'
-                  : 'text-gray-500 hover:text-blue-600'
-              }`}
+              className={`block py-1 text-sm rounded font-medium
+                ${currentPath === to
+                  ? 'text-blue-700'
+                  : 'text-slate-500 hover:text-blue-600'}
+              `}
             >
               {label}
             </Link>

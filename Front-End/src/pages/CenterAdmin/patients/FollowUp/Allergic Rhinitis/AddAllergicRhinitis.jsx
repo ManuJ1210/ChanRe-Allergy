@@ -70,96 +70,96 @@ const AddAllergicRhinitis = ({ patientId: propPatientId, onSuccess, onCancel }) 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow max-w-3xl mx-auto">
-      <h2 className="text-xl font-bold mb-4 text-blue-700">ALLERGIC RHINITIS</h2>
-      <div className="mb-6">
-        <h3 className="font-semibold mb-2">Nasal Symptom Severity</h3>
+    <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-xl max-w-3xl mx-auto border border-blue-100">
+      <h2 className="text-3xl font-extrabold mb-8 text-blue-500 tracking-tight">ALLERGIC RHINITIS</h2>
+      <div className="mb-8">
+        <h3 className="font-semibold mb-3 text-blue-700">Nasal Symptom Severity</h3>
         {NASAL_SYMPTOMS.map(symptom => (
-          <div key={symptom} className="mb-2 flex items-center gap-4">
-            <label className="w-48">{symptom}</label>
+          <div key={symptom} className="mb-4 flex items-center gap-4">
+            <label className="w-56 text-slate-700 font-medium">{symptom}</label>
             <input
               type="range"
               min={0}
               max={7}
               value={nasalSymptoms[symptom] || 0}
               onChange={e => handleSlider(symptom, Number(e.target.value), true)}
-              className="flex-1"
+              className="flex-1 accent-blue-500"
             />
-            <span className="ml-2 text-blue-700">Value: {nasalSymptoms[symptom] || 0}</span>
+            <span className="ml-2 text-blue-700 font-semibold">Value: {nasalSymptoms[symptom] || 0}</span>
           </div>
         ))}
       </div>
-      <div className="mb-6">
-        <h3 className="font-semibold mb-2">Non Nasal Symptom Severity</h3>
+      <div className="mb-8">
+        <h3 className="font-semibold mb-3 text-blue-700">Non Nasal Symptom Severity</h3>
         {NON_NASAL_SYMPTOMS.map(symptom => (
-          <div key={symptom} className="mb-2 flex items-center gap-4">
-            <label className="w-48">{symptom}</label>
+          <div key={symptom} className="mb-4 flex items-center gap-4">
+            <label className="w-56 text-slate-700 font-medium">{symptom}</label>
             <input
               type="range"
               min={0}
               max={7}
               value={nonNasalSymptoms[symptom] || 0}
               onChange={e => handleSlider(symptom, Number(e.target.value), false)}
-              className="flex-1"
+              className="flex-1 accent-blue-500"
             />
-            <span className="ml-2 text-blue-700">Value: {nonNasalSymptoms[symptom] || 0}</span>
+            <span className="ml-2 text-blue-700 font-semibold">Value: {nonNasalSymptoms[symptom] || 0}</span>
           </div>
         ))}
       </div>
-      <div className="mb-6">
-        <h3 className="font-semibold mb-2">Quality of life assessment of rhinitis Severity</h3>
+      <div className="mb-8">
+        <h3 className="font-semibold mb-3 text-blue-700">Quality of life assessment of rhinitis Severity</h3>
         <input
           type="range"
           min={0}
           max={7}
           value={qualityOfLife}
           onChange={e => setQualityOfLife(Number(e.target.value))}
-          className="w-full"
+          className="w-full accent-blue-500"
         />
-        <span className="ml-2 text-blue-700">Value: {qualityOfLife}</span>
+        <span className="ml-2 text-blue-700 font-semibold">Value: {qualityOfLife}</span>
       </div>
-      <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         <input
           type="text"
           placeholder="Medication for Non-Nasal Symptom"
-          className="border rounded px-3 py-2"
+          className="border border-blue-100 rounded-xl px-4 py-3 bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
           value={medications.nonNasal}
           onChange={e => handleMedications('nonNasal', e.target.value)}
         />
         <input
           type="text"
           placeholder="Medication for Nasal Symptom"
-          className="border rounded px-3 py-2"
+          className="border border-blue-100 rounded-xl px-4 py-3 bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
           value={medications.nasal}
           onChange={e => handleMedications('nasal', e.target.value)}
         />
         <input
           type="text"
           placeholder="No of Antihistamine consumed"
-          className="border rounded px-3 py-2"
+          className="border border-blue-100 rounded-xl px-4 py-3 bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
           value={medications.antihistamine}
           onChange={e => handleMedications('antihistamine', e.target.value)}
         />
         <input
           type="text"
           placeholder="Other Medication, if any?"
-          className="border rounded px-3 py-2"
+          className="border border-blue-100 rounded-xl px-4 py-3 bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
           value={medications.other}
           onChange={e => handleMedications('other', e.target.value)}
         />
       </div>
-      <div className="mb-6">
+      <div className="mb-8">
         <input
           type="text"
           placeholder="ENT Examination"
-          className="border rounded px-3 py-2 w-full"
+          className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
           value={entExamination}
           onChange={e => setEntExamination(e.target.value)}
         />
       </div>
       <button
         type="submit"
-        className="bg-blue-700 text-white px-8 py-2 rounded hover:bg-blue-800 disabled:opacity-60"
+        className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-10 py-3 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all disabled:opacity-60"
         disabled={loading}
       >
         {loading ? "Submitting..." : "Submit"}

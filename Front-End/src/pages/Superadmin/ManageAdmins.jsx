@@ -21,12 +21,12 @@ export default function ManageAdmins() {
   };
 
   return (
-    <div className="p-6 w-full">
-      <h2 className="text-3xl font-bold mb-6 text-blue-900">Manage Center Admins</h2>
+    <div className="min-h-screen p-4 sm:p-8">
+      <h2 className="text-3xl font-extrabold mb-8 text-blue-500">Manage Center Admins</h2>
 
-      <div className="overflow-x-auto bg-white rounded-xl shadow">
-        <table className="min-w-full divide-y divide-gray-200 text-sm text-gray-700">
-          <thead className="bg-blue-50 text-blue-800 font-semibold text-left">
+      <div className="overflow-x-auto bg-white rounded-2xl shadow-sm border border-slate-100">
+        <table className="min-w-full divide-y divide-blue-100 text-sm text-slate-600">
+          <thead className="bg-blue-50 text-slate-700 font-semibold text-left">
             <tr>
               <th className="px-4 py-3">Admin Name</th>
               <th className="px-4 py-3">Center Name</th>
@@ -37,18 +37,18 @@ export default function ManageAdmins() {
               <th className="px-4 py-3 text-center">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-50">
             {loading ? (
               <tr>
-                <td colSpan="7" className="text-center py-6 text-gray-500">Loading...</td>
+                <td colSpan="7" className="text-center py-6 text-slate-500">Loading...</td>
               </tr>
             ) : admins.length === 0 ? (
               <tr>
-                <td colSpan="7" className="text-center py-6 text-gray-500">No admins found.</td>
+                <td colSpan="7" className="text-center py-6 text-slate-500">No admins found.</td>
               </tr>
             ) : (
               admins.map((admin) => (
-                <tr key={admin._id} className="hover:bg-gray-50 transition">
+                <tr key={admin._id} className="hover:bg-purple-50 transition">
                   <td className="px-4 py-2">{admin.adminName}</td>
                   <td className="px-4 py-2">{admin.centerName}</td>
                   <td className="px-4 py-2">{admin.centerCode}</td>
@@ -59,13 +59,13 @@ export default function ManageAdmins() {
                     <div className="flex justify-center items-center gap-2">
                       <button
                         onClick={() => navigate(`/superadmin/edit-admin/${admin._id}`)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded flex items-center gap-1"
+                        className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded-xl font-semibold shadow-sm transition"
                       >
                         <FaEdit /> Edit
                       </button>
                       <button
                         onClick={() => handleDelete(admin._id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded flex items-center gap-1"
+                        className="flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded-xl font-semibold shadow-sm transition"
                         disabled={deletingId === admin._id}
                       >
                         <FaTrash />

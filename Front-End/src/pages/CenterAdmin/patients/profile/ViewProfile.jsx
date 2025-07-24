@@ -97,16 +97,16 @@ const ViewProfile = () => {
   if (!patient) return <div className="p-8 text-center text-red-600">Patient not found.</div>;
 
   return (
-    <div className="p-4 sm:p-8 bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen">
+    <div className="p-4 sm:p-8 mt-6">
       {/* Header */}
-      <div className="relative rounded-xl p-6 flex flex-col md:flex-row items-center md:items-end justify-between mb-8 shadow-lg bg-gradient-to-r from-blue-200 to-blue-400">
+      <div className="relative rounded-2xl p-8 flex flex-col md:flex-row items-center md:items-end justify-between mb-10 shadow-xl bg-gradient-to-r from-blue-100 to-blue-200 border border-blue-100">
         <div className="flex items-center gap-6">
           <div className="w-28 h-28 rounded-full bg-white flex items-center justify-center shadow-lg border-4 border-blue-300 overflow-hidden">
-            <FaUserCircle className="text-blue-400 text-7xl" />
+            <FaUserCircle className="text-blue-500 text-7xl" />
           </div>
           <div>
-            <h2 className="text-4xl font-bold text-gray-800 mb-1">{patient.name}</h2>
-            <div className="flex flex-wrap gap-4 text-gray-700 text-base">
+            <h2 className="text-4xl font-extrabold text-blue-500 mb-1">{patient.name}</h2>
+            <div className="flex flex-wrap gap-4 text-slate-700 text-base">
               <span className="font-medium capitalize">{patient.gender}</span>
               {patient.address && <span>{patient.address}</span>}
               {patient.email && <span>{patient.email}</span>}
@@ -124,15 +124,15 @@ const ViewProfile = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-4 mb-8">
+      <div className="flex gap-4 mb-10">
         {TABS.map((tab) => (
           <button
             key={tab}
-            className={`px-6 py-2 rounded-full font-semibold shadow transition-all duration-150 ${
-              activeTab === tab
+            className={`px-6 py-2 rounded-full font-semibold shadow transition-all duration-150 text-base
+              ${activeTab === tab
                 ? "bg-blue-600 text-white"
-                : "bg-white text-blue-700 border border-blue-200 hover:bg-blue-100"
-            }`}
+                : "bg-white text-blue-700 border border-blue-200 hover:bg-blue-100"}
+            `}
             onClick={() => setActiveTab(tab)}
           >
             {tab}
@@ -144,7 +144,7 @@ const ViewProfile = () => {
       {activeTab === "Overview" && (
         <>
           {/* Patient Details Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-blue-100">
             <h3 className="text-xl font-bold mb-6 text-blue-700">Patient Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
@@ -163,7 +163,7 @@ const ViewProfile = () => {
           </div>
 
           {/* Investigations */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-blue-100">
             <h3 className="text-xl font-bold mb-6 text-blue-700">Investigations</h3>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm border rounded-lg overflow-hidden">
@@ -212,7 +212,7 @@ const ViewProfile = () => {
                       </tr>
                     ))
                   ) : (
-                    <tr><td colSpan={17} className="text-center text-gray-400 py-2">No investigations found.</td></tr>
+                    <tr><td colSpan={17} className="text-center text-slate-400 py-2">No investigations found.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -220,14 +220,14 @@ const ViewProfile = () => {
           </div>
 
           {/* Medications */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-blue-100">
             <h3 className="text-xl font-bold mb-6 text-blue-700">Medications</h3>
             {medLoading ? (
               <div className="text-blue-600">Loading medications...</div>
             ) : medError ? (
               <div className="text-red-600">{medError}</div>
             ) : medications.length === 0 ? (
-              <div className="text-gray-400">No medications found.</div>
+              <div className="text-slate-400">No medications found.</div>
             ) : (
               <table className="min-w-full text-sm border rounded-lg overflow-hidden">
                 <thead className="bg-blue-100">
@@ -253,7 +253,7 @@ const ViewProfile = () => {
           </div>
 
           {/* History */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-blue-100">
             <h3 className="text-xl font-bold mb-6 text-blue-700 flex items-center gap-2">
               <FaHistory className="text-blue-500" /> History
             </h3>
@@ -262,7 +262,7 @@ const ViewProfile = () => {
             ) : historyError ? (
               <div className="text-red-600">{historyError}</div>
             ) : history.length === 0 ? (
-              <div className="text-gray-400">No history found.</div>
+              <div className="text-slate-400">No history found.</div>
             ) : (
               <div className="space-y-10">
                 {history.map((h, idx) => (
@@ -270,7 +270,7 @@ const ViewProfile = () => {
                     key={h._id || idx}
                     className="bg-blue-50 border border-blue-200 rounded-xl p-6 shadow-sm"
                   >
-                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <div className="flex items-center gap-2 text-sm text-blue-500 mb-4">
                       <FaNotesMedical className="text-blue-400" />
                       {h.createdAt ? new Date(h.createdAt).toLocaleDateString() : ""}
                     </div>

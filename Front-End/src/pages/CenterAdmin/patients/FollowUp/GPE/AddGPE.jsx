@@ -55,82 +55,82 @@ const AddGPE = ({ patientId: propPatientId, onSuccess, onCancel }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow max-w-3xl mx-auto">
-      <h2 className="text-xl font-bold mb-4 text-blue-700">GPE</h2>
-      <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+    <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-xl max-w-3xl mx-auto border border-blue-100">
+      <h2 className="text-3xl font-extrabold mb-8 text-blue-500 tracking-tight">GPE</h2>
+      <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-6">
         <div>
-          <label className="font-semibold block mb-1">Weight</label>
-          <input type="text" name="weight" className="border rounded px-3 py-2 w-full" value={form.weight} onChange={handleChange} />
+          <label className="font-semibold block mb-2 text-slate-700">Weight</label>
+          <input type="text" name="weight" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.weight} onChange={handleChange} />
         </div>
         <div>
-          <label className="font-semibold block mb-1">Pulse</label>
-          <input type="text" name="pulse" className="border rounded px-3 py-2 w-full" value={form.pulse} onChange={handleChange} />
+          <label className="font-semibold block mb-2 text-slate-700">Pulse</label>
+          <input type="text" name="pulse" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.pulse} onChange={handleChange} />
         </div>
         <div>
-          <label className="font-semibold block mb-1">Bp</label>
-          <input type="text" name="bp" className="border rounded px-3 py-2 w-full" value={form.bp} onChange={handleChange} />
+          <label className="font-semibold block mb-2 text-slate-700">Bp</label>
+          <input type="text" name="bp" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.bp} onChange={handleChange} />
         </div>
         <div>
-          <label className="font-semibold block mb-1">RR</label>
-          <input type="text" name="rr" className="border rounded px-3 py-2 w-full" value={form.rr} onChange={handleChange} />
-        </div>
-      </div>
-      <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div>
-          <label className="font-semibold block mb-1">Temp</label>
-          <input type="text" name="temp" className="border rounded px-3 py-2 w-full" value={form.temp} onChange={handleChange} />
-        </div>
-        <div>
-          <label className="font-semibold block mb-1">SPO₂%</label>
-          <input type="text" name="spo2" className="border rounded px-3 py-2 w-full" value={form.spo2} onChange={handleChange} />
+          <label className="font-semibold block mb-2 text-slate-700">RR</label>
+          <input type="text" name="rr" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.rr} onChange={handleChange} />
         </div>
       </div>
-      <div className="mb-4">
-        <label className="font-semibold block mb-1">ENT Examination</label>
-        <input type="text" name="entExamination" className="border rounded px-3 py-2 w-full" value={form.entExamination} onChange={handleChange} />
-      </div>
-      <div className="mb-4">
-        <h3 className="text-xl font-semibold mb-2">Systematic Examination</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div>
-            <label className="font-semibold block mb-1">CNS</label>
-            <input type="text" name="cns" className="border rounded px-3 py-2 w-full" value={form.cns} onChange={handleChange} />
-          </div>
-          <div>
-            <label className="font-semibold block mb-1">CVS</label>
-            <input type="text" name="cvs" className="border rounded px-3 py-2 w-full" value={form.cvs} onChange={handleChange} />
-          </div>
-          <div>
-            <label className="font-semibold block mb-1">RS</label>
-            <input type="text" name="rs" className="border rounded px-3 py-2 w-full" value={form.rs} onChange={handleChange} />
-          </div>
-          <div>
-            <label className="font-semibold block mb-1">P/A</label>
-            <input type="text" name="pa" className="border rounded px-3 py-2 w-full" value={form.pa} onChange={handleChange} />
-          </div>
+      <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div>
+          <label className="font-semibold block mb-2 text-slate-700">Temp</label>
+          <input type="text" name="temp" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.temp} onChange={handleChange} />
+        </div>
+        <div>
+          <label className="font-semibold block mb-2 text-slate-700">SPO 082%</label>
+          <input type="text" name="spo2" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.spo2} onChange={handleChange} />
         </div>
       </div>
-      <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="mb-8">
+        <label className="font-semibold block mb-2 text-slate-700">ENT Examination</label>
+        <input type="text" name="entExamination" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.entExamination} onChange={handleChange} />
+      </div>
+      <div className="mb-8">
+        <h3 className="text-xl font-semibold mb-3 text-blue-700">Systematic Examination</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div>
+            <label className="font-semibold block mb-2 text-slate-700">CNS</label>
+            <input type="text" name="cns" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.cns} onChange={handleChange} />
+          </div>
+          <div>
+            <label className="font-semibold block mb-2 text-slate-700">CVS</label>
+            <input type="text" name="cvs" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.cvs} onChange={handleChange} />
+          </div>
+          <div>
+            <label className="font-semibold block mb-2 text-slate-700">RS</label>
+            <input type="text" name="rs" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.rs} onChange={handleChange} />
+          </div>
+          <div>
+            <label className="font-semibold block mb-2 text-slate-700">P/A</label>
+            <input type="text" name="pa" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.pa} onChange={handleChange} />
+          </div>
+        </div>
+      </div>
+      <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="font-semibold block mb-1">Drug Adverse Notion</label>
-          <input type="text" name="drugAdverseNotion" className="border rounded px-3 py-2 w-full" value={form.drugAdverseNotion} onChange={handleChange} />
+          <label className="font-semibold block mb-2 text-slate-700">Drug Adverse Notion</label>
+          <input type="text" name="drugAdverseNotion" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.drugAdverseNotion} onChange={handleChange} />
         </div>
         <div>
-          <label className="font-semibold block mb-1">Drug Compliance</label>
-          <input type="text" name="drugCompliance" className="border rounded px-3 py-2 w-full" value={form.drugCompliance} onChange={handleChange} />
+          <label className="font-semibold block mb-2 text-slate-700">Drug Compliance</label>
+          <input type="text" name="drugCompliance" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.drugCompliance} onChange={handleChange} />
         </div>
         <div>
-          <label className="font-semibold block mb-1">Advise to be followed up till next visit</label>
-          <input type="text" name="followUpAdvice" className="border rounded px-3 py-2 w-full" value={form.followUpAdvice} onChange={handleChange} />
+          <label className="font-semibold block mb-2 text-slate-700">Advise to be followed up till next visit</label>
+          <input type="text" name="followUpAdvice" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.followUpAdvice} onChange={handleChange} />
         </div>
         <div>
-          <label className="font-semibold block mb-1">Eye Medication</label>
-          <input type="text" name="eyeMedication" className="border rounded px-3 py-2 w-full" value={form.eyeMedication} onChange={handleChange} />
+          <label className="font-semibold block mb-2 text-slate-700">Eye Medication</label>
+          <input type="text" name="eyeMedication" className="border border-blue-100 rounded-xl px-4 py-3 w-full bg-blue-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-300" value={form.eyeMedication} onChange={handleChange} />
         </div>
       </div>
       <button
         type="submit"
-        className="bg-blue-700 text-white px-8 py-2 rounded hover:bg-blue-800 disabled:opacity-60"
+        className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-10 py-3 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all disabled:opacity-60"
         disabled={loading}
       >
         {loading ? "Submitting..." : "Submit"}

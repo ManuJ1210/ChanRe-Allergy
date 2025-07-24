@@ -44,55 +44,57 @@ const ManageReceptionists = () => {
   }, []);
 
   return (
-    <div className="p-6 bg-white rounded-2xl shadow mt-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Manage Receptionists</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p className="text-red-500">{error}</p>
-      ) : receptionists.length === 0 ? (
-        <p>No receptionists found.</p>
-      ) : (
-        <div className="overflow-x-auto rounded-lg">
-          <table className="min-w-full text-sm text-left border border-gray-200">
-            <thead className="bg-blue-50 text-gray-700 uppercase text-xs font-semibold">
-              <tr>
-                <th className="px-4 py-3">Name</th>
-                <th className="px-4 py-3">Email</th>
-                <th className="px-4 py-3">Phone</th>
-                <th className="px-4 py-3">Username</th>
-                <th className="px-4 py-3 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y text-gray-800">
-              {receptionists.map((r) => (
-                <tr key={r._id} className="hover:bg-gray-50 transition">
-                  <td className="px-4 py-3">{r.name}</td>
-                  <td className="px-4 py-3">{r.email}</td>
-                  <td className="px-4 py-3">{r.phone || 'N/A'}</td>
-                  <td className="px-4 py-3">{r.username}</td>
-                  <td className="px-4 py-3 flex justify-center gap-3">
-                    <button
-                      onClick={() => handleEdit(r._id)}
-                      className="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-full"
-                      title="Edit"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(r._id)}
-                      className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full"
-                      title="Delete"
-                    >
-                      Delete
-                    </button>
-                  </td>
+    <div className="mt-6 flex flex-col items-center justify-center p-4 sm:p-8">
+      <div className="w-full max-w-6xl mx-auto">
+        <h2 className="text-4xl font-extrabold mb-8 text-blue-500 tracking-tight">Manage Receptionists</h2>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
+        ) : receptionists.length === 0 ? (
+          <p className="text-slate-500">No receptionists found.</p>
+        ) : (
+          <div className="overflow-x-auto bg-white rounded-2xl shadow-xl p-2">
+            <table className="min-w-full divide-y divide-blue-100 text-base">
+              <thead className="bg-blue-50">
+                <tr>
+                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">Name</th>
+                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">Email</th>
+                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">Phone</th>
+                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">Username</th>
+                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody className="bg-white divide-y divide-blue-50 text-slate-700">
+                {receptionists.map((r) => (
+                  <tr key={r._id} className="hover:bg-blue-50 transition">
+                    <td className="px-6 py-4 text-center">{r.name}</td>
+                    <td className="px-6 py-4 text-center text-slate-500">{r.email}</td>
+                    <td className="px-6 py-4 text-center text-slate-500">{r.phone || 'N/A'}</td>
+                    <td className="px-6 py-4 text-center text-slate-500">{r.username}</td>
+                    <td className="px-6 py-4 flex justify-center gap-3">
+                      <button
+                        onClick={() => handleEdit(r._id)}
+                        className="bg-blue-100 hover:bg-blue-200 text-blue-700 p-2 rounded-full font-semibold transition"
+                        title="Edit"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(r._id)}
+                        className="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-full font-semibold transition"
+                        title="Delete"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
