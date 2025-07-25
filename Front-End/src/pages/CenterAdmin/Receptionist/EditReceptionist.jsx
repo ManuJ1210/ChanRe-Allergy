@@ -58,14 +58,14 @@ const EditReceptionist = () => {
   if (loading) return <div className="p-6 text-gray-700">Loading...</div>;
 
   return (
-    <div className="p-6 bg-white rounded-xl shadow-md w-full max-w-3xl mx-auto mt-10">
-      <h2 className="text-2xl font-semibold mb-6 text-center">Edit Receptionist</h2>
+    <div className="p-8 bg-white rounded-3xl shadow-2xl border border-blue-100 w-full max-w-3xl mx-auto mt-12">
+      <h2 className="text-3xl md:text-4xl font-extrabold text-center bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent drop-shadow-lg mb-8 tracking-tight">Edit Receptionist</h2>
       {message && <p className={`mb-4 text-center ${message.includes('success') ? 'text-green-600' : 'text-red-600'}`}>{message}</p>}
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name*" className="input border border-gray-300 p-2 rounded" required />
-        <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone*" className="input border border-gray-300 p-2 rounded" required />
-        <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email*" className="input border border-gray-300 p-2 rounded" required />
-        <input type="text" name="username" value={formData.username} onChange={handleChange} placeholder="Username*" className="input border border-gray-300 p-2 rounded" required />
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name*" className="p-3 border border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50 text-blue-700 placeholder-blue-400 transition" required />
+        <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone*" className="p-3 border border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50 text-blue-700 placeholder-blue-400 transition" required />
+        <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email*" className="p-3 border border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50 text-blue-700 placeholder-blue-400 transition" required />
+        <input type="text" name="username" value={formData.username} onChange={handleChange} placeholder="Username*" className="p-3 border border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50 text-blue-700 placeholder-blue-400 transition" required />
         <div className="relative">
           <input
             type={showPassword ? 'text' : 'password'}
@@ -73,16 +73,16 @@ const EditReceptionist = () => {
             value={formData.password}
             onChange={handleChange}
             placeholder="Password*"
-            className="input border border-gray-300 p-2 rounded w-full"
+            className="p-3 border border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50 text-blue-700 placeholder-blue-400 transition w-full"
           />
           <span
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue-500"
             onClick={() => setShowPassword((prev) => !prev)}
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </span>
         </div>
-        <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded col-span-1 md:col-span-2">
+        <button type="submit" className="col-span-1 md:col-span-2 w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white py-3 rounded-xl shadow-lg font-semibold text-lg transition-all duration-200">
           Update Receptionist
         </button>
       </form>

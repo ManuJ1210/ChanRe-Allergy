@@ -5,76 +5,70 @@ const Contact = () => {
     <>
     <HomeHeader/>
     <div className="px-4 md:px-16 py-12 bg-white text-gray-800">
-      <h2 className="text-3xl font-semibold text-blue-700 mb-8 text-center">Contact Us</h2>
+      <h2 className="text-4xl md:text-5xl font-extrabold text-center bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent drop-shadow-lg mb-12 tracking-tight mt-8">Contact Us</h2>
       <div className="grid md:grid-cols-2 gap-10">
         <div className="space-y-6">
-          <div className="bg-white shadow-md border border-gray-200 rounded-xl p-4">
+          <div className="bg-white shadow-xl border border-blue-100 rounded-2xl p-6 flex flex-col gap-4">
             <div className="flex items-center gap-3">
-              <span className="text-green-600 text-xl">📞</span>
-              <p className="text-gray-700">+91 9611768775</p>
+              <span className="text-green-600 text-2xl">📞</span>
+              <span className="text-blue-700 font-semibold text-lg">+91 9611768775</span>
             </div>
-            <div className="flex items-center gap-3 mt-3">
-              <span className="text-black text-xl">✉️</span>
-              <p className="text-gray-700">corporaterelation@chanrerier.com</p>
+            <div className="flex items-center gap-3">
+              <span className="text-blue-500 text-2xl">✉️</span>
+              <span className="text-blue-700 font-semibold text-lg">corporaterelation@chanrerier.com</span>
             </div>
-          </div>
-
-          <div className="bg-white shadow-md border border-gray-200 rounded-xl p-4">
             <div className="flex items-start gap-3">
-              <span className="text-blue-600 text-xl">📍</span>
-              <p className="text-gray-700">
-                65, Metro station, 414, 20th Main Rd, near Rajajinagar, West of Chord Road 2nd Stage,<br />
-                Rajajinagar, Bengaluru, Karnataka 560010
-              </p>
+              <span className="text-blue-500 text-2xl">📍</span>
+              <span className="text-blue-700 font-semibold text-base">
+                65, Metro station, 414, 20th Main Rd, near Rajajinagar, West of Chord Road 2nd Stage,<br />Rajajinagar, Bengaluru, Karnataka 560010
+              </span>
             </div>
           </div>
-
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12..."
-            className="rounded-xl w-full h-72 border"
+            className="rounded-2xl w-full h-72 border border-blue-100 shadow"
             allowFullScreen=""
             loading="lazy"
             title="ChanRe Location"
           ></iframe>
         </div>
-
-        <div className="bg-white shadow-md border border-gray-200 rounded-xl p-6">
-          <form className="space-y-4">
+        <div className="bg-white shadow-2xl border border-blue-100 rounded-3xl p-8">
+          <form className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-1">Full Name</label>
+              <label className="block text-sm font-medium mb-1 text-blue-700">Full Name</label>
               <input
                 type="text"
                 placeholder="Full Name"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full p-3 border border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50 text-blue-700 placeholder-blue-400 transition"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Email Address</label>
+              <label className="block text-sm font-medium mb-1 text-blue-700">Email Address</label>
               <input
                 type="email"
                 placeholder="example@domain.com"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full p-3 border border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50 text-blue-700 placeholder-blue-400 transition"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Subject</label>
+              <label className="block text-sm font-medium mb-1 text-blue-700">Subject</label>
               <input
                 type="text"
                 placeholder="Enter your subject"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full p-3 border border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50 text-blue-700 placeholder-blue-400 transition"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Message</label>
+              <label className="block text-sm font-medium mb-1 text-blue-700">Message</label>
               <textarea
                 rows="4"
                 placeholder="Type your message"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full p-3 border border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50 text-blue-700 placeholder-blue-400 transition"
               ></textarea>
             </div>
             <button
               type="submit"
-              className="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+              className="w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white py-3 rounded-xl shadow-lg font-semibold text-lg transition-all duration-200"
             >
               Submit
             </button>

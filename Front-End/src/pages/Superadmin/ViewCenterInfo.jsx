@@ -44,47 +44,47 @@ export default function ViewCenterInfo() {
   if (!center) return null;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 bg-gradient-to-br from-slate-100 to-purple-50 min-h-screen flex flex-col items-center justify-center">
-      <div className="w-full bg-white rounded-2xl shadow-xl p-8 border border-slate-200">
-        <h2 className="text-3xl font-extrabold text-purple-700 mb-8 flex items-center gap-3">
-          <FaHospital className="text-purple-500" />
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 bg-gradient-to-br from-blue-50 to-white min-h-screen flex flex-col items-center justify-center">
+      <div className="w-full bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
+        <h2 className="text-3xl font-extrabold text-blue-700 mb-8 flex items-center gap-3">
+          <FaHospital className="text-blue-500" />
           {center.name || 'Unnamed Center'}
         </h2>
 
         <div className="space-y-3 text-slate-700 mb-8">
           {center.location && (
             <p className="flex items-center gap-2">
-              <FaMapMarkerAlt className="text-purple-300" /> Location: {center.location}
+              <FaMapMarkerAlt className="text-blue-300" /> Location: {center.location}
             </p>
           )}
           {center.address && (
             <p className="flex items-center gap-2">
-              <FaMapMarkerAlt className="text-purple-300" /> Address: {center.address}
+              <FaMapMarkerAlt className="text-blue-300" /> Address: {center.address}
             </p>
           )}
           {center.email && (
             <p className="flex items-center gap-2">
-              <FaEnvelope className="text-purple-300" /> Email: {center.email}
+              <FaEnvelope className="text-blue-300" /> Email: {center.email}
             </p>
           )}
           {center.phone && (
             <p className="flex items-center gap-2">
-              <FaPhone className="text-purple-300" /> Phone: {center.phone}
+              <FaPhone className="text-blue-300" /> Phone: {center.phone}
             </p>
           )}
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <StatCard icon={<FaUserMd className="text-purple-400" />} label="Doctors" value={center.doctorCount ?? 0} />
-          <StatCard icon={<FaUser className="text-green-400" />} label="Receptionists" value={center.receptionistCount ?? 0} />
-          <StatCard icon={<FaVial className="text-yellow-400" />} label="Lab Staff" value={center.labCount ?? 0} />
-          <StatCard icon={<FaUsers className="text-purple-500" />} label="Patients" value={center.patientCount ?? 0} />
+          <StatCard icon={<FaUserMd className="text-blue-400" />} label="Doctors" value={center.doctorCount ?? 0} />
+          <StatCard icon={<FaUser className="text-blue-400" />} label="Receptionists" value={center.receptionistCount ?? 0} />
+          <StatCard icon={<FaVial className="text-blue-400" />} label="Lab Staff" value={center.labCount ?? 0} />
+          <StatCard icon={<FaUsers className="text-blue-500" />} label="Patients" value={center.patientCount ?? 0} />
         </div>
 
         {center.admin ? (
-          <div className="bg-purple-50 p-6 rounded-xl shadow-inner">
-            <h3 className="text-xl font-semibold text-purple-700 mb-3 flex items-center gap-2">
-              <FaUserShield className="text-purple-500" />
+          <div className="bg-blue-50 p-6 rounded-xl shadow-inner">
+            <h3 className="text-xl font-semibold text-blue-700 mb-3 flex items-center gap-2">
+              <FaUserShield className="text-blue-500" />
               Center Admin Details
             </h3>
             <p className="text-slate-700">
@@ -108,7 +108,7 @@ export default function ViewCenterInfo() {
             </p>
             <button
               onClick={() => navigate(`/superadmin/edit-admin/${center._id}`)}
-              className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-xl shadow text-sm font-semibold transition"
+              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl shadow text-sm font-semibold transition"
             >
               Assign Center Admin
             </button>

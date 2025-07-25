@@ -37,38 +37,40 @@ const ViewAllergicBronchitis = () => {
   const gina = record.ginaGrading || {};
 
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white rounded-xl shadow">
-      <h2 className="text-2xl font-bold mb-4 text-blue-800">Allergic Bronchitis Details</h2>
-      <div className="mb-4 p-4 bg-blue-50 rounded flex flex-wrap gap-6">
-        <div><span className="font-semibold">Name:</span> {patient.name || '-'}</div>
-        <div><span className="font-semibold">Age:</span> {patient.age || '-'}</div>
-        <div><span className="font-semibold">Gender:</span> {patient.gender || '-'}</div>
-        <div><span className="font-semibold">Center Code:</span> {patient.centerCode || '-'}</div>
-        <div><span className="font-semibold">Phone:</span> {patient.phone || '-'}</div>
+    <div className="p-8 max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-blue-100">
+      <h2 className="text-3xl font-extrabold mb-8 text-blue-500 text-center tracking-tight">Allergic Bronchitis Details</h2>
+      <div className="mb-8 p-6 bg-blue-50 rounded-xl border border-blue-100 flex flex-wrap gap-8">
+        <div><span className="font-semibold text-slate-700">Name:</span> {patient.name || '-'}</div>
+        <div><span className="font-semibold text-slate-700">Age:</span> {patient.age || '-'}</div>
+        <div><span className="font-semibold text-slate-700">Gender:</span> {patient.gender || '-'}</div>
+        <div><span className="font-semibold text-slate-700">Center Code:</span> {patient.centerCode || '-'}</div>
+        <div><span className="font-semibold text-slate-700">Phone:</span> {patient.phone || '-'}</div>
       </div>
-      <div className="mb-4">
-        <span className="font-semibold">Symptoms:</span> {record.symptoms || '-'}
+      <div className="mb-6">
+        <span className="font-semibold text-slate-700">Symptoms:</span> <span className="text-slate-500">{record.symptoms || '-'}</span>
       </div>
-      <div className="mb-4">
-        <span className="font-semibold">Type:</span> {record.type || '-'}
+      <div className="mb-6">
+        <span className="font-semibold text-slate-700">Type:</span> <span className="text-slate-500">{record.type || '-'}</span>
       </div>
-      <div className="mb-4">
-        <h3 className="font-semibold mb-2">Gina Grading of Asthma</h3>
-        <ul className="list-disc pl-6">
+      <div className="mb-6">
+        <h3 className="font-semibold mb-2 text-blue-700">Gina Grading of Asthma</h3>
+        <ul className="list-disc pl-6 text-slate-500">
           {gina && Object.keys(gina).length > 0 ? (
             Object.entries(gina).map(([q, v]) => (
-              <li key={q}><span className="font-semibold">{q}:</span> {v}</li>
+              <li key={q}><span className="font-semibold text-slate-700">{q}:</span> {v}</li>
             ))
           ) : (
             <li>-</li>
           )}
         </ul>
       </div>
-      <div className="mb-4">
-        <span className="font-semibold">Grading based on PFT:</span> {record.pftGrading || '-'}</div>
-      <div className="mb-4">
-        <span className="font-semibold">Habits:</span> {record.habits || '-'}</div>
-      <button className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700" onClick={() => navigate(-1)}>Back</button>
+      <div className="mb-6">
+        <span className="font-semibold text-slate-700">Grading based on PFT:</span> <span className="text-slate-500">{record.pftGrading || '-'}</span></div>
+      <div className="mb-8">
+        <span className="font-semibold text-slate-700">Habits:</span> <span className="text-slate-500">{record.habits || '-'}</span></div>
+      <div className="flex justify-center">
+        <button className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-8 py-2 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all" onClick={() => navigate(-1)}>Back</button>
+      </div>
     </div>
   );
 };

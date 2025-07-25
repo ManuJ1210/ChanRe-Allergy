@@ -195,32 +195,32 @@ const AddHistory = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 p-6 bg-gray-100">
-      <h1 className="text-2xl font-bold mb-6">Add History</h1>
-
+    <form onSubmit={handleSubmit} className="space-y-10 p-10 bg-blue-50 min-h-screen">
+      <h1 className="text-3xl font-extrabold mb-10 text-blue-500 text-center tracking-tight">Add History</h1>
       {/* Section 1 */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <h2 className="text-lg font-semibold mb-4">Have you ever had the following conditions</h2>
-        <table className="w-full table-auto border">
+      <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100">
+        <h2 className="text-xl font-semibold mb-6 text-blue-700">Have you ever had the following conditions</h2>
+        <table className="w-full table-auto border rounded-xl overflow-hidden">
           <thead>
-            <tr>
-              <th className="px-4 py-2 text-left">Condition</th>
-              <th className="px-4 py-2 text-center">Yes</th>
-              <th className="px-4 py-2 text-center">No</th>
+            <tr className="bg-blue-50 text-blue-700">
+              <th className="px-4 py-3 text-left">Condition</th>
+              <th className="px-4 py-3 text-center">Yes</th>
+              <th className="px-4 py-3 text-center">No</th>
             </tr>
           </thead>
           <tbody>
             {conditions.map((cond, i) => (
-              <tr key={i} className="border-t">
-                <td className="px-4 py-2">{cond}</td>
+              <tr key={i} className="border-t border-blue-100 even:bg-blue-50">
+                <td className="px-4 py-3 text-slate-700 font-medium">{cond}</td>
                 {["yes", "no"].map((val) => (
-                  <td key={val} className="px-4 py-2 text-center">
+                  <td key={val} className="px-4 py-3 text-center">
                     <input
                       type="radio"
                       name={`cond-${i}`}
                       value={val}
                       checked={formData.sectionOne.conditions[cond] === val}
                       onChange={() => handleConditionChange(cond, val)}
+                      className="accent-blue-500"
                     />
                   </td>
                 ))}
@@ -229,13 +229,12 @@ const AddHistory = () => {
           </tbody>
         </table>
       </div>
-
       {/* Section 2 */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <h2 className="text-lg font-semibold mb-4">Details of Hay fever & Asthma</h2>
-        <div className="grid md:grid-cols-3 gap-4">
+      <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100">
+        <h2 className="text-xl font-semibold mb-6 text-blue-700">Details of Hay fever & Asthma</h2>
+        <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <label className="font-medium block mb-2">Fever grade</label>
+            <label className="font-medium block mb-2 text-slate-700">Fever grade</label>
             {["Mild", "Moderate", "Severe"].map((opt) => (
               <label key={opt} className="mr-4">
                 <input
@@ -243,15 +242,14 @@ const AddHistory = () => {
                   name="feverGrade"
                   checked={formData.sectionTwo.feverGrade === opt}
                   onChange={() => handleChange("sectionTwo", "feverGrade", opt)}
-                  className="mr-1"
+                  className="mr-1 accent-blue-500"
                 />
                 {opt}
               </label>
             ))}
           </div>
-
           <div>
-            <label className="font-medium block mb-2">Itching sore throat?</label>
+            <label className="font-medium block mb-2 text-slate-700">Itching sore throat?</label>
             {["Yes", "No"].map((opt) => (
               <label key={opt} className="mr-4">
                 <input
@@ -259,29 +257,27 @@ const AddHistory = () => {
                   name="itchingThroat"
                   checked={formData.sectionTwo.itchingThroat === opt}
                   onChange={() => handleChange("sectionTwo", "itchingThroat", opt)}
-                  className="mr-1"
+                  className="mr-1 accent-blue-500"
                 />
                 {opt}
               </label>
             ))}
           </div>
-
           <div>
-            <label className="font-medium block mb-2">Specific days/exposure?</label>
+            <label className="font-medium block mb-2 text-slate-700">Specific days/exposure?</label>
             <input
               type="text"
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
               placeholder="E.g., rainy days"
               value={formData.sectionTwo.specificDay || ""}
               onChange={(e) => handleChange("sectionTwo", "specificDay", e.target.value)}
             />
           </div>
         </div>
-
-        <div className="mt-6">
-          <label className="font-medium block mb-2">Asthma Type</label>
+        <div className="mt-8">
+          <label className="font-medium block mb-2 text-slate-700">Asthma Type</label>
           <select
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
             value={formData.sectionTwo.asthmaType || ""}
             onChange={(e) => handleChange("sectionTwo", "asthmaType", e.target.value)}
           >
@@ -290,24 +286,22 @@ const AddHistory = () => {
             <option>Moderate</option>
             <option>Severe</option>
           </select>
-
-          <label className="font-medium block mt-4 mb-2">Exacerbation frequency (last year)</label>
+          <label className="font-medium block mt-4 mb-2 text-slate-700">Exacerbation frequency (last year)</label>
           <input
             type="text"
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
             value={formData.sectionTwo.asthmaFrequency || ""}
             onChange={(e) => handleChange("sectionTwo", "asthmaFrequency", e.target.value)}
           />
         </div>
       </div>
-
       {/* Section 3 */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <h2 className="text-lg font-semibold mb-4">Frequency and Triggers</h2>
-        <div className="grid md:grid-cols-2 gap-4">
+      <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100">
+        <h2 className="text-xl font-semibold mb-6 text-blue-700">Frequency and Triggers</h2>
+        <div className="grid md:grid-cols-2 gap-8">
           {questions.map((q, idx) => (
             <div key={idx}>
-              <label className="block font-medium mb-1">{q}</label>
+              <label className="block font-medium mb-2 text-slate-700">{q}</label>
               {["Yes", "No"].map((val) => (
                 <label key={val} className="mr-4">
                   <input
@@ -316,7 +310,7 @@ const AddHistory = () => {
                     value={val}
                     checked={formData.sectionThree.questions[q] === val}
                     onChange={() => handleQuestionChange(q, val)}
-                    className="mr-1"
+                    className="mr-1 accent-blue-500"
                   />
                   {val}
                 </label>
@@ -324,9 +318,8 @@ const AddHistory = () => {
             </div>
           ))}
         </div>
-
-        <div className="mt-6">
-          <label className="font-medium block mb-2">What triggers exacerbations?</label>
+        <div className="mt-8">
+          <label className="font-medium block mb-2 text-slate-700">What triggers exacerbations?</label>
           <div className="flex flex-wrap gap-4">
             {triggers.map((t, i) => (
               <label key={i} className="flex items-center space-x-2">
@@ -334,26 +327,26 @@ const AddHistory = () => {
                   type="checkbox"
                   checked={formData.sectionThree.triggers.includes(t)}
                   onChange={() => handleTriggerChange(t)}
+                  className="accent-blue-500"
                 />
-                <span>{t}</span>
+                <span className="text-slate-700">{t}</span>
               </label>
             ))}
           </div>
           <input
             type="text"
-            className="mt-2 w-full border rounded px-3 py-2"
+            className="mt-2 w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
             placeholder="Others, please specify"
             value={formData.sectionThree.otherTrigger || ""}
             onChange={(e) => handleChange("sectionThree", "otherTrigger", e.target.value)}
           />
         </div>
       </div>
-
       {/* Section 4 */}
-      <div className="bg-white shadow rounded-lg p-6 overflow-x-auto">
-        <h2 className="text-lg font-semibold mb-4">Allergic Rhinitis</h2>
+      <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100 overflow-x-auto">
+        <h2 className="text-xl font-semibold mb-6 text-blue-700">Allergic Rhinitis</h2>
         <select
-          className="border rounded px-3 py-2 mb-4"
+          className="border border-blue-100 rounded-xl px-3 py-2 mb-4 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
           value={formData.sectionFour.rhinitisType || ""}
           onChange={(e) => handleChange("sectionFour", "rhinitisType", e.target.value)}
         >
@@ -362,28 +355,28 @@ const AddHistory = () => {
           <option>Perennial</option>
           <option>Both</option>
         </select>
-
-        <table className="min-w-full border text-sm">
+        <table className="min-w-full border text-sm rounded-xl overflow-hidden">
           <thead>
-            <tr>
-              <th className="border px-4 py-2 text-left">Symptom</th>
+            <tr className="bg-blue-50 text-blue-700">
+              <th className="border border-blue-100 px-4 py-3 text-left">Symptom</th>
               {severityOptions.map((opt, idx) => (
-                <th key={idx} className="border px-4 py-2 text-center">{opt}</th>
+                <th key={idx} className="border border-blue-100 px-4 py-3 text-center">{opt}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {symptoms.map((sym, i) => (
               <tr key={i}>
-                <td className="border px-4 py-2">{sym}</td>
+                <td className="border border-blue-100 px-4 py-3 text-slate-700 font-medium">{sym}</td>
                 {severityOptions.map((level) => (
-                  <td key={level} className="border px-4 py-2 text-center">
+                  <td key={level} className="border border-blue-100 px-4 py-3 text-center">
                     <input
                       type="radio"
                       name={`sym-${i}`}
                       value={level}
                       checked={formData.sectionFour.symptoms[sym] === level}
                       onChange={() => handleSymptomChange(sym, level)}
+                      className="accent-blue-500"
                     />
                   </td>
                 ))}
@@ -392,25 +385,23 @@ const AddHistory = () => {
           </tbody>
         </table>
       </div>
-
       {/* Section 5 & 6 */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <h2 className="text-xl font-semibold mb-4">Skin Allergy</h2>
+      <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100">
+        <h2 className="text-2xl font-semibold mb-6 text-blue-700">Skin Allergy</h2>
         <select
           value={formData.sectionFive.allergyType || ""}
           onChange={(e) => handleChange("sectionFive", "allergyType", e.target.value)}
-          className="border rounded px-3 py-2 mb-4"
+          className="border border-blue-100 rounded-xl px-3 py-2 mb-4 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
         >
           <option value="">Select Allergy Type</option>
           <option>Contact</option>
           <option>Atopic</option>
           <option>Others</option>
         </select>
-
-        <div className="grid sm:grid-cols-2 gap-6">
+        <div className="grid sm:grid-cols-2 gap-8">
           {skinConditions.map((cond, idx) => (
             <div key={idx}>
-              <label className="block font-medium mb-2">{cond}</label>
+              <label className="block font-medium mb-2 text-slate-700">{cond}</label>
               <div className="flex gap-4 mb-2">
                 {["Yes", "No"].map((opt) => (
                   <label key={opt}>
@@ -419,7 +410,7 @@ const AddHistory = () => {
                       name={`skin-${idx}`}
                       checked={formData.sectionFive.skinAllergy?.[cond]?.answer === opt}
                       onChange={() => handleSkinChange(cond, "answer", opt)}
-                      className="mr-1"
+                      className="mr-1 accent-blue-500"
                     />
                     {opt}
                   </label>
@@ -430,19 +421,17 @@ const AddHistory = () => {
                 placeholder={`${cond} Distribution`}
                 value={formData.sectionFive.skinAllergy?.[cond]?.distribution || ""}
                 onChange={(e) => handleSkinChange(cond, "distribution", e.target.value)}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
               />
             </div>
           ))}
         </div>
-
-        <hr className="my-6" />
-
-        <h2 className="text-xl font-semibold mb-4">History</h2>
-        <div className="grid md:grid-cols-4 gap-4">
+        <hr className="my-8 border-blue-100" />
+        <h2 className="text-2xl font-semibold mb-6 text-blue-700">History</h2>
+        <div className="grid md:grid-cols-4 gap-8">
           {historyConditions.map((cond, idx) => (
             <div key={idx}>
-              <label className="block font-medium mb-2">{cond}</label>
+              <label className="block font-medium mb-2 text-slate-700">{cond}</label>
               {["Yes", "No"].map((opt) => (
                 <label key={opt} className="mr-4">
                   <input
@@ -450,7 +439,7 @@ const AddHistory = () => {
                     name={`hist-${cond}`}
                     checked={formData.sectionFive.history?.[cond] === opt}
                     onChange={() => handleNestedChange("sectionFive", "history", cond, opt)}
-                    className="mr-1"
+                    className="mr-1 accent-blue-500"
                   />
                   {opt}
                 </label>
@@ -458,11 +447,9 @@ const AddHistory = () => {
             </div>
           ))}
         </div>
-
-        <hr className="my-6" />
-
-        <h2 className="text-xl font-semibold mb-4">Drugs and Exposure</h2>
-        <div className="grid sm:grid-cols-2 gap-4">
+        <hr className="my-8 border-blue-100" />
+        <h2 className="text-2xl font-semibold mb-6 text-blue-700">Drugs and Exposure</h2>
+        <div className="grid sm:grid-cols-2 gap-8">
           {["DrugAllergyKnown", "Probable", "Definite"].map((field) => (
             <input
               key={field}
@@ -470,13 +457,12 @@ const AddHistory = () => {
               placeholder={field.replace(/([A-Z])/g, " $1")}
               value={formData.sectionSix?.[field] || ""}
               onChange={(e) => handleChange("sectionSix", field, e.target.value)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
             />
           ))}
         </div>
-
-        <h2 className="text-xl font-semibold mt-6 mb-2">Occupation & Exposure</h2>
-        <div className="grid sm:grid-cols-2 gap-4">
+        <h2 className="text-2xl font-semibold mt-8 mb-4 text-blue-700">Occupation & Exposure</h2>
+        <div className="grid sm:grid-cols-2 gap-8">
           {["Occupation", "ProbableChemicalExposure", "Location", "FamilyHistory"].map((field) => (
             <input
               key={field}
@@ -484,13 +470,12 @@ const AddHistory = () => {
               placeholder={field.replace(/([A-Z])/g, " $1")}
               value={formData.sectionSix?.[field] || ""}
               onChange={(e) => handleChange("sectionSix", field, e.target.value)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
             />
           ))}
         </div>
-
-        <h2 className="text-xl font-semibold mt-6 mb-2">Examination</h2>
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <h2 className="text-2xl font-semibold mt-8 mb-4 text-blue-700">Examination</h2>
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
           {["OralCavity", "Skin", "ENT", "Eye", "RespiratorySystem", "CVS", "CNS", "Abdomen", "AnyOtherFindings"].map((field) => (
             <input
               key={field}
@@ -498,26 +483,24 @@ const AddHistory = () => {
               placeholder={field.replace(/([A-Z])/g, " $1")}
               value={formData.sectionSix?.[field] || ""}
               onChange={(e) => handleChange("sectionSix", field, e.target.value)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
             />
           ))}
         </div>
-
-        <div className="mt-6">
-          <label className="block font-medium mb-2">Upload Report</label>
+        <div className="mt-8">
+          <label className="block font-medium mb-2 text-slate-700">Upload Report</label>
           <input
             type="file"
             onChange={handleFileChange}
-            className="w-full sm:w-1/2 border rounded px-3 py-2"
+            className="w-full sm:w-1/2 border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
           />
         </div>
       </div>
-
       {/* Submit */}
-      <div className="text-right">
+      <div className="text-right mt-8">
         <button
           type="submit"
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-10 py-3 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all"
         >
           Submit
         </button>

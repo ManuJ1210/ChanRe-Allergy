@@ -116,99 +116,96 @@ const ViewProfile = () => {
         <div className="mt-6 md:mt-0">
           <button
             onClick={() => navigate(`/CenterAdmin/patients/EditPatient/${patient._id}`)}
-            className="bg-green-600 text-white px-6 py-2 rounded-lg flex items-center gap-2 shadow hover:bg-green-700 transition"
+            className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-8 py-3 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all flex items-center gap-2"
           >
             <FaEdit /> Edit Profile
           </button>
         </div>
       </div>
-
       {/* Tabs */}
       <div className="flex gap-4 mb-10">
         {TABS.map((tab) => (
           <button
             key={tab}
-            className={`px-6 py-2 rounded-full font-semibold shadow transition-all duration-150 text-base
-              ${activeTab === tab
+            className={`px-8 py-3 rounded-full font-semibold shadow transition-all duration-150 text-lg ${
+              activeTab === tab
                 ? "bg-blue-600 text-white"
-                : "bg-white text-blue-700 border border-blue-200 hover:bg-blue-100"}
-            `}
+                : "bg-white text-blue-700 border border-blue-200 hover:bg-blue-100"
+            }`}
             onClick={() => setActiveTab(tab)}
           >
             {tab}
           </button>
         ))}
       </div>
-
       {/* Tab Content */}
       {activeTab === "Overview" && (
         <>
           {/* Patient Details Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-blue-100">
-            <h3 className="text-xl font-bold mb-6 text-blue-700">Patient Details</h3>
+          <div className="bg-white rounded-2xl shadow-xl p-8 mb-10 border border-blue-100">
+            <h3 className="text-2xl font-bold mb-8 text-blue-700">Patient Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <div className="mb-3"><span className="font-semibold">Full Name :</span> {patient.name}</div>
-                <div className="mb-3"><span className="font-semibold">Mobile :</span> {patient.phone || patient.contact || 'N/A'}</div>
-                <div className="mb-3"><span className="font-semibold">E-mail :</span> {patient.email || 'N/A'}</div>
-                <div className="mb-3"><span className="font-semibold">Location :</span> {patient.address || 'N/A'}</div>
-                <div className="mb-3"><span className="font-semibold">Center Code :</span> {patient.centerCode || 'N/A'}</div>
+                <div className="mb-3"><span className="font-semibold text-slate-700">Full Name :</span> {patient.name}</div>
+                <div className="mb-3"><span className="font-semibold text-slate-700">Mobile :</span> {patient.phone || patient.contact || 'N/A'}</div>
+                <div className="mb-3"><span className="font-semibold text-slate-700">E-mail :</span> {patient.email || 'N/A'}</div>
+                <div className="mb-3"><span className="font-semibold text-slate-700">Location :</span> {patient.address || 'N/A'}</div>
+                <div className="mb-3"><span className="font-semibold text-slate-700">Center Code :</span> {patient.centerCode || 'N/A'}</div>
               </div>
               <div>
-                <div className="mb-3"><span className="font-semibold">Assigned Doctor :</span> {patient.assignedDoctor?.name || patient.assignedDoctor || 'N/A'}</div>
-                <div className="mb-3"><span className="font-semibold">Gender :</span> {patient.gender}</div>
-                <div className="mb-3"><span className="font-semibold">Age :</span> {patient.age}</div>
+                <div className="mb-3"><span className="font-semibold text-slate-700">Assigned Doctor :</span> {patient.assignedDoctor?.name || patient.assignedDoctor || 'N/A'}</div>
+                <div className="mb-3"><span className="font-semibold text-slate-700">Gender :</span> {patient.gender}</div>
+                <div className="mb-3"><span className="font-semibold text-slate-700">Age :</span> {patient.age}</div>
               </div>
             </div>
           </div>
-
           {/* Investigations */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-blue-100">
-            <h3 className="text-xl font-bold mb-6 text-blue-700">Investigations</h3>
+          <div className="bg-white rounded-2xl shadow-xl p-8 mb-10 border border-blue-100">
+            <h3 className="text-2xl font-bold mb-8 text-blue-700">Investigations</h3>
             <div className="overflow-x-auto">
-              <table className="min-w-full text-sm border rounded-lg overflow-hidden">
-                <thead className="bg-blue-100">
+              <table className="min-w-full text-base border rounded-xl overflow-x-auto">
+                <thead className="bg-blue-50 text-blue-700">
                   <tr>
-                    <th className="border px-2 py-1">Date</th>
-                    <th className="border px-2 py-1">CBC</th>
-                    <th className="border px-2 py-1">hb</th>
-                    <th className="border px-2 py-1">tc</th>
-                    <th className="border px-2 py-1">dc</th>
-                    <th className="border px-2 py-1">N</th>
-                    <th className="border px-2 py-1">E</th>
-                    <th className="border px-2 py-1">L</th>
-                    <th className="border px-2 py-1">M</th>
-                    <th className="border px-2 py-1">Platelets</th>
-                    <th className="border px-2 py-1">ESR</th>
-                    <th className="border px-2 py-1">Serum Creatinine</th>
-                    <th className="border px-2 py-1">Serum IgE Levels</th>
-                    <th className="border px-2 py-1">C3, C4 Levels</th>
-                    <th className="border px-2 py-1">ANA</th>
-                    <th className="border px-2 py-1">Urine Routine</th>
-                    <th className="border px-2 py-1">Allergy Panel</th>
+                    <th className="border px-3 py-2">Date</th>
+                    <th className="border px-3 py-2">CBC</th>
+                    <th className="border px-3 py-2">hb</th>
+                    <th className="border px-3 py-2">tc</th>
+                    <th className="border px-3 py-2">dc</th>
+                    <th className="border px-3 py-2">N</th>
+                    <th className="border px-3 py-2">E</th>
+                    <th className="border px-3 py-2">L</th>
+                    <th className="border px-3 py-2">M</th>
+                    <th className="border px-3 py-2">Platelets</th>
+                    <th className="border px-3 py-2">ESR</th>
+                    <th className="border px-3 py-2">Serum Creatinine</th>
+                    <th className="border px-3 py-2">Serum IgE Levels</th>
+                    <th className="border px-3 py-2">C3, C4 Levels</th>
+                    <th className="border px-3 py-2">ANA</th>
+                    <th className="border px-3 py-2">Urine Routine</th>
+                    <th className="border px-3 py-2">Allergy Panel</th>
                   </tr>
                 </thead>
                 <tbody>
                   {patient.tests && patient.tests.length > 0 ? (
                     patient.tests.map((test, idx) => (
                       <tr key={idx} className="hover:bg-blue-50">
-                        <td className="border px-2 py-1">{test.date ? new Date(test.date).toLocaleDateString() : ''}</td>
-                        <td className="border px-2 py-1">{test.CBC || ''}</td>
-                        <td className="border px-2 py-1">{test.Hb || ''}</td>
-                        <td className="border px-2 py-1">{test.TC || ''}</td>
-                        <td className="border px-2 py-1">{test.DC || ''}</td>
-                        <td className="border px-2 py-1">{test.Neutrophils || ''}</td>
-                        <td className="border px-2 py-1">{test.Eosinophil || ''}</td>
-                        <td className="border px-2 py-1">{test.Lymphocytes || ''}</td>
-                        <td className="border px-2 py-1">{test.Monocytes || ''}</td>
-                        <td className="border px-2 py-1">{test.Platelets || ''}</td>
-                        <td className="border px-2 py-1">{test.ESR || ''}</td>
-                        <td className="border px-2 py-1">{test.SerumCreatinine || ''}</td>
-                        <td className="border px-2 py-1">{test.SerumIgELevels || ''}</td>
-                        <td className="border px-2 py-1">{test.C3C4Levels || ''}</td>
-                        <td className="border px-2 py-1">{test.ANA_IF || ''}</td>
-                        <td className="border px-2 py-1">{test.UrineRoutine || ''}</td>
-                        <td className="border px-2 py-1">{test.AllergyPanel || ''}</td>
+                        <td className="border px-3 py-2">{test.date ? new Date(test.date).toLocaleDateString() : ''}</td>
+                        <td className="border px-3 py-2">{test.CBC || ''}</td>
+                        <td className="border px-3 py-2">{test.Hb || ''}</td>
+                        <td className="border px-3 py-2">{test.TC || ''}</td>
+                        <td className="border px-3 py-2">{test.DC || ''}</td>
+                        <td className="border px-3 py-2">{test.Neutrophils || ''}</td>
+                        <td className="border px-3 py-2">{test.Eosinophil || ''}</td>
+                        <td className="border px-3 py-2">{test.Lymphocytes || ''}</td>
+                        <td className="border px-3 py-2">{test.Monocytes || ''}</td>
+                        <td className="border px-3 py-2">{test.Platelets || ''}</td>
+                        <td className="border px-3 py-2">{test.ESR || ''}</td>
+                        <td className="border px-3 py-2">{test.SerumCreatinine || ''}</td>
+                        <td className="border px-3 py-2">{test.SerumIgELevels || ''}</td>
+                        <td className="border px-3 py-2">{test.C3C4Levels || ''}</td>
+                        <td className="border px-3 py-2">{test.ANA_IF || ''}</td>
+                        <td className="border px-3 py-2">{test.UrineRoutine || ''}</td>
+                        <td className="border px-3 py-2">{test.AllergyPanel || ''}</td>
                       </tr>
                     ))
                   ) : (
@@ -218,10 +215,9 @@ const ViewProfile = () => {
               </table>
             </div>
           </div>
-
           {/* Medications */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-blue-100">
-            <h3 className="text-xl font-bold mb-6 text-blue-700">Medications</h3>
+          <div className="bg-white rounded-2xl shadow-xl p-8 mb-10 border border-blue-100">
+            <h3 className="text-2xl font-bold mb-8 text-blue-700">Medications</h3>
             {medLoading ? (
               <div className="text-blue-600">Loading medications...</div>
             ) : medError ? (
@@ -229,32 +225,31 @@ const ViewProfile = () => {
             ) : medications.length === 0 ? (
               <div className="text-slate-400">No medications found.</div>
             ) : (
-              <table className="min-w-full text-sm border rounded-lg overflow-hidden">
-                <thead className="bg-blue-100">
+              <table className="min-w-full text-base border rounded-xl overflow-hidden">
+                <thead className="bg-blue-50 text-blue-700">
                   <tr>
-                    <th className="border px-2 py-1">Drug Name</th>
-                    <th className="border px-2 py-1">Dose</th>
-                    <th className="border px-2 py-1">Duration</th>
-                    <th className="border px-2 py-1">Adverse Effect</th>
+                    <th className="border px-3 py-2">Drug Name</th>
+                    <th className="border px-3 py-2">Dose</th>
+                    <th className="border px-3 py-2">Duration</th>
+                    <th className="border px-3 py-2">Adverse Effect</th>
                   </tr>
                 </thead>
                 <tbody>
                   {medications.map((med, idx) => (
                     <tr key={idx} className="hover:bg-blue-50">
-                      <td className="border px-2 py-1">{med.drugName}</td>
-                      <td className="border px-2 py-1">{med.dose}</td>
-                      <td className="border px-2 py-1">{med.duration}</td>
-                      <td className="border px-2 py-1">{med.adverseEvent || ''}</td>
+                      <td className="border px-3 py-2">{med.drugName}</td>
+                      <td className="border px-3 py-2">{med.dose}</td>
+                      <td className="border px-3 py-2">{med.duration}</td>
+                      <td className="border px-3 py-2">{med.adverseEvent || ''}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             )}
           </div>
-
           {/* History */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-blue-100">
-            <h3 className="text-xl font-bold mb-6 text-blue-700 flex items-center gap-2">
+          <div className="bg-white rounded-2xl shadow-xl p-8 mb-10 border border-blue-100">
+            <h3 className="text-2xl font-bold mb-8 text-blue-700 flex items-center gap-2">
               <FaHistory className="text-blue-500" /> History
             </h3>
             {historyLoading ? (

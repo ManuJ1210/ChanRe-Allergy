@@ -51,41 +51,43 @@ const AddTest = () => {
 
   return (
     <ReceptionistLayout>
-      <div className="p-6 bg-gray-50 min-h-screen">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Add Test</h2>
-        <div className="bg-white shadow rounded-lg p-6 overflow-auto">
+      <div className="p-4 sm:p-8 md:p-10 min-h-screen bg-gradient-to-br from-blue-50 to-white">
+        <h2 className="text-3xl font-extrabold text-blue-500 mb-10 text-center tracking-tight">Add Test</h2>
+        <div className="bg-white shadow-xl rounded-2xl p-4 sm:p-8 md:p-10 border border-blue-100 max-w-4xl mx-auto">
           <form onSubmit={handleSubmit}>
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-gray-100 text-gray-600 uppercase text-sm">
-                  <th className="py-2 px-4 w-1/2">Screening Test</th>
-                  <th className="py-2 px-4 w-1/2">Reports</th>
-                </tr>
-              </thead>
-              <tbody>
-                {testFields.map((test, index) => (
-                  <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="py-2 px-4">{test}</td>
-                    <td className="py-2 px-4">
-                      <input
-                        type="text"
-                        placeholder="Write here..."
-                        className="w-full border rounded px-3 py-1 text-sm focus:outline-none focus:ring focus:ring-blue-200"
-                        value={reports[test] || ""}
-                        onChange={(e) => handleChange(test, e.target.value)}
-                      />
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left rounded-xl overflow-hidden align-middle min-w-[500px]">
+                <thead>
+                  <tr className="bg-blue-50 text-blue-700 uppercase text-base">
+                    <th className="py-3 px-4 w-1/2">Screening Test</th>
+                    <th className="py-3 px-4 w-1/2">Reports</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            {error && <div className="text-red-600 mb-2">{error}</div>}
-            {success && <div className="text-green-600 mb-2">Test reports submitted successfully!</div>}
-            <div className="mt-6 text-right">
+                </thead>
+                <tbody>
+                  {testFields.map((test, index) => (
+                    <tr key={index} className="border-b border-blue-100 even:bg-blue-50 align-middle">
+                      <td className="py-3 px-4 text-slate-700 font-medium align-middle">{test}</td>
+                      <td className="py-3 px-4 align-middle">
+                        <input
+                          type="text"
+                          placeholder="Write here..."
+                          className="w-full border border-blue-100 rounded-xl px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white text-slate-700 align-middle"
+                          value={reports[test] || ""}
+                          onChange={(e) => handleChange(test, e.target.value)}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {error && <div className="mb-4 bg-red-50 border border-blue-400 text-blue-800 px-4 py-3 rounded-xl">{error}</div>}
+            {success && <div className="mb-4 bg-blue-50 border border-blue-400 text-blue-800 px-4 py-3 rounded-xl">Test reports submitted successfully!</div>}
+            <div className="mt-8 text-right">
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
+                className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-10 py-3 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all disabled:opacity-60"
               >
                 {loading ? "Submitting..." : "Submit"}
               </button>
@@ -93,16 +95,16 @@ const AddTest = () => {
           </form>
         </div>
         {/* Future: Investigation Table */}
-        <div className="mt-10 bg-white shadow p-4 rounded-lg">
-          <h3 className="text-lg font-semibold mb-2">Investigation</h3>
-          <table className="w-full text-sm">
-            <thead className="bg-gray-100 text-gray-600 uppercase">
+        <div className="mt-12 bg-white shadow-xl p-6 rounded-2xl border border-blue-100 max-w-4xl mx-auto overflow-x-auto">
+          <h3 className="text-xl font-semibold mb-4 text-blue-700">Investigation</h3>
+          <table className="w-full text-base rounded-xl overflow-hidden min-w-[500px]">
+            <thead className="bg-blue-50 text-blue-700 uppercase">
               <tr>
-                <th className="px-2 py-1">Date</th>
+                <th className="px-3 py-2">Date</th>
                 {testFields.map((t, i) => (
-                  <th key={i} className="px-2 py-1">{t}</th>
+                  <th key={i} className="px-3 py-2">{t}</th>
                 ))}
-                <th className="px-2 py-1">Action</th>
+                <th className="px-3 py-2">Action</th>
               </tr>
             </thead>
             <tbody>

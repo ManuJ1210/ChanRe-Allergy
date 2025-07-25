@@ -31,49 +31,49 @@ export default function ReceptionistDashboard() {
 
   return (
     <ReceptionistLayout>
-      <div className="p-4 sm:p-8 min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col gap-8">
+      <div className="p-8 min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col gap-10">
         
         
 
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-blue-800 tracking-tight">Receptionist Dashboard</h1>
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+          <h1 className="text-3xl font-extrabold text-blue-500 tracking-tight">Receptionist Dashboard</h1>
           <button
-            className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-6 py-2 rounded-xl shadow-lg font-semibold text-base transition-all duration-150 flex items-center gap-2"
+            className="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white px-8 py-3 rounded-xl shadow-lg font-semibold text-lg transition-all flex items-center gap-2"
             onClick={() => navigate("/receptionist/add-patient")}
           >
-            <span className="text-lg">+</span> Add Patient
+            <span className="text-2xl">+</span> Add Patient
           </button>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-6 overflow-x-auto">
-          <h2 className="text-xl font-bold mb-6 text-blue-700">My Registered Patients</h2>
+        <div className="bg-white rounded-2xl shadow-xl p-10 border border-blue-100 overflow-x-auto">
+          <h2 className="text-2xl font-bold mb-8 text-blue-700">My Registered Patients</h2>
           {loading ? (
-            <div className="text-blue-600 text-center py-8">Loading...</div>
+            <div className="text-blue-600 text-center py-12">Loading...</div>
           ) : error ? (
-            <div className="text-red-600 text-center py-8">{error}</div>
+            <div className="text-red-600 text-center py-12">{error}</div>
           ) : patients.length === 0 ? (
-            <div className="text-gray-400 text-center py-8">No patients found.</div>
+            <div className="text-slate-400 text-center py-12">No patients found.</div>
           ) : (
-            <table className="min-w-full text-sm rounded-xl overflow-hidden shadow border border-gray-200">
-              <thead className="bg-blue-100">
+            <table className="min-w-full text-base rounded-xl overflow-hidden shadow border border-blue-100">
+              <thead className="bg-blue-50 text-blue-700">
                 <tr>
-                  <th className="px-6 py-3 text-left font-semibold">Name</th>
-                  <th className="px-6 py-3 text-left font-semibold">Age</th>
-                  <th className="px-6 py-3 text-left font-semibold">Gender</th>
-                  <th className="px-6 py-3 text-left font-semibold">Assigned Doctor</th>
-                  <th className="px-6 py-3 text-left font-semibold">Center Name</th>
-                  <th className="px-6 py-3 text-left font-semibold">Registered Date</th>
+                  <th className="px-6 py-4 text-left font-semibold">Name</th>
+                  <th className="px-6 py-4 text-left font-semibold">Age</th>
+                  <th className="px-6 py-4 text-left font-semibold">Gender</th>
+                  <th className="px-6 py-4 text-left font-semibold">Assigned Doctor</th>
+                  <th className="px-6 py-4 text-left font-semibold">Center Name</th>
+                  <th className="px-6 py-4 text-left font-semibold">Registered Date</th>
                 </tr>
               </thead>
               <tbody>
                 {patients.map((p, idx) => (
                   <tr key={p._id} className={idx % 2 === 0 ? "bg-white" : "bg-blue-50 hover:bg-blue-100 transition"}>
-                    <td className="px-6 py-3 whitespace-nowrap font-medium text-gray-800">{p.name}</td>
-                    <td className="px-6 py-3 whitespace-nowrap">{p.age}</td>
-                    <td className="px-6 py-3 whitespace-nowrap capitalize">{p.gender}</td>
-                    <td className="px-6 py-3 whitespace-nowrap">{p.assignedDoctor?.name || '-'}</td>
-                    <td className="px-6 py-3 whitespace-nowrap">{p.centerId?.name || '-'}</td>
-                    <td className="px-6 py-3 whitespace-nowrap">{new Date(p.createdAt).toLocaleString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-slate-700">{p.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-slate-500">{p.age}</td>
+                    <td className="px-6 py-4 whitespace-nowrap capitalize text-slate-500">{p.gender}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-slate-500">{p.assignedDoctor?.name || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-slate-500">{p.centerId?.name || p.centerCode || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-slate-500">{new Date(p.createdAt).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>

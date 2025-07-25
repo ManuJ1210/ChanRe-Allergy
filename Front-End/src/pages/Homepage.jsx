@@ -52,23 +52,39 @@ export default function Home() {
      <HomeHeader/>
 
       {/* Hero */}
-      <section id="home" className="pt-24 bg-gradient-to-r from-blue-100 via-blue-50 to-white">
-        <div className="max-w-6xl mx-auto px-6 py-12 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-blue-800 mb-4">
+      <section id="home" className="relative pt-24 bg-gradient-to-r from-blue-100 via-blue-50 to-white overflow-hidden">
+        {/* Animated SVG blob background */}
+        <svg className="absolute -top-20 -left-32 w-[500px] h-[500px] opacity-30 blur-2xl z-0" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="heroBlobGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#60A5FA" />
+              <stop offset="100%" stopColor="#1D4ED8" />
+            </linearGradient>
+          </defs>
+          <path fill="url(#heroBlobGradient)" d="M421,307Q393,364,334,386Q275,408,217,393Q159,378,120,329Q81,280,98,210Q115,140,176,110Q237,80,299,97Q361,114,410,157Q459,200,421,307Z" />
+        </svg>
+        <div className="relative z-10 max-w-6xl mx-auto px-6 py-12 text-center flex flex-col items-center">
+          <h2 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent drop-shadow-lg mb-8 mt-8 tracking-tight">
             Unlocking the Relief from Allergy
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Personalized care, advanced diagnostics, and compassionate specialists at your service.
-          </p>
+          <div className="bg-white rounded-3xl shadow-2xl border border-blue-100 max-w-2xl mx-auto p-8 mb-6">
+            <p className="text-gray-600 text-lg">
+              Personalized care, advanced diagnostics, and compassionate specialists at your service.
+            </p>
+          </div>
+          <button className="mt-4 px-10 py-4 bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-2xl shadow-lg font-bold text-xl flex items-center gap-3 hover:from-blue-500 hover:to-blue-700 transition-all duration-200 active:scale-95">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            Book an Appointment
+          </button>
         </div>
       </section>
 
       {/* Why Choose Us */}
       <section className="bg-white py-20 px-6 max-w-7xl mx-auto" id="about">
-        <h3 className="text-3xl font-semibold text-center text-blue-700 mb-10">Why Choose Us?</h3>
+        <h3 className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent drop-shadow-lg mb-10 mt-8 tracking-tight">Why Choose Us?</h3>
         <div className="grid md:grid-cols-2 gap-10 items-center">
-          <div>
-            <p className="text-gray-700 mb-6 text-lg">
+          <div className="bg-white rounded-3xl shadow-2xl border border-blue-100 p-8 flex flex-col gap-6">
+            <p className="text-gray-700 text-lg">
               We specialize in comprehensive allergy care—accurate diagnosis, personalized treatment,
               and the latest medical advancements for a better life.
             </p>
@@ -86,7 +102,7 @@ export default function Home() {
           <img
             src="/1.jpg"
             alt="Doctor"
-            className="rounded-xl shadow-lg w-full max-h-[400px] object-cover"
+            className="rounded-2xl shadow-xl w-full max-h-[400px] object-cover border border-blue-100"
           />
         </div>
       </section>
@@ -97,15 +113,15 @@ export default function Home() {
           <img
             src="2.jpg"
             alt="Clinic Near You"
-            className="rounded-xl shadow-lg w-full max-h-[400px] object-cover"
+            className="rounded-2xl shadow-xl w-full max-h-[400px] object-cover border border-blue-100"
           />
-          <div>
-            <h3 className="text-2xl font-semibold text-blue-700 mb-4">ChanRe Near You</h3>
-            <p className="text-gray-700 mb-6 text-lg">
+          <div className="bg-white rounded-3xl shadow-2xl border border-blue-100 p-8 flex flex-col gap-6">
+            <h3 className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent drop-shadow mb-4">ChanRe Near You</h3>
+            <p className="text-gray-700 text-lg">
               We are establishing franchise allergy clinics to bring expert care closer to your community.
               Say goodbye to long commutes and hello to local allergy relief.
             </p>
-            <button className="bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">Learn More</button>
+            <button className="w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white py-3 rounded-xl shadow-lg font-semibold text-lg transition-all duration-200">Learn More</button>
           </div>
         </div>
       </section>
@@ -113,23 +129,25 @@ export default function Home() {
       {/* Services */}
       <section className="bg-white py-20 px-6" id="services">
         <div className="max-w-4xl mx-auto">
-          <h3 className="text-3xl font-semibold text-blue-700 mb-10 text-center">Our Services</h3>
-          {services.map((item, index) => (
-            <Accordion key={index} title={item.title} desc={item.desc} />
-          ))}
+          <h3 className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent drop-shadow-lg mb-10 mt-8 tracking-tight">Our Services</h3>
+          <div className="bg-white rounded-3xl shadow-2xl border border-blue-100 p-8">
+            {services.map((item, index) => (
+              <Accordion key={index} title={item.title} desc={item.desc} />
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Allergy Info */}
-      <section className="bg-gradient-to-br from-purple-100 via-purple-50 to-white py-20 px-6">
+      <section className="bg-gradient-to-br from-blue-100 via-blue-50 to-white py-20 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <img
             src="3.jpg"
             alt="Immunology"
-            className="rounded-xl shadow-lg w-full max-h-[400px] object-cover"
+            className="rounded-2xl shadow-xl w-full max-h-[400px] object-cover border border-blue-100"
           />
-          <div>
-            <h3 className="text-2xl font-semibold text-purple-800 mb-4">Allergy & Clinical Immunology</h3>
+          <div className="bg-white rounded-3xl shadow-2xl border border-blue-100 p-8 flex flex-col gap-4">
+            <h3 className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent drop-shadow mb-4">Allergy & Clinical Immunology</h3>
             <ul className="list-disc list-inside text-gray-700 text-base leading-relaxed">
               <li>Eyes: Itchy, watering</li>
               <li>Nose: Sneezing, block</li>
@@ -144,19 +162,21 @@ export default function Home() {
       {/* Who Should Visit Section */}
       <section className="bg-white py-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
-          <h3 className="text-2xl font-semibold text-blue-700 mb-8">Who Should Visit?</h3>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left text-gray-700 text-base">
-            <li>1. Complex allergic diseases like asthma or eczema</li>
-            <li>2. Severe allergies (e.g., food, drug, insect)</li>
-            <li>3. Life-threatening allergic reactions (anaphylaxis)</li>
-            <li>4. Suspected occupational/environmental allergies</li>
-            <li>5. Food allergy requiring medically supervised challenge</li>
-            <li>6. Allergic rhinitis needing immunotherapy</li>
-            <li>7. Poor control of asthma despite regular meds</li>
-            <li>8. Suspected chronic urticaria or angioedema</li>
-            <li>9. Suspected immunodeficiencies</li>
-            <li>10. Suspected autoimmune disorders</li>
-          </ul>
+          <h3 className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent drop-shadow mb-8 mt-8">Who Should Visit?</h3>
+          <div className="bg-white rounded-3xl shadow-2xl border border-blue-100 p-8">
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left text-gray-700 text-base">
+              <li>1. Complex allergic diseases like asthma or eczema</li>
+              <li>2. Severe allergies (e.g., food, drug, insect)</li>
+              <li>3. Life-threatening allergic reactions (anaphylaxis)</li>
+              <li>4. Suspected occupational/environmental allergies</li>
+              <li>5. Food allergy requiring medically supervised challenge</li>
+              <li>6. Allergic rhinitis needing immunotherapy</li>
+              <li>7. Poor control of asthma despite regular meds</li>
+              <li>8. Suspected chronic urticaria or angioedema</li>
+              <li>9. Suspected immunodeficiencies</li>
+              <li>10. Suspected autoimmune disorders</li>
+            </ul>
+          </div>
         </div>
       </section>
 

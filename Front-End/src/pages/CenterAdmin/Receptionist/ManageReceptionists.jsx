@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Pencil, Trash2 } from 'lucide-react';
 
 const ManageReceptionists = () => {
   const [receptionists, setReceptionists] = useState([]);
@@ -46,7 +47,7 @@ const ManageReceptionists = () => {
   return (
     <div className="mt-6 flex flex-col items-center justify-center p-4 sm:p-8">
       <div className="w-full max-w-6xl mx-auto">
-        <h2 className="text-4xl font-extrabold mb-8 text-blue-500 tracking-tight">Manage Receptionists</h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center bg-gradient-to-r from-blue-400 to-blue-700 bg-clip-text text-transparent drop-shadow-lg mb-12 tracking-tight mt-8">Manage Receptionists</h2>
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
@@ -54,7 +55,7 @@ const ManageReceptionists = () => {
         ) : receptionists.length === 0 ? (
           <p className="text-slate-500">No receptionists found.</p>
         ) : (
-          <div className="overflow-x-auto bg-white rounded-2xl shadow-xl p-2">
+          <div className="overflow-x-auto bg-white rounded-3xl shadow-2xl border border-blue-100 p-6">
             <table className="min-w-full divide-y divide-blue-100 text-base">
               <thead className="bg-blue-50">
                 <tr>
@@ -75,17 +76,17 @@ const ManageReceptionists = () => {
                     <td className="px-6 py-4 flex justify-center gap-3">
                       <button
                         onClick={() => handleEdit(r._id)}
-                        className="bg-blue-100 hover:bg-blue-200 text-blue-700 p-2 rounded-full font-semibold transition"
+                        className="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white p-2 rounded-full font-semibold shadow transition-all duration-200"
                         title="Edit"
                       >
-                        Edit
+                        <Pencil size={16} />
                       </button>
                       <button
                         onClick={() => handleDelete(r._id)}
-                        className="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-full font-semibold transition"
+                        className="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-full font-semibold shadow transition-all duration-200"
                         title="Delete"
                       >
-                        Delete
+                        <Trash2 size={16} />
                       </button>
                     </td>
                   </tr>
