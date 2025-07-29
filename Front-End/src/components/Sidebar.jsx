@@ -11,6 +11,8 @@ import {
   FaUserTie,
   FaVials,
   FaHome,
+  FaClock,
+  FaCheckCircle,
 } from 'react-icons/fa';
 
 export default function Sidebar(props) {
@@ -19,7 +21,8 @@ export default function Sidebar(props) {
   const [centerOpen, setCenterOpen] = useState(null); // can be 'doctors', 'receptionists', or 'lab'
   // Use prop if provided, otherwise Redux
   const reduxUserInfo = useSelector((state) => state.user?.userInfo);
-  const userInfo = propUserInfo || reduxUserInfo;
+  const authUser = useSelector((state) => state.auth?.user);
+  const userInfo = propUserInfo || authUser || reduxUserInfo;
   const role = userInfo?.role || '';
   const isActive = (path) => location.pathname === path;
 
@@ -90,8 +93,8 @@ export default function Sidebar(props) {
                 open={centerOpen === 'lab'}
                 toggle={() => setCenterOpen(centerOpen === 'lab' ? null : 'lab')}
                 links={[
-                  { to: "/centeradmin/lab/add", label: "Add Lab Staff" },
-                  { to: "/centeradmin/lab", label: "Lab Staff List" },
+                  { to: "/superadmin/add-lab-staff", label: "Add Lab Staff" },
+                  { to: "/superadmin/lab-staff", label: "Lab Staff List" },
                 ]}
                 currentPath={location.pathname}
               />
@@ -174,6 +177,58 @@ export default function Sidebar(props) {
                 label="Manage Patients"
                 icon={<FaUsers />}
                 isActive={isActive("/receptionist/manage-patients")}
+              />
+            </>
+          )}
+
+          {role === 'doctor' && (
+            <>
+              <SidebarLink
+                to="/doctor/dashboard"
+                label="Dashboard"
+                icon={<FaHome />}
+                isActive={isActive("/doctor/dashboard")}
+              />
+              <SidebarLink
+                to="/doctor/patients"
+                label="My Patients"
+                icon={<FaUsers />}
+                isActive={isActive("/doctor/patients")}
+              />
+              <SidebarLink
+                to="/doctor/test-requests"
+                label="Test Requests"
+                icon={<FaVials />}
+                isActive={isActive("/doctor/test-requests")}
+              />
+            </>
+          )}
+
+          {(role === 'Lab Staff' || role === 'Lab Technician' || role === 'Lab Assistant' || role === 'Lab Manager' || role === 'lab staff' || role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') && (
+            <>
+              <SidebarLink
+                to="/lab/dashboard"
+                label="Dashboard"
+                icon={<FaHome />}
+                isActive={isActive("/lab/dashboard")}
+              />
+              <SidebarLink
+                to="/lab/test-requests"
+                label="Test Requests"
+                icon={<FaVials />}
+                isActive={isActive("/lab/test-requests")}
+              />
+              <SidebarLink
+                to="/lab/pending-requests"
+                label="Pending Requests"
+                icon={<FaClock />}
+                isActive={isActive("/lab/pending-requests")}
+              />
+              <SidebarLink
+                to="/lab/completed-requests"
+                label="Completed Tests"
+                icon={<FaCheckCircle />}
+                isActive={isActive("/lab/completed-requests")}
               />
             </>
           )}

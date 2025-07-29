@@ -1,120 +1,182 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import API from "../../services/api";
+import { useSelector, useDispatch } from "react-redux";
+import { createReceptionistTest } from "../../features/receptionist/receptionistThunks";
+import { resetReceptionistState } from "../../features/receptionist/receptionistSlice";
 import ReceptionistLayout from './ReceptionistLayout';
+import { FlaskConical, Save, ArrowLeft, CheckCircle } from "lucide-react";
 
-const testFields = [
-  "CBC", "Hb", "TC", "DC", "Neutrophils", "Eosinophil", "Lymphocytes",
-  "Monocytes", "Platelets", "ESR", "Serum Creatinine", "Serum IgE Levels",
-  "C3, C4 Levels", "ANA (IF)", "Urine Routine", "Allergy Panel"
-];
-
-const AddTest = () => {
-  const { id: patientId } = useParams();
+export default function AddTest() {
+  const { patientId } = useParams();
   const navigate = useNavigate();
-  const [reports, setReports] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const dispatch = useDispatch();
+  const { loading, error, addTestSuccess } = useSelector((state) => state.receptionist);
+  
+  const [formData, setFormData] = useState({
+    testName: "",
+    description: "",
+    date: new Date().toISOString().split('T')[0],
+    results: "",
+    patient: patientId,
+  });
 
-  const handleChange = (testName, value) => {
-    setReports((prev) => ({ ...prev, [testName]: value }));
+  React.useEffect(() => {
+    if (addTestSuccess) {
+      setTimeout(() => {
+        dispatch(resetReceptionistState());
+        navigate(`/receptionist/profile/${patientId}`);
+      }, 1500);
+    }
+  }, [addTestSuccess, dispatch, navigate, patientId]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess(false);
-    setLoading(true);
-    const filledReports = Object.fromEntries(
-      Object.entries(reports).filter(([_, val]) => val && val.trim() !== "")
-    );
-    if (Object.keys(filledReports).length === 0) {
-      setError("Please fill in at least one test report.");
-      setLoading(false);
-      return;
-    }
-    try {
-      const token = localStorage.getItem("token");
-      await API.post(`/patients/${patientId}/tests`, filledReports, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setSuccess(true);
-      setReports({});
-      setTimeout(() => navigate("/receptionist/patients"), 1000);
-    } catch (err) {
-      setError("Failed to submit test reports");
-    } finally {
-      setLoading(false);
-    }
+    dispatch(createReceptionistTest(formData));
   };
 
   return (
     <ReceptionistLayout>
-      <div className="p-4 sm:p-8 md:p-10 min-h-screen bg-gradient-to-br from-blue-50 to-white">
-        <h2 className="text-3xl font-extrabold text-blue-500 mb-10 text-center tracking-tight">Add Test</h2>
-        <div className="bg-white shadow-xl rounded-2xl p-4 sm:p-8 md:p-10 border border-blue-100 max-w-4xl mx-auto">
-          <form onSubmit={handleSubmit}>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left rounded-xl overflow-hidden align-middle min-w-[500px]">
-                <thead>
-                  <tr className="bg-blue-50 text-blue-700 uppercase text-base">
-                    <th className="py-3 px-4 w-1/2">Screening Test</th>
-                    <th className="py-3 px-4 w-1/2">Reports</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {testFields.map((test, index) => (
-                    <tr key={index} className="border-b border-blue-100 even:bg-blue-50 align-middle">
-                      <td className="py-3 px-4 text-slate-700 font-medium align-middle">{test}</td>
-                      <td className="py-3 px-4 align-middle">
-                        <input
-                          type="text"
-                          placeholder="Write here..."
-                          className="w-full border border-blue-100 rounded-xl px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white text-slate-700 align-middle"
-                          value={reports[test] || ""}
-                          onChange={(e) => handleChange(test, e.target.value)}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <button
+              onClick={() => navigate(`/receptionist/profile/${patientId}`)}
+              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Patient
+            </button>
+            <h1 className="text-3xl font-bold text-slate-800 mb-2">
+              Add Test
+            </h1>
+            <p className="text-slate-600">
+              Record a new test for the patient
+            </p>
+          </div>
+
+          {/* Alert Messages */}
+          {addTestSuccess && (
+            <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+              <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+              <span className="text-green-700">Test added successfully!</span>
             </div>
-            {error && <div className="mb-4 bg-red-50 border border-blue-400 text-blue-800 px-4 py-3 rounded-xl">{error}</div>}
-            {success && <div className="mb-4 bg-blue-50 border border-blue-400 text-blue-800 px-4 py-3 rounded-xl">Test reports submitted successfully!</div>}
-            <div className="mt-8 text-right">
-              <button
-                type="submit"
-                disabled={loading}
-                className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-10 py-3 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all disabled:opacity-60"
-              >
-                {loading ? "Submitting..." : "Submit"}
-              </button>
+          )}
+          {error && (
+            <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+              <CheckCircle className="h-5 w-5 text-red-500 mr-3" />
+              <span className="text-red-700">{error}</span>
             </div>
-          </form>
-        </div>
-        {/* Future: Investigation Table */}
-        <div className="mt-12 bg-white shadow-xl p-6 rounded-2xl border border-blue-100 max-w-4xl mx-auto overflow-x-auto">
-          <h3 className="text-xl font-semibold mb-4 text-blue-700">Investigation</h3>
-          <table className="w-full text-base rounded-xl overflow-hidden min-w-[500px]">
-            <thead className="bg-blue-50 text-blue-700 uppercase">
-              <tr>
-                <th className="px-3 py-2">Date</th>
-                {testFields.map((t, i) => (
-                  <th key={i} className="px-3 py-2">{t}</th>
-                ))}
-                <th className="px-3 py-2">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* Test history display can go here in the future */}
-            </tbody>
-          </table>
+          )}
+
+          {/* Form */}
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+            <div className="p-6 border-b border-blue-100">
+              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <FlaskConical className="h-5 w-5 mr-2 text-blue-500" />
+                Test Information
+              </h2>
+              <p className="text-slate-600 mt-1">
+                Fill in the test details below
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Test Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="testName"
+                    value={formData.testName}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter test name"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Test Date *
+                  </label>
+                  <input
+                    type="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={3}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter test description"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Results
+                </label>
+                <textarea
+                  name="results"
+                  value={formData.results}
+                  onChange={handleChange}
+                  rows={3}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter test results"
+                />
+              </div>
+
+              <div className="flex gap-4 pt-6">
+                <button
+                  type="button"
+                  onClick={() => navigate(`/receptionist/profile/${patientId}`)}
+                  className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Adding Test...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4" />
+                      Add Test
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </ReceptionistLayout>
   );
-};
-
-export default AddTest;
+}

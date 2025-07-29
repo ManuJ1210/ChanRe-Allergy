@@ -1,108 +1,251 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Pencil, Trash2 } from 'lucide-react';
+import { fetchDoctors, deleteDoctorThunk } from '../../../features/centerAdmin/centerAdminThunks';
+import { resetCenterAdminState } from '../../../features/centerAdmin/centerAdminSlice';
+import { 
+  Pencil, 
+  Trash2, 
+  User, 
+  Search, 
+  Plus,
+  Mail,
+  Phone,
+  GraduationCap,
+  Building
+} from 'lucide-react';
 
 const DoctorList = () => {
-  const [doctors, setDoctors] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  const fetchDoctors = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/doctors', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setDoctors(res.data);
-      setLoading(false);
-    } catch (err) {
-      setError('Failed to fetch doctors');
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id) => {
-  const confirmDelete = window.confirm('Are you sure you want to delete this doctor?');
-  if (!confirmDelete) return;
-
-  try {
-    const token = localStorage.getItem('token');
-    await axios.delete(`http://localhost:5000/api/doctors/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setDoctors(doctors.filter((doc) => doc._id !== id)); 
-  } catch (err) {
-    alert('Failed to delete doctor');
-  }
-};
-
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-const handleEdit = (id) => {
-  navigate(`/CenterAdmin/Docters/EditDoctor/${id}`);
-};
+  const { doctors, loading, error, deleteSuccess } = useSelector((state) => state.centerAdmin);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
 
   useEffect(() => {
-    fetchDoctors();
-  }, []);
+    dispatch(fetchDoctors());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (deleteSuccess) {
+      setTimeout(() => {
+        dispatch(resetCenterAdminState());
+      }, 2000);
+    }
+  }, [deleteSuccess, dispatch]);
+
+  useEffect(() => {
+    const filtered = doctors.filter(doctor =>
+      doctor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doctor.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doctor.phone?.includes(searchTerm) ||
+      doctor.specialization?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredDoctors(filtered);
+  }, [doctors, searchTerm]);
+
+  const handleDelete = (id) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this doctor?');
+    if (!confirmDelete) return;
+    dispatch(deleteDoctorThunk(id));
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-slate-600">Loading doctors...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+            <p className="text-red-600">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="mt-6 flex flex-col items-center justify-center p-4 sm:p-8">
-      <div className="w-full max-w-6xl mx-auto">
-        <h2 className="text-4xl font-extrabold mb-8 text-blue-500 tracking-tight">Manage Doctors</h2>
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p className="text-red-500">{error}</p>
-        ) : doctors.length === 0 ? (
-          <p className="text-slate-500">No doctors found.</p>
-        ) : (
-          <div className="overflow-x-auto bg-white rounded-2xl shadow-xl p-2">
-            <table className="min-w-full divide-y divide-blue-100 text-base">
-              <thead className="bg-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            Manage Doctors
+          </h1>
+          <p className="text-slate-600">
+            View and manage all doctors in your center
+          </p>
+        </div>
+
+        {/* Stats and Actions */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-8">
+          <div className="p-6 border-b border-blue-100">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                  <User className="h-5 w-5 mr-2 text-blue-500" />
+                  Doctors
+                </h2>
+                <p className="text-slate-600 mt-1">
+                  Total: {doctors.length} doctors
+                </p>
+              </div>
+              <button
+                onClick={() => navigate('/CenterAdmin/Docters/AddDocter')}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add Doctor
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Success Message */}
+        {deleteSuccess && (
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+            <User className="h-5 w-5 text-green-500 mr-3" />
+            <span className="text-green-700">Doctor deleted successfully!</span>
+          </div>
+        )}
+
+        {/* Search */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-6">
+          <div className="p-6">
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search doctors by name, email, phone, specialization..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Doctors Table */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">Name</th>
-                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">Email</th>
-                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">Phone</th>
-                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">KMC No</th>
-                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">Qualification</th>
-                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">Hospital</th>
-                  <th className="px-6 py-4 text-slate-700 font-semibold text-center">Actions</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Doctor
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Contact
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Specialization
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Hospital
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-blue-50 text-slate-700">
-                {doctors.map((doc) => (
-                  <tr key={doc._id} className="hover:bg-blue-50 transition">
-                    <td className="px-6 py-4 text-center">{doc.name}</td>
-                    <td className="px-6 py-4 text-center text-slate-500">{doc.email}</td>
-                    <td className="px-6 py-4 text-center text-slate-500">{doc.phone || 'N/A'}</td>
-                    <td className="px-6 py-4 text-center text-slate-500">{doc.kmcNumber || 'N/A'}</td>
-                    <td className="px-6 py-4 text-center text-slate-500">{doc.qualification || 'N/A'}</td>
-                    <td className="px-6 py-4 text-center text-slate-500">{doc.hospitalName || 'Narayana Hospital'}</td>
-                    <td className="px-6 py-4 flex justify-center gap-3">
-                      <button
-                        onClick={() => handleEdit(doc._id)}
-                        className="bg-blue-100 hover:bg-blue-200 text-blue-700 p-2 rounded-full font-semibold transition"
-                        title="Edit"
-                      >
-                        <Pencil size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(doc._id)}
-                        className="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-full font-semibold transition"
-                        title="Delete"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+              <tbody className="bg-white divide-y divide-slate-200">
+                {filteredDoctors.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="px-6 py-12 text-center">
+                      <User className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-slate-600 mb-2">No Doctors Found</h3>
+                      <p className="text-slate-500 mb-4">
+                        {searchTerm ? 'No doctors match your search.' : 'Get started by adding your first doctor.'}
+                      </p>
+                      {!searchTerm && (
+                        <button
+                          onClick={() => navigate('/CenterAdmin/Docters/AddDocter')}
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto"
+                        >
+                          <Plus className="h-4 w-4" />
+                          Add Doctor
+                        </button>
+                      )}
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  filteredDoctors.map((doctor) => (
+                    <tr key={doctor._id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <User className="h-5 w-5 text-green-500" />
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-slate-900">
+                              Dr. {doctor.name}
+                            </div>
+                            <div className="text-sm text-slate-500">
+                              ID: {doctor._id?.slice(-6)}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="space-y-1">
+                          <div className="flex items-center text-sm text-slate-900">
+                            <Mail className="h-3 w-3 mr-2 text-slate-400" />
+                            {doctor.email || 'No email'}
+                          </div>
+                          <div className="flex items-center text-sm text-slate-500">
+                            <Phone className="h-3 w-3 mr-2 text-slate-400" />
+                            {doctor.phone || 'No phone'}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center text-sm text-slate-900">
+                          <GraduationCap className="h-3 w-3 mr-2 text-slate-400" />
+                          {doctor.specialization || 'General'}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center text-sm text-slate-900">
+                          <Building className="h-3 w-3 mr-2 text-slate-400" />
+                          {doctor.hospitalName || 'Not specified'}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => navigate(`/CenterAdmin/Docters/EditDoctor/${doctor._id}`)}
+                            className="text-blue-600 hover:text-blue-900 p-1 rounded transition-colors"
+                            title="Edit doctor"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(doctor._id)}
+                            className="text-red-600 hover:text-red-900 p-1 rounded transition-colors"
+                            title="Delete doctor"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

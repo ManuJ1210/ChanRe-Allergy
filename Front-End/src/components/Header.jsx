@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaSearch, FaUserCircle, FaSignOutAlt, FaUser, FaTimes } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../redux/slices/userSlice';
+import { logout } from '../features/auth/authSlice';
 import API from '../services/api';
 
 export default function Header({ onHamburgerClick }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const user = useSelector((state) => state.user.userInfo);
+  const user = useSelector((state) => state.auth?.user || state.user?.userInfo);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,7 +23,10 @@ export default function Header({ onHamburgerClick }) {
         // Only fetch if not already in localStorage
         if (!localStorage.getItem('centerName')) {
           try {
-            const res = await API.get(`/centers/${user.centerId}`);
+            // Ensure centerId is a string
+            const centerId = typeof user.centerId === 'object' ? user.centerId._id || user.centerId.id : user.centerId;
+            
+            const res = await API.get(`/centers/${centerId}`);
             if (res.data && res.data.name) {
               setCenterName(res.data.name);
               localStorage.setItem('centerName', res.data.name);

@@ -1,79 +1,346 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchSinglePrescription } from '../../../../../features/centerAdmin/centerAdminThunks';
+
+import { 
+  Eye, 
+  ArrowLeft, 
+  Download, 
+  Printer, 
+  AlertCircle,
+  Activity,
+  FileText,
+  User,
+  Calendar,
+  Clock,
+  UserCheck
+} from 'lucide-react';
 
 const ViewPrescription = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [record, setRecord] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  
+  const { prescription, loading, error } = useSelector(state => state.centerAdmin);
 
   useEffect(() => {
-    const fetchRecord = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(
-          `http://localhost:5000/api/prescriptions/${id}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setRecord(res.data);
-      } catch (err) {
-        setError("Failed to fetch prescription");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchRecord();
-  }, [id]);
+    if (id) {
+      dispatch(fetchSinglePrescription(id));
+    }
+  }, [dispatch, id]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div className="text-red-600">{error}</div>;
-  if (!record) return <div>No record found.</div>;
+  const handlePrint = () => {
+    window.print();
+  };
 
-  const patient = record.patientId || {};
-  const updatedBy = record.updatedBy || {};
+  const handleDownload = () => {
+    const element = document.createElement('a');
+    const file = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
+    element.href = URL.createObjectURL(file);
+    element.download = `prescription-${id}.html`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
+  // Handle array response from backend - get the most recent record
+  const getLatestRecord = () => {
+    if (!prescription) return null;
+    
+    // If it's an array, get the most recent one
+    if (Array.isArray(prescription)) {
+      return prescription.length > 0 ? prescription[0] : null; // Already sorted by createdAt desc
+    }
+    
+    // If it's a single object, return it
+    return prescription;
+  };
+
+  const latestRecord = getLatestRecord();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="animate-pulse space-y-4">
+              <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              <div className="space-y-3">
+                <div className="h-4 bg-gray-200 rounded"></div>
+                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Prescription</h2>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <button
+                onClick={() => navigate(-1)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!latestRecord) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="text-center">
+              <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">No Prescription Found</h2>
+              <p className="text-gray-600 mb-4">No prescription record found for this ID.</p>
+              <button
+                onClick={() => navigate(-1)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-8 max-w-2xl mx-auto bg-white rounded-2xl shadow-xl border border-blue-100">
-      <h2 className="text-3xl font-extrabold mb-6 text-blue-500 tracking-tight">Prescription Details</h2>
-      <div className="mb-6 p-4 bg-blue-50 rounded-xl flex flex-wrap gap-6">
-        <div><span className="font-semibold">Patient Name:</span> {patient.name || '-'}</div>
-        <div><span className="font-semibold">Patient Id:</span> {patient._id || '-'}</div>
-        <div><span className="font-semibold">Updated By:</span> {updatedBy.name || '-'}</div>
-        <div><span className="font-semibold">Date:</span> {record.date ? new Date(record.date).toLocaleDateString() : '-'}</div>
-        <div><span className="font-semibold">Visit:</span> {record.visit || '-'}</div>
-      </div>
-      <div className="mb-6">
-        <h3 className="font-semibold mb-2 text-blue-700">Medications</h3>
-        <table className="min-w-full text-sm border rounded-xl overflow-hidden">
-          <thead className="bg-blue-50">
-            <tr>
-              <th className="border px-3 py-2 text-slate-700 font-semibold">Drug Name</th>
-              <th className="border px-3 py-2 text-slate-700 font-semibold">Dose</th>
-              <th className="border px-3 py-2 text-slate-700 font-semibold">Duration</th>
-              <th className="border px-3 py-2 text-slate-700 font-semibold">Instructions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {record.medications && record.medications.length > 0 ? (
-              record.medications.map((med, idx) => (
-                <tr key={idx}>
-                  <td className="border px-3 py-2">{med.medicationName || '-'}</td>
-                  <td className="border px-3 py-2">{med.dosage || '-'}</td>
-                  <td className="border px-3 py-2">{med.duration || '-'}</td>
-                  <td className="border px-3 py-2">{med.instructions || '-'}</td>
-                </tr>
-              ))
-            ) : (
-              <tr><td colSpan={4} className="text-center text-slate-400 py-3">No medications found.</td></tr>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-5xl mx-auto p-6">
+        {/* Header */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate(-1)}
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
+              >
+                <ArrowLeft size={20} />
+                <span>Back</span>
+              </button>
+              <h1 className="text-2xl font-bold text-gray-800">Prescription Medical Record</h1>
+            </div>
+            <div className="flex space-x-3">
+              <button
+                onClick={handlePrint}
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-2"
+              >
+                <Printer size={16} />
+                <span>Print</span>
+              </button>
+              <button
+                onClick={handleDownload}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
+              >
+                <Download size={16} />
+                <span>Download</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          {/* Record Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">MEDICAL PRESCRIPTION</h1>
+            <p className="text-gray-600">Prescription ID: {latestRecord._id}</p>
+          </div>
+          
+          {/* Patient Information */}
+          <div className="bg-blue-50 rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
+              Patient Information
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Patient Name</label>
+                <p className="text-gray-900 font-medium">{latestRecord.patientId?.name || 'N/A'}</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Patient ID</label>
+                <p className="text-gray-900 font-medium">{latestRecord.patientId?._id || 'N/A'}</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Prescription Date</label>
+                <p className="text-gray-900 font-medium">
+                  {latestRecord.date ? new Date(latestRecord.date).toLocaleDateString() : 'N/A'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Clinical Assessment */}
+          <div className="space-y-8">
+            {/* Diagnosis */}
+            {latestRecord.diagnosis && (
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                  <Eye className="h-5 w-5 mr-2 text-blue-600" />
+                  Clinical Diagnosis
+                </h2>
+                <div className="bg-white rounded-lg p-4 border">
+                  <p className="text-gray-800">{latestRecord.diagnosis}</p>
+                </div>
+              </div>
             )}
-          </tbody>
-        </table>
+
+            {/* Medications */}
+            <div className="bg-gray-50 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <FileText className="h-5 w-5 mr-2 text-blue-600" />
+                Prescribed Medications
+              </h2>
+              {latestRecord.medications && latestRecord.medications.length > 0 ? (
+                <div className="space-y-4">
+                  {latestRecord.medications.map((med, index) => (
+                    <div key={index} className="bg-white rounded-lg p-4 border border-l-4 border-blue-500">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <h3 className="font-semibold text-gray-800 text-lg">{med.medicationName}</h3>
+                          <p className="text-gray-600">{med.dosage}</p>
+                        </div>
+                        <div>
+                          <div className="space-y-2">
+                            <div>
+                              <span className="text-sm font-medium text-gray-500">Duration:</span>
+                              <span className="text-gray-800 ml-2">{med.duration}</span>
+                            </div>
+                            <div>
+                              <span className="text-sm font-medium text-gray-500">Frequency:</span>
+                              <span className="text-gray-800 ml-2">{med.frequency}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {med.instructions && (
+                        <div className="mt-3 pt-3 border-t border-gray-200">
+                          <span className="text-sm font-medium text-gray-500">Instructions:</span>
+                          <p className="text-gray-800 mt-1">{med.instructions}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-white rounded-lg p-4 border border-l-4 border-gray-300">
+                  <p className="text-gray-500 italic">No medications prescribed</p>
+                </div>
+              )}
+            </div>
+
+            {/* Instructions */}
+            {latestRecord.instructions && (
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4">Additional Instructions</h2>
+                <div className="bg-white rounded-lg p-4 border">
+                  <p className="text-gray-800">{latestRecord.instructions}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Follow-up */}
+            {latestRecord.followUp && (
+              <div className="bg-gray-50 rounded-lg p-6">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4">Follow-up Instructions</h2>
+                <div className="bg-white rounded-lg p-4 border">
+                  <p className="text-gray-800">{latestRecord.followUp}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Clinical Summary */}
+            <div className="bg-gray-50 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">Prescription Summary</h2>
+              <div className="bg-white rounded-lg p-6 border">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                  <div>
+                    <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                      <FileText className="h-8 w-8 text-blue-600" />
+                    </div>
+                    <h3 className="font-medium text-gray-800 mb-1">Medications</h3>
+                    <p className="text-sm text-gray-500">
+                      {latestRecord.medications ? latestRecord.medications.length : 0} prescribed
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                      <User className="h-8 w-8 text-green-600" />
+                    </div>
+                    <h3 className="font-medium text-gray-800 mb-1">Prescribed By</h3>
+                    <p className="text-sm text-gray-500">{latestRecord.doctorId?.name || 'N/A'}</p>
+                  </div>
+                  
+                  <div>
+                    <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                      <Calendar className="h-8 w-8 text-purple-600" />
+                    </div>
+                    <h3 className="font-medium text-gray-800 mb-1">Prescription Date</h3>
+                    <p className="text-sm text-gray-500">
+                      {latestRecord.date ? new Date(latestRecord.date).toLocaleDateString() : 'N/A'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Record Metadata */}
+          <div className="border-t pt-6 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="flex items-center space-x-2">
+                <Clock className="h-4 w-4 text-gray-400" />
+                <span className="text-gray-500">Record Created:</span>
+                <span className="text-gray-900">
+                  {latestRecord.createdAt ? new Date(latestRecord.createdAt).toLocaleString() : 'N/A'}
+                </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Clock className="h-4 w-4 text-gray-400" />
+                <span className="text-gray-500">Last Updated:</span>
+                <span className="text-gray-900">
+                  {latestRecord.updatedAt ? new Date(latestRecord.updatedAt).toLocaleString() : 'N/A'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Doctor Signature */}
+          <div className="border-t pt-6 mt-8">
+            <div className="flex justify-between items-center">
+              <div className="text-sm text-gray-600">
+                <p>Generated on: {new Date().toLocaleDateString()}</p>
+              </div>
+              <div className="text-right">
+                <p className="font-medium text-gray-800">{latestRecord.doctorId?.name || 'Doctor'}</p>
+                <p className="text-sm text-gray-600">Medical Professional</p>
+                <p className="text-sm text-gray-600">{latestRecord.centerId?.name || 'Medical Center'}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <button className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-6 py-2 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all" onClick={() => navigate(-1)}>Back</button>
     </div>
   );
 };

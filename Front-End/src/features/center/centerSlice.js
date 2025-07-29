@@ -18,6 +18,7 @@ const centerSlice = createSlice({
     creating: false,
     deletingId: null,
     updateLoading: false, // Added for update operations
+    updateSuccess: false, // Added for update success state
     assignAdminLoading: false, // Added for admin assignment
     error: null,
     success: false,
@@ -28,6 +29,7 @@ const centerSlice = createSlice({
       state.creating = false;
       state.error = null;
       state.success = false;
+      state.updateSuccess = false;
       state.deletingId = null;
     },
     // Added new reducers
@@ -104,10 +106,12 @@ const centerSlice = createSlice({
       // Update center
       .addCase(updateCenter.pending, (state) => {
         state.updateLoading = true;
+        state.updateSuccess = false;
         state.error = null;
       })
       .addCase(updateCenter.fulfilled, (state, action) => {
         state.updateLoading = false;
+        state.updateSuccess = true;
         state.currentCenter = action.payload;
         // Update in centers array if it exists
         const index = state.centers.findIndex(center => center._id === action.payload._id);
@@ -117,6 +121,7 @@ const centerSlice = createSlice({
       })
       .addCase(updateCenter.rejected, (state, action) => {
         state.updateLoading = false;
+        state.updateSuccess = false;
         state.error = action.payload;
       });
       // assignAdmin cases removed

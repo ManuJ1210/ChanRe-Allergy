@@ -1,23 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import API from '../../services/api';
-import Input from '../../components/Input'; // ✅ Make sure this path is correct!
-
-import {
-  FaUserAlt,
-  FaUserMd,
-  FaIdBadge,
-  FaHospital,
-  FaCode,
-  FaPhone,
-  FaEnvelope,
-  FaUserCircle,
-  FaKey,
-} from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCenterAdmin, createCenterAdmin, updateCenterAdmin } from '../../features/superadmin/superadminThunks';
+import { resetSuperadminState } from '../../features/superadmin/superadminSlice';
+import { User, GraduationCap, Badge, Building2, Hash, Phone, Mail, Save, ArrowLeft, CheckCircle, AlertCircle, Eye, EyeOff } from 'lucide-react';
 
 export default function EditCenterAdmin() {
   const { id } = useParams(); // id is centerId when assigning
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { centerAdmin, loading, error, isNewAdmin, addSuccess, updateSuccess } = useSelector((state) => state.superadmin);
 
   const [admin, setAdmin] = useState({
     name: '',
@@ -31,25 +24,44 @@ export default function EditCenterAdmin() {
     username: '',
     password: '',
   });
-  const [isNewAdmin, setIsNewAdmin] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // Load admin data on mount
   useEffect(() => {
-    API.get(`/center-admins/${id}`)
-      .then((res) => {
-        setAdmin(res.data);
-        setIsNewAdmin(false);
-      })
-      .catch((err) => {
-        if (err.response && err.response.status === 404) {
-          // No admin exists for this center, allow creation
-          setIsNewAdmin(true);
-        } else {
-          console.error('Error loading admin:', err);
-          alert('❌ Failed to load admin info');
-        }
-      });
-  }, [id]);
+    if (id) {
+      dispatch(fetchCenterAdmin(id));
+    }
+    return () => {
+      dispatch(resetSuperadminState());
+    };
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (centerAdmin) {
+      const adminData = { 
+        ...centerAdmin, 
+        password: '',
+        qualification: centerAdmin.qualification || '',
+        designation: centerAdmin.designation || '',
+        kmcNumber: centerAdmin.kmcNumber || '',
+        hospitalName: centerAdmin.hospitalName || '',
+        centerCode: centerAdmin.centerCode || '',
+        username: centerAdmin.username || '',
+        phone: centerAdmin.phone || '',
+        email: centerAdmin.email || '',
+        name: centerAdmin.name || ''
+      };
+      setAdmin(adminData);
+    }
+  }, [centerAdmin]);
+
+  useEffect(() => {
+    if (addSuccess || updateSuccess) {
+      setTimeout(() => {
+        dispatch(resetSuperadminState());
+        navigate('/superadmin/manage-admins');
+      }, 1500);
+    }
+  }, [addSuccess, updateSuccess, dispatch, navigate]);
 
   const handleAdminChange = (e) => {
     setAdmin({ ...admin, [e.target.name]: e.target.value });
@@ -57,54 +69,275 @@ export default function EditCenterAdmin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const dataToSend = { ...admin };
-      if (!admin.password) delete dataToSend.password; // Only send password if filled
-      if (isNewAdmin) {
-        // Create new admin for this center
-        await API.post('/center-admins', { ...dataToSend, centerId: id });
-        alert('✅ Admin created successfully');
-      } else {
-        // Update existing admin
-        await API.put(`/center-admins/${id}`, dataToSend);
-        alert('✅ Admin updated successfully');
-      }
-      navigate('/superadmin/manage-admins');
-    } catch (err) {
-      console.error(isNewAdmin ? 'Error creating admin:' : 'Error updating admin:', err);
-      alert(`❌ Failed to ${isNewAdmin ? 'create' : 'update'} admin`);
+    if (isNewAdmin) {
+      dispatch(createCenterAdmin({ ...admin, centerId: id }));
+    } else {
+      dispatch(updateCenterAdmin({ id, adminData: admin }));
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-8">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+              <p className="text-slate-600">Loading admin details...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10 bg-white rounded-xl shadow-md">
-      <h2 className="text-3xl font-bold mb-6 text-blue-800">
-        {isNewAdmin ? 'Assign Center Admin' : 'Edit Center Admin'}
-      </h2>
-
-      <form onSubmit={handleSubmit}>
-        <h3 className="text-2xl font-semibold text-gray-700 mb-4">👤 Admin Information</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Input label="Full Name" name="name" value={admin.name} onChange={handleAdminChange} icon={<FaUserAlt />} />
-          <Input label="Qualification" name="qualification" value={admin.qualification} onChange={handleAdminChange} icon={<FaUserMd />} />
-          <Input label="Designation" name="designation" value={admin.designation} onChange={handleAdminChange} icon={<FaIdBadge />} />
-          <Input label="kmcNumber" name="kmcNumber" value={admin.kmcNumber} onChange={handleAdminChange} icon={<FaIdBadge />} />
-          <Input label="Hospital Name" name="hospitalName" value={admin.hospitalName} onChange={handleAdminChange} icon={<FaHospital />} />
-          <Input label="centrCode" name="centerCode" value={admin.centerCode} onChange={handleAdminChange} icon={<FaCode />} />
-          <Input label="Phone" name="phone" value={admin.phone} onChange={handleAdminChange} icon={<FaPhone />} />
-          <Input label="Email" type="email" name="email" value={admin.email} onChange={handleAdminChange} icon={<FaEnvelope />} />
-          <Input label="Username" name="username" value={admin.username} onChange={handleAdminChange} icon={<FaUserCircle />} />
-          <Input label="Password" type="password" name="password" value={admin.password} onChange={handleAdminChange} icon={<FaKey />} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <button
+            onClick={() => navigate('/superadmin/manage-admins')}
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Admins
+          </button>
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            {isNewAdmin ? 'Assign Center Admin' : 'Edit Center Admin'}
+          </h1>
+          <p className="text-slate-600">
+            {isNewAdmin ? 'Create a new administrator for this center' : 'Update administrator information'}
+          </p>
         </div>
 
-        <button
-          type="submit"
-          className="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded text-lg font-medium"
-        >
-          {isNewAdmin ? 'Assign Admin' : 'Save Changes'}
-        </button>
-      </form>
+        {/* Alert Messages */}
+        {addSuccess && (
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+            <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+            <span className="text-green-700">Admin created successfully</span>
+          </div>
+        )}
+        {updateSuccess && (
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+            <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+            <span className="text-green-700">Admin updated successfully</span>
+          </div>
+        )}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+            <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
+            <span className="text-red-700">{error}</span>
+          </div>
+        )}
+
+        {/* Form */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+          <div className="p-6 border-b border-blue-100">
+            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <User className="h-5 w-5 mr-2 text-blue-500" />
+              Administrator Information
+            </h2>
+            <p className="text-slate-600 mt-1">
+              {isNewAdmin ? 'Fill in the details for the new administrator' : 'Update the administrator details below'}
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <User className="h-4 w-4 text-blue-500" />
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={admin.name || ''}
+                  onChange={handleAdminChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter full name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <GraduationCap className="h-4 w-4 text-blue-500" />
+                  Qualification *
+                </label>
+                <input
+                  type="text"
+                  name="qualification"
+                  value={admin.qualification || ''}
+                  onChange={handleAdminChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter qualification"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <Badge className="h-4 w-4 text-blue-500" />
+                  Designation *
+                </label>
+                <input
+                  type="text"
+                  name="designation"
+                  value={admin.designation}
+                  onChange={handleAdminChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter designation"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <Badge className="h-4 w-4 text-blue-500" />
+                  KMC Number *
+                </label>
+                <input
+                  type="text"
+                  name="kmcNumber"
+                  value={admin.kmcNumber}
+                  onChange={handleAdminChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter KMC number"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <Building2 className="h-4 w-4 text-blue-500" />
+                  Hospital Name *
+                </label>
+                <input
+                  type="text"
+                  name="hospitalName"
+                  value={admin.hospitalName}
+                  onChange={handleAdminChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter hospital name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <Hash className="h-4 w-4 text-blue-500" />
+                  Center Code *
+                </label>
+                <input
+                  type="text"
+                  name="centerCode"
+                  value={admin.centerCode}
+                  onChange={handleAdminChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter center code"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-blue-500" />
+                  Phone *
+                </label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={admin.phone}
+                  onChange={handleAdminChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter phone number"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-blue-500" />
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={admin.email}
+                  onChange={handleAdminChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter email address"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <User className="h-4 w-4 text-blue-500" />
+                  Username *
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  value={admin.username}
+                  onChange={handleAdminChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter username"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <Badge className="h-4 w-4 text-blue-500" />
+                  Password {!isNewAdmin && '(Leave blank to keep current)'}
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={admin.password}
+                    onChange={handleAdminChange}
+                    required={isNewAdmin}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder={isNewAdmin ? "Enter password" : "Enter new password (optional)"}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-3 text-slate-400 hover:text-blue-500 transition-colors"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    {isNewAdmin ? 'Creating Admin...' : 'Saving Changes...'}
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4" />
+                    {isNewAdmin ? 'Assign Admin' : 'Save Changes'}
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

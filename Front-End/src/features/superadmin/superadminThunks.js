@@ -1,0 +1,342 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import API from '../../services/api';
+
+// Fetch dashboard stats
+export const fetchDashboardStats = createAsyncThunk(
+  'superadmin/fetchDashboardStats',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await API.get('/dashboard/superadmin/stats');
+      return res.data;
+    } catch (error) {
+      console.error('Dashboard stats error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch dashboard stats');
+    }
+  }
+);
+
+// Fetch all centers
+export const fetchCenters = createAsyncThunk(
+  'superadmin/fetchCenters',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await API.get('/centers');
+      return res.data;
+    } catch (error) {
+      console.error('Centers fetch error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch centers');
+    }
+  }
+);
+
+// Fetch center admins
+export const fetchCenterAdmins = createAsyncThunk(
+  'superadmin/fetchCenterAdmins',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await API.get('/center-admins');
+      return res.data;
+    } catch (error) {
+      console.error('Center admins fetch error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch center admins');
+    }
+  }
+);
+
+// Fetch center info with stats
+export const fetchCenterInfo = createAsyncThunk(
+  'superadmin/fetchCenterInfo',
+  async (centerId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/centers/${centerId}/stats`);
+      return res.data;
+    } catch (error) {
+      console.error('Center info error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch center info');
+    }
+  }
+);
+
+// Fetch follow-up patients
+export const fetchFollowUpPatients = createAsyncThunk(
+  'superadmin/fetchFollowUpPatients',
+  async (_, { rejectWithValue }) => {
+    try {
+      console.log('🔍 Fetching follow-up patients...');
+      const res = await API.get('/followups/patients');
+      console.log('📊 Follow-up patients response:', res.data);
+      return res.data;
+    } catch (error) {
+      console.error('Followup patients error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch follow-up patients');
+    }
+  }
+);
+
+// Fetch detailed follow-up data
+export const fetchDetailedFollowUps = createAsyncThunk(
+  'superadmin/fetchDetailedFollowUps',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await API.get('/followups/detailed');
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch detailed follow-ups');
+    }
+  }
+);
+
+// Fetch patient follow-ups
+export const fetchPatientFollowUps = createAsyncThunk(
+  'superadmin/fetchPatientFollowUps',
+  async ({ patientId, type }, { rejectWithValue }) => {
+    try {
+      let url = '';
+      switch (type) {
+        case 'Allergic Rhinitis':
+          url = '/allergic-rhinitis';
+          break;
+        case 'Atopic Dermatitis':
+          url = '/atopic-dermatitis';
+          break;
+        case 'Allergic Conjunctivitis':
+          url = '/allergic-conjunctivitis';
+          break;
+        case 'Allergic Bronchitis':
+          url = '/allergic-bronchitis';
+          break;
+        default:
+          url = '/followups';
+      }
+      
+      const res = await API.get(`${url}?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      console.error('Patient followups error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient follow-ups');
+    }
+  }
+);
+
+// Fetch allergic rhinitis list
+export const fetchAllergicRhinitisList = createAsyncThunk(
+  'superadmin/fetchAllergicRhinitisList',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/allergic-rhinitis?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      console.error('Allergic rhinitis error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch allergic rhinitis list');
+    }
+  }
+);
+
+// Fetch allergic conjunctivitis list
+export const fetchAllergicConjunctivitisList = createAsyncThunk(
+  'superadmin/fetchAllergicConjunctivitisList',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/allergic-conjunctivitis?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      console.error('Allergic conjunctivitis error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch allergic conjunctivitis list');
+    }
+  }
+);
+
+// Fetch allergic bronchitis list
+export const fetchAllergicBronchitisList = createAsyncThunk(
+  'superadmin/fetchAllergicBronchitisList',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/allergic-bronchitis?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      console.error('Allergic bronchitis error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch allergic bronchitis list');
+    }
+  }
+);
+
+// Fetch atopic dermatitis list
+export const fetchAtopicDermatitisList = createAsyncThunk(
+  'superadmin/fetchAtopicDermatitisList',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/atopic-dermatitis?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      console.error('Atopic dermatitis error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch atopic dermatitis list');
+    }
+  }
+);
+
+// Fetch GPE list
+export const fetchGPEList = createAsyncThunk(
+  'superadmin/fetchGPEList',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/gpe?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      console.error('GPE error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch GPE list');
+    }
+  }
+); 
+
+// Fetch center admin
+export const fetchCenterAdmin = createAsyncThunk(
+  'superadmin/fetchCenterAdmin',
+  async (centerId, { rejectWithValue }) => {
+    try {
+      // First, let's get all centers to see what we're working with
+      const centersRes = await API.get('/centers');
+      
+      // Try to get all center admins and find the one for this center
+      const res = await API.get('/center-admins');
+      
+      // First try to find by centerId (normal case)
+      let centerAdmin = res.data.find(admin => 
+        admin.centerId && admin.centerId.toString() === centerId.toString()
+      );
+      
+      // If not found, try to find by admin ID (in case someone passed admin ID instead of center ID)
+      if (!centerAdmin) {
+        centerAdmin = res.data.find(admin => 
+          admin._id && admin._id.toString() === centerId.toString()
+        );
+      }
+      
+      if (centerAdmin) {
+        // Get the complete admin data using getCenterAdminById
+        const completeAdminRes = await API.get(`/center-admins/${centerAdmin._id}`);
+        const completeAdmin = completeAdminRes.data;
+        
+        return completeAdmin;
+      }
+      
+      // If no admin exists, return null (this will trigger isNewAdmin = true)
+      return null;
+    } catch (error) {
+      console.error('Center admin error:', error.response?.data || error.message);
+      // If it's a 404 or any other error, it means no admin exists, so return null
+      return null;
+    }
+  }
+);
+
+// Create center admin
+export const createCenterAdmin = createAsyncThunk(
+  'superadmin/createCenterAdmin',
+  async (adminData, { rejectWithValue }) => {
+    try {
+      const res = await API.post('/center-admins', adminData);
+      return res.data;
+    } catch (error) {
+      console.error('Create center admin error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to create center admin');
+    }
+  }
+);
+
+// Update center admin
+export const updateCenterAdmin = createAsyncThunk(
+  'superadmin/updateCenterAdmin',
+  async ({ id, adminData }, { rejectWithValue }) => {
+    try {
+      const res = await API.put(`/center-admins/${id}`, adminData);
+      return res.data;
+    } catch (error) {
+      console.error('Update center admin error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to update center admin');
+    }
+  }
+);
+
+// Delete center admin
+export const deleteCenterAdmin = createAsyncThunk(
+  'superadmin/deleteCenterAdmin',
+  async (adminId, { rejectWithValue }) => {
+    try {
+      const res = await API.delete(`/center-admins/${adminId}`);
+      return { adminId, message: res.data.message };
+    } catch (error) {
+      console.error('Delete center admin error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to delete center admin');
+    }
+  }
+);
+
+// Fetch lab staff
+export const fetchLabStaff = createAsyncThunk(
+  'superadmin/fetchLabStaff',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await API.get('/lab-staff');
+      return res.data;
+    } catch (error) {
+      console.error('Lab staff fetch error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch lab staff');
+    }
+  }
+);
+
+// Fetch single lab staff by ID
+export const fetchLabStaffById = createAsyncThunk(
+  'superadmin/fetchLabStaffById',
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/lab-staff/${id}`);
+      return res.data;
+    } catch (error) {
+      console.error('Lab staff fetch by ID error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch lab staff');
+    }
+  }
+);
+
+// Create lab staff
+export const createLabStaff = createAsyncThunk(
+  'superadmin/createLabStaff',
+  async (staffData, { rejectWithValue }) => {
+    try {
+      const res = await API.post('/lab-staff', staffData);
+      return res.data;
+    } catch (error) {
+      console.error('Create lab staff error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to create lab staff');
+    }
+  }
+);
+
+// Update lab staff
+export const updateLabStaff = createAsyncThunk(
+  'superadmin/updateLabStaff',
+  async ({ id, staffData }, { rejectWithValue }) => {
+    try {
+      const res = await API.put(`/lab-staff/${id}`, staffData);
+      return res.data;
+    } catch (error) {
+      console.error('Update lab staff error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to update lab staff');
+    }
+  }
+);
+
+// Delete lab staff
+export const deleteLabStaff = createAsyncThunk(
+  'superadmin/deleteLabStaff',
+  async (staffId, { rejectWithValue }) => {
+    try {
+      const res = await API.delete(`/lab-staff/${staffId}`);
+      return { staffId, message: res.data.message };
+    } catch (error) {
+      console.error('Delete lab staff error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to delete lab staff');
+    }
+  }
+); 

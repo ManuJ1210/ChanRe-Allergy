@@ -1,48 +1,76 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import API from "../../services/api";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchReceptionistSinglePatient, updateReceptionistPatient } from "../../features/receptionist/receptionistThunks";
+import { resetReceptionistState } from "../../features/receptionist/receptionistSlice";
 import ReceptionistLayout from './ReceptionistLayout';
+import { User, Save, ArrowLeft, CheckCircle, AlertCircle, Mail, Phone, MapPin, Calendar, UserCheck, Building2 } from "lucide-react";
 
 export default function EditPatient() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { singlePatient, patientLoading, patientError, updateSuccess } = useSelector((state) => state.receptionist);
+  
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
-    phone: "",
     age: "",
     gender: "",
     address: "",
+    contact: "",
+    email: "",
+    centerCode: "",
+    assignedDoctor: "",
   });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [doctors, setDoctors] = useState([]);
+  const [doctorLoading, setDoctorLoading] = useState(true);
+  const [doctorError, setDoctorError] = useState("");
 
   useEffect(() => {
-    fetchPatient();
-    // eslint-disable-next-line
-  }, [id]);
+    if (id) {
+      dispatch(fetchReceptionistSinglePatient(id));
+    }
+    fetchDoctors();
+  }, [dispatch, id]);
 
-  const fetchPatient = async () => {
-    setLoading(true);
-    setError("");
+  useEffect(() => {
+    if (singlePatient) {
+      setFormData({
+        name: singlePatient.name || "",
+        age: singlePatient.age || "",
+        gender: singlePatient.gender || "",
+        address: singlePatient.address || "",
+        contact: singlePatient.contact || "",
+        email: singlePatient.email || "",
+        centerCode: singlePatient.centerCode || "",
+        assignedDoctor: singlePatient.assignedDoctor || "",
+      });
+    }
+  }, [singlePatient]);
+
+  useEffect(() => {
+    if (updateSuccess) {
+      setTimeout(() => {
+        dispatch(resetReceptionistState());
+        navigate("/receptionist/patients");
+      }, 1500);
+    }
+  }, [updateSuccess, dispatch, navigate]);
+
+  const fetchDoctors = async () => {
+    setDoctorLoading(true);
+    setDoctorError("");
     try {
       const token = localStorage.getItem("token");
-      const res = await API.get(`/patients/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const response = await fetch('http://localhost:5000/api/doctors', {
+        headers: { Authorization: `Bearer ${token}` }
       });
-      setFormData({
-        name: res.data.name || "",
-        email: res.data.email || "",
-        phone: res.data.phone || "",
-        age: res.data.age || "",
-        gender: res.data.gender || "",
-        address: res.data.address || "",
-      });
+      const data = await response.json();
+      setDoctors(data);
     } catch (err) {
-      setError("Failed to fetch patient");
+      setDoctorError("Failed to load doctors");
     } finally {
-      setLoading(false);
+      setDoctorLoading(false);
     }
   };
 
@@ -52,111 +80,253 @@ export default function EditPatient() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-    setSuccess(false);
-    try {
-      const token = localStorage.getItem("token");
-      await API.put(`/patients/${id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setSuccess(true);
-      setTimeout(() => navigate("/receptionist/patients"), 1000);
-    } catch (err) {
-      setError("Failed to update patient");
-    } finally {
-      setLoading(false);
-    }
+    dispatch(updateReceptionistPatient({ id, patientData: formData }));
   };
 
-  if (loading) {
-    return <div className="text-center py-10">Loading patient data...</div>;
+  if (patientLoading) {
+    return (
+      <ReceptionistLayout>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+              <p className="text-slate-600">Loading patient details...</p>
+            </div>
+          </div>
+        </div>
+      </ReceptionistLayout>
+    );
+  }
+
+  if (patientError) {
+    return (
+      <ReceptionistLayout>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+              <p className="text-red-600">{patientError}</p>
+            </div>
+          </div>
+        </div>
+      </ReceptionistLayout>
+    );
   }
 
   return (
     <ReceptionistLayout>
-      <div className="max-w-3xl mx-auto p-10 bg-white shadow-xl rounded-2xl mt-12 border border-blue-100">
-        <h2 className="text-3xl font-extrabold text-blue-500 mb-8 text-center tracking-tight">Edit Patient Details</h2>
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            <div>
-              <label className="block text-base font-medium text-slate-700 mb-2">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full border border-blue-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-              />
-            </div>
-            <div>
-              <label className="block text-base font-medium text-slate-700 mb-2">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full border border-blue-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-              />
-            </div>
-            <div>
-              <label className="block text-base font-medium text-slate-700 mb-2">Contact</label>
-              <input
-                type="number"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full border border-blue-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-              />
-            </div>
-            <div>
-              <label className="block text-base font-medium text-slate-700 mb-2">Age</label>
-              <input
-                type="number"
-                name="age"
-                value={formData.age}
-                onChange={handleChange}
-                className="w-full border border-blue-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-              />
-            </div>
-            <div>
-              <label className="block text-base font-medium text-slate-700 mb-2">Gender</label>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="w-full border border-blue-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-              >
-                <option value="">Select</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-base font-medium text-slate-700 mb-2">Address</label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                className="w-full border border-blue-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-              />
-            </div>
-          </div>
-          {error && <div className="mb-4 bg-red-50 border border-blue-400 text-blue-800 px-4 py-3 rounded-xl">{error}</div>}
-          {success && <div className="mb-4 bg-blue-50 border border-blue-400 text-blue-800 px-4 py-3 rounded-xl">Patient updated successfully!</div>}
-          <div className="flex justify-end">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
             <button
-              type="submit"
-              className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-10 py-3 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all"
-              disabled={loading}
+              onClick={() => navigate('/receptionist/patients')}
+              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
             >
-              Save Changes
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Patients
             </button>
+            <h1 className="text-3xl font-bold text-slate-800 mb-2">
+              Edit Patient
+            </h1>
+            <p className="text-slate-600">
+              Update patient information
+            </p>
           </div>
-        </form>
+
+          {/* Alert Messages */}
+          {updateSuccess && (
+            <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+              <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+              <span className="text-green-700">Patient updated successfully!</span>
+            </div>
+          )}
+
+          {/* Form */}
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+            <div className="p-6 border-b border-blue-100">
+              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <User className="h-5 w-5 mr-2 text-blue-500" />
+                Patient Information
+              </h2>
+              <p className="text-slate-600 mt-1">
+                Update the patient details below
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                    <User className="h-4 w-4 text-blue-500" />
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter patient's full name"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-blue-500" />
+                    Age *
+                  </label>
+                  <input
+                    type="number"
+                    name="age"
+                    value={formData.age}
+                    onChange={handleChange}
+                    required
+                    min="0"
+                    max="150"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter age"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                    <UserCheck className="h-4 w-4 text-blue-500" />
+                    Gender *
+                  </label>
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  >
+                    <option value="">Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                    <Phone className="h-4 w-4 text-blue-500" />
+                    Contact Number *
+                  </label>
+                  <input
+                    type="tel"
+                    name="contact"
+                    value={formData.contact}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter contact number"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                    <Mail className="h-4 w-4 text-blue-500" />
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter email address"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                    <Building2 className="h-4 w-4 text-blue-500" />
+                    Center Code
+                  </label>
+                  <input
+                    type="text"
+                    name="centerCode"
+                    value={formData.centerCode}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter center code"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                    <UserCheck className="h-4 w-4 text-blue-500" />
+                    Assigned Doctor
+                  </label>
+                  <select
+                    name="assignedDoctor"
+                    value={formData.assignedDoctor}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  >
+                    <option value="">Select doctor</option>
+                    {doctorLoading ? (
+                      <option value="" disabled>Loading doctors...</option>
+                    ) : doctorError ? (
+                      <option value="" disabled>Error loading doctors</option>
+                    ) : (
+                      doctors.map((doctor) => (
+                        <option key={doctor._id} value={doctor._id}>
+                          Dr. {doctor.name} - {doctor.specialization || 'General'}
+                        </option>
+                      ))
+                    )}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-blue-500" />
+                  Address *
+                </label>
+                <textarea
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  required
+                  rows={3}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter complete address"
+                />
+              </div>
+
+              <div className="flex gap-4 pt-6">
+                <button
+                  type="button"
+                  onClick={() => navigate('/receptionist/patients')}
+                  className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={patientLoading}
+                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                >
+                  {patientLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Updating Patient...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4" />
+                      Update Patient
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </ReceptionistLayout>
   );

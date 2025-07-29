@@ -1,151 +1,238 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const SYMPTOMS = ["Itching", "Tearing", "Redness", "Discomfort", "Discharge", "Photophobia"];
-const TYPES = [
-  { label: "Seasonal", value: "Seasonal" },
-  { label: "Perinneal", value: "Perinneal" },
-  { label: "Intermittent (< 4 days per week or < 4 consecutive week)", value: "Intermittent" },
-  { label: "Persistent (< 4 days per week or < 4 consecutive week)", value: "Persistent" }
+const SYMPTOM_OPTIONS = ['Itching', 'Tearing', 'Redness', 'Discomfort', 'Discharge', 'Photophobia'];
+const TYPE_OPTIONS = [
+  'Seasonal',
+  'Perennial',
+  'Intermittent (< 4 days per week or < 4 consecutive week)',
+  'Persistent (< 4 days per week or < 4 consecutive week)'
 ];
-const GRADING_QUESTIONS = [
-  "Signs & Symptoms being bothersome",
-  "Effects on vision",
-  "Interference in School/Work",
-  "Able to perform daily activities"
+const GRADING_CRITERIA = [
+  'Signs & Symptoms being bothersome',
+  'Effects on vision',
+  'Interference in School/Work',
+  'Able to perform daily activities'
 ];
-const GRADING_LEVELS = [
-  { label: "Mild (0)", value: 0 },
-  { label: "Moderate (1-3)", value: 2 },
-  { label: "Severe (4)", value: 4 }
+const SEVERITY_LEVELS = [
+  { value: 'mild', label: 'Mild (0)', score: 0 },
+  { value: 'moderate', label: 'Moderate (1-3)', score: 1 },
+  { value: 'severe', label: 'Severe (4)', score: 4 }
 ];
 
-const AddAllergicConjunctivitis = ({ patientId: propPatientId, onSuccess, onCancel }) => {
+export default function AddAllergicConjunctivitis() {
+  const [form, setForm] = useState({
+    symptoms: {
+      Itching: '',
+      Tearing: '',
+      Redness: '',
+      Discomfort: '',
+      Discharge: '',
+      Photophobia: ''
+    },
+    type: '',
+    grading: {
+      'Signs & Symptoms being bothersome': '',
+      'Effects on vision': '',
+      'Interference in School/Work': '',
+      'Able to perform daily activities': ''
+    }
+  });
+  
   const params = useParams();
   const navigate = useNavigate();
-  const patientId = propPatientId || params.patientId || params.id;
-  const [symptoms, setSymptoms] = useState([]);
-  const [type, setType] = useState("");
-  const [grading, setGrading] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
 
-  const handleSymptomChange = (symptom) => {
-    setSymptoms(prev => prev.includes(symptom)
-      ? prev.filter(s => s !== symptom)
-      : [...prev, symptom]);
+  const handleSymptomChange = (symptom, value) => {
+    setForm(prev => ({
+      ...prev,
+      symptoms: {
+        ...prev.symptoms,
+        [symptom]: value
+      }
+    }));
   };
 
-  const handleGradingChange = (question, value) => {
-    setGrading(prev => ({ ...prev, [question]: value }));
+  const handleGradingChange = (criterion, value) => {
+    setForm(prev => ({
+      ...prev,
+      grading: {
+        ...prev.grading,
+        [criterion]: value
+      }
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-    setSuccess(false);
+    
+    // Validate form data
+    if (!form.type) {
+      alert("Please select a type for the allergic conjunctivitis.");
+      return;
+    }
+    
+    // Check if at least one symptom is selected
+    const hasSymptoms = Object.values(form.symptoms).some(value => value === 'yes');
+    if (!hasSymptoms) {
+      alert("Please select at least one symptom.");
+      return;
+    }
+    
+    // Check if grading is complete
+    const hasGrading = Object.values(form.grading).some(value => value !== '');
+    if (!hasGrading) {
+      alert("Please complete the grading section.");
+      return;
+    }
+    
     try {
       const token = localStorage.getItem("token");
-      await axios.post(
+      
+      // Prepare the data
+      const formData = {
+        patientId: params.patientId,
+        symptoms: form.symptoms,
+        type: form.type,
+        grading: form.grading
+      };
+      
+      console.log('Submitting form data:', formData);
+      
+      const response = await axios.post(
         "http://localhost:5000/api/allergic-conjunctivitis",
-        { patientId, symptoms, type, grading },
+        formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setSuccess(true);
-      setSymptoms([]);
-      setType("");
-      setGrading({});
-      if (onSuccess) onSuccess();
-      setTimeout(() => {
-        navigate(`/CenterAdmin/patients/FollowUp/${patientId}`);
-      }, 1000);
+      
+      console.log('Response:', response.data);
+      alert("Submitted successfully!");
+      navigate(`/Receptionist/profile/${params.patientId}`);
     } catch (err) {
-      setError("Failed to add record");
-    } finally {
-      setLoading(false);
+      console.error('Error submitting form:', err);
+      console.error('Error response:', err.response?.data);
+      alert(`Failed to submit. Error: ${err.response?.data?.message || err.message}`);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow max-w-3xl mx-auto">
-      <h2 className="text-xl font-bold mb-4 text-blue-700">Allergic Conjunctivitis</h2>
-      <div className="mb-4 flex flex-wrap gap-6 items-center">
-        <div>
-          <span className="font-semibold mr-2">Symptoms</span>
-          {SYMPTOMS.map(symptom => (
-            <label key={symptom} className="mr-3">
-              <input
-                type="checkbox"
-                checked={symptoms.includes(symptom)}
-                onChange={() => handleSymptomChange(symptom)}
-                className="mr-1"
-              />
-              {symptom}
-            </label>
-          ))}
-        </div>
-        <div>
-          <span className="font-semibold mr-2">Type</span>
-          {TYPES.map(t => (
-            <label key={t.value} className="mr-3">
-              <input
-                type="radio"
-                name="type"
-                value={t.value}
-                checked={type === t.value}
-                onChange={e => setType(e.target.value)}
-                className="mr-1"
-              />
-              {t.label}
-            </label>
-          ))}
-        </div>
-      </div>
-      <div className="mb-6">
-        <h3 className="text-2xl font-semibold mb-2">Grading</h3>
-        <table className="min-w-full text-sm border">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border px-2 py-1 text-left">Grading</th>
-              {GRADING_LEVELS.map(level => (
-                <th key={level.value} className="border px-2 py-1 text-center">{level.label}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {GRADING_QUESTIONS.map(q => (
-              <tr key={q}>
-                <td className="border px-2 py-1">{q}</td>
-                {GRADING_LEVELS.map(level => (
-                  <td key={level.value} className="border px-2 py-1 text-center">
-                    <input
-                      type="radio"
-                      name={q}
-                      value={level.value}
-                      checked={grading[q] === level.value}
-                      onChange={() => handleGradingChange(q, level.value)}
-                    />
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-700 text-white px-8 py-2 rounded hover:bg-blue-800 disabled:opacity-60"
-        disabled={loading}
-      >
-        {loading ? "Submitting..." : "Submit"}
-      </button>
-      {success && <div className="text-green-600 mt-2">Record added successfully!</div>}
-      {error && <div className="text-red-600 mt-2">{error}</div>}
-    </form>
-  );
-};
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto p-6">
+        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8 space-y-8">
+          {/* Main Title */}
+          <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">ALLERGIC CONJUNCTIVITIS</h1>
+          
+          {/* Symptoms Section */}
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Symptoms</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Left side - Symptoms */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  {SYMPTOM_OPTIONS.slice(0, 4).map(symptom => (
+                    <div key={symptom} className="flex items-center space-x-3">
+                      <input
+                        type="radio"
+                        name={`symptom-${symptom}`}
+                        value="yes"
+                        checked={form.symptoms[symptom] === 'yes'}
+                        onChange={() => handleSymptomChange(symptom, 'yes')}
+                        className="text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">{symptom}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  {SYMPTOM_OPTIONS.slice(4).map(symptom => (
+                    <div key={symptom} className="flex items-center space-x-3">
+                      <input
+                        type="radio"
+                        name={`symptom-${symptom}`}
+                        value="yes"
+                        checked={form.symptoms[symptom] === 'yes'}
+                        onChange={() => handleSymptomChange(symptom, 'yes')}
+                        className="text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">{symptom}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Right side - Type */}
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700 mb-3">Type</label>
+                <div className="space-y-3">
+                  {TYPE_OPTIONS.map(type => (
+                    <div key={type} className="flex items-center space-x-3">
+                      <input
+                        type="radio"
+                        name="type"
+                        value={type}
+                        checked={form.type === type}
+                        onChange={(e) => setForm(prev => ({ ...prev, type: e.target.value }))}
+                        className="text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">{type}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
 
-export default AddAllergicConjunctivitis; 
+          {/* Grading Section */}
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Grading</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="border border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700">Grading</th>
+                    {SEVERITY_LEVELS.map(level => (
+                      <th key={level.value} className="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">
+                        {level.label}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {GRADING_CRITERIA.map(criterion => (
+                    <tr key={criterion} className="border-b border-gray-300">
+                      <td className="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">
+                        {criterion}
+                      </td>
+                      {SEVERITY_LEVELS.map(level => (
+                        <td key={level.value} className="border border-gray-300 px-4 py-3 text-center">
+                          <input
+                            type="radio"
+                            name={`grading-${criterion}`}
+                            value={level.value}
+                            checked={form.grading[criterion] === level.value}
+                            onChange={() => handleGradingChange(criterion, level.value)}
+                            className="text-blue-600 focus:ring-blue-500"
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-center pt-6">
+            <button
+              type="submit"
+              className="bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+} 

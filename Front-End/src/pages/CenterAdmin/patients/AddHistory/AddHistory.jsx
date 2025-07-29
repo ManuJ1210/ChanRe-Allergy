@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addPatientHistory } from '../../../../features/centerAdmin/centerAdminThunks';
+import { resetCenterAdminState } from '../../../../features/centerAdmin/centerAdminSlice';
+import { FileText, ArrowLeft, Save, ClipboardList, Activity, Heart, Eye, Upload, CheckCircle } from 'lucide-react';
 
 const conditions = [
   "Hay fever (itching of nose, sneezing, stuffy nose, running nose)",
@@ -49,7 +52,11 @@ const skinConditions = ["Hives", "Eczema", "Ulcer", "Papualo-squamous rashes", "
 const historyConditions = ["Hypertension", "Diabetes", "Epilepsy", "IHD"];
 
 const AddHistory = () => {
-  const { id: patientId } = useParams(); // get patientId from URL
+  const { id: patientId } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error, addHistorySuccess } = useSelector((state) => state.centerAdmin);
+  
   const [formData, setFormData] = useState({
     sectionOne: { conditions: {} },
     sectionTwo: {},
@@ -58,6 +65,15 @@ const AddHistory = () => {
     sectionFive: { skinAllergy: {}, history: {} },
     sectionSix: {},
   });
+
+  React.useEffect(() => {
+    if (addHistorySuccess) {
+      setTimeout(() => {
+        dispatch(resetCenterAdminState());
+        navigate('/CenterAdmin/patients/PatientList');
+      }, 1500);
+    }
+  }, [addHistorySuccess, dispatch, navigate]);
 
   const handleChange = (section, field, value) => {
     setFormData((prev) => ({
@@ -166,347 +182,484 @@ const AddHistory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const data = new FormData();
-      const formCopy = { ...formData, patientId }; // add patientId to form data
-      const file = formCopy.sectionSix.reportFile;
-      delete formCopy.sectionSix.reportFile;
+    const formCopy = { ...formData, patientId };
+    const file = formCopy.sectionSix.reportFile;
+    delete formCopy.sectionSix.reportFile;
 
-      data.append("formData", JSON.stringify(formCopy));
-      if (file) data.append("reportFile", file);
-
-      const response = await axios.post(
-        "http://localhost:5000/api/history/add", 
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      alert("History submitted successfully");
-      console.log("Backend response:", response.data);
-    } catch (error) {
-      console.error("Submission failed:", error);
-      alert("Failed to submit history");
+    // Add the file back to the data object for the thunk to handle
+    if (file) {
+      formCopy.reportFile = file;
     }
+
+    dispatch(addPatientHistory(formCopy));
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-10 p-10 bg-blue-50 min-h-screen">
-      <h1 className="text-3xl font-extrabold mb-10 text-blue-500 text-center tracking-tight">Add History</h1>
-      {/* Section 1 */}
-      <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100">
-        <h2 className="text-xl font-semibold mb-6 text-blue-700">Have you ever had the following conditions</h2>
-        <table className="w-full table-auto border rounded-xl overflow-hidden">
-          <thead>
-            <tr className="bg-blue-50 text-blue-700">
-              <th className="px-4 py-3 text-left">Condition</th>
-              <th className="px-4 py-3 text-center">Yes</th>
-              <th className="px-4 py-3 text-center">No</th>
-            </tr>
-          </thead>
-          <tbody>
-            {conditions.map((cond, i) => (
-              <tr key={i} className="border-t border-blue-100 even:bg-blue-50">
-                <td className="px-4 py-3 text-slate-700 font-medium">{cond}</td>
-                {["yes", "no"].map((val) => (
-                  <td key={val} className="px-4 py-3 text-center">
-                    <input
-                      type="radio"
-                      name={`cond-${i}`}
-                      value={val}
-                      checked={formData.sectionOne.conditions[cond] === val}
-                      onChange={() => handleConditionChange(cond, val)}
-                      className="accent-blue-500"
-                    />
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {/* Section 2 */}
-      <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100">
-        <h2 className="text-xl font-semibold mb-6 text-blue-700">Details of Hay fever & Asthma</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div>
-            <label className="font-medium block mb-2 text-slate-700">Fever grade</label>
-            {["Mild", "Moderate", "Severe"].map((opt) => (
-              <label key={opt} className="mr-4">
-                <input
-                  type="radio"
-                  name="feverGrade"
-                  checked={formData.sectionTwo.feverGrade === opt}
-                  onChange={() => handleChange("sectionTwo", "feverGrade", opt)}
-                  className="mr-1 accent-blue-500"
-                />
-                {opt}
-              </label>
-            ))}
-          </div>
-          <div>
-            <label className="font-medium block mb-2 text-slate-700">Itching sore throat?</label>
-            {["Yes", "No"].map((opt) => (
-              <label key={opt} className="mr-4">
-                <input
-                  type="radio"
-                  name="itchingThroat"
-                  checked={formData.sectionTwo.itchingThroat === opt}
-                  onChange={() => handleChange("sectionTwo", "itchingThroat", opt)}
-                  className="mr-1 accent-blue-500"
-                />
-                {opt}
-              </label>
-            ))}
-          </div>
-          <div>
-            <label className="font-medium block mb-2 text-slate-700">Specific days/exposure?</label>
-            <input
-              type="text"
-              className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-              placeholder="E.g., rainy days"
-              value={formData.sectionTwo.specificDay || ""}
-              onChange={(e) => handleChange("sectionTwo", "specificDay", e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="mt-8">
-          <label className="font-medium block mb-2 text-slate-700">Asthma Type</label>
-          <select
-            className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-            value={formData.sectionTwo.asthmaType || ""}
-            onChange={(e) => handleChange("sectionTwo", "asthmaType", e.target.value)}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <button
+            onClick={() => navigate('/CenterAdmin/patients/PatientList')}
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
-            <option value="">Select</option>
-            <option>Mild</option>
-            <option>Moderate</option>
-            <option>Severe</option>
-          </select>
-          <label className="font-medium block mt-4 mb-2 text-slate-700">Exacerbation frequency (last year)</label>
-          <input
-            type="text"
-            className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-            value={formData.sectionTwo.asthmaFrequency || ""}
-            onChange={(e) => handleChange("sectionTwo", "asthmaFrequency", e.target.value)}
-          />
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Patients List
+          </button>
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            Add Patient History
+          </h1>
+          <p className="text-slate-600">
+            Complete comprehensive patient history and examination
+          </p>
         </div>
-      </div>
-      {/* Section 3 */}
-      <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100">
-        <h2 className="text-xl font-semibold mb-6 text-blue-700">Frequency and Triggers</h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          {questions.map((q, idx) => (
-            <div key={idx}>
-              <label className="block font-medium mb-2 text-slate-700">{q}</label>
-              {["Yes", "No"].map((val) => (
-                <label key={val} className="mr-4">
-                  <input
-                    type="radio"
-                    name={`q-${idx}`}
-                    value={val}
-                    checked={formData.sectionThree.questions[q] === val}
-                    onChange={() => handleQuestionChange(q, val)}
-                    className="mr-1 accent-blue-500"
-                  />
-                  {val}
-                </label>
-              ))}
-            </div>
-          ))}
-        </div>
-        <div className="mt-8">
-          <label className="font-medium block mb-2 text-slate-700">What triggers exacerbations?</label>
-          <div className="flex flex-wrap gap-4">
-            {triggers.map((t, i) => (
-              <label key={i} className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={formData.sectionThree.triggers.includes(t)}
-                  onChange={() => handleTriggerChange(t)}
-                  className="accent-blue-500"
-                />
-                <span className="text-slate-700">{t}</span>
-              </label>
-            ))}
+
+        {/* Alert Messages */}
+        {addHistorySuccess && (
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+            <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+            <span className="text-green-700 font-medium">History submitted successfully!</span>
           </div>
-          <input
-            type="text"
-            className="mt-2 w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-            placeholder="Others, please specify"
-            value={formData.sectionThree.otherTrigger || ""}
-            onChange={(e) => handleChange("sectionThree", "otherTrigger", e.target.value)}
-          />
-        </div>
-      </div>
-      {/* Section 4 */}
-      <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100 overflow-x-auto">
-        <h2 className="text-xl font-semibold mb-6 text-blue-700">Allergic Rhinitis</h2>
-        <select
-          className="border border-blue-100 rounded-xl px-3 py-2 mb-4 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-          value={formData.sectionFour.rhinitisType || ""}
-          onChange={(e) => handleChange("sectionFour", "rhinitisType", e.target.value)}
-        >
-          <option value="">Select Rhinitis Type</option>
-          <option>Seasonal</option>
-          <option>Perennial</option>
-          <option>Both</option>
-        </select>
-        <table className="min-w-full border text-sm rounded-xl overflow-hidden">
-          <thead>
-            <tr className="bg-blue-50 text-blue-700">
-              <th className="border border-blue-100 px-4 py-3 text-left">Symptom</th>
-              {severityOptions.map((opt, idx) => (
-                <th key={idx} className="border border-blue-100 px-4 py-3 text-center">{opt}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {symptoms.map((sym, i) => (
-              <tr key={i}>
-                <td className="border border-blue-100 px-4 py-3 text-slate-700 font-medium">{sym}</td>
-                {severityOptions.map((level) => (
-                  <td key={level} className="border border-blue-100 px-4 py-3 text-center">
-                    <input
-                      type="radio"
-                      name={`sym-${i}`}
-                      value={level}
-                      checked={formData.sectionFour.symptoms[sym] === level}
-                      onChange={() => handleSymptomChange(sym, level)}
-                      className="accent-blue-500"
-                    />
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {/* Section 5 & 6 */}
-      <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100">
-        <h2 className="text-2xl font-semibold mb-6 text-blue-700">Skin Allergy</h2>
-        <select
-          value={formData.sectionFive.allergyType || ""}
-          onChange={(e) => handleChange("sectionFive", "allergyType", e.target.value)}
-          className="border border-blue-100 rounded-xl px-3 py-2 mb-4 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-        >
-          <option value="">Select Allergy Type</option>
-          <option>Contact</option>
-          <option>Atopic</option>
-          <option>Others</option>
-        </select>
-        <div className="grid sm:grid-cols-2 gap-8">
-          {skinConditions.map((cond, idx) => (
-            <div key={idx}>
-              <label className="block font-medium mb-2 text-slate-700">{cond}</label>
-              <div className="flex gap-4 mb-2">
-                {["Yes", "No"].map((opt) => (
-                  <label key={opt}>
-                    <input
-                      type="radio"
-                      name={`skin-${idx}`}
-                      checked={formData.sectionFive.skinAllergy?.[cond]?.answer === opt}
-                      onChange={() => handleSkinChange(cond, "answer", opt)}
-                      className="mr-1 accent-blue-500"
-                    />
-                    {opt}
-                  </label>
+        )}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+            <CheckCircle className="h-5 w-5 text-red-500 mr-3" />
+            <span className="text-red-700">{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Section 1: Medical Conditions */}
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+            <div className="p-6 border-b border-blue-100">
+              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <ClipboardList className="h-5 w-5 mr-2 text-blue-500" />
+                Medical Conditions History
+              </h2>
+              <p className="text-slate-600 mt-1">
+                Have you ever had the following conditions?
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-200">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                        Condition
+                      </th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
+                        Yes
+                      </th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
+                        No
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {conditions.map((cond, i) => (
+                      <tr key={i} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-4 py-3 text-slate-700 font-medium">{cond}</td>
+                        {["yes", "no"].map((val) => (
+                          <td key={val} className="px-4 py-3 text-center">
+                            <input
+                              type="radio"
+                              name={`cond-${i}`}
+                              value={val}
+                              checked={formData.sectionOne.conditions[cond] === val}
+                              onChange={() => handleConditionChange(cond, val)}
+                              className="text-blue-500 focus:ring-blue-500"
+                            />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Hay Fever & Asthma Details */}
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+            <div className="p-6 border-b border-blue-100">
+              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <Activity className="h-5 w-5 mr-2 text-blue-500" />
+                Hay Fever & Asthma Details
+              </h2>
+              <p className="text-slate-600 mt-1">
+                Detailed information about hay fever and asthma conditions
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="grid md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-3">Fever Grade</label>
+                  <div className="space-y-2">
+                    {["Mild", "Moderate", "Severe"].map((opt) => (
+                      <label key={opt} className="flex items-center">
+                        <input
+                          type="radio"
+                          name="feverGrade"
+                          checked={formData.sectionTwo.feverGrade === opt}
+                          onChange={() => handleChange("sectionTwo", "feverGrade", opt)}
+                          className="text-blue-500 focus:ring-blue-500 mr-2"
+                        />
+                        <span className="text-slate-700">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-3">Itching Sore Throat?</label>
+                  <div className="space-y-2">
+                    {["Yes", "No"].map((opt) => (
+                      <label key={opt} className="flex items-center">
+                        <input
+                          type="radio"
+                          name="itchingThroat"
+                          checked={formData.sectionTwo.itchingThroat === opt}
+                          onChange={() => handleChange("sectionTwo", "itchingThroat", opt)}
+                          className="text-blue-500 focus:ring-blue-500 mr-2"
+                        />
+                        <span className="text-slate-700">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Specific Days/Exposure</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="E.g., rainy days"
+                    value={formData.sectionTwo.specificDay || ""}
+                    onChange={(e) => handleChange("sectionTwo", "specificDay", e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="mt-6 grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Asthma Type</label>
+                  <select
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    value={formData.sectionTwo.asthmaType || ""}
+                    onChange={(e) => handleChange("sectionTwo", "asthmaType", e.target.value)}
+                  >
+                    <option value="">Select Asthma Type</option>
+                    <option>Mild</option>
+                    <option>Moderate</option>
+                    <option>Severe</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Exacerbation Frequency (Last Year)</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter frequency"
+                    value={formData.sectionTwo.asthmaFrequency || ""}
+                    onChange={(e) => handleChange("sectionTwo", "asthmaFrequency", e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 3: Frequency and Triggers */}
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+            <div className="p-6 border-b border-blue-100">
+              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <Activity className="h-5 w-5 mr-2 text-blue-500" />
+                Frequency and Triggers
+              </h2>
+              <p className="text-slate-600 mt-1">
+                Frequency of symptoms and triggering factors
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                {questions.map((q, idx) => (
+                  <div key={idx}>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">{q}</label>
+                    <div className="space-y-2">
+                      {["Yes", "No"].map((val) => (
+                        <label key={val} className="flex items-center">
+                          <input
+                            type="radio"
+                            name={`q-${idx}`}
+                            value={val}
+                            checked={formData.sectionThree.questions[q] === val}
+                            onChange={() => handleQuestionChange(q, val)}
+                            className="text-blue-500 focus:ring-blue-500 mr-2"
+                          />
+                          <span className="text-slate-700">{val}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
-              <input
-                type="text"
-                placeholder={`${cond} Distribution`}
-                value={formData.sectionFive.skinAllergy?.[cond]?.distribution || ""}
-                onChange={(e) => handleSkinChange(cond, "distribution", e.target.value)}
-                className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-              />
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-slate-700 mb-3">What triggers exacerbations?</label>
+                <div className="flex flex-wrap gap-4 mb-4">
+                  {triggers.map((t, i) => (
+                    <label key={i} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={formData.sectionThree.triggers.includes(t)}
+                        onChange={() => handleTriggerChange(t)}
+                        className="text-blue-500 focus:ring-blue-500 mr-2"
+                      />
+                      <span className="text-slate-700">{t}</span>
+                    </label>
+                  ))}
+                </div>
+                <input
+                  type="text"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Others, please specify"
+                  value={formData.sectionThree.otherTrigger || ""}
+                  onChange={(e) => handleChange("sectionThree", "otherTrigger", e.target.value)}
+                />
+              </div>
             </div>
-          ))}
-        </div>
-        <hr className="my-8 border-blue-100" />
-        <h2 className="text-2xl font-semibold mb-6 text-blue-700">History</h2>
-        <div className="grid md:grid-cols-4 gap-8">
-          {historyConditions.map((cond, idx) => (
-            <div key={idx}>
-              <label className="block font-medium mb-2 text-slate-700">{cond}</label>
-              {["Yes", "No"].map((opt) => (
-                <label key={opt} className="mr-4">
+          </div>
+
+          {/* Section 4: Allergic Rhinitis */}
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+            <div className="p-6 border-b border-blue-100">
+              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <Eye className="h-5 w-5 mr-2 text-blue-500" />
+                Allergic Rhinitis
+              </h2>
+              <p className="text-slate-600 mt-1">
+                Symptoms and severity assessment
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-slate-700 mb-2">Rhinitis Type</label>
+                <select
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  value={formData.sectionFour.rhinitisType || ""}
+                  onChange={(e) => handleChange("sectionFour", "rhinitisType", e.target.value)}
+                >
+                  <option value="">Select Rhinitis Type</option>
+                  <option>Seasonal</option>
+                  <option>Perennial</option>
+                  <option>Both</option>
+                </select>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-200">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                        Symptom
+                      </th>
+                      {severityOptions.map((opt, idx) => (
+                        <th key={idx} className="px-4 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
+                          {opt}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {symptoms.map((sym, i) => (
+                      <tr key={i} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-4 py-3 text-slate-700 font-medium">{sym}</td>
+                        {severityOptions.map((level) => (
+                          <td key={level} className="px-4 py-3 text-center">
+                            <input
+                              type="radio"
+                              name={`sym-${i}`}
+                              value={level}
+                              checked={formData.sectionFour.symptoms[sym] === level}
+                              onChange={() => handleSymptomChange(sym, level)}
+                              className="text-blue-500 focus:ring-blue-500"
+                            />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 5: Skin Allergy & History */}
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+            <div className="p-6 border-b border-blue-100">
+              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <Heart className="h-5 w-5 mr-2 text-blue-500" />
+                Skin Allergy & Medical History
+              </h2>
+              <p className="text-slate-600 mt-1">
+                Skin conditions and medical history assessment
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-slate-700 mb-2">Allergy Type</label>
+                <select
+                  value={formData.sectionFive.allergyType || ""}
+                  onChange={(e) => handleChange("sectionFive", "allergyType", e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                >
+                  <option value="">Select Allergy Type</option>
+                  <option>Contact</option>
+                  <option>Atopic</option>
+                  <option>Others</option>
+                </select>
+              </div>
+              
+              <div className="grid sm:grid-cols-2 gap-6">
+                {skinConditions.map((cond, idx) => (
+                  <div key={idx} className="space-y-3">
+                    <label className="block text-sm font-medium text-slate-700">{cond}</label>
+                    <div className="flex gap-4">
+                      {["Yes", "No"].map((opt) => (
+                        <label key={opt} className="flex items-center">
+                          <input
+                            type="radio"
+                            name={`skin-${idx}`}
+                            checked={formData.sectionFive.skinAllergy?.[cond]?.answer === opt}
+                            onChange={() => handleSkinChange(cond, "answer", opt)}
+                            className="text-blue-500 focus:ring-blue-500 mr-2"
+                          />
+                          <span className="text-slate-700">{opt}</span>
+                        </label>
+                      ))}
+                    </div>
+                    <input
+                      type="text"
+                      placeholder={`${cond} Distribution`}
+                      value={formData.sectionFive.skinAllergy?.[cond]?.distribution || ""}
+                      onChange={(e) => handleSkinChange(cond, "distribution", e.target.value)}
+                      className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <hr className="my-8 border-slate-200" />
+              
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">Medical History</h3>
+              <div className="grid md:grid-cols-4 gap-6">
+                {historyConditions.map((cond, idx) => (
+                  <div key={idx}>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">{cond}</label>
+                    <div className="space-y-2">
+                      {["Yes", "No"].map((opt) => (
+                        <label key={opt} className="flex items-center">
+                          <input
+                            type="radio"
+                            name={`hist-${cond}`}
+                            checked={formData.sectionFive.history?.[cond] === opt}
+                            onChange={() => handleNestedChange("sectionFive", "history", cond, opt)}
+                            className="text-blue-500 focus:ring-blue-500 mr-2"
+                          />
+                          <span className="text-slate-700">{opt}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Section 6: Drugs, Exposure & Examination */}
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+            <div className="p-6 border-b border-blue-100">
+              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <FileText className="h-5 w-5 mr-2 text-blue-500" />
+                Drugs, Exposure & Examination
+              </h2>
+              <p className="text-slate-600 mt-1">
+                Drug allergies, occupational exposure, and examination findings
+              </p>
+            </div>
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">Drugs and Exposure</h3>
+              <div className="grid sm:grid-cols-2 gap-6 mb-6">
+                {["DrugAllergyKnown", "Probable", "Definite"].map((field) => (
                   <input
-                    type="radio"
-                    name={`hist-${cond}`}
-                    checked={formData.sectionFive.history?.[cond] === opt}
-                    onChange={() => handleNestedChange("sectionFive", "history", cond, opt)}
-                    className="mr-1 accent-blue-500"
+                    key={field}
+                    type="text"
+                    placeholder={field.replace(/([A-Z])/g, " $1")}
+                    value={formData.sectionSix?.[field] || ""}
+                    onChange={(e) => handleChange("sectionSix", field, e.target.value)}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   />
-                  {opt}
-                </label>
-              ))}
+                ))}
+              </div>
+
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">Occupation & Exposure</h3>
+              <div className="grid sm:grid-cols-2 gap-6 mb-6">
+                {["Occupation", "ProbableChemicalExposure", "Location", "FamilyHistory"].map((field) => (
+                  <input
+                    key={field}
+                    type="text"
+                    placeholder={field.replace(/([A-Z])/g, " $1")}
+                    value={formData.sectionSix?.[field] || ""}
+                    onChange={(e) => handleChange("sectionSix", field, e.target.value)}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  />
+                ))}
+              </div>
+
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">Examination</h3>
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
+                {["OralCavity", "Skin", "ENT", "Eye", "RespiratorySystem", "CVS", "CNS", "Abdomen", "AnyOtherFindings"].map((field) => (
+                  <input
+                    key={field}
+                    type="text"
+                    placeholder={field.replace(/([A-Z])/g, " $1")}
+                    value={formData.sectionSix?.[field] || ""}
+                    onChange={(e) => handleChange("sectionSix", field, e.target.value)}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  />
+                ))}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Upload Report</label>
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  className="w-full sm:w-1/2 px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                />
+              </div>
             </div>
-          ))}
-        </div>
-        <hr className="my-8 border-blue-100" />
-        <h2 className="text-2xl font-semibold mb-6 text-blue-700">Drugs and Exposure</h2>
-        <div className="grid sm:grid-cols-2 gap-8">
-          {["DrugAllergyKnown", "Probable", "Definite"].map((field) => (
-            <input
-              key={field}
-              type="text"
-              placeholder={field.replace(/([A-Z])/g, " $1")}
-              value={formData.sectionSix?.[field] || ""}
-              onChange={(e) => handleChange("sectionSix", field, e.target.value)}
-              className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-            />
-          ))}
-        </div>
-        <h2 className="text-2xl font-semibold mt-8 mb-4 text-blue-700">Occupation & Exposure</h2>
-        <div className="grid sm:grid-cols-2 gap-8">
-          {["Occupation", "ProbableChemicalExposure", "Location", "FamilyHistory"].map((field) => (
-            <input
-              key={field}
-              type="text"
-              placeholder={field.replace(/([A-Z])/g, " $1")}
-              value={formData.sectionSix?.[field] || ""}
-              onChange={(e) => handleChange("sectionSix", field, e.target.value)}
-              className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-            />
-          ))}
-        </div>
-        <h2 className="text-2xl font-semibold mt-8 mb-4 text-blue-700">Examination</h2>
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {["OralCavity", "Skin", "ENT", "Eye", "RespiratorySystem", "CVS", "CNS", "Abdomen", "AnyOtherFindings"].map((field) => (
-            <input
-              key={field}
-              type="text"
-              placeholder={field.replace(/([A-Z])/g, " $1")}
-              value={formData.sectionSix?.[field] || ""}
-              onChange={(e) => handleChange("sectionSix", field, e.target.value)}
-              className="w-full border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-            />
-          ))}
-        </div>
-        <div className="mt-8">
-          <label className="block font-medium mb-2 text-slate-700">Upload Report</label>
-          <input
-            type="file"
-            onChange={handleFileChange}
-            className="w-full sm:w-1/2 border border-blue-100 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-          />
-        </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  Submitting History...
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4" />
+                  Submit Patient History
+                </>
+              )}
+            </button>
+          </div>
+        </form>
       </div>
-      {/* Submit */}
-      <div className="text-right mt-8">
-        <button
-          type="submit"
-          className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-10 py-3 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all"
-        >
-          Submit
-        </button>
-      </div>
-    </form>
+    </div>
   );
 };
 
-export default AddHistory
+export default AddHistory;

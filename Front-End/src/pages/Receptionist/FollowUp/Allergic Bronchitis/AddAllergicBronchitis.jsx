@@ -1,6 +1,15 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addReceptionistAllergicBronchitis, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
+import { 
+  ArrowLeft, 
+  AlertCircle,
+  Activity,
+  Save,
+  FileText,
+  User
+} from 'lucide-react';
 
 const GINA_QUESTIONS = [
   "Day time symptoms",
@@ -10,176 +19,268 @@ const GINA_QUESTIONS = [
   "Lung Function(PEF or FEV1)",
   "Exacerbations"
 ];
+
 const GINA_OPTIONS = [
   { label: "Controlled", value: "Controlled" },
   { label: "Partially Controlled", value: "Partially Controlled" },
   { label: "Uncontrolled", value: "Uncontrolled" }
 ];
+
 const PFT_GRADES = [
-  { label: "Mild (Fev >= 80%)", value: "Mild" },
-  { label: "Moderate (Fev >= 50-80%)", value: "Moderate" },
-  { label: "Severe (Fev >= 30-50%)", value: "Severe" },
-  { label: "Very Severe (Extremely difficult to breathe)", value: "Very Severe" }
+  { label: "Mild", value: "Mild", description: "Fev >= 80%" },
+  { label: "Moderate", value: "Moderate", description: "Fev >= 50-80%" },
+  { label: "Severe", value: "Severe", description: "Fev >= 30-50%" },
+  { label: "Very Severe", value: "Very Severe", description: "Extremely difficult to breathe" }
 ];
+
 const HABITS = ["Smoker", "Non Smoker"];
 
-const AddAllergicBronchitis = ({ patientId: propPatientId, onSuccess, onCancel }) => {
-  const params = useParams();
+const AddAllergicBronchitis = () => {
+  const { patientId } = useParams();
   const navigate = useNavigate();
-  const patientId = propPatientId || params.patientId || params.id;
-  const [symptoms, setSymptoms] = useState("");
-  const [type, setType] = useState("");
-  const [ginaGrading, setGinaGrading] = useState({});
-  const [pftGrading, setPftGrading] = useState("");
-  const [habits, setHabits] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleGinaChange = (question, value) => {
-    setGinaGrading(prev => ({ ...prev, [question]: value }));
+  const [formData, setFormData] = useState({
+    symptoms: '',
+    type: '',
+    ginaGrading: {},
+    pftGrading: '',
+    habits: ''
+  });
+
+  const { loading, error, addAllergicBronchitisSuccess } = useSelector(state => state.receptionist);
+
+  useEffect(() => {
+    if (addAllergicBronchitisSuccess) {
+      dispatch(resetReceptionistState());
+      navigate(`/Receptionist/profile/${patientId}`);
+    }
+  }, [addAllergicBronchitisSuccess, dispatch, navigate, patientId]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleGinaChange = (question, value) => {
+    setFormData(prev => ({
+      ...prev,
+      ginaGrading: {
+        ...prev.ginaGrading,
+        [question]: value
+      }
+    }));
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-    setSuccess(false);
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(
-        "http://localhost:5000/api/allergic-bronchitis",
-        { patientId, symptoms, type, ginaGrading, pftGrading, habits },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setSuccess(true);
-      setTimeout(() => {
-        navigate(`/CenterAdmin/patients/FollowUp/${patientId}`);
-      }, 1000);
-    } catch (err) {
-      setError("Failed to add record");
-    } finally {
-      setLoading(false);
-    }
+    const payload = {
+      ...formData,
+      patientId
+    };
+    dispatch(addReceptionistAllergicBronchitis(payload));
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow max-w-3xl mx-auto">
-      <h2 className="text-xl font-bold mb-4 text-blue-700">Allergic Bronchitis</h2>
-      <div className="mb-4 flex flex-wrap gap-6 items-center">
-        <div>
-          <span className="font-semibold mr-2">Symptoms</span>
-          <input
-            type="text"
-            className="border rounded px-3 py-2"
-            value={symptoms}
-            onChange={e => setSymptoms(e.target.value)}
-            placeholder="Enter symptoms"
-          />
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate(-1)}
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
+              >
+                <ArrowLeft size={20} />
+                <span>Back</span>
+              </button>
+              <h1 className="text-2xl font-bold text-gray-800">Add Allergic Bronchitis Record</h1>
+            </div>
+          </div>
         </div>
-        <div>
-          <span className="font-semibold mr-2">Type</span>
-          <label className="mr-3">
-            <input
-              type="radio"
-              name="type"
-              value="Acute"
-              checked={type === "Acute"}
-              onChange={e => setType(e.target.value)}
-              className="mr-1"
-            />
-            Acute
-          </label>
-          <label className="mr-3">
-            <input
-              type="radio"
-              name="type"
-              value="Chronic"
-              checked={type === "Chronic"}
-              onChange={e => setType(e.target.value)}
-              className="mr-1"
-            />
-            Chronic
-          </label>
+
+        {/* Form */}
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Main Title */}
+            <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">ALLERGIC BRONCHITIS</h1>
+            
+            {/* Allergic Bronchitis Section */}
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Allergic Bronchitis</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">Symptoms</label>
+                  <textarea
+                    name="symptoms"
+                    value={formData.symptoms}
+                    onChange={handleChange}
+                    placeholder="Enter symptoms..."
+                    rows={4}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">Type</label>
+                  <div className="flex space-x-6">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="type"
+                        value="Acute"
+                        checked={formData.type === "Acute"}
+                        onChange={handleChange}
+                        className="mr-2 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-gray-700">Acute</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="type"
+                        value="Chronic"
+                        checked={formData.type === "Chronic"}
+                        onChange={handleChange}
+                        className="mr-2 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-gray-700">Chronic</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* GINA Grading Section */}
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
+                <Activity className="h-5 w-5 mr-2 text-blue-600" />
+                GINA Grading of Asthma
+              </h2>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border border-gray-300">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="border border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700">Characteristics</th>
+                        <th className="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">Controlled</th>
+                        <th className="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">Partially Controlled</th>
+                        <th className="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">Uncontrolled</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {GINA_QUESTIONS.map(question => (
+                        <tr key={question} className="border-b border-gray-300">
+                          <td className="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">
+                            {question}
+                          </td>
+                          {GINA_OPTIONS.map(option => (
+                            <td key={option.value} className="border border-gray-300 px-4 py-3 text-center">
+                              <input
+                                type="radio"
+                                name={question}
+                                value={option.value}
+                                checked={formData.ginaGrading[question] === option.value}
+                                onChange={() => handleGinaChange(question, option.value)}
+                                className="text-blue-600 focus:ring-blue-500"
+                              />
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* PFT Grading Section */}
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
+                <Activity className="h-5 w-5 mr-2 text-blue-600" />
+                Grading based on PFT
+              </h2>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {PFT_GRADES.map(grade => (
+                    <label key={grade.value} className="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="pftGrading"
+                        value={grade.value}
+                        checked={formData.pftGrading === grade.value}
+                        onChange={handleChange}
+                        className="mr-3 text-blue-600 focus:ring-blue-500"
+                      />
+                      <div>
+                        <div className="font-medium text-gray-800">{grade.label}</div>
+                        <div className="text-sm text-gray-600">{grade.description}</div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Habits Section */}
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Habits</h2>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <div className="flex space-x-6">
+                  {HABITS.map(habit => (
+                    <label key={habit} className="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="habits"
+                        value={habit}
+                        checked={formData.habits === habit}
+                        onChange={handleChange}
+                        className="mr-3 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="font-medium text-gray-800">{habit}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="flex items-center">
+                  <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
+                  <span className="text-red-700">{error}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <div className="flex items-center justify-center pt-6 border-t">
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+              >
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4" />
+                    <span>Submit</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-      <div className="mb-6">
-        <h3 className="text-2xl font-semibold mb-2">Gina Grading of Asthma</h3>
-        <table className="min-w-full text-sm border">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border px-2 py-1 text-left">Characteristics</th>
-              {GINA_OPTIONS.map(opt => (
-                <th key={opt.value} className="border px-2 py-1 text-center">{opt.label}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {GINA_QUESTIONS.map(q => (
-              <tr key={q}>
-                <td className="border px-2 py-1">{q}</td>
-                {GINA_OPTIONS.map(opt => (
-                  <td key={opt.value} className="border px-2 py-1 text-center">
-                    <input
-                      type="radio"
-                      name={q}
-                      value={opt.value}
-                      checked={ginaGrading[q] === opt.value}
-                      onChange={() => handleGinaChange(q, opt.value)}
-                    />
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mb-6">
-        <h3 className="text-2xl font-semibold mb-2">Grading based on PFT</h3>
-        <div className="flex flex-wrap gap-6">
-          {PFT_GRADES.map(grade => (
-            <label key={grade.value} className="mr-3">
-              <input
-                type="radio"
-                name="pftGrading"
-                value={grade.value}
-                checked={pftGrading === grade.value}
-                onChange={e => setPftGrading(e.target.value)}
-                className="mr-1"
-              />
-              {grade.label}
-            </label>
-          ))}
-        </div>
-      </div>
-      <div className="mb-6">
-        <h3 className="text-2xl font-semibold mb-2">Habits</h3>
-        <div className="flex flex-wrap gap-6">
-          {HABITS.map(habit => (
-            <label key={habit} className="mr-3">
-              <input
-                type="radio"
-                name="habits"
-                value={habit}
-                checked={habits === habit}
-                onChange={e => setHabits(e.target.value)}
-                className="mr-1"
-              />
-              {habit}
-            </label>
-          ))}
-        </div>
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-700 text-white px-8 py-2 rounded hover:bg-blue-800 disabled:opacity-60"
-        disabled={loading}
-      >
-        {loading ? "Submitting..." : "Submit"}
-      </button>
-      {success && <div className="text-green-600 mt-2">Record added successfully!</div>}
-      {error && <div className="text-red-600 mt-2">{error}</div>}
-    </form>
+    </div>
   );
 };
 

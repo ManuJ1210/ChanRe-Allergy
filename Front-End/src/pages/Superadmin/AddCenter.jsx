@@ -5,10 +5,9 @@ import { createCenterWithAdmin } from "../../features/center/centerThunks";
 import { resetStatus } from "../../features/center/centerSlice";
 import { useNavigate } from "react-router-dom";
 import {
-  FaHospital, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaPlusCircle,
-  FaUserAlt, FaUserMd, FaIdBadge, FaCode, FaPhone, FaUserCircle, FaKey,
-  FaUserCog, FaEye, FaEyeSlash
-} from "react-icons/fa";
+  Building2, MapPin, Mail, Phone, Plus, User, GraduationCap, 
+  Badge, Hash, Eye, EyeOff, Save, ArrowLeft, CheckCircle, AlertCircle
+} from "lucide-react";
 
 export default function AddCenterWithAdmin() {
   const navigate = useNavigate();
@@ -58,97 +57,232 @@ export default function AddCenterWithAdmin() {
   }, [success, navigate, dispatch]);
 
   return (
-    <div className="w-full min-h-screen px-4 py-10">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-4xl font-extrabold text-blue-500 mb-8 flex items-center gap-3">
-          Add Healthcare Center + Admin
-        </h2>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <button
+            onClick={() => navigate('/superadmin/centers')}
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Centers
+          </button>
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            Add Healthcare Center & Admin
+          </h1>
+          <p className="text-slate-600">
+            Create a new healthcare center with its administrator
+          </p>
+        </div>
 
-        {success && <p className="text-green-600 mb-4">✅ Successfully added center and admin!</p>}
-        {error && <p className="text-red-600 mb-4">❌ {error}</p>}
+        {/* Alert Messages */}
+        {success && (
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+            <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+            <span className="text-green-700">Successfully added center and admin!</span>
+          </div>
+        )}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+            <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
+            <span className="text-red-700">{error}</span>
+          </div>
+        )}
 
-        <form onSubmit={handleSubmit} className="bg-white border border-slate-100 p-8 rounded-3xl shadow-sm space-y-10">
-          {/* Center Info */}
-          <Section title="🏥 Center Information">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Input label="Center Name" name="centername" value={center.centername} onChange={handleCenterChange} icon={<FaHospital className='text-blue-400' />} />
-              <Input label="Location (City)" name="location" value={center.location} onChange={handleCenterChange} icon={<FaMapMarkerAlt className='text-blue-300' />} />
-              <Input label="Center Code" name="code" value={center.code} onChange={handleCenterChange} icon={<FaCode className='text-blue-300' />} />
-              <div className="md:col-span-2">
-                <TextArea label="Full Address" name="fulladdress" value={center.fulladdress} onChange={handleCenterChange} icon={<FaMapMarkerAlt className='text-blue-300' />} />
+        {/* Form */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+          <form onSubmit={handleSubmit} className="p-6 space-y-8">
+            {/* Center Information Section */}
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                <Building2 className="h-5 w-5 mr-2 text-blue-500" />
+                Center Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Input 
+                  label="Center Name" 
+                  name="centername" 
+                  value={center.centername} 
+                  onChange={handleCenterChange} 
+                  icon={<Building2 className="h-4 w-4 text-blue-500" />} 
+                />
+                <Input 
+                  label="Location (City)" 
+                  name="location" 
+                  value={center.location} 
+                  onChange={handleCenterChange} 
+                  icon={<MapPin className="h-4 w-4 text-blue-500" />} 
+                />
+                <Input 
+                  label="Center Code" 
+                  name="code" 
+                  value={center.code} 
+                  onChange={handleCenterChange} 
+                  icon={<Hash className="h-4 w-4 text-blue-500" />} 
+                />
+                <div className="md:col-span-2">
+                  <TextArea 
+                    label="Full Address" 
+                    name="fulladdress" 
+                    value={center.fulladdress} 
+                    onChange={handleCenterChange} 
+                    icon={<MapPin className="h-4 w-4 text-blue-500" />} 
+                  />
+                </div>
+                <Input 
+                  label="Email" 
+                  name="email" 
+                  type="email" 
+                  value={center.email} 
+                  onChange={handleCenterChange} 
+                  icon={<Mail className="h-4 w-4 text-blue-500" />} 
+                />
+                <Input 
+                  label="Phone" 
+                  name="phone" 
+                  value={center.phone} 
+                  onChange={handleCenterChange} 
+                  icon={<Phone className="h-4 w-4 text-blue-500" />} 
+                />
               </div>
-              <Input label="Email" name="email" type="email" value={center.email} onChange={handleCenterChange} icon={<FaEnvelope className='text-blue-300' />} />
-              <Input label="Phone" name="phone" value={center.phone} onChange={handleCenterChange} icon={<FaPhoneAlt className='text-blue-300' />} />
             </div>
-          </Section>
 
-          {/* Admin Info */}
-          <Section title="👤 Admin Information">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Input label="Full Name" name="name" value={admin.name} onChange={handleAdminChange} icon={<FaUserAlt className='text-blue-400' />} />
-              <Input label="Qualification" name="qualification" value={admin.qualification} onChange={handleAdminChange} icon={<FaUserMd className='text-blue-300' />} />
-              <Input label="Designation" name="designation" value={admin.designation} onChange={handleAdminChange} icon={<FaIdBadge className='text-blue-300' />} />
-              <Input label="KMC Number" name="kmcNumber" value={admin.kmcNumber} onChange={handleAdminChange} icon={<FaIdBadge className='text-blue-300' />} />
-              <Input label="Hospital Name" name="hospitalName" value={admin.hospitalName} onChange={handleAdminChange} icon={<FaHospital className='text-blue-300' />} />
-              <Input label="Phone" name="phone" value={admin.phone} onChange={handleAdminChange} icon={<FaPhone className='text-blue-300' />} />
-              <Input label="Email" name="email" type="email" value={admin.email} onChange={handleAdminChange} icon={<FaEnvelope className='text-blue-300' />} />
-              <Input label="Username" name="username" value={admin.username} onChange={handleAdminChange} icon={<FaUserCircle className='text-blue-300' />} />
+            {/* Admin Information Section */}
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                <User className="h-5 w-5 mr-2 text-blue-500" />
+                Administrator Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Input 
+                  label="Full Name" 
+                  name="name" 
+                  value={admin.name} 
+                  onChange={handleAdminChange} 
+                  icon={<User className="h-4 w-4 text-blue-500" />} 
+                />
+                <Input 
+                  label="Qualification" 
+                  name="qualification" 
+                  value={admin.qualification} 
+                  onChange={handleAdminChange} 
+                  icon={<GraduationCap className="h-4 w-4 text-blue-500" />} 
+                />
+                <Input 
+                  label="Designation" 
+                  name="designation" 
+                  value={admin.designation} 
+                  onChange={handleAdminChange} 
+                  icon={<Badge className="h-4 w-4 text-blue-500" />} 
+                />
+                <Input 
+                  label="KMC Number" 
+                  name="kmcNumber" 
+                  value={admin.kmcNumber} 
+                  onChange={handleAdminChange} 
+                  icon={<Badge className="h-4 w-4 text-blue-500" />} 
+                />
+                <Input 
+                  label="Hospital Name" 
+                  name="hospitalName" 
+                  value={admin.hospitalName} 
+                  onChange={handleAdminChange} 
+                  icon={<Building2 className="h-4 w-4 text-blue-500" />} 
+                />
+                <Input 
+                  label="Phone" 
+                  name="phone" 
+                  value={admin.phone} 
+                  onChange={handleAdminChange} 
+                  icon={<Phone className="h-4 w-4 text-blue-500" />} 
+                />
+                <Input 
+                  label="Email" 
+                  name="email" 
+                  type="email" 
+                  value={admin.email} 
+                  onChange={handleAdminChange} 
+                  icon={<Mail className="h-4 w-4 text-blue-500" />} 
+                />
+                <Input 
+                  label="Username" 
+                  name="username" 
+                  value={admin.username} 
+                  onChange={handleAdminChange} 
+                  icon={<User className="h-4 w-4 text-blue-500" />} 
+                />
 
-              {/* Password */}
-              <div>
-                <label className="mb-2 text-sm font-medium text-slate-700 flex items-center gap-2">
-                  <FaKey className="text-blue-300" /> Password *
-                </label>
-                <div className="relative">
-                  <input
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    value={admin.password}
+                {/* Password */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                    <Badge className="h-4 w-4 text-blue-500" />
+                    Password *
+                  </label>
+                  <div className="relative">
+                    <input
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      value={admin.password}
+                      onChange={handleAdminChange}
+                      required
+                      className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      placeholder="Enter password"
+                    />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-3 text-slate-400 hover:text-blue-500 transition-colors"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* User Type */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                    <User className="h-4 w-4 text-blue-500" />
+                    User Type *
+                  </label>
+                  <select
+                    name="userType"
+                    value={admin.userType}
                     onChange={handleAdminChange}
                     required
-                    className="w-full border border-slate-100 p-3 pr-10 rounded-xl bg-slate-50 text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
-                  />
-                  <span
-                    className="absolute right-3 top-3 text-slate-400 hover:text-blue-400 cursor-pointer"
-                    onClick={() => setShowPassword(!showPassword)}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </span>
+                    <option value="centeradmin">Center Admin</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="receptionist">Receptionist</option>
+                    <option value="lab">Lab</option>
+                  </select>
                 </div>
               </div>
-
-              {/* User Type */}
-              <div className="col-span-1 md:col-span-2">
-                <label className="mb-2 text-sm font-medium text-slate-700 flex items-center gap-2">
-                  <FaUserCog className="text-blue-300" /> User Type *
-                </label>
-                <select
-                  name="userType"
-                  value={admin.userType}
-                  onChange={handleAdminChange}
-                  required
-                  className="w-full border border-slate-100 p-3 rounded-xl bg-slate-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-100"
-                >
-                  <option value="centeradmin">Center Admin</option>
-                  <option value="doctor">Doctor</option>
-                  <option value="receptionist">Receptionist</option>
-                  <option value="lab">Lab</option>
-                </select>
-              </div>
             </div>
-          </Section>
 
-          {/* Submit */}
-          <div className="pt-4 flex justify-end">
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white py-3 rounded-xl shadow-lg font-semibold text-lg transition-all duration-200 disabled:opacity-60 ${loading ? 'opacity-60' : ''}`}
-            >
-              {loading ? "Submitting..." : "Submit Both"}
-            </button>
-          </div>
-        </form>
+            {/* Submit Button */}
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Creating Center & Admin...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4" />
+                    Create Center & Admin
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
@@ -156,8 +290,8 @@ export default function AddCenterWithAdmin() {
 
 const Input = ({ label, name, value, onChange, type = "text", icon }) => (
   <div>
-    <label className="mb-2 text-sm font-medium text-slate-700 flex items-center gap-2">
-      <span className="text-blue-500">{icon}</span>
+    <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+      {icon}
       {label} *
     </label>
     <input
@@ -166,15 +300,16 @@ const Input = ({ label, name, value, onChange, type = "text", icon }) => (
       value={value}
       onChange={onChange}
       required
-      className="w-full border border-slate-200 p-3 rounded-xl bg-slate-50 text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
+      className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+      placeholder={`Enter ${label.toLowerCase()}`}
     />
   </div>
 );
 
 const TextArea = ({ label, name, value, onChange, icon }) => (
   <div>
-    <label className="mb-2 text-sm font-medium text-slate-700 flex items-center gap-2">
-      <span className="text-blue-500">{icon}</span>
+    <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+      {icon}
       {label} *
     </label>
     <textarea
@@ -183,14 +318,8 @@ const TextArea = ({ label, name, value, onChange, icon }) => (
       onChange={onChange}
       required
       rows={3}
-      className="w-full border border-slate-200 p-3 rounded-xl bg-slate-50 text-slate-700 placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300"
+      className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+      placeholder={`Enter ${label.toLowerCase()}`}
     />
-  </div>
-);
-
-const Section = ({ title, children }) => (
-  <div className="space-y-6">
-    <h3 className="text-2xl font-semibold text-blue-700 mb-2">{title}</h3>
-    {children}
   </div>
 );

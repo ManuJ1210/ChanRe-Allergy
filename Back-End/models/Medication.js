@@ -5,6 +5,10 @@ const medicationSchema = new mongoose.Schema({
   drugName: { type: String, required: true },
   dose: { type: String, required: true },
   duration: { type: String, required: true },
+  frequency: { type: String },
+  prescribedBy: { type: String },
+  prescribedDate: { type: Date },
+  instructions: { type: String },
   adverseEvent: { type: String },
 }, { timestamps: true });
 

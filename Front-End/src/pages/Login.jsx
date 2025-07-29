@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../features/auth/authThunks';
 import { useNavigate } from 'react-router-dom';
@@ -7,11 +7,17 @@ export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const hasNavigated = useRef(false);
 
   const { user, loading, error } = useSelector((state) => state.auth);
 
+  // Debug logging
+  console.log('Login Component State:', { user, loading, error, hasNavigated: hasNavigated.current });
+
   useEffect(() => {
-    if (user) {
+    if (user && !hasNavigated.current) {
+      console.log('Navigating user:', user);
+      hasNavigated.current = true;
       // Store centerId for centeradmin
       if (user.role && user.role.toLowerCase() === 'centeradmin' && user.centerId) {
         localStorage.setItem('centerId', user.centerId);
@@ -21,10 +27,10 @@ export default function Login() {
       else if (role === 'centeradmin') navigate('/centeradmin/dashboard');
       else if (role === 'doctor') navigate('/doctor/dashboard');
       else if (role === 'receptionist') navigate('/receptionist/dashboard');
-      else if (role === 'lab') navigate('/lab/dashboard');
+      else if (role === 'lab staff' || role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') navigate('/lab/dashboard');
       else navigate('/patient/dashboard');
     }
-  }, [user, navigate]);
+  }, [user]); // Remove navigate from dependencies
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

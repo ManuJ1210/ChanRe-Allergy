@@ -6,16 +6,17 @@ import {
   deleteCenterAdmin,
   createCenterAdmin
 } from '../controllers/centerAdminController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 // ✅ Existing route
-router.get('/', getAllCenterAdmins);
+router.get('/', protect, getAllCenterAdmins);
 
 // ✅ New routes
-router.get('/:id', getCenterAdminById);
-router.put('/:id', updateCenterAdmin);
-router.delete('/:id', deleteCenterAdmin);
-router.post('/', createCenterAdmin);
+router.get('/:id', protect, getCenterAdminById);
+router.put('/:id', protect, updateCenterAdmin);
+router.delete('/:id', protect, deleteCenterAdmin);
+router.post('/', protect, createCenterAdmin);
 
 export default router;

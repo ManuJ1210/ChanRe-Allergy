@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const testSchema = new mongoose.Schema({
+  // Test result fields
   CBC: { type: String },
   Hb: { type: String },
   TC: { type: String },
@@ -17,6 +18,30 @@ const testSchema = new mongoose.Schema({
   ANA_IF: { type: String },
   UrineRoutine: { type: String },
   AllergyPanel: { type: String },
+  
+  // Test request fields
+  testType: { type: String }, // e.g., 'CBC', 'Allergy Panel', 'Complete Blood Work'
+  notes: { type: String },
+  priority: { 
+    type: String, 
+    enum: ['low', 'normal', 'high', 'urgent'], 
+    default: 'normal' 
+  },
+  status: { 
+    type: String, 
+    enum: ['pending', 'in_progress', 'completed', 'cancelled'], 
+    default: 'pending' 
+  },
+  requestedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  completedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  completedAt: { type: Date },
+  
   date: { type: Date, default: Date.now },
   patient: {
     type: mongoose.Schema.Types.ObjectId,

@@ -1,343 +1,340 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
-import AddFollowUp from "./AddFollowUp";
-// import AddAllergicRhinitis from "./AddAllergicRhinitis"; // Not needed as a modal now
-import AtopicDermatitisDetails from './Atopic Dermatitis/ViewAtopicDermatitis'; // (to be created)
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { fetchAllFollowUps, fetchPatientDetails } from '../../../../features/centerAdmin/centerAdminThunks';
+import { 
+  Calendar, 
+  User, 
+  Activity, 
+  Eye, 
+  Plus,
+  Search,
+  Filter,
+  Clock,
+  AlertCircle
+} from 'lucide-react';
 
-const FOLLOWUP_TYPES = [
-  "Allergic Rhinitis",
-  "Atopic Dermatitis",
-  "Allergic Conjunctivitis",
-  "Allergic Bronchitis",
-  "GPE"
-];
-
-const FollowUp = ({ patientId: propPatientId }) => {
-  const params = useParams();
+const FollowUp = () => {
   const navigate = useNavigate();
-  const patientId = propPatientId || params.patientId || params.id;
-  const [followUps, setFollowUps] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState("");
-  const [viewModal, setViewModal] = useState(false);
-  const [selectedFollowUp, setSelectedFollowUp] = useState(null);
-  const [selectedPatient, setSelectedPatient] = useState(null);
-  const [viewLoading, setViewLoading] = useState(false);
-  const [viewError, setViewError] = useState("");
-  const [allergicRhinitisDetails, setAllergicRhinitisDetails] = useState(null);
-  const [atopicDermatitisRecords, setAtopicDermatitisRecords] = useState([]);
-  const [allergicConjunctivitisRecords, setAllergicConjunctivitisRecords] = useState([]);
-  const [allergicBronchitisRecords, setAllergicBronchitisRecords] = useState([]);
-  const [patientDetails, setPatientDetails] = useState(null);
-  const [gpeRecords, setGpeRecords] = useState([]);
-  // Removed: const [patientDetailsMap, setPatientDetailsMap] = useState({});
+  const dispatch = useDispatch();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
 
-  const fetchFollowUps = async () => {
-    if (!patientId) return;
-    setLoading(true);
-    setError("");
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `http://localhost:5000/api/followups?patientId=${patientId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setFollowUps(res.data);
-    } catch (err) {
-      setError("Failed to fetch follow ups");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { followUps, loading, error } = useSelector(state => state.centerAdmin);
+  const { patientDetails } = useSelector(state => state.centerAdmin);
 
   useEffect(() => {
-    if (!patientId) return;
+    dispatch(fetchAllFollowUps());
+  }, [dispatch]);
 
-    const fetchAllFollowUps = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const token = localStorage.getItem("token");
-        const headers = { Authorization: `Bearer ${token}` };
-
-        // Fetch all types in parallel
-        const [
-          followUpRes,
-          atopicRes,
-          conjunctivitisRes,
-          bronchitisRes,
-          gpeRes
-        ] = await Promise.all([
-          axios.get(`http://localhost:5000/api/followups?patientId=${patientId}`, { headers }),
-          axios.get(`http://localhost:5000/api/atopic-dermatitis?patientId=${patientId}`, { headers }),
-          axios.get(`http://localhost:5000/api/allergic-conjunctivitis?patientId=${patientId}`, { headers }),
-          axios.get(`http://localhost:5000/api/allergic-bronchitis?patientId=${patientId}`, { headers }),
-          axios.get(`http://localhost:5000/api/gpe?patientId=${patientId}`, { headers })
-        ]);
-
-        // Merge all results into one array
-        const merged = [
-          ...followUpRes.data,
-          ...atopicRes.data.map(r => ({ ...r, type: "Atopic Dermatitis", date: r.createdAt, updatedBy: r.updatedBy, symptoms: r.symptoms })),
-          ...conjunctivitisRes.data.map(r => ({ ...r, type: "Allergic Conjunctivitis", date: r.createdAt, updatedBy: r.updatedBy, symptoms: r.symptoms })),
-          ...bronchitisRes.data.map(r => ({ ...r, type: "Allergic Bronchitis", date: r.createdAt, updatedBy: r.updatedBy, symptoms: r.symptoms })),
-          ...gpeRes.data.map(r => ({ ...r, type: "GPE", date: r.createdAt, updatedBy: r.updatedBy }))
-        ];
-
-        setFollowUps(merged);
-        setAtopicDermatitisRecords(atopicRes.data);
-        setAllergicConjunctivitisRecords(conjunctivitisRes.data);
-        setAllergicBronchitisRecords(bronchitisRes.data);
-        setGpeRecords(gpeRes.data);
-      } catch (err) {
-        setError("Failed to fetch follow ups");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAllFollowUps();
-    // Fetch patient details
-    const fetchPatientDetails = async () => {
-      if (!patientId) return;
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(
-          `http://localhost:5000/api/patients/${patientId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setPatientDetails(res.data);
-      } catch (err) {
-        // Optionally handle error
-      }
-    };
-    fetchPatientDetails();
-    // eslint-disable-next-line
-  }, [patientId]);
-
-  // Removed the useEffect for fetching patient details per Atopic Dermatitis record
-
-  // Group follow-ups by type
-  const grouped = FOLLOWUP_TYPES.reduce((acc, type) => {
-    acc[type] = followUps.filter(fu => fu.type === type);
-    return acc;
-  }, {});
-
-  // Table headers for each type
-  const getHeaders = (type) => {
-    // All types use the same columns now
-    return ["Patient Name", "Age", "Center Code", "Contact", "Updated date", "Action"];
+  const handleViewPatient = (patientId) => {
+    dispatch(fetchPatientDetails(patientId));
+    navigate(`/CenterAdmin/patients/ViewProfile/${patientId}`);
   };
 
-  // Table row rendering for each type
-  const renderRow = (type, fu) => {
-    const patient = fu.patientId || {};
-    return (
-      <tr key={fu._id}>
-        <td className="border px-2 py-1">{patient.name || "-"}</td>
-        <td className="border px-2 py-1">{patient.age || "-"}</td>
-        <td className="border px-2 py-1">{patient.centerCode || patient.center?.code || "-"}</td>
-        <td className="border px-2 py-1">{patient.phone || patient.contact || "-"}</td>
-        <td className="border px-2 py-1">{
-  fu.updatedAt
-    ? new Date(fu.updatedAt).toLocaleDateString()
-    : (fu.createdAt ? new Date(fu.createdAt).toLocaleDateString() : "-")
-}</td>
-        <td className="border px-2 py-1 text-center">
-          <button
-            className="bg-blue-100 text-blue-700 px-2 py-1 rounded"
-            onClick={() => {
-              if (type === "Allergic Rhinitis") {
-                navigate(`/CenterAdmin/patients/FollowUp/ViewAllergicRhinitis/${fu.allergicRhinitisId}`);
-              } else if (type === "Allergic Conjunctivitis") {
-                console.log('Navigating to Allergic Conjunctivitis details:', fu._id, fu);
-                navigate(`/CenterAdmin/patients/FollowUp/ViewAllergicConjunctivitis/${fu._id}`);
-              } else if (type === "Atopic Dermatitis") {
-                navigate(`/CenterAdmin/patients/FollowUp/ViewAtopicDermatitis/${fu._id}`);
-              } else if (type === "Allergic Bronchitis") {
-                navigate(`/CenterAdmin/patients/FollowUp/ViewAllergicBronchitis/${fu._id}`);
-              } else if (type === "GPE") {
-                navigate(`/CenterAdmin/patients/FollowUp/ViewGPE/${fu._id}`);
-              }
-            }}
-            disabled={
-              (type === "Allergic Rhinitis" && !fu.allergicRhinitisId) ||
-              (type === "Atopic Dermatitis" && !fu._id) ||
-              (type === "Allergic Conjunctivitis" && !fu._id) ||
-              (type === "Allergic Bronchitis" && !fu._id) ||
-              (type === "GPE" && !fu._id)
-            }
-            title={
-              type === "Allergic Rhinitis"
-                ? 'View Allergic Rhinitis Details'
-                : type === "Allergic Conjunctivitis"
-                  ? 'View Allergic Conjunctivitis Details'
-                  : type === "Atopic Dermatitis"
-                    ? 'View Atopic Dermatitis Details'
-                    : type === "Allergic Bronchitis"
-                      ? 'View Allergic Bronchitis Details'
-                      : type === "GPE"
-                        ? 'View GPE Details'
-                        : 'No details available'
-            }
-          >
-            View Details
-          </button>
-        </td>
-      </tr>
-    );
+  const handleAddFollowUp = (patientId) => {
+    navigate(`/CenterAdmin/patients/FollowUp/add/${patientId}`);
   };
 
-  const handleView = async (fu) => {
-    setViewModal(true);
-    setSelectedFollowUp(fu);
-    setViewLoading(true);
-    setViewError("");
-    setAllergicRhinitisDetails(null);
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `http://localhost:5000/api/patients/${fu.patientId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setSelectedPatient(res.data);
-      if (fu.type === "Allergic Rhinitis" && fu.allergicRhinitisId) {
-        try {
-          const resRhinitis = await axios.get(
-            `http://localhost:5000/api/allergic-rhinitis/${fu.allergicRhinitisId}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          setAllergicRhinitisDetails(resRhinitis.data);
-        } catch (err) {
-          setAllergicRhinitisDetails(null);
-        }
-      }
-    } catch (err) {
-      setViewError("Failed to fetch patient details");
-    } finally {
-      setViewLoading(false);
+  const handleViewFollowUp = (patientId, followUpType) => {
+    navigate(`/CenterAdmin/patients/FollowUp/${followUpType}/view/${patientId}`);
+  };
+
+  const filteredFollowUps = followUps?.filter(followUp => {
+    const matchesSearch = followUp.patientId?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         followUp.patientId?.phone?.includes(searchTerm);
+    const matchesFilter = filterStatus === 'all' || followUp.status === filterStatus;
+    return matchesSearch && matchesFilter;
+  }) || [];
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'completed':
+        return 'bg-green-100 text-green-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'overdue':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
-  return (
-    <div className="p-6">
-      <h2 className="text-3xl font-extrabold mb-8 text-blue-500 tracking-tight">Follow Up</h2>
-      {loading ? (
-        <div>Loading...</div>
-      ) : error ? (
-        <div className="text-red-600">{error}</div>
-      ) : (
-        FOLLOWUP_TYPES.map(type => (
-          <div key={type} className="mb-10 bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-blue-700">{type}</h3>
+  const getFollowUpTypeIcon = (type) => {
+    switch (type) {
+      case 'allergic-rhinitis':
+        return '🤧';
+      case 'allergic-conjunctivitis':
+        return '👁️';
+      case 'allergic-bronchitis':
+        return '🫁';
+      case 'atopic-dermatitis':
+        return '🦠';
+      case 'gpe':
+        return '🏥';
+      default:
+        return '📋';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="animate-pulse">
+              <div className="h-8 bg-gray-200 rounded w-1/3 mb-6"></div>
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-20 bg-gray-200 rounded"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Error Loading Follow-ups</h3>
+              <p className="text-gray-600 mb-4">{error}</p>
               <button
-                className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-5 py-2 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all"
-                onClick={() => {
-                  if (type === "Allergic Rhinitis") {
-                    navigate(`/CenterAdmin/patients/FollowUp/AddAllergicRhinitis/${patientId}`);
-                  } else if (type === "Atopic Dermatitis") {
-                    navigate(`/CenterAdmin/patients/FollowUp/AtopicDermatitis/${patientId}`);
-                  } else if (type === "Allergic Conjunctivitis") {
-                    navigate(`/CenterAdmin/patients/FollowUp/AddAllergicConjunctivitis/${patientId}`);
-                  } else if (type === "Allergic Bronchitis") {
-                    navigate(`/CenterAdmin/patients/FollowUp/AddAllergicBronchitis/${patientId}`);
-                  } else if (type === "GPE") {
-                    navigate(`/CenterAdmin/patients/FollowUp/AddGPE/${patientId}`);
-                  } else {
-                    // For other types, you can add navigation or logic as needed
-                  }
-                }}
+                onClick={() => dispatch(fetchAllFollowUps())}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Add Follow Up
+                Try Again
               </button>
             </div>
-            <div className="overflow-x-auto rounded-xl">
-              <table className="min-w-full text-sm border rounded-xl overflow-hidden">
-                <thead className="bg-blue-50">
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-800 flex items-center">
+                <Activity className="h-6 w-6 mr-2 text-blue-600" />
+                Patient Follow-ups
+              </h1>
+              <p className="text-gray-600 mt-1">Manage and track patient follow-up appointments</p>
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search patients..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="overdue">Overdue</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Follow-ups List */}
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          {filteredFollowUps.length === 0 ? (
+            <div className="p-8 text-center">
+              <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">No Follow-ups Found</h3>
+              <p className="text-gray-600">
+                {searchTerm || filterStatus !== 'all' 
+                  ? 'Try adjusting your search or filter criteria'
+                  : 'No follow-up appointments have been scheduled yet'
+                }
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
                   <tr>
-                    {getHeaders(type).map(h => (
-                      <th key={h} className="border px-3 py-2 text-slate-700 font-semibold">{h}</th>
-                    ))}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Patient
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Follow-up Type
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Scheduled Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Last Updated
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
-                <tbody>
-                  {grouped[type] && grouped[type].length > 0 ? (
-                    grouped[type].map(fu => renderRow(type, fu))
-                  ) : (
-                    <tr>
-                      <td colSpan={getHeaders(type).length} className="text-center text-slate-400 py-3">No follow ups found.</td>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredFollowUps.map((followUp) => (
+                    <tr key={followUp._id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 h-10 w-10">
+                            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                              <User className="h-5 w-5 text-blue-600" />
+                            </div>
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {followUp.patientId?.name || 'Unknown Patient'}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {followUp.patientId?.phone || 'No phone'}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <span className="text-lg mr-2">
+                            {getFollowUpTypeIcon(followUp.followUpType)}
+                          </span>
+                          <span className="text-sm text-gray-900 capitalize">
+                            {followUp.followUpType?.replace('-', ' ') || 'General'}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <Calendar className="h-4 w-4 text-gray-400 mr-2" />
+                          <span className="text-sm text-gray-900">
+                            {followUp.scheduledDate ? new Date(followUp.scheduledDate).toLocaleDateString() : 'Not scheduled'}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(followUp.status)}`}>
+                          {followUp.status || 'pending'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 text-gray-400 mr-2" />
+                          <span className="text-sm text-gray-500">
+                            {followUp.updatedAt ? new Date(followUp.updatedAt).toLocaleDateString() : 'Never'}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="flex items-center justify-end space-x-2">
+                          <button
+                            onClick={() => handleViewPatient(followUp.patientId?._id)}
+                            className="text-blue-600 hover:text-blue-900 transition-colors"
+                            title="View Patient"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => handleAddFollowUp(followUp.patientId?._id)}
+                            className="text-green-600 hover:text-green-900 transition-colors"
+                            title="Add Follow-up"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                          {followUp.followUpType && (
+                            <button
+                              onClick={() => handleViewFollowUp(followUp.patientId?._id, followUp.followUpType)}
+                              className="text-purple-600 hover:text-purple-900 transition-colors"
+                              title="View Follow-up Details"
+                            >
+                              <Activity className="h-4 w-4" />
+                            </button>
+                          )}
+                        </div>
+                      </td>
                     </tr>
-                  )}
+                  ))}
                 </tbody>
               </table>
             </div>
-          </div>
-        ))
-      )}
-      <div className="mb-10 bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-blue-700">Atopic Dermatitis</h3>
-          <button
-            className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-5 py-2 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all"
-            onClick={() => navigate(`/CenterAdmin/patients/FollowUp/AtopicDermatitis/${patientId}`)}
-          >
-            Add Follow Up
-          </button>
+          )}
         </div>
-        {/* Patient details for Atopic Dermatitis */}
-        {patientDetails && (
-          <div className="mb-4 p-4 bg-blue-50 rounded-xl flex flex-wrap gap-6">
-            <div><span className="font-semibold">Name:</span> {patientDetails.name || '-'}</div>
-            <div><span className="font-semibold">Age:</span> {patientDetails.age || '-'}</div>
-            <div><span className="font-semibold">Gender:</span> {patientDetails.gender || '-'}</div>
-            <div><span className="font-semibold">Center Code:</span> {patientDetails.centerCode || patientDetails.center?.code || '-'}</div>
-            <div><span className="font-semibold">Phone:</span> {patientDetails.phone || patientDetails.contact || '-'}</div>
+
+        {/* Summary Stats */}
+        {filteredFollowUps.length > 0 && (
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-white rounded-lg shadow-lg p-4">
+              <div className="flex items-center">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <Activity className="h-6 w-6 text-blue-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Total Follow-ups</p>
+                  <p className="text-2xl font-bold text-gray-900">{filteredFollowUps.length}</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow-lg p-4">
+              <div className="flex items-center">
+                <div className="p-2 bg-yellow-100 rounded-lg">
+                  <Clock className="h-6 w-6 text-yellow-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Pending</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {filteredFollowUps.filter(f => f.status === 'pending').length}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow-lg p-4">
+              <div className="flex items-center">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <Activity className="h-6 w-6 text-green-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Completed</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {filteredFollowUps.filter(f => f.status === 'completed').length}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow-lg p-4">
+              <div className="flex items-center">
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <AlertCircle className="h-6 w-6 text-red-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Overdue</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {filteredFollowUps.filter(f => f.status === 'overdue').length}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         )}
-        <div className="overflow-x-auto rounded-xl">
-          <table className="min-w-full text-sm border rounded-xl overflow-hidden">
-            <thead className="bg-blue-50">
-              <tr>
-                <th className="border px-3 py-2 text-slate-700 font-semibold">Patient Name</th>
-                <th className="border px-3 py-2 text-slate-700 font-semibold">Age</th>
-                <th className="border px-3 py-2 text-slate-700 font-semibold">Date</th>
-                <th className="border px-3 py-2 text-slate-700 font-semibold">Symptoms</th>
-                <th className="border px-3 py-2 text-slate-700 font-semibold">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {atopicDermatitisRecords.length > 0 ? (
-                atopicDermatitisRecords.map(record => {
-                  const patient = record.patientId || {};
-                  return (
-                    <tr key={record._id}>
-                      <td className="border px-3 py-2">{patient.name || "-"}</td>
-                      <td className="border px-3 py-2">{patient.age || "-"}</td>
-                      <td className="border px-3 py-2">{record.createdAt ? new Date(record.createdAt).toLocaleDateString() : "-"}</td>
-                      <td className="border px-3 py-2">{record.symptoms || "-"}</td>
-                      <td className="border px-3 py-2 text-center">
-                        <button
-                          className="bg-blue-100 text-blue-700 px-3 py-1 rounded font-semibold"
-                          onClick={() => navigate(`/CenterAdmin/patients/FollowUp/ViewAtopicDermatitis/${record._id}`)}
-                        >
-                          View
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={5} className="text-center text-slate-400 py-3">No records found.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   );

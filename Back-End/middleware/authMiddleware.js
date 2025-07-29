@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import LabStaff from '../models/LabStaff.js';
 
 const protect = async (req, res, next) => {
   let token;
@@ -9,8 +10,24 @@ const protect = async (req, res, next) => {
   ) {
     try {
       token = req.headers.authorization.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.id).select('-password');
+      
+      // Use environment variable or fallback to a default secret
+      const jwtSecret = process.env.JWT_SECRET || 'fallback-secret-key-for-development';
+      const decoded = jwt.verify(token, jwtSecret);
+      
+      // First try to find user in User model
+      let user = await User.findById(decoded.id).select('-password').populate('centerId', 'name code');
+      
+      // If not found in User model, try LabStaff model
+      if (!user) {
+        user = await LabStaff.findById(decoded.id).select('-password');
+      }
+      
+      if (!user) {
+        return res.status(401).json({ message: 'Not authorized, user not found' });
+      }
+      
+      req.user = user;
       next();
     } catch (error) {
       console.error('Token validation failed', error);

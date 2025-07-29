@@ -220,6 +220,23 @@ const getPatientsByReceptionist = async (req, res) => {
   }
 };
 
+// Get patients assigned to a specific doctor
+const getPatientsByDoctor = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+    
+    const patients = await Patient.find({ assignedDoctor: doctorId })
+      .populate('centerId', 'name code')
+      .populate('assignedDoctor', 'name')
+      .select('name age gender phone email address centerId assignedDoctor');
+    
+    res.json(patients);
+  } catch (err) {
+    console.error('Get patients by doctor error:', err);
+    res.status(500).json({ message: 'Failed to fetch patients by doctor', error: err.message });
+  }
+};
+
 // ✅ Named exports (required for ESM import)
 export {
   addPatient,
@@ -229,5 +246,6 @@ export {
   deletePatient,
   addTestToPatient,
   getTestsByPatient,
-  getPatientsByReceptionist
+  getPatientsByReceptionist,
+  getPatientsByDoctor
 };

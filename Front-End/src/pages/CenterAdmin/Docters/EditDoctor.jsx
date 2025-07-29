@@ -1,113 +1,263 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchDoctorById, updateDoctor } from '../../../features/doctor/doctorThunks';
-import { resetUpdateStatus } from '../../../features/doctor/doctorSlice';
-import { Eye, EyeOff } from 'lucide-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateDoctor } from '../../../features/centerAdmin/centerAdminThunks';
+import { resetCenterAdminState } from '../../../features/centerAdmin/centerAdminSlice';
+import { Eye, EyeOff, UserCheck, ArrowLeft, Save } from 'lucide-react';
 
 const EditDoctor = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { doctorData, loading, updateSuccess, error } = useSelector((state) => state.doctor);
-
-  const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const { loading, error, updateSuccess } = useSelector((state) => state.centerAdmin);
+  
   const [formData, setFormData] = useState({
     name: '',
-    qualification: '',
-    designation: '',
-    kmcNumber: '',
-    hospitalName: '',
-    centerCode: '',
     phone: '',
     email: '',
     username: '',
-    userType: 'doctor',
     password: '',
+    specialization: '',
+    userType: 'doctor',
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
-  // Fetch doctor details by ID
   useEffect(() => {
-    if (id) dispatch(fetchDoctorById(id));
-  }, [dispatch, id]);
+    fetchDoctor();
+  }, [id]);
 
-  // Populate form with fetched doctor data
-  useEffect(() => {
-    if (doctorData && typeof doctorData === 'object') {
-      setFormData((prev) => ({
-        ...prev,
-        ...doctorData,
-        password: '', // don't fill password
-      }));
-    }
-  }, [doctorData]);
-
-  // Handle successful update
   useEffect(() => {
     if (updateSuccess) {
-      alert('Doctor updated successfully!');
-      dispatch(resetUpdateStatus());
-      navigate('/CenterAdmin/Docters/DocterList');
+      setTimeout(() => {
+        dispatch(resetCenterAdminState());
+        navigate('/CenterAdmin/Docters/DocterList');
+      }, 1500);
     }
   }, [updateSuccess, dispatch, navigate]);
+
+  const fetchDoctor = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:5000/api/doctors/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await response.json();
+      setFormData({ 
+        name: data.name || '',
+        phone: data.phone || '',
+        email: data.email || '',
+        username: data.username || '',
+        password: '',
+        specialization: data.specialization || '',
+        userType: 'doctor',
+      });
+    } catch (err) {
+      console.error('Failed to fetch doctor:', err);
+    } finally {
+      setInitialLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(updateDoctor({ id, formData }));
+    dispatch(updateDoctor({ id, doctorData: formData }));
   };
 
-  return (
-    <div className="mt-6 flex flex-col items-center justify-center p-4 sm:p-8">
-      <div className="w-full max-w-3xl mx-auto">
-        <h2 className="text-4xl font-extrabold mb-8 text-blue-500 tracking-tight text-center">Edit Doctor</h2>
-        {loading && <p className="text-center text-slate-500">Loading...</p>}
-        {error && <p className="text-center text-red-500">{error}</p>}
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 rounded-2xl shadow-xl border border-blue-100">
-          <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <input type="text" name="qualification" value={formData.qualification} onChange={handleChange} placeholder="Qualification*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <input type="text" name="designation" value={formData.designation} onChange={handleChange} placeholder="Designation*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <input type="text" name="kmcNumber" value={formData.kmcNumber} onChange={handleChange} placeholder="KMC No*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <input type="text" name="hospitalName" value={formData.hospitalName} onChange={handleChange} placeholder="Hospital Name*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <input type="text" name="centerCode" value={formData.centerCode} onChange={handleChange} placeholder="Center Code*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <input type="text" name="username" value={formData.username} onChange={handleChange} placeholder="Username*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <div className="relative col-span-1 md:col-span-2">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password*"
-              className="border border-blue-100 p-3 rounded-xl w-full text-slate-700 focus:ring-2 focus:ring-blue-300"
-            />
-            <span
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue-400"
-              onClick={() => setShowPassword((prev) => !prev)}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </span>
+  if (initialLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-slate-600">Loading doctor details...</p>
           </div>
-          <select
-            name="userType"
-            value={formData.userType}
-            onChange={handleChange}
-            className="border border-blue-100 p-3 rounded-xl col-span-1 md:col-span-2 text-slate-700 focus:ring-2 focus:ring-blue-300"
-            required
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <button
+            onClick={() => navigate('/CenterAdmin/Docters/DocterList')}
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
-            <option value="doctor">Doctor</option>
-            <option value="lab">Lab</option>
-          </select>
-          <button type="submit" className="w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white py-3 rounded-xl shadow-lg font-semibold text-lg transition-all duration-200 disabled:opacity-60 col-span-1 md:col-span-2">
-            Update
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Doctors
           </button>
-        </form>
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            Edit Doctor
+          </h1>
+          <p className="text-slate-600">
+            Update doctor information
+          </p>
+        </div>
+
+        {/* Alert Messages */}
+        {updateSuccess && (
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+            <UserCheck className="h-5 w-5 text-green-500 mr-3" />
+            <span className="text-green-700">Doctor updated successfully!</span>
+          </div>
+        )}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+            <UserCheck className="h-5 w-5 text-red-500 mr-3" />
+            <span className="text-red-700">{error}</span>
+          </div>
+        )}
+
+        {/* Form */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+          <div className="p-6 border-b border-blue-100">
+            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <UserCheck className="h-5 w-5 mr-2 text-blue-500" />
+              Doctor Information
+            </h2>
+            <p className="text-slate-600 mt-1">
+              Update the doctor details below
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter full name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Phone Number *
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter phone number"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter email address"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Username *
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter username"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Specialization *
+                </label>
+                <input
+                  type="text"
+                  name="specialization"
+                  value={formData.specialization}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter specialization"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  New Password (leave blank to keep current)
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 pr-12 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter new password (optional)"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-4 pt-6">
+              <button
+                type="button"
+                onClick={() => navigate('/CenterAdmin/Docters/DocterList')}
+                className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Updating Doctor...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4" />
+                    Update Doctor
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

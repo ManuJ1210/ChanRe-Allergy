@@ -24,7 +24,7 @@ export const createDoctor = createAsyncThunk(
   }
 );
 
-// ✅ Update a doctor
+// ✅ Update Doctor
 export const updateDoctor = createAsyncThunk(
   'doctor/updateDoctor',
   async ({ id, formData }, { rejectWithValue }) => {
@@ -45,6 +45,28 @@ export const updateDoctor = createAsyncThunk(
     }
   }
 );
+
+// ✅ Delete Doctor
+export const deleteDoctor = createAsyncThunk(
+  'doctor/deleteDoctor',
+  async (doctorId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.delete(
+        `http://localhost:5000/api/doctors/${doctorId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || 'Failed to delete doctor'
+      );
+    }
+  }
+);
+
 export const fetchDoctorById = createAsyncThunk(
   'doctor/fetchDoctorById',
   async (doctorId, thunkAPI) => {
@@ -73,6 +95,152 @@ export const fetchAllDoctors = createAsyncThunk(
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch doctors');
+    }
+  }
+);
+
+// ✅ New: Fetch assigned patients for doctor
+export const fetchAssignedPatients = createAsyncThunk(
+  'doctor/fetchAssignedPatients',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/doctors/assigned-patients', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch assigned patients');
+    }
+  }
+);
+
+// ✅ New: Fetch patient details for doctor
+export const fetchPatientDetails = createAsyncThunk(
+  'doctor/fetchPatientDetails',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`http://localhost:5000/api/doctors/patient/${patientId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient details');
+    }
+  }
+);
+
+// ✅ New: Add test request
+export const addTestRequest = createAsyncThunk(
+  'doctor/addTestRequest',
+  async ({ patientId, testData }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `http://localhost:5000/api/doctors/patient/${patientId}/test-request`,
+        testData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to add test request');
+    }
+  }
+);
+
+// ✅ New: Fetch test requests for doctor
+export const fetchTestRequests = createAsyncThunk(
+  'doctor/fetchTestRequests',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/test-requests/doctor', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch test requests');
+    }
+  }
+);
+
+// ✅ New: Create test request
+export const createTestRequest = createAsyncThunk(
+  'doctor/createTestRequest',
+  async (testRequestData, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        'http://localhost:5000/api/test-requests',
+        testRequestData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to create test request');
+    }
+  }
+);
+
+// ✅ New: Fetch test request by ID
+export const fetchTestRequestById = createAsyncThunk(
+  'doctor/fetchTestRequestById',
+  async (testRequestId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `http://localhost:5000/api/test-requests/${testRequestId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch test request');
+    }
+  }
+);
+
+// ✅ New: Download test report
+export const downloadTestReport = createAsyncThunk(
+  'doctor/downloadTestReport',
+  async (testRequestId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `http://localhost:5000/api/test-requests/${testRequestId}/report`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: 'blob',
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to download report');
+    }
+  }
+);
+
+// ✅ New: Fetch patient test requests
+export const fetchPatientTestRequests = createAsyncThunk(
+  'doctor/fetchPatientTestRequests',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `http://localhost:5000/api/test-requests/patient/${patientId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient test requests');
     }
   }
 );

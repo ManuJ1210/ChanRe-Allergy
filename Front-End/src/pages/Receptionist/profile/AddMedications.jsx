@@ -1,127 +1,235 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { createReceptionistMedication } from "../../../features/receptionist/receptionistThunks";
+import { resetReceptionistState } from "../../../features/receptionist/receptionistSlice";
+import ReceptionistLayout from '../ReceptionistLayout';
+import { Pill, Save, ArrowLeft, CheckCircle } from "lucide-react";
 
-const AddMedications = () => {
-  // Support both :id and :patientId route params for robustness
-  const params = useParams();
-  const patientId = params.patientId || params.id;
-  const [form, setForm] = useState({
+export default function AddMedications() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error, addMedicationSuccess } = useSelector((state) => state.receptionist);
+  
+  const [formData, setFormData] = useState({
     drugName: "",
     dose: "",
+    frequency: "",
     duration: "",
-    adverseEvent: "",
+    prescribedBy: "",
+    prescribedDate: new Date().toISOString().split('T')[0],
+    instructions: "",
+    patientId: id,
   });
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
+
+  React.useEffect(() => {
+    if (addMedicationSuccess) {
+      setTimeout(() => {
+        dispatch(resetReceptionistState());
+        navigate('/receptionist/manage-patients');
+      }, 1500);
+    }
+  }, [addMedicationSuccess, dispatch, navigate]);
+
+  React.useEffect(() => {
+    setFormData(prev => ({ ...prev, patientId: id }));
+  }, [id]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitting(true);
-    setError("");
-    setSuccess(false);
-    setShowAlert(false);
-    try {
-      const token = localStorage.getItem("token");
-      const payload = { ...form, patientId };
-      console.log("Submitting medication:", payload);
-      await axios.post(
-        "http://localhost:5000/api/medications",
-        payload,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setSuccess(true);
-      setShowAlert(true);
-      setForm({ drugName: "", dose: "", duration: "", adverseEvent: "" });
-    } catch (err) {
-      setError("Failed to add medication");
-      setShowAlert(true);
-    } finally {
-      setSubmitting(false);
-    }
+    dispatch(createReceptionistMedication(formData));
   };
 
   return (
-    <div className="max-w-lg mx-auto p-8 bg-white rounded-2xl shadow-xl mt-12 border border-blue-100">
-      <h2 className="text-3xl font-extrabold mb-8 text-blue-500 flex items-center gap-2 tracking-tight">
-        Add Medication
-      </h2>
-      {showAlert && success && (
-        <div className="mb-6 bg-blue-50 border border-blue-400 text-blue-800 px-4 py-3 rounded-xl flex items-center justify-between">
-          <span>Medication added successfully!</span>
-          <button onClick={() => setShowAlert(false)} className="ml-4 text-lg font-bold">×</button>
-        </div>
-      )}
-      {showAlert && error && (
-        <div className="mb-6 bg-red-50 border border-blue-400 text-blue-800 px-4 py-3 rounded-xl flex items-center justify-between">
-          <span>{error}</span>
-          <button onClick={() => setShowAlert(false)} className="ml-4 text-lg font-bold">×</button>
-        </div>
-      )}
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block font-medium mb-2 text-slate-700">Drug Name</label>
-          <input
-            type="text"
-            name="drugName"
-            value={form.drugName}
-            onChange={handleChange}
-            placeholder="Enter drug name.."
-            className="w-full border border-blue-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-            required
-          />
-        </div>
-        <div>
-          <label className="block font-medium mb-2 text-slate-700">Dose</label>
-          <input
-            type="text"
-            name="dose"
-            value={form.dose}
-            onChange={handleChange}
-            placeholder="Enter dose.."
-            className="w-full border border-blue-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-            required
-          />
-        </div>
-        <div>
-          <label className="block font-medium mb-2 text-slate-700">Duration</label>
-          <input
-            type="text"
-            name="duration"
-            value={form.duration}
-            onChange={handleChange}
-            placeholder="Enter duration.."
-            className="w-full border border-blue-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-            required
-          />
-        </div>
-        <div>
-          <label className="block font-medium mb-2 text-slate-700">Adverse event and any reason to stop</label>
-          <textarea
-            name="adverseEvent"
-            value={form.adverseEvent}
-            onChange={handleChange}
-            placeholder="Enter details.."
-            className="w-full border border-blue-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-            rows={3}
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-10 py-3 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all"
-          disabled={submitting}
-        >
-          {submitting ? "Submitting..." : "Add Medication"}
-        </button>
-      </form>
-    </div>
-  );
-};
+    <ReceptionistLayout>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <button
+              onClick={() => navigate(`/receptionist/profile/${id}`)}
+              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Patient
+            </button>
+            <h1 className="text-3xl font-bold text-slate-800 mb-2">
+              Add Medication
+            </h1>
+            <p className="text-slate-600">
+              Prescribe medication for the patient
+            </p>
+          </div>
 
-export default AddMedications; 
+          {/* Alert Messages */}
+          {addMedicationSuccess && (
+            <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+              <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+              <span className="text-green-700">Medication added successfully!</span>
+            </div>
+          )}
+          {error && (
+            <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+              <CheckCircle className="h-5 w-5 text-red-500 mr-3" />
+              <span className="text-red-700">{error}</span>
+            </div>
+          )}
+
+          {/* Form */}
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+            <div className="p-6 border-b border-blue-100">
+              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <Pill className="h-5 w-5 mr-2 text-blue-500" />
+                Medication Information
+              </h2>
+              <p className="text-slate-600 mt-1">
+                Fill in the medication details below
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Medication Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="drugName"
+                    value={formData.drugName}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter medication name"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Dosage *
+                  </label>
+                  <input
+                    type="text"
+                    name="dose"
+                    value={formData.dose}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="e.g., 500mg"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Frequency *
+                  </label>
+                  <input
+                    type="text"
+                    name="frequency"
+                    value={formData.frequency}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="e.g., Twice daily"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Duration *
+                  </label>
+                  <input
+                    type="text"
+                    name="duration"
+                    value={formData.duration}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="e.g., 7 days"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Prescribed By *
+                  </label>
+                  <input
+                    type="text"
+                    name="prescribedBy"
+                    value={formData.prescribedBy}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter doctor's name"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Prescribed Date *
+                  </label>
+                  <input
+                    type="date"
+                    name="prescribedDate"
+                    value={formData.prescribedDate}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Instructions
+                </label>
+                <textarea
+                  name="instructions"
+                  value={formData.instructions}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter medication instructions"
+                />
+              </div>
+
+              <div className="flex gap-4 pt-6">
+                <button
+                  type="button"
+                  onClick={() => navigate(`/receptionist/profile/${id}`)}
+                  className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Adding Medication...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4" />
+                      Add Medication
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </ReceptionistLayout>
+  );
+} 

@@ -19,6 +19,9 @@ import allergicConjunctivitisRoutes from './routes/allergicConjunctivitisRoutes.
 import allergicBronchitisRoutes from './routes/allergicBronchitisRoutes.js';
 import gpeRoutes from './routes/gpeRoutes.js';
 import prescriptionRoutes from './routes/prescriptionRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
+import labStaffRoutes from './routes/labStaffRoutes.js';
+import testRequestRoutes from './routes/testRequestRoutes.js';
 
 dotenv.config();
 
@@ -46,8 +49,14 @@ app.use('/api/allergic-conjunctivitis', allergicConjunctivitisRoutes);
 app.use('/api/allergic-bronchitis', allergicBronchitisRoutes);
 app.use('/api/gpe', gpeRoutes);
 app.use('/api/prescriptions', prescriptionRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/lab-staff', labStaffRoutes);
+app.use('/api/test-requests', testRequestRoutes);
 
-mongoose.connect(process.env.MONGO_URI, {
+// Use environment variable or fallback to local MongoDB
+const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/chenre-allergy';
+
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })

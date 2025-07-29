@@ -1,41 +1,34 @@
 // src/pages/followup/ViewFollowUpPatients.jsx
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import API from "../../services/api";
+import { fetchDetailedFollowUps } from "../../features/superadmin/superadminThunks";
+import { Users, Search, Activity, Eye, Calendar, Building2, Hash } from "lucide-react";
 
 export default function ViewFollowUpPatients() {
-  const [patients, setPatients] = useState([]);
-  const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { patientFollowUps, loading, error } = useSelector((state) => state.superadmin);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetchPatients();
-  }, []);
-
-  const fetchPatients = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await API.get("/followups/patients", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setPatients(res.data);
-    } catch (err) {
-      console.error("Error fetching patients", err);
-    }
-  };
+    dispatch(fetchDetailedFollowUps());
+  }, [dispatch]);
 
   const typeToRoute = {
     "Allergic Rhinitis": (patientId) => `/Superadmin/AllergicRhinitisList/${patientId}`,
     "Atopic Dermatitis": (patientId) => `/Superadmin/AtopicDermatitisList/${patientId}`,
     "Allergic Conjunctivitis": (patientId) => `/Superadmin/AllergicConjunctivitisList/${patientId}`,
     "Allergic Bronchitis": (patientId) => `/Superadmin/AllergicBronchitisList/${patientId}`,
+    "GPE": (patientId) => `/Superadmin/GPEList/${patientId}`,
   };
 
   const typeToColor = {
-    "Allergic Rhinitis": "bg-indigo-600 hover:bg-indigo-700",
+    "Allergic Rhinitis": "bg-blue-500 hover:bg-blue-600",
     "Atopic Dermatitis": "bg-red-500 hover:bg-red-600",
     "Allergic Conjunctivitis": "bg-emerald-500 hover:bg-emerald-600",
-    "Allergic Bronchitis": "bg-blue-500 hover:bg-blue-600",
+    "Allergic Bronchitis": "bg-indigo-500 hover:bg-indigo-600",
+    "GPE": "bg-purple-500 hover:bg-purple-600",
   };
 
   const followupTypes = [
@@ -43,77 +36,185 @@ export default function ViewFollowUpPatients() {
     "Atopic Dermatitis",
     "Allergic Conjunctivitis",
     "Allergic Bronchitis",
+    "GPE",
   ];
 
   // Filter patients by search
-  const filteredPatients = patients.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
+  const filteredPatients = patientFollowUps.filter((p) =>
+    (p.patientId?.name || '').toLowerCase().includes(search.toLowerCase())
   );
 
-  return (
-    <div className="p-6  min-h-screen flex flex-col items-center">
-      <div className="w-full max-w-6xl mx-auto">
-        <h1 className="text-4xl font-extrabold mb-4 mt-6 text-start text-blue-500 tracking-tight">Patient List</h1>
-        <div className="flex justify-end items-center mb-6">
-          <input
-            type="text"
-            placeholder="Search by patient name..."
-            className="border border-blue-100 rounded-xl px-4 py-2 w-72 focus:outline-none focus:ring-2 focus:ring-blue-200 shadow-sm text-slate-700"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
+  // Group records by patient
+  const patientsWithFollowUps = filteredPatients.reduce((acc, record) => {
+    const patientId = record.patientId?._id;
+    if (!patientId) return acc;
+    
+    if (!acc[patientId]) {
+      acc[patientId] = {
+        patient: record.patientId,
+        center: record.patientId?.centerId,
+        records: [],
+        hasTypes: new Set()
+      };
+    }
+    
+    acc[patientId].records.push(record);
+    acc[patientId].hasTypes.add(record.type);
+    
+    return acc;
+  }, {});
+
+  const patientList = Object.values(patientsWithFollowUps);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-slate-600">Loading follow-up patients...</p>
+          </div>
         </div>
-        <div className="overflow-x-auto rounded-2xl shadow-xl bg-white p-2">
-          <table className="min-w-full divide-y divide-blue-100 text-base">
-            <thead className="bg-blue-50">
-              <tr>
-                <th className="px-6 py-4 font-semibold text-slate-700 text-center">S.No</th>
-                <th className="px-6 py-4 font-semibold text-slate-700 text-center">Patient Name</th>
-                <th className="px-6 py-4 font-semibold text-slate-700 text-center">Center Name</th>
-                <th className="px-6 py-4 font-semibold text-slate-700 text-center">Center Code</th>
-                <th className="px-6 py-4 font-semibold text-slate-700 text-center">Registered Date</th>
-                <th className="px-6 py-4 font-semibold text-slate-700 text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPatients.map((patient, idx) => (
-                <tr
-                  key={patient._id}
-                  className={
-                    idx % 2 === 0
-                      ? "bg-white hover:bg-blue-50 transition"
-                      : "bg-blue-50 hover:bg-blue-100 transition"
-                  }
-                >
-                  <td className="px-6 py-4 text-center font-semibold">{idx + 1}</td>
-                  <td className="px-6 py-4 text-center font-medium text-slate-700">{patient.name}</td>
-                  <td className="px-6 py-4 text-center text-slate-500">{patient.centerName || '-'}</td>
-                  <td className="px-6 py-4 text-center text-slate-500">{patient.centerCode}</td>
-                  <td className="px-6 py-4 text-center text-slate-500">{new Date(patient.createdAt).toLocaleString()}</td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="flex flex-row gap-2 justify-center items-center whitespace-nowrap overflow-x-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-50" style={{ minWidth: 340 }}>
-                        {followupTypes.map((condition, index) => (
-                          <button
-                            key={index}
-                            className={`min-w-[120px] px-3 py-1 rounded-lg text-white text-xs font-semibold shadow ${typeToColor[condition]} transition-all duration-150`}
-                            onClick={() => navigate(typeToRoute[condition](patient._id))}
-                          >
-                            {condition}
-                          </button>
-                        ))}
-                      </div>
-                  </td>
-                </tr>
-              ))}
-              {filteredPatients.length === 0 && (
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+            <p className="text-red-600">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            Follow-up Patients
+          </h1>
+          <p className="text-slate-600">
+            View and manage patient follow-up assessments across all centers
+          </p>
+        </div>
+
+        {/* Search and Stats */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-8">
+          <div className="p-6 border-b border-blue-100">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                  <Activity className="h-5 w-5 mr-2 text-blue-500" />
+                  Follow-up Assessments
+                </h2>
+                <p className="text-slate-600 mt-1">
+                  Total: {patientFollowUps.length} patients with follow-ups
+                </p>
+              </div>
+              <div className="relative max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search patients by name..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Patients Table */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <td colSpan="6" className="text-center p-6 text-gray-400">
-                    No patients found.
-                  </td>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Patient
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Center
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Last Follow-up
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="bg-white divide-y divide-slate-200">
+                {patientList.length === 0 ? (
+                  <tr>
+                    <td colSpan="4" className="px-6 py-12 text-center">
+                      <Users className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-slate-600 mb-2">No Follow-up Patients Found</h3>
+                      <p className="text-slate-500">
+                        {search ? 'No patients match your search.' : 'No patients have follow-up assessments yet.'}
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  patientList.map((patient) => (
+                    <tr key={patient.patient._id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <Users className="h-5 w-5 text-blue-500" />
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-slate-900">
+                              {patient.patient.name || 'Unknown Patient'}
+                            </div>
+                            <div className="text-sm text-slate-500">
+                              ID: {patient.patient._id?.slice(-6) || 'No ID'}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center text-sm text-slate-900">
+                          <Building2 className="h-3 w-3 mr-2 text-slate-400" />
+                          {patient.patient.centerId?.name || 'Unknown Center'}
+                        </div>
+                        <div className="flex items-center text-sm text-slate-500">
+                          <Hash className="h-3 w-3 mr-2 text-slate-400" />
+                          {patient.patient.centerCode || 'No code'}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center text-sm text-slate-900">
+                          <Calendar className="h-3 w-3 mr-2 text-slate-400" />
+                          {patient.records.length > 0 ? new Date(patient.records[0].createdAt || patient.records[0].date).toLocaleDateString() : 'No date'}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                        <div className="flex flex-wrap gap-2 justify-center">
+                          {followupTypes.map((type) => (
+                            <button
+                              key={type}
+                              onClick={() => navigate(typeToRoute[type](patient.patient._id))}
+                              className={`${typeToColor[type]} text-white px-3 py-1 rounded text-xs font-medium transition-colors`}
+                            >
+                              View {type}
+                            </button>
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

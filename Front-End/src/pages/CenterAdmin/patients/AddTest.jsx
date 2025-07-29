@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { submitPatientTests } from "../../../features/patient/patientThunks"; // ✅ Correct import
+import { submitPatientTests } from "../../../features/patient/patientThunks";
 import { resetPatientState } from "../../../features/patient/patientSlice";
+import { FileText, ArrowLeft, Save, FlaskConical } from 'lucide-react';
 
 const testFields = [
   "CBC", "Hb", "TC", "DC", "Neutrophils", "Eosinophil", "Lymphocytes",
@@ -39,7 +40,7 @@ const AddTest = () => {
       return;
     }
 
-    dispatch(submitPatientTests({ patientId, testData: filledReports })); // ✅ Correct usage
+    dispatch(submitPatientTests({ patientId, testData: filledReports }));
   };
 
   useEffect(() => {
@@ -57,62 +58,138 @@ const AddTest = () => {
   }, [testSubmitError]);
 
   return (
-    <div className="p-8 bg-blue-50 min-h-screen">
-      <h2 className="text-3xl font-extrabold text-blue-500 mb-8 text-center tracking-tight">Add Test</h2>
-      <div className="bg-white shadow-xl rounded-2xl p-8 border border-blue-100">
-        <form onSubmit={handleSubmit}>
-          <table className="w-full text-left rounded-xl overflow-hidden">
-            <thead>
-              <tr className="bg-blue-50 text-blue-700 uppercase text-sm">
-                <th className="py-3 px-4 w-1/2">Screening Test</th>
-                <th className="py-3 px-4 w-1/2">Reports</th>
-              </tr>
-            </thead>
-            <tbody>
-              {testFields.map((test, index) => (
-                <tr key={index} className="border-b border-blue-100 even:bg-blue-50">
-                  <td className="py-3 px-4 text-slate-700 font-medium">{test}</td>
-                  <td className="py-3 px-4">
-                    <input
-                      type="text"
-                      placeholder="Write here..."
-                      className="w-full border border-blue-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white text-slate-700"
-                      value={reports[test] || ""}
-                      onChange={(e) => handleChange(test, e.target.value)}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="mt-8 text-right">
-            <button
-              type="submit"
-              disabled={testSubmitting}
-              className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-10 py-3 rounded-xl font-semibold shadow hover:from-blue-500 hover:to-blue-700 transition-all disabled:opacity-60"
-            >
-              {testSubmitting ? "Submitting..." : "Submit"}
-            </button>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <button
+            onClick={() => navigate('/CenterAdmin/patients/PatientList')}
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Patients List
+          </button>
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            Add Test Reports
+          </h1>
+          <p className="text-slate-600">
+            Add laboratory test results for patient
+          </p>
+        </div>
+
+        {/* Test Form */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-8">
+          <div className="p-6 border-b border-blue-100">
+            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <FileText className="h-5 w-5 mr-2 text-blue-500" />
+              Laboratory Test Reports
+            </h2>
+            <p className="text-slate-600 mt-1">
+              Fill in the test results for the patient
+            </p>
           </div>
-        </form>
-      </div>
-      {/* Future: Investigation Table */}
-      <div className="mt-12 bg-white shadow-xl p-6 rounded-2xl border border-blue-100">
-        <h3 className="text-xl font-semibold mb-4 text-blue-700">Investigation</h3>
-        <table className="w-full text-sm rounded-xl overflow-hidden">
-          <thead className="bg-blue-50 text-blue-700 uppercase">
-            <tr>
-              <th className="px-3 py-2">Date</th>
-              {testFields.map((t, i) => (
-                <th key={i} className="px-3 py-2">{t}</th>
-              ))}
-              <th className="px-3 py-2">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Test history display can go here in the future */}
-          </tbody>
-        </table>
+
+          <form onSubmit={handleSubmit} className="p-6">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="py-4 px-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                      Screening Test
+                    </th>
+                    <th className="py-4 px-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                      Test Results
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  {testFields.map((test, index) => (
+                    <tr key={index} className="hover:bg-slate-50 transition-colors">
+                      <td className="py-4 px-4">
+                        <div className="font-medium text-slate-800">{test}</div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <input
+                          type="text"
+                          placeholder="Enter test result..."
+                          className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
+                          value={reports[test] || ""}
+                          onChange={(e) => handleChange(test, e.target.value)}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Submit Button */}
+            <div className="mt-8">
+              <button
+                type="submit"
+                disabled={testSubmitting}
+                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+              >
+                {testSubmitting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Submitting Tests...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4" />
+                    Submit Test Reports
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Investigation History */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+          <div className="p-6 border-b border-blue-100">
+            <h3 className="text-xl font-semibold text-slate-800 flex items-center">
+              <FlaskConical className="h-5 w-5 mr-2 text-blue-500" />
+              Investigation History
+            </h3>
+            <p className="text-slate-600 mt-1">
+              Previous test results and investigations
+            </p>
+          </div>
+
+          <div className="p-6">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                      Date
+                    </th>
+                    {testFields.slice(0, 5).map((test, i) => (
+                      <th key={i} className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                        {test}
+                      </th>
+                    ))}
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  <tr>
+                    <td className="px-4 py-4 text-sm text-slate-500" colSpan={7}>
+                      <div className="text-center py-8">
+                        <FlaskConical className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                        <p className="text-slate-500">No previous test history available</p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

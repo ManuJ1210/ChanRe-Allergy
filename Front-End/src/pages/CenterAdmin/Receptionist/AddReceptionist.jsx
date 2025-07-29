@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Eye, EyeOff } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { createReceptionist } from '../../../features/centerAdmin/centerAdminThunks';
+import { resetCenterAdminState } from '../../../features/centerAdmin/centerAdminSlice';
+import { Eye, EyeOff, UserCheck, ArrowLeft } from 'lucide-react';
 
 const AddReceptionist = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const { loading, error, addSuccess } = useSelector((state) => state.centerAdmin);
+  
   // Try Redux first, then fallback to localStorage
   const centerId = user?.centerId || JSON.parse(localStorage.getItem('user'))?.centerId;
 
@@ -17,8 +23,15 @@ const AddReceptionist = () => {
     userType: 'receptionist',
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (addSuccess) {
+      setTimeout(() => {
+        dispatch(resetCenterAdminState());
+        navigate('/CenterAdmin/Receptionist/ManageReceptionists');
+      }, 1500);
+    }
+  }, [addSuccess, dispatch, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,58 +40,175 @@ const AddReceptionist = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage('');
     if (!centerId) {
-      setMessage('No center ID found. Please log in again as a center admin.');
-      setLoading(false);
+      alert('No center ID found. Please log in again as a center admin.');
       return;
     }
-    try {
-      const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/receptionists', { ...formData, centerId }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setMessage('Receptionist added successfully!');
-      setFormData({ name: '', phone: '', email: '', username: '', password: '', userType: 'receptionist' });
-    } catch (err) {
-      setMessage(err.response?.data?.message || 'Failed to add receptionist');
-    } finally {
-      setLoading(false);
-    }
+    dispatch(createReceptionist({ ...formData, centerId }));
   };
 
   return (
-    <div className="mt-6 flex flex-col items-center justify-center p-4 sm:p-8">
-      <div className="w-full max-w-3xl mx-auto">
-        <h2 className="text-4xl font-extrabold mb-8 text-blue-500 tracking-tight text-center">Add Receptionist</h2>
-        {message && <p className={`mb-4 text-center ${message.includes('success') ? 'text-green-600' : 'text-red-600'}`}>{message}</p>}
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 rounded-2xl shadow-xl border border-blue-100">
-          <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <input type="text" name="username" value={formData.username} onChange={handleChange} placeholder="Username*" className="border border-blue-100 p-3 rounded-xl text-slate-700 focus:ring-2 focus:ring-blue-300" required />
-          <div className="relative col-span-1 md:col-span-2">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password*"
-              className="border border-blue-100 p-3 rounded-xl w-full text-slate-700 focus:ring-2 focus:ring-blue-300"
-              required
-            />
-            <span
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue-400"
-              onClick={() => setShowPassword((prev) => !prev)}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </span>
-          </div>
-          <button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white py-3 rounded-xl shadow-lg font-semibold text-lg transition-all duration-200 disabled:opacity-60 col-span-1 md:col-span-2">
-            {loading ? 'Submitting...' : 'Add Receptionist'}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <button
+            onClick={() => navigate('/CenterAdmin/Receptionist/ManageReceptionists')}
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Receptionists
           </button>
-        </form>
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            Add New Receptionist
+          </h1>
+          <p className="text-slate-600">
+            Register a new receptionist for your center
+          </p>
+        </div>
+
+        {/* Alert Messages */}
+        {addSuccess && (
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+            <UserCheck className="h-5 w-5 text-green-500 mr-3" />
+            <span className="text-green-700">Receptionist added successfully!</span>
+          </div>
+        )}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+            <UserCheck className="h-5 w-5 text-red-500 mr-3" />
+            <span className="text-red-700">{error}</span>
+          </div>
+        )}
+
+        {/* Form */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+          <div className="p-6 border-b border-blue-100">
+            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <UserCheck className="h-5 w-5 mr-2 text-blue-500" />
+              Receptionist Information
+            </h2>
+            <p className="text-slate-600 mt-1">
+              Fill in the receptionist details below
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter full name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Phone Number *
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter phone number"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter email address"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Username *
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter username"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Password *
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 pr-12 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-4 pt-6">
+              <button
+                type="button"
+                onClick={() => navigate('/CenterAdmin/Receptionist/ManageReceptionists')}
+                className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Adding Receptionist...
+                  </>
+                ) : (
+                  <>
+                    <UserCheck className="h-4 w-4" />
+                    Add Receptionist
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
