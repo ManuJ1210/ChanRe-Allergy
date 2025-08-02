@@ -144,7 +144,50 @@ export default function AppRoutes() {
       <Route path="/dashboard" element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
         {/* Superadmin Routes */}
         <Route path="superadmin/dashboard" element={<SuperadminDashboard />} />
-        <Route path="superadmin/dashboard" element={<SuperadminDashboard />} />
+        
+        {/* Route to match navigation pattern with capital S - moved to be more specific */}
+        <Route path="Superadmin/dashboard" element={<SuperadminDashboard />} />
+        <Route path="Superadmin" element={<SuperadminDashboard />} />
+        
+        {/* Superadmin Centers Routes with capital S */}
+        <Route path="Superadmin/Centers/AddCenter" element={<AddCenter />} />
+        <Route path="Superadmin/Centers/CentersList" element={<CentersList />} />
+        <Route path="Superadmin/Centers/EditCenter/:id" element={<EditCenter />} />
+        <Route path="Superadmin/Centers/EditCenterAdmin/:id" element={<EditCenterAdmin />} />
+        <Route path="Superadmin/Centers/ManageAdmins" element={<ManageAdmins />} />
+        <Route path="Superadmin/Centers/ViewCenterInfo/:id" element={<ViewCenterInfo />} />
+        
+        {/* Superadmin Doctors Routes with capital S */}
+        <Route path="Superadmin/Docters/SuperAdminDoctorList" element={<SuperAdminDoctorList />} />
+        <Route path="Superadmin/Docters/AddSuperadminDoctor" element={<AddSuperAdminDoctor />} />
+        <Route path="Superadmin/Docters/ViewSuperadminDoctor/:id" element={<ViewSuperadminDoctor />} />
+        <Route path="Superadmin/Docters/EditSuperadminDoctor/:id" element={<EditSuperadminDoctor />} />
+        
+        {/* Superadmin Receptionists Routes with capital S */}
+        <Route path="Superadmin/Receptionists/SuperAdminReceptionistList" element={<SuperAdminReceptionistList />} />
+        <Route path="Superadmin/Receptionists/AddSuperadminReceptionist" element={<AddSuperAdminReceptionist />} />
+        <Route path="Superadmin/Receptionists/ViewSuperadminReceptionist/:id" element={<ViewSuperadminReceptionist />} />
+        <Route path="Superadmin/Receptionists/EditSuperadminReceptionist/:id" element={<EditSuperadminReceptionist />} />
+        
+        {/* Superadmin Lab Routes with capital S */}
+        <Route path="Superadmin/Lab/LabStaffList" element={<LabStaffList />} />
+        <Route path="Superadmin/Lab/AddLabStaff" element={<AddLabStaff />} />
+        <Route path="Superadmin/Lab/EditLabStaff/:id" element={<EditLabStaff />} />
+        
+        {/* Superadmin Followups Routes with capital S */}
+        <Route path="Superadmin/Followups/ManageFollowUp" element={<ManageFollowUp />} />
+        <Route path="Superadmin/Followups/ViewFollowUpPatients" element={<ViewFollowUpPatients />} />
+        <Route path="Superadmin/Followups/ViewPatientFollowUps/:patientId" element={<ViewPatientFollowUps />} />
+        <Route path="Superadmin/Followups/AllergicBronchitisList" element={<SuperadminAllergicBronchitisList />} />
+        <Route path="Superadmin/Followups/AllergicConjunctivitisList" element={<SuperadminAllergicConjunctivitisList />} />
+        <Route path="Superadmin/Followups/AllergicRhinitisList" element={<SuperadminAllergicRhinitisList />} />
+        <Route path="Superadmin/Followups/AtopicDermatitisList" element={<SuperadminAtopicDermatitisList />} />
+        <Route path="Superadmin/Followups/GPEList" element={<GPEList />} />
+        <Route path="Superadmin/Followups/ViewAllergicBronchitis/:patientId" element={<ViewAllergicBronchitis />} />
+        <Route path="Superadmin/Followups/ViewAllergicConjunctivitis/:patientId" element={<ViewAllergicConjunctivitis />} />
+        <Route path="Superadmin/Followups/ViewAllergicRhinitis/:patientId" element={<ViewAllergicRhinitis />} />
+        <Route path="Superadmin/Followups/ViewAtopicDermatitis/:patientId" element={<ViewAtopicDermatitis />} />
+        <Route path="Superadmin/Followups/ViewGPE/:patientId" element={<ViewGPE />} />
         
         {/* Centers Routes */}
         <Route path="superadmin/centers/centerslist" element={<CentersList />} />
