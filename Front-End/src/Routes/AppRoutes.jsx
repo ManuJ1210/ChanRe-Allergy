@@ -182,6 +182,12 @@ export default function AppRoutes() {
         <Route path="superadmin/doctors/all-test-reports" element={<AllTestReports />} />
         <Route path="superadmin/doctors/test-request/:id" element={<SuperadminTestRequestDetails />} />
         
+        {/* Additional routes to match navigation patterns */}
+        <Route path="Superadmin/Docters/SuperAdminDoctorList" element={<SuperAdminDoctorList />} />
+        <Route path="Superadmin/Docters/AddSuperadminDoctor" element={<AddSuperAdminDoctor />} />
+        <Route path="Superadmin/Docters/ViewSuperadminDoctor/:id" element={<ViewSuperadminDoctor />} />
+        <Route path="Superadmin/Docters/EditSuperadminDoctor/:id" element={<EditSuperadminDoctor />} />
+        
         {/* Receptionists Routes */}
         <Route path="superadmin/receptionists/superadminreceptionistlist" element={<SuperAdminReceptionistList />} />
         <Route path="superadmin/receptionists/addsuperadminreceptionist" element={<AddSuperAdminReceptionist />} />

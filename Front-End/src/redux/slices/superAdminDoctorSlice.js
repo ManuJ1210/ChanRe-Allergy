@@ -271,8 +271,10 @@ const superAdminDoctorSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.message = action.payload.message;
-        state.doctors.unshift(action.payload.doctor);
-        state.pagination.total += 1;
+        if (action.payload.doctor) {
+          state.doctors.unshift(action.payload.doctor);
+          state.pagination.total += 1;
+        }
       })
       .addCase(addSuperAdminDoctor.rejected, (state, action) => {
         state.loading = false;
@@ -289,12 +291,14 @@ const superAdminDoctorSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.message = action.payload.message;
-        const index = state.doctors.findIndex(doc => doc._id === action.payload.doctor._id);
-        if (index !== -1) {
-          state.doctors[index] = action.payload.doctor;
-        }
-        if (state.currentDoctor && state.currentDoctor._id === action.payload.doctor._id) {
-          state.currentDoctor = action.payload.doctor;
+        if (action.payload.doctor && action.payload.doctor._id) {
+          const index = state.doctors.findIndex(doc => doc._id === action.payload.doctor._id);
+          if (index !== -1) {
+            state.doctors[index] = action.payload.doctor;
+          }
+          if (state.currentDoctor && state.currentDoctor._id === action.payload.doctor._id) {
+            state.currentDoctor = action.payload.doctor;
+          }
         }
       })
       .addCase(updateSuperAdminDoctor.rejected, (state, action) => {
@@ -332,12 +336,14 @@ const superAdminDoctorSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.message = action.payload.message;
-        const index = state.doctors.findIndex(doc => doc._id === action.payload.doctor._id);
-        if (index !== -1) {
-          state.doctors[index].status = action.payload.status;
-        }
-        if (state.currentDoctor && state.currentDoctor._id === action.payload.doctor._id) {
-          state.currentDoctor.status = action.payload.status;
+        if (action.payload.doctor && action.payload.doctor._id) {
+          const index = state.doctors.findIndex(doc => doc._id === action.payload.doctor._id);
+          if (index !== -1) {
+            state.doctors[index].status = action.payload.status;
+          }
+          if (state.currentDoctor && state.currentDoctor._id === action.payload.doctor._id) {
+            state.currentDoctor.status = action.payload.status;
+          }
         }
       })
       .addCase(toggleSuperAdminDoctorStatus.rejected, (state, action) => {
