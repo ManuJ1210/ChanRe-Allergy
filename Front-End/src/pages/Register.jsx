@@ -20,12 +20,16 @@ export default function Register() {
   };
 
   const navigateRole = (role) => {
-    if (role === 'superadmin') navigate('/superadmin/dashboard');
-    else if (role === 'centeradmin') navigate('/centeradmin/dashboard');
-    else if (role === 'doctor') navigate('/doctor/dashboard');
-    else if (role === 'receptionist') navigate('/receptionist/dashboard');
-    else if (role === 'lab') navigate('/lab/dashboard');
-    else navigate('/patient/dashboard');
+    if (role === 'superadmin') navigate('/dashboard/Superadmin/Dashboard');
+    else if (role === 'centeradmin') navigate('/dashboard/CenterAdmin/Dashboard');
+    else if (role === 'doctor') navigate('/dashboard/doctor/dashboard');
+    else if (role === 'receptionist') navigate('/dashboard/receptionist/dashboard');
+    else if (role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') navigate('/dashboard/lab/dashboard');
+    else if (role === 'lab staff') {
+      // Lab Staff can only be used for sample collection, not dashboard access
+      alert('Lab Staff accounts are for sample collection only. Please contact your administrator for dashboard access.');
+      return;
+    }
   };
 
   return (

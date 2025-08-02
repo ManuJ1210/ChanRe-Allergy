@@ -81,7 +81,6 @@ const testRequestSchema = new mongoose.Schema({
   // Test results
   testResults: {
     type: String,
-    enum: ['Normal', 'Abnormal', 'Critical', 'Pending'],
     default: 'Pending'
   },
   resultDetails: String,
@@ -106,6 +105,31 @@ const testRequestSchema = new mongoose.Schema({
   reportGeneratedByName: String,
   reportFile: String, // PDF file path
   reportNotes: String,
+  reportFilePath: String, // For uploaded files
+  reportSummary: String,
+  clinicalInterpretation: String,
+  qualityControl: String,
+  methodUsed: String,
+  equipmentUsed: String,
+  
+  // Additional fields for complete testing workflow
+  conclusion: String,
+  recommendations: String,
+  labTestingCompletedDate: Date,
+  
+  // Report sending fields
+  reportSentDate: Date,
+  reportSentBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'LabStaff'
+  },
+  reportSentByName: String,
+  sendMethod: String,
+  emailSubject: String,
+  emailMessage: String,
+  notificationMessage: String,
+  sentTo: String,
+  deliveryConfirmation: String,
   
   // Timestamps
   createdAt: {

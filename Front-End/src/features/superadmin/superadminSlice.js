@@ -8,6 +8,12 @@ import {
   fetchAllergicConjunctivitisList,
   fetchAllergicBronchitisList,
   fetchAtopicDermatitisList,
+  fetchGPEList,
+  fetchGPE,
+  fetchAllergicRhinitis,
+  fetchAllergicConjunctivitis,
+  fetchAtopicDermatitis,
+  fetchAllergicBronchitis,
   fetchCenterAdmin,
   createCenterAdmin,
   updateCenterAdmin,
@@ -33,6 +39,12 @@ const initialState = {
   allergicConjunctivitisList: [],
   allergicBronchitisList: [],
   atopicDermatitisList: [],
+  gpeList: [],
+  gpe: null,
+  allergicRhinitis: null,
+  allergicConjunctivitis: null,
+  atopicDermatitis: null,
+  allergicBronchitis: null,
   dashboardStats: {
     totalCenters: 0,
     totalAdmins: 0,
@@ -237,6 +249,96 @@ const superadminSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchAtopicDermatitisList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch GPE list
+      .addCase(fetchGPEList.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchGPEList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.gpeList = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchGPEList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch GPE
+      .addCase(fetchGPE.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchGPE.fulfilled, (state, action) => {
+        state.loading = false;
+        state.gpe = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchGPE.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch Allergic Rhinitis
+      .addCase(fetchAllergicRhinitis.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllergicRhinitis.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allergicRhinitis = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchAllergicRhinitis.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch Allergic Conjunctivitis
+      .addCase(fetchAllergicConjunctivitis.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllergicConjunctivitis.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allergicConjunctivitis = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchAllergicConjunctivitis.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch Atopic Dermatitis
+      .addCase(fetchAtopicDermatitis.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAtopicDermatitis.fulfilled, (state, action) => {
+        state.loading = false;
+        state.atopicDermatitis = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchAtopicDermatitis.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch Allergic Bronchitis
+      .addCase(fetchAllergicBronchitis.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllergicBronchitis.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allergicBronchitis = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchAllergicBronchitis.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

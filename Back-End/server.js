@@ -11,6 +11,8 @@ import patientRoutes from './routes/patientRoutes.js';
 import historyRoutes from './routes/historyRoutes.js';
 import doctorRoutes from './routes/doctorRoutes.js';
 import receptionistRoutes from './routes/receptionistRoutes.js';
+import superAdminDoctorRoutes from './routes/superAdminDoctorRoutes.js';
+import superAdminReceptionistRoutes from './routes/superAdminReceptionistRoutes.js';
 import medicationRoutes from './routes/medicationRoutes.js';
 import followUpRoutes from './routes/followUpRoutes.js';
 import allergicRhinitisRoutes from './routes/allergicRhinitisRoutes.js';
@@ -27,6 +29,44 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000',
+  'https://billingfrontend-sigma.vercel.app'
+];
+// CORS options
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(
+      new Error('CORS: Access denied from this origin.'),
+      false
+    );
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: [
+    'Origin',
+    'X-Requested-With',
+    'Content-Type',
+    'Accept',
+    'Authorization',
+    'Cache-Control',
+    'X-HTTP-Method-Override'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+// Apply middleware
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
 app.use(cors());
 app.use(express.json());
 
@@ -41,6 +81,8 @@ app.use('/api/patients', patientRoutes);
 app.use('/api/history', historyRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/receptionists', receptionistRoutes);
+app.use('/api/superadmin/doctors', superAdminDoctorRoutes);
+app.use('/api/superadmin/receptionists', superAdminReceptionistRoutes);
 app.use('/api/medications', medicationRoutes);
 app.use('/api/followups', followUpRoutes);
 app.use('/api/allergic-rhinitis', allergicRhinitisRoutes);

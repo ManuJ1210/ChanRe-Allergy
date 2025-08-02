@@ -66,7 +66,7 @@ export default function CenterAdminDashboard() {
       icon: <User className="h-6 w-6" />,
       color: 'bg-green-500',
       hoverColor: 'hover:bg-green-600',
-      onClick: () => navigate('/CenterAdmin/Docters/AddDocter')
+              onClick: () => navigate('/dashboard/CenterAdmin/Docters/AddDocter')
     },
     {
       title: 'Add Receptionist',
@@ -239,7 +239,7 @@ export default function CenterAdminDashboard() {
             <div className="p-6">
               <div className="space-y-3">
                 <button
-                  onClick={() => navigate('/CenterAdmin/Docters/AddDocter')}
+                  onClick={() => navigate('/dashboard/CenterAdmin/Docters/AddDocter')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -248,7 +248,7 @@ export default function CenterAdminDashboard() {
                   </div>
                 </button>
                 <button
-                  onClick={() => navigate('/CenterAdmin/Docters/DocterList')}
+                  onClick={() => navigate('/dashboard/CenterAdmin/Docters/DocterList')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">

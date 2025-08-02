@@ -67,7 +67,7 @@ export default function EditPatient() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitting patient update:", formData);
+    
     dispatch(updatePatient({ id, updatedData: formData }));
   };
 

@@ -29,12 +29,23 @@ const userSchema = new mongoose.Schema({
     ref: 'Center',
     default: null
   },
+  // ✅ New: Flag to distinguish between center-specific and superadmin staff
+  isSuperAdminStaff: {
+    type: Boolean,
+    default: false
+  },
   qualification: { type: String, default: '' },
   designation: { type: String, default: '' },
   kmcNumber: { type: String, default: '' },
   centerCode :{type: String, default: '' },
   hospitalName: { type: String, default: '' },
-  username: { type: String, unique: true, sparse: true }, 
+  username: { type: String, unique: true, sparse: true },
+  mobile: { type: String, default: '' },
+  specializations: [{ type: String }],
+  experience: { type: String, default: '' },
+  bio: { type: String, default: '' },
+  status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  isDeleted: { type: Boolean, default: false },
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {

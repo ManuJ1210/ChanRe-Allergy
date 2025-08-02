@@ -97,7 +97,7 @@ export default function AddAllergicConjunctivitis() {
         grading: form.grading
       };
       
-      console.log('Submitting form data:', formData);
+
       
       const response = await axios.post(
         "http://localhost:5000/api/allergic-conjunctivitis",
@@ -105,7 +105,7 @@ export default function AddAllergicConjunctivitis() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
-      console.log('Response:', response.data);
+      
       alert("Submitted successfully!");
       navigate(`/Receptionist/profile/${params.patientId}`);
     } catch (err) {

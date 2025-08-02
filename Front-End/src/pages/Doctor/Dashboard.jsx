@@ -196,7 +196,13 @@ const DoctorDashboard = () => {
                       <div
                         key={patient._id}
                         className="bg-slate-50 rounded-lg p-4 border border-slate-200 hover:border-blue-300 transition-colors cursor-pointer"
-                        onClick={() => navigate(`/doctor/patient/${patient._id}`)}
+                        onClick={() => {
+                          // Bulletproof patient._id conversion - ensure it's always a string
+                          const id = typeof patient._id === 'object' && patient._id !== null
+                            ? patient._id._id || patient._id.id || String(patient._id)
+                            : String(patient._id);
+                          navigate(`/doctor/patient/${id}`);
+                        }}
                       >
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="font-semibold text-slate-800">{patient.name}</h4>
@@ -261,7 +267,13 @@ const DoctorDashboard = () => {
                             {test.urgency}
                           </span>
                           <button
-                            onClick={() => navigate(`/doctor/patient/${test.patientId}`)}
+                            onClick={() => {
+                              // Bulletproof test.patientId conversion - ensure it's always a string
+                              const id = typeof test.patientId === 'object' && test.patientId !== null
+                                ? test.patientId._id || test.patientId.id || String(test.patientId)
+                                : String(test.patientId);
+                              navigate(`/doctor/patient/${id}`);
+                            }}
                             className="text-blue-500 hover:text-blue-600 text-sm font-medium"
                           >
                             View Patient

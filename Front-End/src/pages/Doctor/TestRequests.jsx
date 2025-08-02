@@ -123,12 +123,24 @@ const TestRequests = () => {
     try {
       const result = await dispatch(downloadTestReport(testRequestId)).unwrap();
       
-      // Create a blob URL and trigger download
-      const blob = new Blob([result], { type: 'application/pdf' });
+      // Since we're returning JSON metadata, create a text file with the report data
+      const reportData = {
+        patientName: result.patientName,
+        testType: result.testType,
+        testResults: result.testResults,
+        conclusion: result.conclusion,
+        recommendations: result.recommendations,
+        reportSummary: result.reportSummary,
+        clinicalInterpretation: result.clinicalInterpretation,
+        reportGeneratedDate: result.reportGeneratedDate,
+        reportGeneratedBy: result.reportGeneratedBy
+      };
+      
+      const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `test-report-${testRequestId}.pdf`;
+      link.download = `test-report-${testRequestId}.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -157,7 +169,7 @@ const TestRequests = () => {
         {/* Header */}
         <div className="mb-6">
           <button
-            onClick={() => navigate('/doctor/dashboard')}
+            onClick={() => navigate('/dashboard/doctor/dashboard')}
             className="flex items-center text-blue-600 hover:text-blue-700 mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -403,7 +415,13 @@ const TestRequests = () => {
                       <td className="px-6 py-4">
                         <div className="flex space-x-2">
                           <button
-                            onClick={() => navigate(`/doctor/patient/${test.patientId}`)}
+                            onClick={() => {
+                              // Bulletproof test.patientId conversion - ensure it's always a string
+                              const id = typeof test.patientId === 'object' && test.patientId !== null
+                                ? test.patientId._id || test.patientId.id || String(test.patientId)
+                                : String(test.patientId);
+                              navigate(`/doctor/patient/${id}`);
+                            }}
                             className="flex items-center text-blue-600 hover:text-blue-700 font-medium"
                           >
                             <Eye className="h-4 w-4 mr-1" />

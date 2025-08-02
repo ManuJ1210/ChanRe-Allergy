@@ -1,5 +1,6 @@
 import express from 'express';
 import { protect } from '../middleware/authMiddleware.js';
+import upload from '../middleware/uploadMiddleware.js';
 import {
   getAllTestRequests,
   getPendingTestRequests,
@@ -79,7 +80,7 @@ router.put('/:id/start-testing', protect, startLabTesting);
 router.put('/:id/complete-testing', protect, completeLabTesting);
 
 // Generate test report
-router.put('/:id/generate-report', protect, generateTestReport);
+router.put('/:id/generate-report', protect, upload.single('reportFile'), generateTestReport);
 
 // Send report to doctor
 router.put('/:id/send-report', protect, sendReportToDoctor);
@@ -91,6 +92,6 @@ router.put('/:id/status', protect, updateTestRequestStatus);
 router.put('/:id/cancel', protect, cancelTestRequest);
 
 // Download test report
-router.get('/:id/report', protect, downloadTestReport);
+router.get('/:id/download-report', protect, downloadTestReport);
 
 export default router; 

@@ -9,7 +9,11 @@ import {
   Plus,
   Eye,
   Settings,
-  TrendingUp
+  TrendingUp,
+  UserCheck,
+  User,
+  Building2,
+  Activity
 } from 'lucide-react';
 import { fetchDashboardStats } from '../../features/superadmin/superadminThunks';
 
@@ -27,11 +31,11 @@ export default function SuperadminDashboard() {
   const quickActions = [
     {
       title: 'Add Center',
-      description: 'Register a new healthcare center',
-      icon: <Building className="h-6 w-6" />,
+      description: 'Register a new medical center',
+      icon: <Plus className="h-6 w-6" />,
       color: 'bg-blue-500',
       hoverColor: 'hover:bg-blue-600',
-      onClick: () => navigate('/superadmin/centers/add')
+      onClick: () => navigate('/dashboard/Superadmin/Centers/AddCenter')
     },
     {
       title: 'Manage Centers',
@@ -39,7 +43,7 @@ export default function SuperadminDashboard() {
       icon: <Eye className="h-6 w-6" />,
       color: 'bg-green-500',
       hoverColor: 'hover:bg-green-600',
-      onClick: () => navigate('/superadmin/centers')
+      onClick: () => navigate('/dashboard/Superadmin/Centers/CentersList')
     },
     {
       title: 'Manage Admins',
@@ -47,7 +51,7 @@ export default function SuperadminDashboard() {
       icon: <Shield className="h-6 w-6" />,
       color: 'bg-purple-500',
       hoverColor: 'hover:bg-purple-600',
-      onClick: () => navigate('/superadmin/manage-admins')
+      onClick: () => navigate('/dashboard/Superadmin/Centers/ManageAdmins')
     },
     {
       title: 'View Reports',
@@ -55,8 +59,9 @@ export default function SuperadminDashboard() {
       icon: <TrendingUp className="h-6 w-6" />,
       color: 'bg-orange-500',
       hoverColor: 'hover:bg-orange-600',
-      onClick: () => navigate('/superadmin/follow-up/view')
-    }
+      onClick: () => navigate('/dashboard/Superadmin/Followups/ViewFollowUpPatients')
+    },
+    
   ];
 
   return (
@@ -171,7 +176,7 @@ export default function SuperadminDashboard() {
             <div className="p-6">
               <div className="space-y-3">
                 <button
-                  onClick={() => navigate('/superadmin/centers/add')}
+                  onClick={() => navigate('/dashboard/Superadmin/Centers/AddCenter')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -180,7 +185,7 @@ export default function SuperadminDashboard() {
                   </div>
                 </button>
                 <button
-                  onClick={() => navigate('/superadmin/centers')}
+                  onClick={() => navigate('/dashboard/Superadmin/Centers/CentersList')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -189,7 +194,7 @@ export default function SuperadminDashboard() {
                   </div>
                 </button>
                 <button
-                  onClick={() => navigate('/superadmin/follow-up/view')}
+                  onClick={() => navigate('/dashboard/Superadmin/Followups/ViewFollowUpPatients')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -212,7 +217,7 @@ export default function SuperadminDashboard() {
             <div className="p-6">
               <div className="space-y-3">
                 <button
-                  onClick={() => navigate('/superadmin/manage-admins')}
+                  onClick={() => navigate('/dashboard/Superadmin/Centers/ManageAdmins')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -221,7 +226,7 @@ export default function SuperadminDashboard() {
                   </div>
                 </button>
                 <button
-                  onClick={() => navigate('/superadmin/follow-up/view')}
+                  onClick={() => navigate('/dashboard/Superadmin/Followups/ViewFollowUpPatients')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -230,7 +235,7 @@ export default function SuperadminDashboard() {
                   </div>
                 </button>
                 <button
-                  onClick={() => navigate('/superadmin/centers')}
+                  onClick={() => navigate('/dashboard/Superadmin/Centers/CentersList')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -238,6 +243,7 @@ export default function SuperadminDashboard() {
                     <Eye className="h-4 w-4 text-slate-400" />
                   </div>
                 </button>
+
               </div>
             </div>
           </div>

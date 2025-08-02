@@ -94,7 +94,7 @@ const NewTestRequest = () => {
 
       const result = await dispatch(createTestRequest(requestData)).unwrap();
       
-      console.log('Test request created successfully:', result);
+      
       
       // Show success message
       setSuccessMessage(`Test request for ${formData.patientName} has been sent to the lab successfully!`);

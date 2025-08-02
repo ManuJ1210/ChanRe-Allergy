@@ -74,7 +74,7 @@ const MyPatients = () => {
         {/* Header */}
         <div className="mb-6">
           <button
-            onClick={() => navigate('/doctor/dashboard')}
+            onClick={() => navigate('/dashboard/doctor/dashboard')}
             className="flex items-center text-blue-600 hover:text-blue-700 mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -240,7 +240,13 @@ const MyPatients = () => {
                       </td>
                       <td className="px-6 py-4">
                         <button
-                          onClick={() => navigate(`/doctor/patient/${patient._id}`)}
+                          onClick={() => {
+                            // Bulletproof patient._id conversion - ensure it's always a string
+                            const id = typeof patient._id === 'object' && patient._id !== null
+                              ? patient._id._id || patient._id.id || String(patient._id)
+                              : String(patient._id);
+                            navigate(`/doctor/patient/${id}`);
+                          }}
                           className="flex items-center text-blue-600 hover:text-blue-700 font-medium"
                         >
                           <Eye className="h-4 w-4 mr-1" />

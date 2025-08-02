@@ -1,37 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createReceptionist } from '../../../features/centerAdmin/centerAdminThunks';
-import { resetCenterAdminState } from '../../../features/centerAdmin/centerAdminSlice';
-import { Eye, EyeOff, UserCheck, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, UserCheck, ArrowLeft, Save } from 'lucide-react';
+import { addCenterAdminReceptionist, clearError, clearSuccess } from '../../../redux/slices/centerAdminReceptionistSlice';
 
 const AddReceptionist = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { loading, error, addSuccess } = useSelector((state) => state.centerAdmin);
+  const { loading, error, success, message } = useSelector((state) => state.centerAdminReceptionists);
   
   // Try Redux first, then fallback to localStorage
   const centerId = user?.centerId || JSON.parse(localStorage.getItem('user'))?.centerId;
 
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
+    mobile: '',
     email: '',
     username: '',
     password: '',
-    userType: 'receptionist',
+    address: '',
+    emergencyContact: '',
+    emergencyContactName: '',
+    role: 'receptionist',
   });
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    if (addSuccess) {
+    if (success) {
       setTimeout(() => {
-        dispatch(resetCenterAdminState());
-        navigate('/CenterAdmin/Receptionist/ManageReceptionists');
+        dispatch(clearSuccess());
+        navigate('/dashboard/CenterAdmin/Receptionist/ManageReceptionists');
       }, 1500);
     }
-  }, [addSuccess, dispatch, navigate]);
+  }, [success, dispatch, navigate]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+      dispatch(clearSuccess());
+    };
+  }, [dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +53,17 @@ const AddReceptionist = () => {
       alert('No center ID found. Please log in again as a center admin.');
       return;
     }
-    dispatch(createReceptionist({ ...formData, centerId }));
+    
+    dispatch(clearError());
+    dispatch(clearSuccess());
+    
+    const submitData = {
+      ...formData,
+      centerId,
+      status: 'active'
+    };
+    
+    dispatch(addCenterAdminReceptionist(submitData));
   };
 
   return (
@@ -53,7 +72,7 @@ const AddReceptionist = () => {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => navigate('/CenterAdmin/Receptionist/ManageReceptionists')}
+            onClick={() => navigate('/dashboard/CenterAdmin/Receptionist/ManageReceptionists')}
             className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -68,10 +87,10 @@ const AddReceptionist = () => {
         </div>
 
         {/* Alert Messages */}
-        {addSuccess && (
+        {success && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700">Receptionist added successfully!</span>
+            <span className="text-green-700">{message}</span>
           </div>
         )}
         {error && (
@@ -94,96 +113,149 @@ const AddReceptionist = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter full name"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Phone Number *
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter phone number"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter email address"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Username *
-                </label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter username"
-                />
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Password *
-                </label>
-                <div className="relative">
+            {/* Basic Information */}
+            <div>
+              <h3 className="text-lg font-medium text-slate-800 mb-4">Basic Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Full Name *
+                  </label>
                   <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={formData.password}
+                    type="text"
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 pr-12 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    placeholder="Enter password"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter full name"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Mobile Number *
+                  </label>
+                  <input
+                    type="tel"
+                    name="mobile"
+                    value={formData.mobile}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter mobile number"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter email address"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Username *
+                  </label>
+                  <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter username"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Password *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 pr-12 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      placeholder="Enter password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
 
+            {/* Contact Information */}
+            <div>
+              <h3 className="text-lg font-medium text-slate-800 mb-4">Contact Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Address
+                  </label>
+                  <textarea
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    rows="3"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter full address"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Emergency Contact Number
+                  </label>
+                  <input
+                    type="tel"
+                    name="emergencyContact"
+                    value={formData.emergencyContact}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter emergency contact number"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Emergency Contact Name
+                  </label>
+                  <input
+                    type="text"
+                    name="emergencyContactName"
+                    value={formData.emergencyContactName}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Enter emergency contact name"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Submit Buttons */}
             <div className="flex gap-4 pt-6">
               <button
                 type="button"
-                onClick={() => navigate('/CenterAdmin/Receptionist/ManageReceptionists')}
+                onClick={() => navigate('/dashboard/CenterAdmin/Receptionist/ManageReceptionists')}
                 className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -201,7 +273,7 @@ const AddReceptionist = () => {
                   </>
                 ) : (
                   <>
-                    <UserCheck className="h-4 w-4" />
+                    <Save className="h-4 w-4" />
                     Add Receptionist
                   </>
                 )}

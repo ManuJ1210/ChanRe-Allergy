@@ -11,24 +11,27 @@ export default function Login() {
 
   const { user, loading, error } = useSelector((state) => state.auth);
 
-  // Debug logging
-  console.log('Login Component State:', { user, loading, error, hasNavigated: hasNavigated.current });
+
 
   useEffect(() => {
     if (user && !hasNavigated.current) {
-      console.log('Navigating user:', user);
       hasNavigated.current = true;
       // Store centerId for centeradmin
       if (user.role && user.role.toLowerCase() === 'centeradmin' && user.centerId) {
         localStorage.setItem('centerId', user.centerId);
       }
       const role = user.role.toLowerCase();
-      if (role === 'superadmin') navigate('/superadmin/dashboard');
-      else if (role === 'centeradmin') navigate('/centeradmin/dashboard');
-      else if (role === 'doctor') navigate('/doctor/dashboard');
-      else if (role === 'receptionist') navigate('/receptionist/dashboard');
-      else if (role === 'lab staff' || role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') navigate('/lab/dashboard');
-      else navigate('/patient/dashboard');
+      if (role === 'superadmin') navigate('/dashboard/Superadmin/Dashboard');
+      else if (role === 'centeradmin') navigate('/dashboard/CenterAdmin/Dashboard');
+      else if (role === 'doctor') navigate('/dashboard/doctor/dashboard');
+      else if (role === 'receptionist') navigate('/dashboard/receptionist/dashboard');
+      else if (role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') navigate('/dashboard/lab/dashboard');
+      else if (role === 'lab staff') {
+        // Lab Staff can only be used for sample collection, not dashboard access
+        alert('Lab Staff accounts are for sample collection only. Please contact your administrator for dashboard access.');
+        return;
+      }
+      // Note: Patient role doesn't have a dashboard - they access the system through other means
     }
   }, [user]); // Remove navigate from dependencies
 

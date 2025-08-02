@@ -115,13 +115,18 @@ export const fetchAssignedPatients = createAsyncThunk(
   }
 );
 
-// ✅ New: Fetch patient details for doctor
+// Fetch patient details
 export const fetchPatientDetails = createAsyncThunk(
   'doctor/fetchPatientDetails',
   async (patientId, { rejectWithValue }) => {
     try {
+      // Bulletproof patientId conversion - ensure it's always a string
+      const id = typeof patientId === 'object' && patientId !== null
+        ? patientId._id || patientId.id || String(patientId)
+        : String(patientId);
+      
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/doctors/patient/${patientId}`, {
+      const response = await axios.get(`http://localhost:5000/api/doctors/patient/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -131,22 +136,26 @@ export const fetchPatientDetails = createAsyncThunk(
   }
 );
 
-// ✅ New: Add test request
+// Add test request
 export const addTestRequest = createAsyncThunk(
   'doctor/addTestRequest',
-  async ({ patientId, testData }, { rejectWithValue }) => {
+  async (requestData, { rejectWithValue }) => {
     try {
+      // Bulletproof patientId conversion - ensure it's always a string
+      const processedData = {
+        ...requestData,
+        patientId: typeof requestData.patientId === 'object' && requestData.patientId !== null
+          ? requestData.patientId._id || requestData.patientId.id || String(requestData.patientId)
+          : String(requestData.patientId)
+      };
+      
       const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `http://localhost:5000/api/doctors/patient/${patientId}/test-request`,
-        testData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.post('http://localhost:5000/api/test-requests', processedData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to add test request');
+      return rejectWithValue(error.response?.data?.message || 'Failed to create test request');
     }
   }
 );
@@ -213,10 +222,9 @@ export const downloadTestReport = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:5000/api/test-requests/${testRequestId}/report`,
+        `http://localhost:5000/api/test-requests/${testRequestId}/download-report`,
         {
           headers: { Authorization: `Bearer ${token}` },
-          responseType: 'blob',
         }
       );
       return response.data;
@@ -226,14 +234,19 @@ export const downloadTestReport = createAsyncThunk(
   }
 );
 
-// ✅ New: Fetch patient test requests
+// Fetch patient test requests
 export const fetchPatientTestRequests = createAsyncThunk(
   'doctor/fetchPatientTestRequests',
   async (patientId, { rejectWithValue }) => {
     try {
+      // Bulletproof patientId conversion - ensure it's always a string
+      const id = typeof patientId === 'object' && patientId !== null
+        ? patientId._id || patientId.id || String(patientId)
+        : String(patientId);
+      
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:5000/api/test-requests/patient/${patientId}`,
+        `http://localhost:5000/api/test-requests/patient/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

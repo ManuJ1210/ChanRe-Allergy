@@ -1,137 +1,231 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchDoctors, deleteDoctorThunk } from '../../../features/centerAdmin/centerAdminThunks';
-import { resetCenterAdminState } from '../../../features/centerAdmin/centerAdminSlice';
 import { 
-  Pencil, 
-  Trash2, 
-  User, 
   Search, 
-  Plus,
-  Mail,
-  Phone,
-  GraduationCap,
-  Building
+  Plus, 
+  Edit, 
+  Trash2, 
+  Eye, 
+  Filter,
+  MoreHorizontal,
+  UserCheck,
+  UserX,
+  ArrowLeft,
+  ArrowRight
 } from 'lucide-react';
+import { 
+  fetchCenterAdminDoctors, 
+  deleteCenterAdminDoctor, 
+  toggleCenterAdminDoctorStatus,
+  fetchCenterAdminDoctorStats,
+  setFilters,
+  clearError,
+  clearSuccess 
+} from '../../../redux/slices/centerAdminDoctorSlice';
 
 const DoctorList = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { doctors, loading, error, deleteSuccess } = useSelector((state) => state.centerAdmin);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredDoctors, setFilteredDoctors] = useState([]);
+  const dispatch = useDispatch();
+  
+  const { 
+    doctors, 
+    loading, 
+    error, 
+    success, 
+    message, 
+    pagination, 
+    filters,
+    stats 
+  } = useSelector((state) => state.centerAdminDoctors);
+
+  const [searchTerm, setSearchTerm] = useState(filters.search || '');
+  const [statusFilter, setStatusFilter] = useState(filters.status || '');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchDoctors());
+    dispatch(fetchCenterAdminDoctors({ 
+      page: pagination.currentPage, 
+      limit: pagination.limit, 
+      search: filters.search, 
+      status: filters.status 
+    }));
+    dispatch(fetchCenterAdminDoctorStats());
+  }, [dispatch, pagination.currentPage, filters.search, filters.status]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+      dispatch(clearSuccess());
+    };
   }, [dispatch]);
 
-  useEffect(() => {
-    if (deleteSuccess) {
-      setTimeout(() => {
-        dispatch(resetCenterAdminState());
-      }, 2000);
-    }
-  }, [deleteSuccess, dispatch]);
-
-  useEffect(() => {
-    const filtered = doctors.filter(doctor =>
-      doctor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.phone?.includes(searchTerm) ||
-      doctor.specialization?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredDoctors(filtered);
-  }, [doctors, searchTerm]);
-
-  const handleDelete = (id) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this doctor?');
-    if (!confirmDelete) return;
-    dispatch(deleteDoctorThunk(id));
+  const handleSearch = (e) => {
+    e.preventDefault();
+    dispatch(setFilters({ search: searchTerm }));
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-slate-600">Loading doctors...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handleStatusFilter = (status) => {
+    setStatusFilter(status);
+    dispatch(setFilters({ status }));
+  };
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-            <p className="text-red-600">{error}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handlePageChange = (page) => {
+    dispatch(fetchCenterAdminDoctors({ 
+      page, 
+      limit: pagination.limit, 
+      search: filters.search, 
+      status: filters.status 
+    }));
+  };
+
+  const handleDelete = async () => {
+    if (selectedDoctor) {
+      await dispatch(deleteCenterAdminDoctor(selectedDoctor._id));
+      setShowDeleteModal(false);
+      setSelectedDoctor(null);
+    }
+  };
+
+  const handleToggleStatus = async (doctor) => {
+    await dispatch(toggleCenterAdminDoctorStatus(doctor._id));
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={() => navigate('/dashboard/CenterAdmin/Dashboard')}
+              className="flex items-center text-slate-600 hover:text-slate-800 transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </button>
+            <button
+              onClick={() => navigate('/dashboard/CenterAdmin/Docters/AddDocter')}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+            >
+              <Plus className="h-4 w-4" />
+              Add Doctor
+            </button>
+          </div>
           <h1 className="text-3xl font-bold text-slate-800 mb-2">
-            Manage Doctors
+            Center Doctors
           </h1>
           <p className="text-slate-600">
-            View and manage all doctors in your center
+            Manage all doctors in your center
           </p>
         </div>
 
-        {/* Stats and Actions */}
-        <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-8">
-          <div className="p-6 border-b border-blue-100">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
+            <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-slate-800 flex items-center">
-                  <User className="h-5 w-5 mr-2 text-blue-500" />
-                  Doctors
-                </h2>
-                <p className="text-slate-600 mt-1">
-                  Total: {doctors.length} doctors
-                </p>
+                <p className="text-slate-600 text-sm font-medium">Total Doctors</p>
+                <p className="text-3xl font-bold text-slate-800">{stats.total}</p>
               </div>
-              <button
-                onClick={() => navigate('/CenterAdmin/Docters/AddDocter')}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Doctor
-              </button>
+              <div className="bg-blue-100 p-3 rounded-lg">
+                <UserCheck className="h-6 w-6 text-blue-600" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-green-100 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-slate-600 text-sm font-medium">Active Doctors</p>
+                <p className="text-3xl font-bold text-green-600">{stats.active}</p>
+              </div>
+              <div className="bg-green-100 p-3 rounded-lg">
+                <UserCheck className="h-6 w-6 text-green-600" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-red-100 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-slate-600 text-sm font-medium">Inactive Doctors</p>
+                <p className="text-3xl font-bold text-red-600">{stats.inactive}</p>
+              </div>
+              <div className="bg-red-100 p-3 rounded-lg">
+                <UserX className="h-6 w-6 text-red-600" />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Success Message */}
-        {deleteSuccess && (
+        {/* Alert Messages */}
+        {success && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
-            <User className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700">Doctor deleted successfully!</span>
+            <UserCheck className="h-5 w-5 text-green-500 mr-3" />
+            <span className="text-green-700">{message}</span>
+          </div>
+        )}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+            <UserCheck className="h-5 w-5 text-red-500 mr-3" />
+            <span className="text-red-700">{error}</span>
           </div>
         )}
 
-        {/* Search */}
-        <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-6">
-          <div className="p-6">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search doctors by name, email, phone, specialization..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+        {/* Filters and Search */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6 mb-6">
+          <div className="flex flex-col md:flex-row gap-4">
+            <form onSubmit={handleSearch} className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search doctors by name, email, or username..."
+                  className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </form>
+            <div className="flex gap-2">
+              <button
+                onClick={() => handleStatusFilter('')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  statusFilter === '' 
+                    ? 'bg-blue-500 text-white' 
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                All
+              </button>
+              <button
+                onClick={() => handleStatusFilter('active')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  statusFilter === 'active' 
+                    ? 'bg-green-500 text-white' 
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                Active
+              </button>
+              <button
+                onClick={() => handleStatusFilter('inactive')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  statusFilter === 'inactive' 
+                    ? 'bg-red-500 text-white' 
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                Inactive
+              </button>
             </div>
           </div>
         </div>
@@ -142,98 +236,117 @@ const DoctorList = () => {
             <table className="w-full">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Doctor
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Contact
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Specialization
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    Hospital
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Status
                   </th>
-                  <th className="px-6 py-4 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Joined
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-slate-200">
-                {filteredDoctors.length === 0 ? (
+                {loading ? (
                   <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center">
-                      <User className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-slate-600 mb-2">No Doctors Found</h3>
-                      <p className="text-slate-500 mb-4">
-                        {searchTerm ? 'No doctors match your search.' : 'Get started by adding your first doctor.'}
-                      </p>
-                      {!searchTerm && (
-                        <button
-                          onClick={() => navigate('/CenterAdmin/Docters/AddDocter')}
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto"
-                        >
-                          <Plus className="h-4 w-4" />
-                          Add Doctor
-                        </button>
-                      )}
+                    <td colSpan="6" className="px-6 py-4 text-center">
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                        <span className="ml-2 text-slate-600">Loading doctors...</span>
+                      </div>
+                    </td>
+                  </tr>
+                ) : doctors.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-4 text-center text-slate-500">
+                      No doctors found
                     </td>
                   </tr>
                 ) : (
-                  filteredDoctors.map((doctor) => (
+                  doctors.map((doctor) => (
                     <tr key={doctor._id} className="hover:bg-slate-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                            <User className="h-5 w-5 text-green-500" />
+                          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                            <span className="text-blue-600 font-semibold">
+                              {doctor.name ? doctor.name.charAt(0).toUpperCase() : 'D'}
+                            </span>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-slate-900">
-                              Dr. {doctor.name}
-                            </div>
-                            <div className="text-sm text-slate-500">
-                              ID: {doctor._id?.slice(-6)}
-                            </div>
+                            <div className="text-sm font-medium text-slate-900">Dr. {doctor.name || 'Unknown'}</div>
+                            <div className="text-sm text-slate-500">@{doctor.username || 'N/A'}</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="space-y-1">
-                          <div className="flex items-center text-sm text-slate-900">
-                            <Mail className="h-3 w-3 mr-2 text-slate-400" />
-                            {doctor.email || 'No email'}
-                          </div>
-                          <div className="flex items-center text-sm text-slate-500">
-                            <Phone className="h-3 w-3 mr-2 text-slate-400" />
-                            {doctor.phone || 'No phone'}
-                          </div>
-                        </div>
+                        <div className="text-sm text-slate-900">{doctor.email}</div>
+                        <div className="text-sm text-slate-500">{doctor.phone || doctor.mobile || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center text-sm text-slate-900">
-                          <GraduationCap className="h-3 w-3 mr-2 text-slate-400" />
-                          {doctor.specialization || 'General'}
+                        <div className="text-sm text-slate-900">
+                          {doctor.specializations && doctor.specializations.length > 0 
+                            ? doctor.specializations.join(', ')
+                            : doctor.specialization || 'General'
+                          }
                         </div>
+                        <div className="text-sm text-slate-500">{doctor.hospitalName || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center text-sm text-slate-900">
-                          <Building className="h-3 w-3 mr-2 text-slate-400" />
-                          {doctor.hospitalName || 'Not specified'}
-                        </div>
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          doctor.status === 'active' 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {doctor.status || 'active'}
+                        </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <div className="flex items-center justify-center gap-2">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                        {formatDate(doctor.createdAt)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="flex items-center justify-end gap-2">
                           <button
-                            onClick={() => navigate(`/CenterAdmin/Docters/EditDoctor/${doctor._id}`)}
-                            className="text-blue-600 hover:text-blue-900 p-1 rounded transition-colors"
-                            title="Edit doctor"
+                            onClick={() => navigate(`/dashboard/CenterAdmin/Docters/ViewDoctor/${doctor._id}`)}
+                            className="text-blue-600 hover:text-blue-900 p-1"
+                            title="View"
                           >
-                            <Pencil className="h-4 w-4" />
+                            <Eye className="h-4 w-4" />
                           </button>
                           <button
-                            onClick={() => handleDelete(doctor._id)}
-                            className="text-red-600 hover:text-red-900 p-1 rounded transition-colors"
-                            title="Delete doctor"
+                            onClick={() => navigate(`/dashboard/CenterAdmin/Docters/EditDoctor/${doctor._id}`)}
+                            className="text-green-600 hover:text-green-900 p-1"
+                            title="Edit"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => handleToggleStatus(doctor)}
+                            className={`p-1 ${
+                              doctor.status === 'active' 
+                                ? 'text-orange-600 hover:text-orange-900' 
+                                : 'text-green-600 hover:text-green-900'
+                            }`}
+                            title={doctor.status === 'active' ? 'Deactivate' : 'Activate'}
+                          >
+                            {doctor.status === 'active' ? <UserX className="h-4 w-4" /> : <UserCheck className="h-4 w-4" />}
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedDoctor(doctor);
+                              setShowDeleteModal(true);
+                            }}
+                            className="text-red-600 hover:text-red-900 p-1"
+                            title="Delete"
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
@@ -246,7 +359,63 @@ const DoctorList = () => {
             </table>
           </div>
         </div>
+
+        {/* Pagination */}
+        {pagination.totalPages > 1 && (
+          <div className="mt-6 flex items-center justify-between">
+            <div className="text-sm text-slate-700">
+              Showing {((pagination.currentPage - 1) * pagination.limit) + 1} to{' '}
+              {Math.min(pagination.currentPage * pagination.limit, pagination.total)} of{' '}
+              {pagination.total} results
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handlePageChange(pagination.currentPage - 1)}
+                disabled={pagination.currentPage === 1}
+                className="px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+              <span className="px-3 py-2 text-sm text-slate-700">
+                Page {pagination.currentPage} of {pagination.totalPages}
+              </span>
+              <button
+                onClick={() => handlePageChange(pagination.currentPage + 1)}
+                disabled={pagination.currentPage === pagination.totalPages}
+                className="px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Confirm Delete</h3>
+            <p className="text-slate-600 mb-6">
+              Are you sure you want to delete <strong>Dr. {selectedDoctor?.name}</strong>? This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -4,20 +4,24 @@ import { useSelector } from 'react-redux';
 import API from '../../services/api';
 import { 
   ArrowLeft, 
-  Clock, 
-  CheckCircle, 
-  AlertTriangle, 
-  User, 
-  Phone, 
-  MapPin,
+  Activity,
+  AlertCircle,
   Calendar,
+  User,
   FileText,
-  Microscope,
+  Eye,
+  UserCheck,
+  MapPin,
+  Phone,
+  Stethoscope,
+  TestTube,
   Download,
-  Edit
+  Play,
+  StopCircle,
+  Send
 } from 'lucide-react';
 
-export default function TestRequestDetails() {
+const TestRequestDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -43,6 +47,20 @@ export default function TestRequestDetails() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleDownload = () => {
+    const element = document.createElement('a');
+    const file = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
+    element.href = URL.createObjectURL(file);
+    element.download = `test-request-${id}.html`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
   const getStatusColor = (status) => {
@@ -85,99 +103,64 @@ export default function TestRequestDetails() {
     }
   };
 
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'Pending':
-        return <Clock className="h-4 w-4" />;
-      case 'Assigned':
-        return <Microscope className="h-4 w-4" />;
-      case 'Sample_Collection_Scheduled':
-        return <Calendar className="h-4 w-4" />;
-      case 'Sample_Collected':
-        return <User className="h-4 w-4" />;
-      case 'In_Lab_Testing':
-        return <AlertTriangle className="h-4 w-4" />;
-      case 'Testing_Completed':
-        return <CheckCircle className="h-4 w-4" />;
-      case 'Report_Generated':
-        return <FileText className="h-4 w-4" />;
-      case 'Report_Sent':
-        return <CheckCircle className="h-4 w-4" />;
-      case 'Completed':
-        return <CheckCircle className="h-4 w-4" />;
-      case 'Cancelled':
-        return <AlertTriangle className="h-4 w-4" />;
-      default:
-        return <Clock className="h-4 w-4" />;
-    }
-  };
-
-  const handleUpdateStatus = () => {
-    navigate(`/lab/update-status/${id}`);
-  };
-
-  const handleScheduleCollection = () => {
-    navigate(`/lab/schedule-collection/${id}`);
-  };
-
-  const handleStartTesting = () => {
-    navigate(`/lab/start-testing/${id}`);
-  };
-
-  const handleCompleteTesting = () => {
-    navigate(`/lab/complete-testing/${id}`);
-  };
-
-  const handleGenerateReport = () => {
-    navigate(`/lab/generate-report/${id}`);
-  };
-
-  const handleDownloadReport = async () => {
-    try {
-      const response = await API.get(`/test-requests/${id}/report`, {
-        responseType: 'blob'
-      });
-      
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `test-report-${id}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (error) {
-      console.error('Error downloading report:', error);
-      alert('Failed to download report');
-    }
-  };
-
   if (loading) {
     return (
-      <div className="p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-slate-600">Loading test request details...</p>
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="animate-pulse space-y-4">
+              <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              <div className="space-y-3">
+                <div className="h-4 bg-gray-200 rounded"></div>
+                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  if (error || !testRequest) {
+  if (error) {
     return (
-      <div className="p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center py-12">
-            <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-slate-900 mb-2">Error Loading Test Request</h3>
-            <p className="text-slate-600">{error || 'Test request not found'}</p>
-            <button
-              onClick={() => navigate('/lab/test-requests')}
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Back to Test Requests
-            </button>
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <button
+                onClick={() => navigate('/lab/test-requests')}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Back to Test Requests
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!testRequest) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="text-center">
+              <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">No Test Request Found</h2>
+              <p className="text-gray-600 mb-4">The requested test request could not be found.</p>
+              <button
+                onClick={() => navigate('/lab/test-requests')}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Back to Test Requests
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -185,233 +168,416 @@ export default function TestRequestDetails() {
   }
 
   return (
-    <div className="p-4 sm:p-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-5xl mx-auto p-6">
         {/* Header */}
-        <div className="mb-8">
-          <button
-            onClick={() => navigate('/lab/test-requests')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Test Requests
-          </button>
-          
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-3xl font-bold text-slate-800 mb-2">
-                Test Request Details
-              </h1>
-              <p className="text-slate-600">
-                Request ID: {testRequest._id}
-              </p>
-            </div>
-            
-            <div className="flex gap-2">
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
               <button
-                onClick={handleUpdateStatus}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                onClick={() => navigate('/lab/test-requests')}
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
               >
-                <Edit className="h-4 w-4 mr-2" />
-                Update Status
+                <ArrowLeft size={20} />
+                <span>Back</span>
+              </button>
+              <h1 className="text-2xl font-bold text-gray-800">Test Request Details</h1>
+            </div>
+            <div className="flex space-x-3">
+              <button
+                onClick={handlePrint}
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-2"
+              >
+                <FileText size={16} />
+                <span>Print</span>
+              </button>
+              <button
+                onClick={handleDownload}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
+              >
+                <FileText size={16} />
+                <span>Download</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Status and Urgency */}
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
-          <div className="flex items-center gap-4 mb-4">
-            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(testRequest.status)}`}>
-              {getStatusIcon(testRequest.status)}
-              <span className="ml-1">{testRequest.status.replace(/_/g, ' ')}</span>
-            </span>
-            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getUrgencyColor(testRequest.urgency)}`}>
-              {testRequest.urgency}
-            </span>
+        {/* Main Content */}
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          {/* Record Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">LABORATORY TEST REQUEST</h1>
+            <p className="text-gray-600">Medical Test Request Record</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h3 className="font-semibold text-slate-900 mb-2">Test Information</h3>
-              <p><strong>Test Type:</strong> {testRequest.testType}</p>
-              <p><strong>Description:</strong> {testRequest.testDescription}</p>
-              <p><strong>Created:</strong> {new Date(testRequest.createdAt).toLocaleString()}</p>
-              {testRequest.updatedAt && (
-                <p><strong>Last Updated:</strong> {new Date(testRequest.updatedAt).toLocaleString()}</p>
+          {/* Test Request Information */}
+          <div className="bg-blue-50 rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
+              Test Request Information
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Request ID</label>
+                <p className="text-gray-900 font-medium">{testRequest._id || 'N/A'}</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Request Date</label>
+                <p className="text-gray-900 font-medium">
+                  {testRequest.createdAt ? new Date(testRequest.createdAt).toLocaleDateString() : 'N/A'}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Last Updated</label>
+                <p className="text-gray-900 font-medium">
+                  {testRequest.updatedAt ? new Date(testRequest.updatedAt).toLocaleDateString() : 'N/A'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Status and Urgency */}
+          <div className="bg-gray-50 rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <Activity className="h-5 w-5 mr-2 text-blue-600" />
+              Status & Priority
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-500 mb-2">Current Status</label>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(testRequest.status)}`}>
+                  {testRequest.status.replace(/_/g, ' ')}
+                </span>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500 mb-2">Urgency Level</label>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getUrgencyColor(testRequest.urgency)}`}>
+                  {testRequest.urgency}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Patient Information */}
+          <div className="bg-gray-50 rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <User className="h-5 w-5 mr-2 text-blue-600" />
+              Patient Information
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500">Patient Name</label>
+                    <p className="text-gray-900 font-medium">{testRequest.patientName || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500">Patient ID</label>
+                    <p className="text-gray-900 font-medium">{typeof testRequest.patientId === 'object' ? testRequest.patientId._id || 'N/A' : testRequest.patientId || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500">Patient Phone</label>
+                    <p className="text-gray-900 font-medium flex items-center">
+                      <Phone className="h-4 w-4 mr-2 text-gray-400" />
+                      {testRequest.patientPhone || 'N/A'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500">Patient Address</label>
+                    <p className="text-gray-900 font-medium flex items-start">
+                      <MapPin className="h-4 w-4 mr-2 text-gray-400 mt-0.5" />
+                      {testRequest.patientAddress || 'N/A'}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500">Center</label>
+                    <p className="text-gray-900 font-medium">{testRequest.centerName || 'N/A'}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Doctor Information */}
+          <div className="bg-gray-50 rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <Stethoscope className="h-5 w-5 mr-2 text-blue-600" />
+              Requesting Doctor
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Doctor Name</label>
+                <p className="text-gray-900 font-medium">{testRequest.doctorName || 'N/A'}</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Doctor ID</label>
+                <p className="text-gray-900 font-medium">{typeof testRequest.doctorId === 'object' ? testRequest.doctorId._id || 'N/A' : testRequest.doctorId || 'N/A'}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Test Details */}
+          <div className="bg-gray-50 rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <TestTube className="h-5 w-5 mr-2 text-blue-600" />
+              Test Details
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Test Type</label>
+                <p className="text-gray-900 font-medium">{testRequest.testType || 'N/A'}</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Test Description</label>
+                <p className="text-gray-900">{testRequest.testDescription || 'N/A'}</p>
+              </div>
+              {testRequest.testNotes && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-500">Additional Notes</label>
+                  <p className="text-gray-900">
+                    {typeof testRequest.testNotes === 'object' 
+                      ? JSON.stringify(testRequest.testNotes, null, 2) 
+                      : testRequest.testNotes}
+                  </p>
+                </div>
               )}
             </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 mb-2">Notes</h3>
-              <p className="text-slate-600">
-                {testRequest.notes || 'No notes provided'}
-              </p>
-            </div>
           </div>
-        </div>
 
-        {/* Patient Information */}
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4 flex items-center">
-            <User className="h-5 w-5 mr-2 text-blue-500" />
-            Patient Information
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p><strong>Name:</strong> {testRequest.patientName}</p>
-              <p><strong>Phone:</strong> {testRequest.patientPhone}</p>
-            </div>
-            <div>
-              <p><strong>Address:</strong> {testRequest.patientAddress}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Doctor Information */}
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4 flex items-center">
-            <User className="h-5 w-5 mr-2 text-green-500" />
-            Doctor Information
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p><strong>Name:</strong> {testRequest.doctorName}</p>
-              <p><strong>Center:</strong> {testRequest.centerName} ({testRequest.centerCode})</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Lab Workflow Information */}
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4 flex items-center">
-            <Microscope className="h-5 w-5 mr-2 text-purple-500" />
-            Lab Workflow
-          </h3>
-          
-          {/* Assigned Lab Staff */}
-          {testRequest.assignedLabStaffName && (
-            <div className="mb-4">
-              <h4 className="font-semibold text-slate-700 mb-2">Assigned Lab Staff</h4>
-              <p>{testRequest.assignedLabStaffName}</p>
+          {/* Sample Collection Details */}
+          {(testRequest.sampleCollectorId || testRequest.sampleCollectorName) && (
+            <div className="bg-gray-50 rounded-lg p-6 mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
+                Sample Collection Details
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500">Sample Collector</label>
+                      <p className="text-gray-900 font-medium">{testRequest.sampleCollectorName || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500">Scheduled Date</label>
+                      <p className="text-gray-900 font-medium">
+                        {testRequest.sampleCollectionScheduledDate ? 
+                          new Date(testRequest.sampleCollectionScheduledDate).toLocaleDateString() : 'N/A'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500">Collection Status</label>
+                      <p className="text-gray-900 font-medium">{testRequest.sampleCollectionStatus || 'Not Started'}</p>
+                    </div>
+                    {testRequest.sampleCollectionNotes && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-500">Collection Notes</label>
+                        <p className="text-gray-900">
+                          {typeof testRequest.sampleCollectionNotes === 'object' 
+                            ? JSON.stringify(testRequest.sampleCollectionNotes, null, 2) 
+                            : testRequest.sampleCollectionNotes}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
-          {/* Sample Collection */}
-          {testRequest.sampleCollectorName && (
-            <div className="mb-4">
-              <h4 className="font-semibold text-slate-700 mb-2">Sample Collection</h4>
-              <p><strong>Collector:</strong> {testRequest.sampleCollectorName}</p>
-              {testRequest.sampleCollectionScheduledDate && (
-                <p><strong>Scheduled:</strong> {new Date(testRequest.sampleCollectionScheduledDate).toLocaleString()}</p>
-              )}
-              {testRequest.sampleCollectionActualDate && (
-                <p><strong>Collected:</strong> {new Date(testRequest.sampleCollectionActualDate).toLocaleString()}</p>
-              )}
-              {testRequest.sampleCollectionNotes && (
-                <p><strong>Notes:</strong> {testRequest.sampleCollectionNotes}</p>
-              )}
-            </div>
-          )}
-
-          {/* Lab Testing */}
-          {testRequest.labTechnicianName && (
-            <div className="mb-4">
-              <h4 className="font-semibold text-slate-700 mb-2">Lab Testing</h4>
-              <p><strong>Technician:</strong> {testRequest.labTechnicianName}</p>
-              {testRequest.testingStartDate && (
-                <p><strong>Started:</strong> {new Date(testRequest.testingStartDate).toLocaleString()}</p>
-              )}
-              {testRequest.testingEndDate && (
-                <p><strong>Completed:</strong> {new Date(testRequest.testingEndDate).toLocaleString()}</p>
-              )}
-              {testRequest.testingNotes && (
-                <p><strong>Notes:</strong> {testRequest.testingNotes}</p>
-              )}
+          {/* Lab Testing Details */}
+          {(testRequest.labStaffId || testRequest.labStaffName) && (
+            <div className="bg-gray-50 rounded-lg p-6 mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <TestTube className="h-5 w-5 mr-2 text-blue-600" />
+                Lab Testing Details
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500">Lab Staff</label>
+                      <p className="text-gray-900 font-medium">{testRequest.labStaffName || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500">Testing Started</label>
+                      <p className="text-gray-900 font-medium">
+                        {testRequest.labTestingStartedDate ? 
+                          new Date(testRequest.labTestingStartedDate).toLocaleDateString() : 'Not Started'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500">Testing Completed</label>
+                      <p className="text-gray-900 font-medium">
+                        {testRequest.labTestingCompletedDate ? 
+                          new Date(testRequest.labTestingCompletedDate).toLocaleDateString() : 'Not Completed'}
+                      </p>
+                    </div>
+                    {testRequest.labTestingNotes && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-500">Testing Notes</label>
+                        <p className="text-gray-900">
+                          {typeof testRequest.labTestingNotes === 'object' 
+                            ? JSON.stringify(testRequest.labTestingNotes, null, 2) 
+                            : testRequest.labTestingNotes}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
           {/* Test Results */}
-          {testRequest.testResults && testRequest.testResults !== 'Pending' && (
-            <div className="mb-4">
-              <h4 className="font-semibold text-slate-700 mb-2">Test Results</h4>
-              <p><strong>Result:</strong> {testRequest.testResults}</p>
-              {testRequest.resultDetails && (
-                <p><strong>Details:</strong> {testRequest.resultDetails}</p>
-              )}
+          {testRequest.testResults && (
+            <div className="bg-gray-50 rounded-lg p-6 mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <Eye className="h-5 w-5 mr-2 text-blue-600" />
+                Test Results
+              </h2>
+              <div className="bg-white rounded-lg p-4 border">
+                <p className="text-gray-800 whitespace-pre-wrap">
+                  {typeof testRequest.testResults === 'object' 
+                    ? JSON.stringify(testRequest.testResults, null, 2) 
+                    : testRequest.testResults}
+                </p>
+              </div>
             </div>
           )}
 
           {/* Report Information */}
-          {testRequest.reportGeneratedByName && (
-            <div className="mb-4">
-              <h4 className="font-semibold text-slate-700 mb-2">Report</h4>
-              <p><strong>Generated by:</strong> {testRequest.reportGeneratedByName}</p>
-              {testRequest.reportGeneratedDate && (
-                <p><strong>Generated:</strong> {new Date(testRequest.reportGeneratedDate).toLocaleString()}</p>
-              )}
-              {testRequest.reportNotes && (
-                <p><strong>Notes:</strong> {testRequest.reportNotes}</p>
-              )}
+          {testRequest.reportGeneratedDate && (
+            <div className="bg-gray-50 rounded-lg p-6 mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <FileText className="h-5 w-5 mr-2 text-blue-600" />
+                Report Information
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500">Report Generated</label>
+                      <p className="text-gray-900 font-medium">
+                        {new Date(testRequest.reportGeneratedDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500">Report Sent</label>
+                      <p className="text-gray-900 font-medium">
+                        {testRequest.reportSentDate ? 
+                          new Date(testRequest.reportSentDate).toLocaleDateString() : 'Not Sent'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="space-y-3">
+                    {testRequest.reportFilePath && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-500">Report File</label>
+                        <button className="flex items-center text-blue-600 hover:text-blue-700">
+                          <Download className="h-4 w-4 mr-2" />
+                          Download Report
+                        </button>
+                      </div>
+                    )}
+                    {testRequest.reportNotes && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-500">Report Notes</label>
+                        <p className="text-gray-900">
+                  {typeof testRequest.reportNotes === 'object' 
+                    ? JSON.stringify(testRequest.reportNotes, null, 2) 
+                    : testRequest.reportNotes}
+                </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
-        </div>
 
-        {/* Action Buttons */}
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4">Actions</h3>
-          <div className="flex flex-wrap gap-3">
-            {testRequest.status === 'Pending' && (
+          {/* Action Buttons */}
+          <div className="flex items-center justify-end space-x-4 pt-6 border-t">
+            <button
+              onClick={() => navigate('/lab/test-requests')}
+              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Back to Test Requests
+            </button>
+            
+            {/* Conditional action buttons based on status */}
+            {/* Show Schedule Collection button if no collection has been scheduled yet */}
+            {!testRequest.sampleCollectionScheduledDate && (
               <button
-                onClick={handleUpdateStatus}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                onClick={() => navigate(`/lab/schedule-collection/${id}`)}
+                className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center"
               >
-                Assign to Lab Staff
+                <Calendar className="h-4 w-4 mr-2" />
+                Schedule Collection
               </button>
             )}
             
-            {testRequest.status === 'Assigned' && (
+            {testRequest.status === 'Sample_Collection_Scheduled' && (
               <button
-                onClick={handleScheduleCollection}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                onClick={() => navigate(`/lab/update-status/${id}`)}
+                className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center"
               >
-                Schedule Sample Collection
+                <Play className="h-4 w-4 mr-2" />
+                Start Collection
               </button>
             )}
             
             {testRequest.status === 'Sample_Collected' && (
               <button
-                onClick={handleStartTesting}
-                className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+                onClick={() => navigate(`/lab/start-testing/${id}`)}
+                className="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors flex items-center"
               >
-                Start Lab Testing
+                <TestTube className="h-4 w-4 mr-2" />
+                Start Testing
               </button>
             )}
             
             {testRequest.status === 'In_Lab_Testing' && (
               <button
-                onClick={handleCompleteTesting}
-                className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+                onClick={() => navigate(`/lab/complete-testing/${id}`)}
+                className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors flex items-center"
               >
+                <StopCircle className="h-4 w-4 mr-2" />
                 Complete Testing
               </button>
             )}
             
             {testRequest.status === 'Testing_Completed' && (
               <button
-                onClick={handleGenerateReport}
-                className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700"
+                onClick={() => navigate(`/lab/generate-report/${id}`)}
+                className="px-6 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors flex items-center"
               >
+                <FileText className="h-4 w-4 mr-2" />
                 Generate Report
               </button>
             )}
             
-            {testRequest.reportFile && (
+            {testRequest.status === 'Report_Generated' && (
               <button
-                onClick={handleDownloadReport}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                onClick={() => navigate(`/lab/send-report/${id}`)}
+                className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors flex items-center"
               >
-                <Download className="h-4 w-4 mr-2" />
-                Download Report
+                <Send className="h-4 w-4 mr-2" />
+                Send Report
               </button>
             )}
           </div>
@@ -419,4 +585,6 @@ export default function TestRequestDetails() {
       </div>
     </div>
   );
-} 
+};
+
+export default TestRequestDetails; 

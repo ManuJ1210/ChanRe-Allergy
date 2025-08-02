@@ -44,7 +44,7 @@ export default function PatientList() {
   }, [searchTerm, patients]);
 
   const handleDelete = (id) => {
-    console.log("Deleting patient:", id);
+    
     if (window.confirm('Are you sure you want to delete this patient?')) {
       dispatch(deletePatient(id));
     }

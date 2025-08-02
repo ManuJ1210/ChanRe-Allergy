@@ -132,7 +132,10 @@ const ViewAllergicConjunctivitis = () => {
   const severitySummary = latestRecord.grading ? 
     Object.entries(latestRecord.grading)
       .filter(([_, value]) => value !== '')
-      .map(([criterion, severity]) => ({ criterion, severity })) : [];
+      .map(([criterion, severity]) => ({ 
+        criterion, 
+        severity: typeof severity === 'string' ? severity : String(severity || '') 
+      })) : [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -254,7 +257,10 @@ const ViewAllergicConjunctivitis = () => {
                           severity === 'moderate' ? 'bg-yellow-100 text-yellow-800' :
                           'bg-red-100 text-red-800'
                         }`}>
-                          {severity.charAt(0).toUpperCase() + severity.slice(1)}
+                          {typeof severity === 'string' && severity.length > 0 
+                            ? severity.charAt(0).toUpperCase() + severity.slice(1)
+                            : severity || 'N/A'
+                          }
                         </span>
                       </div>
                     </div>

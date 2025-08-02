@@ -59,55 +59,22 @@ export default function Sidebar(props) {
           {role === 'superadmin' && (
             <>
               <SidebarLink
-                to="/superadmin/dashboard"
+                to="/dashboard/Superadmin/Dashboard"
                 label="Dashboard"
                 icon={<FaHospitalAlt />}
-                isActive={isActive("/superadmin/dashboard")}
+                isActive={isActive("/dashboard/Superadmin/Dashboard")}
               />
               <SidebarGroup
-                label="Center Admin"
+                label="Centers"
                 icon={<FaUserShield />}
                 open={centerOpen === 'center'}
                 toggle={() => setCenterOpen(centerOpen === 'center' ? null : 'center')}
                 links={[
-                  { to: "/superadmin/centers", label: "Manage Center" },
-                  { to: "/superadmin/centers/add", label: "Add Center" },
-                  { to: "/superadmin/manage-admins", label: "Manage Admins" },
+                  { to: "/dashboard/Superadmin/Centers/CentersList", label: "Manage Centers" },
+                  { to: "/dashboard/Superadmin/Centers/AddCenter", label: "Add Center" },
+                  { to: "/dashboard/Superadmin/Centers/ManageAdmins", label: "Manage Admins" },
                 ]}
                 currentPath={location.pathname}
-              />
-              <SidebarGroup
-                label="Follow Up"
-                icon={<FaUserCheck />}
-                open={centerOpen === 'followup'}
-                toggle={() => setCenterOpen(centerOpen === 'followup' ? null : 'followup')}
-                links={[
-                  { to: "/superadmin/follow-up/view", label: "View FollowUp" },
-                  { to: "/superadmin/follow-up/manage", label: "Manage FollowUp" },
-                ]}
-                currentPath={location.pathname}
-              />
-              <SidebarGroup
-                label="Manage Lab Staff"
-                icon={<FaVials />}
-                open={centerOpen === 'lab'}
-                toggle={() => setCenterOpen(centerOpen === 'lab' ? null : 'lab')}
-                links={[
-                  { to: "/superadmin/add-lab-staff", label: "Add Lab Staff" },
-                  { to: "/superadmin/lab-staff", label: "Lab Staff List" },
-                ]}
-                currentPath={location.pathname}
-              />
-            </>
-          )}
-
-          {role === 'centeradmin' && (
-            <>
-              <SidebarLink
-                to="/centeradmin/dashboard"
-                label="Dashboard"
-                icon={<FaHome />}
-                isActive={isActive("/centeradmin/dashboard")}
               />
               <SidebarGroup
                 label="Doctors"
@@ -115,8 +82,8 @@ export default function Sidebar(props) {
                 open={centerOpen === 'doctors'}
                 toggle={() => setCenterOpen(centerOpen === 'doctors' ? null : 'doctors')}
                 links={[
-                  { to: "/CenterAdmin/Docters/AddDocter", label: "Add Doctor" },
-                  { to: "/CenterAdmin/Docters/DocterList", label: "Doctor List" },
+                  { to: "/dashboard/Superadmin/Docters/SuperAdminDoctorList", label: "Manage Doctors" },
+                  { to: "/dashboard/Superadmin/Docters/AddSuperAdminDoctor", label: "Add Doctor" },
                 ]}
                 currentPath={location.pathname}
               />
@@ -126,8 +93,64 @@ export default function Sidebar(props) {
                 open={centerOpen === 'receptionists'}
                 toggle={() => setCenterOpen(centerOpen === 'receptionists' ? null : 'receptionists')}
                 links={[
-                  { to: "/CenterAdmin/Receptionist/AddReceptionist", label: "Add Receptionist" },
-                  { to: "/CenterAdmin/Receptionist/ManageReceptionists", label: "Receptionist List" },
+                  { to: "/dashboard/Superadmin/Receptionists/SuperAdminReceptionistList", label: "Manage Receptionists" },
+                  { to: "/dashboard/Superadmin/Receptionists/AddSuperAdminReceptionist", label: "Add Receptionist" },
+                ]}
+                currentPath={location.pathname}
+              />
+              <SidebarGroup
+                label="Lab Staff"
+                icon={<FaVials />}
+                open={centerOpen === 'lab'}
+                toggle={() => setCenterOpen(centerOpen === 'lab' ? null : 'lab')}
+                links={[
+                  { to: "/dashboard/Superadmin/Lab/LabStaffList", label: "Lab Staff List" },
+                  { to: "/dashboard/Superadmin/Lab/AddLabStaff", label: "Add Lab Staff" },
+                ]}
+                currentPath={location.pathname}
+              />
+              <SidebarGroup
+                label="Follow Ups"
+                icon={<FaUserCheck />}
+                open={centerOpen === 'followup'}
+                toggle={() => setCenterOpen(centerOpen === 'followup' ? null : 'followup')}
+                links={[
+                  { to: "/dashboard/Superadmin/Followups/ViewFollowUpPatients", label: "View FollowUp Patients" },
+                  { to: "/dashboard/Superadmin/Followups/ManageFollowUp", label: "Manage FollowUp" },
+    
+                ]}
+                currentPath={location.pathname}
+              />
+            </>
+          )}
+
+          {role === 'centeradmin' && (
+            <>
+              <SidebarLink
+                to="/dashboard/CenterAdmin/Dashboard"
+                label="Dashboard"
+                icon={<FaHome />}
+                isActive={isActive("/dashboard/CenterAdmin/Dashboard")}
+              />
+              <SidebarGroup
+                label="Doctors"
+                icon={<FaUserMd />}
+                open={centerOpen === 'doctors'}
+                toggle={() => setCenterOpen(centerOpen === 'doctors' ? null : 'doctors')}
+                links={[
+                  { to: "/dashboard/CenterAdmin/Docters/AddDocter", label: "Add Doctor" },
+                  { to: "/dashboard/CenterAdmin/Docters/DocterList", label: "Doctor List" },
+                ]}
+                currentPath={location.pathname}
+              />
+              <SidebarGroup
+                label="Receptionists"
+                icon={<FaUserTie />}
+                open={centerOpen === 'receptionists'}
+                toggle={() => setCenterOpen(centerOpen === 'receptionists' ? null : 'receptionists')}
+                links={[
+                  { to: "/dashboard/CenterAdmin/Receptionist/AddReceptionist", label: "Add Receptionist" },
+                  { to: "/dashboard/CenterAdmin/Receptionist/ManageReceptionists", label: "Receptionist List" },
                 ]}
                 currentPath={location.pathname}
               />
@@ -137,17 +160,17 @@ export default function Sidebar(props) {
                 open={centerOpen === 'patients'}
                 toggle={() => setCenterOpen(centerOpen === 'patients' ? null : 'patients')}
                 links={[
-                  { to: "/CenterAdmin/patients/addpatient", label: "Add patients" },
-                  { to: "/CenterAdmin/patients/PatientList", label: "Patients List" },
-                  { to: "/CenterAdmin/patients/ManagePatients", label: "Manage patients" },
+                  { to: "/dashboard/CenterAdmin/patients/addpatient", label: "Add patients" },
+                  { to: "/dashboard/CenterAdmin/patients/PatientList", label: "Patients List" },
+                  { to: "/dashboard/CenterAdmin/patients/ManagePatients", label: "Manage patients" },
                 ]}
                 currentPath={location.pathname}
               />
               <SidebarLink
-                to="/CenterAdmin/center-profile"
+                to="/dashboard/CenterAdmin/center-profile"
                 label="Center Profile"
                 icon={<FaHospitalAlt />}
-                isActive={isActive("/CenterAdmin/center-profile")}
+                isActive={isActive("/dashboard/CenterAdmin/center-profile")}
               />
             </>
           )}
@@ -155,28 +178,28 @@ export default function Sidebar(props) {
           {role === 'receptionist' && (
             <>
               <SidebarLink
-                to="/receptionist/dashboard"
+                to="/dashboard/receptionist/dashboard"
                 label="Dashboard"
                 icon={<FaHome />}
-                isActive={isActive("/receptionist/dashboard")}
+                isActive={isActive("/dashboard/receptionist/dashboard")}
               />
               <SidebarLink
-                to="/receptionist/add-patient"
+                to="/dashboard/receptionist/add-patient"
                 label="Add Patient"
                 icon={<FaUserMd />}
-                isActive={isActive("/receptionist/add-patient")}
+                isActive={isActive("/dashboard/receptionist/add-patient")}
               />
               <SidebarLink
-                to="/receptionist/patients"
+                to="/dashboard/receptionist/patients"
                 label="Patient List"
                 icon={<FaUsers />}
-                isActive={isActive("/receptionist/patients")}
+                isActive={isActive("/dashboard/receptionist/patients")}
               />
               <SidebarLink
-                to="/receptionist/manage-patients"
+                to="/dashboard/receptionist/manage-patients"
                 label="Manage Patients"
                 icon={<FaUsers />}
-                isActive={isActive("/receptionist/manage-patients")}
+                isActive={isActive("/dashboard/receptionist/manage-patients")}
               />
             </>
           )}
@@ -184,51 +207,51 @@ export default function Sidebar(props) {
           {role === 'doctor' && (
             <>
               <SidebarLink
-                to="/doctor/dashboard"
+                to="/dashboard/doctor/dashboard"
                 label="Dashboard"
                 icon={<FaHome />}
-                isActive={isActive("/doctor/dashboard")}
+                isActive={isActive("/dashboard/doctor/dashboard")}
               />
               <SidebarLink
-                to="/doctor/patients"
+                to="/dashboard/doctor/patients"
                 label="My Patients"
                 icon={<FaUsers />}
-                isActive={isActive("/doctor/patients")}
+                isActive={isActive("/dashboard/doctor/patients")}
               />
               <SidebarLink
-                to="/doctor/test-requests"
+                to="/dashboard/doctor/test-requests"
                 label="Test Requests"
                 icon={<FaVials />}
-                isActive={isActive("/doctor/test-requests")}
+                isActive={isActive("/dashboard/doctor/test-requests")}
               />
             </>
           )}
 
-          {(role === 'Lab Staff' || role === 'Lab Technician' || role === 'Lab Assistant' || role === 'Lab Manager' || role === 'lab staff' || role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') && (
+          {(role === 'Lab Technician' || role === 'Lab Assistant' || role === 'Lab Manager' || role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') && (
             <>
               <SidebarLink
-                to="/lab/dashboard"
+                to="/dashboard/lab/dashboard"
                 label="Dashboard"
                 icon={<FaHome />}
-                isActive={isActive("/lab/dashboard")}
+                isActive={isActive("/dashboard/lab/dashboard")}
               />
               <SidebarLink
-                to="/lab/test-requests"
+                to="/dashboard/lab/test-requests"
                 label="Test Requests"
                 icon={<FaVials />}
-                isActive={isActive("/lab/test-requests")}
+                isActive={isActive("/dashboard/lab/test-requests")}
               />
               <SidebarLink
-                to="/lab/pending-requests"
+                to="/dashboard/lab/pending-requests"
                 label="Pending Requests"
                 icon={<FaClock />}
-                isActive={isActive("/lab/pending-requests")}
+                isActive={isActive("/dashboard/lab/pending-requests")}
               />
               <SidebarLink
-                to="/lab/completed-requests"
+                to="/dashboard/lab/completed-requests"
                 label="Completed Tests"
                 icon={<FaCheckCircle />}
-                isActive={isActive("/lab/completed-requests")}
+                isActive={isActive("/dashboard/lab/completed-requests")}
               />
             </>
           )}

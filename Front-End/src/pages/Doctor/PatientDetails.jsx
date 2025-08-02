@@ -18,9 +18,15 @@ import {
 } from 'lucide-react';
 
 const PatientDetails = () => {
-  const dispatch = useDispatch();
+  const { patientId: rawPatientId } = useParams();
   const navigate = useNavigate();
-  const { patientId } = useParams();
+  const dispatch = useDispatch();
+  
+  // Bulletproof patientId conversion - ensure it's always a string
+  const patientId = typeof rawPatientId === 'object' && rawPatientId !== null
+    ? rawPatientId._id || rawPatientId.id || String(rawPatientId)
+    : String(rawPatientId);
+
   const { 
     patientDetails, 
     patientDetailsLoading, 
@@ -104,7 +110,7 @@ const PatientDetails = () => {
         <div className="text-center">
           <p className="text-red-600 mb-4">{patientDetailsError}</p>
           <button
-            onClick={() => navigate('/doctor/dashboard')}
+            onClick={() => navigate('/dashboard/doctor/dashboard')}
             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
           >
             Back to Dashboard
@@ -126,7 +132,7 @@ const PatientDetails = () => {
         {/* Header */}
         <div className="mb-6">
           <button
-            onClick={() => navigate('/doctor/dashboard')}
+            onClick={() => navigate('/dashboard/doctor/dashboard')}
             className="flex items-center text-blue-600 hover:text-blue-700 mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />

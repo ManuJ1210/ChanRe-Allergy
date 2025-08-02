@@ -20,8 +20,7 @@ export default function LabDashboard() {
   const { user } = useSelector((state) => state.auth);
   
   // Debug logging
-  console.log('Lab Dashboard - User data:', user);
-  console.log('Lab Dashboard - Auth state:', useSelector((state) => state.auth));
+  
 
   const [stats, setStats] = useState({
     totalRequests: 0,
@@ -85,10 +84,7 @@ export default function LabDashboard() {
 
       // Recent requests (last 5)
       setRecentRequests(data.slice(0, 5));
-      
-      console.log('Lab Dashboard - Fetched real data:', data.length, 'requests');
     } catch (error) {
-      console.error('Error fetching lab dashboard data:', error);
       // Set default stats on error
       setStats({
         totalRequests: 0,

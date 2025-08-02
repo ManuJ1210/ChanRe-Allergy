@@ -32,12 +32,9 @@ export default function TestRequests() {
   const [lastRefreshTime, setLastRefreshTime] = useState(null);
 
   useEffect(() => {
-    console.log('TestRequests - User state:', user);
     if (user && (user._id || user.id)) {
-      console.log('TestRequests - Fetching test requests for user:', user._id || user.id);
       fetchTestRequests();
     } else if (user && !user._id && !user.id) {
-      console.log('TestRequests - User exists but no ID, stopping loading');
       setLoading(false);
     }
   }, [user]);
@@ -46,7 +43,6 @@ export default function TestRequests() {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden && user && (user._id || user.id)) {
-        console.log('Tab became visible, refreshing data');
         fetchTestRequests();
       }
     };
@@ -60,7 +56,6 @@ export default function TestRequests() {
     if (!user || (!user._id && !user.id)) return;
 
     const interval = setInterval(() => {
-      console.log('Auto-refreshing test requests');
       fetchTestRequests();
     }, 2 * 60 * 1000); // 2 minutes
 
@@ -74,14 +69,11 @@ export default function TestRequests() {
   const fetchTestRequests = async () => {
     try {
       setLoading(true);
-      console.log('TestRequests - Making API call to /test-requests/lab-staff');
       const response = await API.get('/test-requests/lab-staff');
       const data = response.data;
-      console.log('TestRequests - API response:', data);
       setTestRequests(data);
       setLastRefreshTime(new Date());
     } catch (error) {
-      console.error('Error fetching test requests:', error);
       setTestRequests([]);
     } finally {
       setLoading(false);
@@ -89,7 +81,6 @@ export default function TestRequests() {
   };
 
   const handleRefresh = async () => {
-    console.log('Manual refresh triggered');
     await fetchTestRequests();
   };
 

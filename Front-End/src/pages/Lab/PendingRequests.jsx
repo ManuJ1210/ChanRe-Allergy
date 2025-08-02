@@ -28,9 +28,7 @@ export default function PendingRequests() {
       const data = response.data;
       
       setPendingRequests(data);
-      console.log('Pending Requests fetched successfully:', data);
     } catch (error) {
-      console.error('Error fetching pending requests:', error);
       setPendingRequests([]);
     } finally {
       setLoading(false);
@@ -47,9 +45,7 @@ export default function PendingRequests() {
       
       // Refresh the pending requests list
       fetchPendingRequests();
-      console.log('Request assigned successfully:', response.data);
     } catch (error) {
-      console.error('Error assigning request:', error);
     }
   };
 
@@ -61,9 +57,7 @@ export default function PendingRequests() {
       
       // Refresh the pending requests list
       fetchPendingRequests();
-      console.log('Sample collection started:', response.data);
     } catch (error) {
-      console.error('Error starting collection:', error);
     }
   };
 

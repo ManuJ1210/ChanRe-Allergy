@@ -8,23 +8,29 @@ import {
   getAssignedPatients,
   getPatientDetails,
   addTestRequest,
-  getTestRequests
+  getTestRequests,
+  getDoctorStats
 } from '../controllers/doctorController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, ensureCenterIsolation } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
+// Apply center isolation middleware to all routes
+router.use(protect);
+router.use(ensureCenterIsolation);
+
 // Doctor-specific routes (for doctors to manage their patients) - PUT THESE FIRST
-router.get('/assigned-patients', protect, getAssignedPatients);
-router.get('/test-requests', protect, getTestRequests);
-router.get('/patient/:patientId', protect, getPatientDetails);
-router.post('/patient/:patientId/test-request', protect, addTestRequest);
+router.get('/assigned-patients', getAssignedPatients);
+router.get('/test-requests', getTestRequests);
+router.get('/patient/:patientId', getPatientDetails);
+router.post('/patient/:patientId/test-request', addTestRequest);
 
 // Admin routes (for center admin to manage doctors) - PUT THESE AFTER
-router.post('/', protect, addDoctor);
-router.get('/', protect, getAllDoctors);
-router.get('/:id', protect, getDoctorById);
-router.delete('/:id', protect, deleteDoctor);
-router.put('/:id', protect, updateDoctor);
+router.get('/stats', getDoctorStats);
+router.post('/', addDoctor);
+router.get('/', getAllDoctors);
+router.get('/:id', getDoctorById);
+router.delete('/:id', deleteDoctor);
+router.put('/:id', updateDoctor);
 
 export default router;

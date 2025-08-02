@@ -208,6 +208,7 @@ export const getTestRequestsForCurrentLabStaff = async (req, res) => {
 export const getTestRequestsByPatient = async (req, res) => {
   try {
     const { patientId } = req.params;
+    console.log('Backend getTestRequestsByPatient: received patientId:', patientId, typeof patientId);
     
     const testRequests = await TestRequest.find({ 
       patientId, 
@@ -495,9 +496,11 @@ export const completeLabTesting = async (req, res) => {
     const { id } = req.params;
     const { 
       testResults,
-      resultDetails,
-      resultValues,
-      testingNotes 
+      labTestingNotes,
+      labTestingCompletedDate,
+      testParameters,
+      conclusion,
+      recommendations
     } = req.body;
 
     const testRequest = await TestRequest.findById(id);
@@ -505,15 +508,19 @@ export const completeLabTesting = async (req, res) => {
       return res.status(404).json({ message: 'Test request not found' });
     }
 
+    // Map frontend field names to model field names
     testRequest.testResults = testResults;
-    testRequest.resultDetails = resultDetails;
-    if (resultValues) {
-      testRequest.resultValues = resultValues;
-    }
-    if (testingNotes) {
-      testRequest.testingNotes = testingNotes;
-    }
-    testRequest.testingEndDate = new Date();
+    testRequest.testingNotes = labTestingNotes; // Map to correct field name
+    testRequest.testingEndDate = labTestingCompletedDate || new Date(); // Map to correct field name
+    testRequest.resultValues = testParameters || []; // Map to correct field name
+    testRequest.conclusion = conclusion; // Use the new field
+    testRequest.recommendations = recommendations; // Use the new field
+    testRequest.labTestingCompletedDate = labTestingCompletedDate || new Date(); // Use the new field
+    
+    // Set the lab technician who completed the testing
+    testRequest.labTechnicianId = req.user.id || req.user._id;
+    testRequest.labTechnicianName = req.user.staffName || req.user.name;
+    
     testRequest.status = 'Testing_Completed';
     testRequest.updatedAt = new Date();
 
@@ -541,7 +548,11 @@ export const generateTestReport = async (req, res) => {
     const { id } = req.params;
     const { 
       reportNotes,
-      reportFile 
+      reportSummary,
+      clinicalInterpretation,
+      qualityControl,
+      methodUsed,
+      equipmentUsed
     } = req.body;
 
     const testRequest = await TestRequest.findById(id);
@@ -549,11 +560,22 @@ export const generateTestReport = async (req, res) => {
       return res.status(404).json({ message: 'Test request not found' });
     }
 
+    // Handle file upload if present
+    let reportFilePath = null;
+    if (req.file) {
+      reportFilePath = req.file.path;
+    }
+
     testRequest.reportGeneratedDate = new Date();
     testRequest.reportGeneratedBy = req.user.id || req.user._id;
     testRequest.reportGeneratedByName = req.user.staffName || req.user.name;
-    testRequest.reportFile = reportFile;
+    testRequest.reportFilePath = reportFilePath;
     testRequest.reportNotes = reportNotes;
+    testRequest.reportSummary = reportSummary;
+    testRequest.clinicalInterpretation = clinicalInterpretation;
+    testRequest.qualityControl = qualityControl;
+    testRequest.methodUsed = methodUsed;
+    testRequest.equipmentUsed = equipmentUsed;
     testRequest.status = 'Report_Generated';
     testRequest.updatedAt = new Date();
 
@@ -579,13 +601,31 @@ export const generateTestReport = async (req, res) => {
 export const sendReportToDoctor = async (req, res) => {
   try {
     const { id } = req.params;
+    const {
+      sendMethod,
+      emailSubject,
+      emailMessage,
+      notificationMessage,
+      reportSentDate,
+      sentTo,
+      deliveryConfirmation
+    } = req.body;
 
     const testRequest = await TestRequest.findById(id);
     if (!testRequest) {
       return res.status(404).json({ message: 'Test request not found' });
     }
 
-    testRequest.status = 'Report_Sent';
+    testRequest.reportSentDate = reportSentDate || new Date();
+    testRequest.reportSentBy = req.user.id || req.user._id;
+    testRequest.reportSentByName = req.user.staffName || req.user.name;
+    testRequest.sendMethod = sendMethod;
+    testRequest.emailSubject = emailSubject;
+    testRequest.emailMessage = emailMessage;
+    testRequest.notificationMessage = notificationMessage;
+    testRequest.sentTo = sentTo;
+    testRequest.deliveryConfirmation = deliveryConfirmation;
+    testRequest.status = 'Completed'; // Set to Completed so it appears in completed tests
     testRequest.updatedAt = new Date();
 
     const updatedTestRequest = await testRequest.save();
@@ -714,16 +754,24 @@ export const downloadTestReport = async (req, res) => {
       return res.status(404).json({ message: 'Test request not found' });
     }
 
-    if (!testRequest.reportFile) {
+    // Check for report file path (new field) or report file (old field)
+    const reportFilePath = testRequest.reportFilePath || testRequest.reportFile;
+    
+    if (!reportFilePath) {
       return res.status(404).json({ message: 'Report file not found' });
     }
 
-    // For now, return the file path. In production, you'd serve the actual file
+    // For now, return the file path and metadata. In production, you'd serve the actual file
     res.status(200).json({
       message: 'Report file found',
-      reportFile: testRequest.reportFile,
+      reportFile: reportFilePath,
       reportGeneratedDate: testRequest.reportGeneratedDate,
-      reportGeneratedBy: testRequest.reportGeneratedByName
+      reportGeneratedBy: testRequest.reportGeneratedByName,
+      reportSummary: testRequest.reportSummary,
+      clinicalInterpretation: testRequest.clinicalInterpretation,
+      testResults: testRequest.testResults,
+      conclusion: testRequest.conclusion,
+      recommendations: testRequest.recommendations
     });
   } catch (error) {
     console.error('Error downloading test report:', error);

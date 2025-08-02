@@ -1,5 +1,7 @@
 import User from '../models/User.js';
 import LabStaff from '../models/LabStaff.js';
+import SuperAdminDoctor from '../models/SuperAdminDoctor.js';
+import SuperAdminReceptionist from '../models/SuperAdminReceptionist.js';
 import jwt from 'jsonwebtoken';
 
 // Generate JWT Token
@@ -71,6 +73,18 @@ export const login = async (req, res) => {
       userType = 'labStaff';
     }
 
+    // If not found in LabStaff model, try SuperAdminDoctor model
+    if (!user) {
+      user = await SuperAdminDoctor.findOne({ email });
+      userType = 'superAdminDoctor';
+    }
+
+    // If not found in SuperAdminDoctor model, try SuperAdminReceptionist model
+    if (!user) {
+      user = await SuperAdminReceptionist.findOne({ email });
+      userType = 'superAdminReceptionist';
+    }
+
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -86,7 +100,8 @@ export const login = async (req, res) => {
         phone: user.phone || 'N/A',
         centerId: user.centerId,
       };
-    } else {
+    } else if (userType === 'labStaff') {
+      // Lab staff
       userData = {
         id: user._id,
         staffName: user.staffName,
@@ -96,6 +111,28 @@ export const login = async (req, res) => {
         phone: user.phone,
         labId: user.labId,
         centerId: null, // Lab staff don't belong to centers
+      };
+    } else if (userType === 'superAdminDoctor') {
+      // SuperAdmin Doctor
+      userData = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        phone: user.mobile || 'N/A',
+        centerId: null, // Superadmin doctors don't belong to centers
+        isSuperAdminStaff: true,
+      };
+    } else if (userType === 'superAdminReceptionist') {
+      // SuperAdmin Receptionist
+      userData = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        phone: user.mobile || 'N/A',
+        centerId: null, // Superadmin receptionists don't belong to centers
+        isSuperAdminStaff: true,
       };
     }
 

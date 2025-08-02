@@ -186,6 +186,76 @@ export const fetchGPEList = createAsyncThunk(
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch GPE list');
     }
   }
+);
+
+// Fetch GPE
+export const fetchGPE = createAsyncThunk(
+  'superadmin/fetchGPE',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/gpe?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      console.error('GPE fetch error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch GPE');
+    }
+  }
+);
+
+// Fetch Allergic Rhinitis
+export const fetchAllergicRhinitis = createAsyncThunk(
+  'superadmin/fetchAllergicRhinitis',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/allergic-rhinitis?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      console.error('Allergic rhinitis fetch error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch allergic rhinitis');
+    }
+  }
+);
+
+// Fetch Allergic Conjunctivitis
+export const fetchAllergicConjunctivitis = createAsyncThunk(
+  'superadmin/fetchAllergicConjunctivitis',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/allergic-conjunctivitis?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      console.error('Allergic conjunctivitis fetch error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch allergic conjunctivitis');
+    }
+  }
+);
+
+// Fetch Atopic Dermatitis
+export const fetchAtopicDermatitis = createAsyncThunk(
+  'superadmin/fetchAtopicDermatitis',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/atopic-dermatitis?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      console.error('Atopic dermatitis fetch error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch atopic dermatitis');
+    }
+  }
+);
+
+// Fetch Allergic Bronchitis
+export const fetchAllergicBronchitis = createAsyncThunk(
+  'superadmin/fetchAllergicBronchitis',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/allergic-bronchitis?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      console.error('Allergic bronchitis fetch error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch allergic bronchitis');
+    }
+  }
 ); 
 
 // Fetch center admin

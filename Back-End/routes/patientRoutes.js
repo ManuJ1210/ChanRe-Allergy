@@ -10,22 +10,25 @@ import {
   getPatientsByReceptionist,
   getPatientsByDoctor
 } from '../controllers/patientController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, ensureCenterIsolation } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
+// Apply center isolation middleware to all routes
+router.use(protect);
+router.use(ensureCenterIsolation);
+
 // Patient Routes
-router.post('/', protect, addPatient);
-router.get('/', protect, getPatients);
-router.get('/receptionist/mine', protect, getPatientsByReceptionist);
-router.get('/doctor/:doctorId', protect, getPatientsByDoctor);
-router.get('/:id', protect, getPatientById);
-router.put('/:id', protect, updatePatient);
-router.delete('/:id', protect, deletePatient);
+router.post('/', addPatient);
+router.get('/', getPatients);
+router.get('/receptionist/mine', getPatientsByReceptionist);
+router.get('/doctor/:doctorId', getPatientsByDoctor);
+router.get('/:id', getPatientById);
+router.put('/:id', updatePatient);
+router.delete('/:id', deletePatient);
 
 // Test Routes for Patient
-router.post('/:id/tests', protect, addTestToPatient);
-
-router.get('/:id/show-tests', protect, getPatientAndTests);
+router.post('/:id/tests', addTestToPatient);
+router.get('/:id/show-tests', getPatientAndTests);
 
 export default router;

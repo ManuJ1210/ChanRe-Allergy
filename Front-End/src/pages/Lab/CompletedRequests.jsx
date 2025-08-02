@@ -30,9 +30,7 @@ export default function CompletedRequests() {
       const data = response.data;
       
       setCompletedRequests(data);
-      console.log('Completed Requests fetched successfully:', data);
     } catch (error) {
-      console.error('Error fetching completed requests:', error);
       setCompletedRequests([]);
     } finally {
       setLoading(false);
@@ -60,9 +58,8 @@ export default function CompletedRequests() {
       link.remove();
       window.URL.revokeObjectURL(url);
       
-      console.log('Report downloaded successfully');
+
     } catch (error) {
-      console.error('Error downloading report:', error);
     }
   };
 

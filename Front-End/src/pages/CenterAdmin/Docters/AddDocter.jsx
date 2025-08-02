@@ -1,42 +1,72 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createDoctor } from '../../../features/centerAdmin/centerAdminThunks';
-import { resetCenterAdminState } from '../../../features/centerAdmin/centerAdminSlice';
-import { Eye, EyeOff, UserCheck, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, UserCheck, ArrowLeft, Save } from 'lucide-react';
+import { addCenterAdminDoctor, clearError, clearSuccess } from '../../../redux/slices/centerAdminDoctorSlice';
 
 const AddDocter = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { loading, error, addSuccess } = useSelector((state) => state.centerAdmin);
+  const { loading, error, success, message } = useSelector((state) => state.centerAdminDoctors);
   
   // Try Redux first, then fallback to localStorage
   const centerId = user?.centerId || JSON.parse(localStorage.getItem('user'))?.centerId;
 
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
+    mobile: '',
     email: '',
     username: '',
     password: '',
-    specialization: '',
-    userType: 'doctor',
+    qualification: '',
+    designation: '',
+    kmcNumber: '',
+    hospitalName: '',
+    specializations: [],
+    experience: '',
+    bio: '',
+    role: 'doctor',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [newSpecialization, setNewSpecialization] = useState('');
 
   useEffect(() => {
-    if (addSuccess) {
+    if (success) {
       setTimeout(() => {
-        dispatch(resetCenterAdminState());
-        navigate('/CenterAdmin/Docters/DocterList');
+        dispatch(clearSuccess());
+        navigate('/dashboard/CenterAdmin/Docters/DocterList');
       }, 1500);
     }
-  }, [addSuccess, dispatch, navigate]);
+  }, [success, dispatch, navigate]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+      dispatch(clearSuccess());
+    };
+  }, [dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddSpecialization = () => {
+    if (newSpecialization.trim() && !formData.specializations.includes(newSpecialization.trim())) {
+      setFormData(prev => ({
+        ...prev,
+        specializations: [...prev.specializations, newSpecialization.trim()]
+      }));
+      setNewSpecialization('');
+    }
+  };
+
+  const handleRemoveSpecialization = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      specializations: prev.specializations.filter((_, i) => i !== index)
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -45,7 +75,17 @@ const AddDocter = () => {
       alert('No center ID found. Please log in again as a center admin.');
       return;
     }
-    dispatch(createDoctor({ ...formData, centerId }));
+    
+    dispatch(clearError());
+    dispatch(clearSuccess());
+    
+    const submitData = {
+      ...formData,
+      centerId,
+      status: 'active'
+    };
+    
+    dispatch(addCenterAdminDoctor(submitData));
   };
 
   return (
@@ -54,7 +94,7 @@ const AddDocter = () => {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => navigate('/CenterAdmin/Docters/DocterList')}
+            onClick={() => navigate('/dashboard/CenterAdmin/Docters/DocterList')}
             className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -69,10 +109,10 @@ const AddDocter = () => {
         </div>
 
         {/* Alert Messages */}
-        {addSuccess && (
+        {success && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700">Doctor added successfully!</span>
+            <span className="text-green-700">{message}</span>
           </div>
         )}
         {error && (
@@ -113,16 +153,16 @@ const AddDocter = () => {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Phone Number *
+                  Mobile Number *
                 </label>
                 <input
                   type="tel"
-                  name="phone"
-                  value={formData.phone}
+                  name="mobile"
+                  value={formData.mobile}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter phone number"
+                  placeholder="Enter mobile number"
                 />
               </div>
 
@@ -158,16 +198,15 @@ const AddDocter = () => {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Specialization *
+                  Qualification
                 </label>
                 <input
                   type="text"
-                  name="specialization"
-                  value={formData.specialization}
+                  name="qualification"
+                  value={formData.qualification}
                   onChange={handleChange}
-                  required
                   className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter specialization"
+                  placeholder="Enter qualification"
                 />
               </div>
 
@@ -194,21 +233,127 @@ const AddDocter = () => {
                   </button>
                 </div>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Designation
+                </label>
+                <input
+                  type="text"
+                  name="designation"
+                  value={formData.designation}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter designation"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  KMC Number
+                </label>
+                <input
+                  type="text"
+                  name="kmcNumber"
+                  value={formData.kmcNumber}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter KMC number"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Hospital Name
+                </label>
+                <input
+                  type="text"
+                  name="hospitalName"
+                  value={formData.hospitalName}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter hospital name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Experience
+                </label>
+                <input
+                  type="text"
+                  name="experience"
+                  value={formData.experience}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter experience (e.g., 5 years)"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Specializations
+                </label>
+                <div className="space-y-4">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newSpecialization}
+                      onChange={(e) => setNewSpecialization(e.target.value)}
+                      className="flex-1 px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      placeholder="Add specialization"
+                      onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddSpecialization())}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddSpecialization}
+                      className="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    >
+                      Add
+                    </button>
+                  </div>
+                  {formData.specializations.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {formData.specializations.map((spec, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                        >
+                          {spec}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSpecialization(index)}
+                            className="text-blue-600 hover:text-blue-800"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Bio
+                </label>
+                <textarea
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleChange}
+                  rows="3"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter doctor bio"
+                />
+              </div>
             </div>
 
             <div className="flex gap-4 pt-6">
               <button
-                type="button"
-                onClick={() => navigate('/CenterAdmin/Docters/DocterList')}
-                className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Cancel
-              </button>
-              <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                className="flex-1 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -221,6 +366,13 @@ const AddDocter = () => {
                     Add Doctor
                   </>
                 )}
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/dashboard/CenterAdmin/Docters/DocterList')}
+                className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
+              >
+                Cancel
               </button>
             </div>
           </form>
