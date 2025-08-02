@@ -43,6 +43,7 @@ export default function PatientList() {
       patient.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       patient.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       patient.contact?.includes(searchTerm) ||
+      patient.phone?.includes(searchTerm) ||
       patient.address?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredPatients(filtered);
@@ -129,7 +130,7 @@ export default function PatientList() {
                   />
                 </div>
                 <button
-                  onClick={() => navigate('/receptionist/add-patient')}
+                  onClick={() => navigate('/dashboard/receptionist/add-patient')}
                   className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
                 >
                   <Plus className="h-4 w-4" />
@@ -216,7 +217,7 @@ export default function PatientList() {
                         </p>
                         {!searchTerm && (
                           <button
-                            onClick={() => navigate('/receptionist/add-patient')}
+                            onClick={() => navigate('/dashboard/receptionist/add-patient')}
                             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto"
                           >
                             <Plus className="h-4 w-4" />
@@ -251,7 +252,7 @@ export default function PatientList() {
                             </div>
                             <div className="flex items-center text-sm text-slate-500">
                               <Phone className="h-3 w-3 mr-2 text-slate-400" />
-                              {patient.contact || 'No phone'}
+                              {patient.phone || patient.contact || 'No phone'}
                             </div>
                           </div>
                         </td>
@@ -270,14 +271,14 @@ export default function PatientList() {
                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                           <div className="flex items-center justify-center gap-2">
                             <button
-                              onClick={() => navigate(`/receptionist/profile/${patient._id}`)}
+                              onClick={() => navigate(`/dashboard/receptionist/profile/${patient._id}`)}
                               className="text-blue-600 hover:text-blue-900 p-1 rounded transition-colors"
                               title="View patient"
                             >
                               <Eye className="h-4 w-4" />
                             </button>
                             <button
-                              onClick={() => navigate(`/receptionist/edit-patient/${patient._id}`)}
+                              onClick={() => navigate(`/dashboard/receptionist/edit-patient/${patient._id}`)}
                               className="text-green-600 hover:text-green-900 p-1 rounded transition-colors"
                               title="Edit patient"
                             >

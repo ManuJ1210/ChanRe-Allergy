@@ -35,7 +35,7 @@ const AddDocter = () => {
     if (success) {
       setTimeout(() => {
         dispatch(clearSuccess());
-        navigate('/dashboard/CenterAdmin/Docters/DocterList');
+        navigate('/dashboard/centeradmin/doctors/doctorlist');
       }, 1500);
     }
   }, [success, dispatch, navigate]);
@@ -94,7 +94,7 @@ const AddDocter = () => {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => navigate('/dashboard/CenterAdmin/Docters/DocterList')}
+                            onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
             className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -369,7 +369,7 @@ const AddDocter = () => {
               </button>
               <button
                 type="button"
-                onClick={() => navigate('/dashboard/CenterAdmin/Docters/DocterList')}
+                onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
                 className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
               >
                 Cancel

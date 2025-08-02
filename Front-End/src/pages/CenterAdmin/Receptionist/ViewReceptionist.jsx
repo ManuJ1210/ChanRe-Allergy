@@ -35,7 +35,7 @@ const ViewReceptionist = () => {
           <div className="text-red-600 text-xl mb-4">Error</div>
           <p className="text-gray-600">{error}</p>
           <button
-            onClick={() => navigate('/dashboard/CenterAdmin/Receptionist/ManageReceptionists')}
+            onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             Back to List
@@ -51,7 +51,7 @@ const ViewReceptionist = () => {
         <div className="text-center">
           <div className="text-gray-600 text-xl mb-4">Receptionist not found</div>
           <button
-            onClick={() => navigate('/dashboard/CenterAdmin/Receptionist/ManageReceptionists')}
+            onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             Back to List
@@ -69,7 +69,7 @@ const ViewReceptionist = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => navigate('/dashboard/CenterAdmin/Receptionist/ManageReceptionists')}
+                onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
                 className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <ArrowLeft className="h-5 w-5" />
@@ -81,7 +81,7 @@ const ViewReceptionist = () => {
             </div>
             <div className="flex space-x-3">
               <button
-                onClick={() => navigate(`/dashboard/CenterAdmin/Receptionist/EditReceptionist/${currentReceptionist._id}`)}
+                onClick={() => navigate(`/dashboard/centeradmin/receptionist/editreceptionist/${currentReceptionist._id}`)}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Edit Receptionist

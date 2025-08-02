@@ -38,7 +38,7 @@ const AddGPE = () => {
   useEffect(() => {
     if (addGPESuccess) {
       dispatch(resetReceptionistState());
-      navigate(`/Receptionist/profile/${patientId}`);
+      navigate(`/dashboard/receptionist/profile/${patientId}`);
     }
   }, [addGPESuccess, dispatch, navigate, patientId]);
 

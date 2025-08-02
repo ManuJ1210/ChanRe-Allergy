@@ -18,6 +18,7 @@ export default function EditPatient() {
     gender: "",
     address: "",
     contact: "",
+    phone: "",
     email: "",
     centerCode: "",
     assignedDoctor: "",
@@ -40,7 +41,8 @@ export default function EditPatient() {
         age: singlePatient.age || "",
         gender: singlePatient.gender || "",
         address: singlePatient.address || "",
-        contact: singlePatient.contact || "",
+        contact: singlePatient.phone || singlePatient.contact || "",
+        phone: singlePatient.phone || singlePatient.contact || "",
         email: singlePatient.email || "",
         centerCode: singlePatient.centerCode || "",
         assignedDoctor: singlePatient.assignedDoctor || "",
@@ -52,7 +54,7 @@ export default function EditPatient() {
     if (updateSuccess) {
       setTimeout(() => {
         dispatch(resetReceptionistState());
-        navigate("/receptionist/patients");
+        navigate("/dashboard/receptionist/patients");
       }, 1500);
     }
   }, [updateSuccess, dispatch, navigate]);
@@ -80,7 +82,13 @@ export default function EditPatient() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(updateReceptionistPatient({ id, patientData: formData }));
+    // Ensure phone data is properly included
+    const submitData = {
+      ...formData,
+      contact: formData.phone || formData.contact,
+      phone: formData.phone || formData.contact
+    };
+    dispatch(updateReceptionistPatient({ id, patientData: submitData }));
   };
 
   if (patientLoading) {
@@ -119,7 +127,7 @@ export default function EditPatient() {
           {/* Header */}
           <div className="mb-8">
             <button
-              onClick={() => navigate('/receptionist/patients')}
+                              onClick={() => navigate('/dashboard/receptionist/patients')}
               className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -215,8 +223,8 @@ export default function EditPatient() {
                   </label>
                   <input
                     type="tel"
-                    name="contact"
-                    value={formData.contact}
+                    name="phone"
+                    value={formData.phone || formData.contact}
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
@@ -300,7 +308,7 @@ export default function EditPatient() {
               <div className="flex gap-4 pt-6">
                 <button
                   type="button"
-                  onClick={() => navigate('/receptionist/patients')}
+                  onClick={() => navigate('/dashboard/receptionist/patients')}
                   className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
                 >
                   <ArrowLeft className="h-4 w-4" />

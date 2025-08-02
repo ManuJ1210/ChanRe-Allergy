@@ -191,11 +191,11 @@ export default function TestRequests() {
   };
 
   const handleViewDetails = (requestId) => {
-    navigate(`/lab/test-request/${requestId}`);
+            navigate(`/dashboard/lab/test-request/${requestId}`);
   };
 
   const handleUpdateStatus = (requestId) => {
-    navigate(`/lab/update-status/${requestId}`);
+            navigate(`/dashboard/lab/update-status/${requestId}`);
   };
 
   if (!user || (!user._id && !user.id)) {

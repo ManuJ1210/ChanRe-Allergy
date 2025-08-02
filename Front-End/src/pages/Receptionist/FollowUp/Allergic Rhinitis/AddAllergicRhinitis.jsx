@@ -54,7 +54,7 @@ const AddAllergicRhinitis = () => {
   useEffect(() => {
     if (addAllergicRhinitisSuccess) {
       dispatch(resetReceptionistState());
-      navigate(`/receptionist/profile/${patientId}`);
+      navigate(`/dashboard/receptionist/profile/${patientId}`);
     }
   }, [addAllergicRhinitisSuccess, dispatch, navigate, patientId]);
 
@@ -470,7 +470,7 @@ const AddAllergicRhinitis = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .slider::-webkit-slider-thumb {
           appearance: none;
           height: 20px;

@@ -261,7 +261,7 @@ export default function ManagePatients() {
 
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => navigate('/receptionist/add-patient')}
+                    onClick={() => navigate('/dashboard/receptionist/add-patient')}
                     className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
                   >
                     <Plus className="h-4 w-4" />
@@ -319,7 +319,7 @@ export default function ManagePatients() {
                         </p>
                         {!searchTerm && (
                           <button
-                            onClick={() => navigate('/receptionist/add-patient')}
+                            onClick={() => navigate('/dashboard/receptionist/add-patient')}
                             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto"
                           >
                             <Plus className="h-4 w-4" />
@@ -387,14 +387,14 @@ export default function ManagePatients() {
                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                           <div className="flex items-center justify-center gap-2">
                             <button
-                              onClick={() => navigate(`/receptionist/add-history/${patient._id}`)}
+                              onClick={() => navigate(`/dashboard/receptionist/add-history/${patient._id}`)}
                               className="text-purple-600 hover:text-purple-900 p-1 rounded transition-colors"
                               title="Add History"
                             >
                               <FileText className="h-4 w-4" />
                             </button>
                             <button
-                              onClick={() => navigate(`/receptionist/add-medications/${patient._id}`)}
+                              onClick={() => navigate(`/dashboard/receptionist/add-medications/${patient._id}`)}
                               className="text-blue-600 hover:text-blue-900 p-1 rounded transition-colors"
                               title="Add Medications"
                             >

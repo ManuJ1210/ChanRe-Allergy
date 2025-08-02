@@ -144,6 +144,38 @@ const DoctorDashboard = () => {
           </div>
         </div>
 
+        {/* Quick Actions */}
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-6">
+          <div className="p-6">
+            <h3 className="text-lg font-semibold text-slate-800 mb-4">Quick Actions</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <button
+                onClick={() => navigate('/dashboard/doctor/new-test-request')}
+                className="flex items-center justify-center p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
+              >
+                <FileText className="h-6 w-6 text-blue-600 mr-3" />
+                <span className="font-medium text-blue-800">New Test Request</span>
+              </button>
+              
+              <button
+                onClick={() => navigate('/dashboard/doctor/test-requests')}
+                className="flex items-center justify-center p-4 bg-yellow-50 border border-yellow-200 rounded-lg hover:bg-yellow-100 transition-colors"
+              >
+                <Clock className="h-6 w-6 text-yellow-600 mr-3" />
+                <span className="font-medium text-yellow-800">View Test Requests</span>
+              </button>
+              
+              <button
+                onClick={() => navigate('/dashboard/doctor/completed-reports')}
+                className="flex items-center justify-center p-4 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors"
+              >
+                <CheckCircle className="h-6 w-6 text-green-600 mr-3" />
+                <span className="font-medium text-green-800">Completed Reports</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Tabs */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-6">
           <div className="border-b border-blue-100">
@@ -201,7 +233,7 @@ const DoctorDashboard = () => {
                           const id = typeof patient._id === 'object' && patient._id !== null
                             ? patient._id._id || patient._id.id || String(patient._id)
                             : String(patient._id);
-                          navigate(`/doctor/patient/${id}`);
+                          navigate(`/dashboard/doctor/patient/${id}`);
                         }}
                       >
                         <div className="flex items-center justify-between mb-2">
@@ -272,7 +304,7 @@ const DoctorDashboard = () => {
                               const id = typeof test.patientId === 'object' && test.patientId !== null
                                 ? test.patientId._id || test.patientId.id || String(test.patientId)
                                 : String(test.patientId);
-                              navigate(`/doctor/patient/${id}`);
+                              navigate(`/dashboard/doctor/patient/${id}`);
                             }}
                             className="text-blue-500 hover:text-blue-600 text-sm font-medium"
                           >

@@ -24,7 +24,7 @@ export default function AddTest() {
     if (addTestSuccess) {
       setTimeout(() => {
         dispatch(resetReceptionistState());
-        navigate(`/receptionist/profile/${patientId}`);
+        navigate(`/dashboard/receptionist/profile/${patientId}`);
       }, 1500);
     }
   }, [addTestSuccess, dispatch, navigate, patientId]);
@@ -46,7 +46,7 @@ export default function AddTest() {
           {/* Header */}
           <div className="mb-8">
             <button
-              onClick={() => navigate(`/receptionist/profile/${patientId}`)}
+                              onClick={() => navigate(`/dashboard/receptionist/profile/${patientId}`)}
               className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -149,7 +149,7 @@ export default function AddTest() {
               <div className="flex gap-4 pt-6">
                 <button
                   type="button"
-                  onClick={() => navigate(`/receptionist/profile/${patientId}`)}
+                  onClick={() => navigate(`/dashboard/receptionist/profile/${patientId}`)}
                   className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
                 >
                   <ArrowLeft className="h-4 w-4" />

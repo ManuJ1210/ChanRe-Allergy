@@ -258,7 +258,7 @@ export default function LabDashboard() {
                 Recent Test Requests
               </h2>
               <button
-                onClick={() => navigate('/lab/test-requests')}
+                onClick={() => navigate('/dashboard/lab/test-requests')}
                 className="text-blue-500 hover:text-blue-600 font-medium text-sm"
               >
                 View All
@@ -279,7 +279,7 @@ export default function LabDashboard() {
                   <div
                     key={request._id}
                     className="border border-slate-200 rounded-lg p-4 hover:bg-slate-50 transition-colors cursor-pointer"
-                    onClick={() => navigate(`/lab/test-request/${request._id}`)}
+                    onClick={() => navigate(`/dashboard/lab/test-request/${request._id}`)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
@@ -325,7 +325,7 @@ export default function LabDashboard() {
           <h3 className="text-lg font-semibold text-slate-800 mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <button
-              onClick={() => navigate('/lab/test-requests')}
+              onClick={() => navigate('/dashboard/lab/test-requests')}
               className="flex items-center gap-3 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
             >
               <FileText className="h-5 w-5 text-blue-500" />
@@ -336,7 +336,7 @@ export default function LabDashboard() {
             </button>
             
             <button
-              onClick={() => navigate('/lab/pending-requests')}
+              onClick={() => navigate('/dashboard/lab/pending-requests')}
               className="flex items-center gap-3 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
             >
               <Clock className="h-5 w-5 text-yellow-500" />
@@ -347,7 +347,7 @@ export default function LabDashboard() {
             </button>
             
             <button
-              onClick={() => navigate('/lab/completed-requests')}
+              onClick={() => navigate('/dashboard/lab/completed-requests')}
               className="flex items-center gap-3 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
             >
               <CheckCircle className="h-5 w-5 text-green-500" />

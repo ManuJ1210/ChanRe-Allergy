@@ -30,7 +30,7 @@ const AddReceptionist = () => {
     if (success) {
       setTimeout(() => {
         dispatch(clearSuccess());
-        navigate('/dashboard/CenterAdmin/Receptionist/ManageReceptionists');
+        navigate('/dashboard/centeradmin/receptionist/managereceptionists');
       }, 1500);
     }
   }, [success, dispatch, navigate]);
@@ -72,7 +72,7 @@ const AddReceptionist = () => {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => navigate('/dashboard/CenterAdmin/Receptionist/ManageReceptionists')}
+                            onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
             className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -255,7 +255,7 @@ const AddReceptionist = () => {
             <div className="flex gap-4 pt-6">
               <button
                 type="button"
-                onClick={() => navigate('/dashboard/CenterAdmin/Receptionist/ManageReceptionists')}
+                onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
                 className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
               >
                 <ArrowLeft className="h-4 w-4" />

@@ -104,7 +104,7 @@ const NewTestRequest = () => {
       
       // Navigate to test requests page after a short delay
       setTimeout(() => {
-        navigate('/doctor/test-requests');
+        navigate('/dashboard/doctor/test-requests');
       }, 1500);
       
     } catch (error) {
@@ -144,7 +144,7 @@ const NewTestRequest = () => {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => navigate('/doctor/test-requests')}
+            onClick={() => navigate('/dashboard/doctor/test-requests')}
             className="flex items-center text-blue-600 hover:text-blue-700 mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -311,7 +311,7 @@ const NewTestRequest = () => {
             <div className="flex justify-end space-x-4">
               <button
                 type="button"
-                onClick={() => navigate('/doctor/test-requests')}
+                onClick={() => navigate('/dashboard/doctor/test-requests')}
                 className="px-6 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50"
               >
                 Cancel

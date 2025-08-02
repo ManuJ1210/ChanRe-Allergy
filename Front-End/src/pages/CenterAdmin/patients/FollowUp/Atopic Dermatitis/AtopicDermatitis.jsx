@@ -58,7 +58,7 @@ export default function AtopicDermatitisFollowUp() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert("Submitted successfully!");
-      navigate(`/Receptionist/profile/${params.patientId}`);
+              navigate(`/dashboard/receptionist/profile/${params.patientId}`);
     } catch (err) {
       alert("Failed to submit. Please try again.");
     }
@@ -258,7 +258,7 @@ export default function AtopicDermatitisFollowUp() {
         </form>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .slider::-webkit-slider-thumb {
           appearance: none;
           height: 20px;

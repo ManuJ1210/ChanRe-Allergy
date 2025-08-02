@@ -606,7 +606,7 @@ const PatientDetails = () => {
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold text-slate-800">Test Requests</h3>
                   <button
-                    onClick={() => navigate('/doctor/new-test-request')}
+                    onClick={() => navigate('/dashboard/doctor/new-test-request')}
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center"
                   >
                     <Plus className="h-4 w-4 mr-2" />
@@ -694,7 +694,7 @@ const PatientDetails = () => {
                     <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
                     <p className="text-slate-500">No test requests found</p>
                     <button
-                      onClick={() => navigate('/doctor/new-test-request')}
+                      onClick={() => navigate('/dashboard/doctor/new-test-request')}
                       className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                     >
                       Create First Test Request

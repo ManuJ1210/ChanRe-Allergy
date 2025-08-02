@@ -53,7 +53,7 @@ const AddAllergicBronchitis = () => {
   useEffect(() => {
     if (addAllergicBronchitisSuccess) {
       dispatch(resetReceptionistState());
-      navigate(`/Receptionist/profile/${patientId}`);
+      navigate(`/dashboard/receptionist/profile/${patientId}`);
     }
   }, [addAllergicBronchitisSuccess, dispatch, navigate, patientId]);
 

@@ -135,7 +135,7 @@ const StartTesting = () => {
       
       setSuccess(true);
       setTimeout(() => {
-        navigate(`/lab/test-request/${id}`);
+        navigate(`/dashboard/lab/test-request/${id}`);
       }, 2000);
       
     } catch (error) {
@@ -216,7 +216,7 @@ const StartTesting = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
-                onClick={() => navigate('/lab/test-requests')}
+                onClick={() => navigate('/dashboard/lab/test-requests')}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Back to Test Requests
@@ -238,7 +238,7 @@ const StartTesting = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-2">No Test Request Found</h2>
               <p className="text-gray-600 mb-4">The requested test request could not be found.</p>
               <button
-                onClick={() => navigate('/lab/test-requests')}
+                onClick={() => navigate('/dashboard/lab/test-requests')}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Back to Test Requests
@@ -258,7 +258,7 @@ const StartTesting = () => {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => navigate(`/lab/test-request/${id}`)}
+                onClick={() => navigate(`/dashboard/lab/test-request/${id}`)}
                 className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
               >
                 <ArrowLeft size={20} />
@@ -435,7 +435,7 @@ const StartTesting = () => {
               <div className="flex justify-end gap-3">
                 <button
                   type="button"
-                  onClick={() => navigate(`/lab/test-request/${id}`)}
+                  onClick={() => navigate(`/dashboard/lab/test-request/${id}`)}
                   className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                 >
                   Cancel

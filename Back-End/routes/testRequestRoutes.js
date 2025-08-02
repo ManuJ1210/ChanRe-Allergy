@@ -7,6 +7,7 @@ import {
   getCompletedTestRequests,
   getTestRequestsByDoctor,
   getTestRequestsForCurrentDoctor,
+  getCompletedTestRequestsForCurrentDoctor,
   getTestRequestsByCenter,
   getTestRequestsByLabStaff,
   getTestRequestsForCurrentLabStaff,
@@ -42,6 +43,9 @@ router.get('/stats', protect, getTestRequestStats);
 
 // Get test requests for current doctor (authenticated)
 router.get('/doctor', protect, getTestRequestsForCurrentDoctor);
+
+// Get completed test requests for current doctor (authenticated)
+router.get('/doctor/completed', protect, getCompletedTestRequestsForCurrentDoctor);
 
 // Get test requests for current lab staff (authenticated)
 router.get('/lab-staff', protect, getTestRequestsForCurrentLabStaff);

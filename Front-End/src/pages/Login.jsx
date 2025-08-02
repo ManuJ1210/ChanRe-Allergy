@@ -21,8 +21,8 @@ export default function Login() {
         localStorage.setItem('centerId', user.centerId);
       }
       const role = user.role.toLowerCase();
-      if (role === 'superadmin') navigate('/dashboard/Superadmin/Dashboard');
-      else if (role === 'centeradmin') navigate('/dashboard/CenterAdmin/Dashboard');
+      if (role === 'superadmin') navigate('/dashboard/superadmin/dashboard');
+      else if (role === 'centeradmin') navigate('/dashboard/centeradmin/dashboard');
       else if (role === 'doctor') navigate('/dashboard/doctor/dashboard');
       else if (role === 'receptionist') navigate('/dashboard/receptionist/dashboard');
       else if (role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') navigate('/dashboard/lab/dashboard');

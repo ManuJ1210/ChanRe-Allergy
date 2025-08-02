@@ -206,6 +206,7 @@ export const getCenterStats = async (req, res) => {
 
     res.json({
       name: center.name,
+      code: center.code,
       address: center.address,
       email: center.email,
       phone: center.phone,

@@ -78,7 +78,7 @@ const ViewAllergicRhinitis = () => {
               <h3 className="text-lg font-semibold text-gray-800 mb-2">No Allergic Rhinitis Record Found</h3>
               <p className="text-gray-600 mb-4">This patient doesn't have any allergic rhinitis records yet.</p>
               <button
-                onClick={() => navigate(`/receptionist/followup/allergic-rhinitis/add/${patientId}`)}
+                onClick={() => navigate(`/dashboard/receptionist/followup/allergic-rhinitis/add/${patientId}`)}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors mr-2"
               >
                 Add Record
@@ -116,7 +116,7 @@ const ViewAllergicRhinitis = () => {
             </div>
             <div className="flex items-center space-x-3">
               <button
-                onClick={() => navigate(`/receptionist/followup/allergic-rhinitis/add/${patientId}`)}
+                onClick={() => navigate(`/dashboard/receptionist/followup/allergic-rhinitis/add/${patientId}`)}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Add New Record
@@ -315,7 +315,7 @@ const ViewAllergicRhinitis = () => {
               Back to Follow-ups
             </button>
             <button
-              onClick={() => navigate(`/receptionist/followup/allergic-rhinitis/add/${patientId}`)}
+              onClick={() => navigate(`/dashboard/receptionist/followup/allergic-rhinitis/add/${patientId}`)}
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               Add New Record

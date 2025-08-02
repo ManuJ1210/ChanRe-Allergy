@@ -138,7 +138,7 @@ const CenterProfile = () => {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => navigate('/dashboard/CenterAdmin/Dashboard')}
+            onClick={() => navigate('/dashboard/centeradmin/dashboard')}
             className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -266,7 +266,7 @@ const CenterProfile = () => {
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <button
-                onClick={() => navigate('/dashboard/CenterAdmin/Doctors/DocterList')}
+                onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
                 className="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg transition-colors flex flex-col items-center gap-3"
               >
                 <User className="h-6 w-6" />
@@ -277,7 +277,7 @@ const CenterProfile = () => {
               </button>
 
               <button
-                onClick={() => navigate('/dashboard/CenterAdmin/patients/PatientList')}
+                onClick={() => navigate('/dashboard/centeradmin/patients/patientlist')}
                 className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg transition-colors flex flex-col items-center gap-3"
               >
                 <Users className="h-6 w-6" />
@@ -288,7 +288,7 @@ const CenterProfile = () => {
               </button>
 
               <button
-                onClick={() => navigate('/dashboard/CenterAdmin/Receptionist/ManageReceptionists')}
+                onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
                 className="bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-lg transition-colors flex flex-col items-center gap-3"
               >
                 <UserCheck className="h-6 w-6" />
@@ -299,7 +299,7 @@ const CenterProfile = () => {
               </button>
 
               <button
-                onClick={() => navigate('/dashboard/CenterAdmin/Dashboard')}
+                onClick={() => navigate('/dashboard/centeradmin/dashboard')}
                 className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-lg transition-colors flex flex-col items-center gap-3"
               >
                 <Shield className="h-6 w-6" />

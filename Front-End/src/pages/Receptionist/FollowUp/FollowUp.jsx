@@ -29,11 +29,11 @@ const FollowUp = () => {
 
   const handleViewPatient = (patientId) => {
     dispatch(fetchReceptionistPatientDetails(patientId));
-    navigate(`/receptionist/profile/${patientId}`);
+    navigate(`/dashboard/receptionist/profile/${patientId}`);
   };
 
   const handleAddFollowUp = (patientId) => {
-    navigate(`/receptionist/followup/add/${patientId}`);
+    navigate(`/dashboard/receptionist/followup/add/${patientId}`);
   };
 
   const handleViewFollowUp = (patientId, followUpType) => {

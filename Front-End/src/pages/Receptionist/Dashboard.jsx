@@ -31,7 +31,7 @@ export default function ReceptionistDashboard() {
       icon: <UserPlus className="h-6 w-6" />,
       color: 'bg-blue-500',
       hoverColor: 'hover:bg-blue-600',
-      onClick: () => navigate('/receptionist/add-patient')
+                  onClick: () => navigate('/dashboard/receptionist/add-patient')
     },
     {
       title: 'View Patients',
@@ -39,7 +39,7 @@ export default function ReceptionistDashboard() {
       icon: <Users className="h-6 w-6" />,
       color: 'bg-green-500',
       hoverColor: 'hover:bg-green-600',
-      onClick: () => navigate('/receptionist/patients')
+      onClick: () => navigate('/dashboard/receptionist/patients')
     },
     {
       title: 'Add Test',
@@ -47,7 +47,7 @@ export default function ReceptionistDashboard() {
       icon: <FileText className="h-6 w-6" />,
       color: 'bg-purple-500',
       hoverColor: 'hover:bg-purple-600',
-      onClick: () => navigate('/receptionist/patients')
+      onClick: () => navigate('/dashboard/receptionist/patients')
     },
     {
       title: 'Patient History',
@@ -55,7 +55,7 @@ export default function ReceptionistDashboard() {
       icon: <Calendar className="h-6 w-6" />,
       color: 'bg-orange-500',
       hoverColor: 'hover:bg-orange-600',
-      onClick: () => navigate('/receptionist/patients')
+      onClick: () => navigate('/dashboard/receptionist/patients')
     }
   ];
 
@@ -191,7 +191,7 @@ export default function ReceptionistDashboard() {
                   </p>
                 </div>
                 <button
-                  onClick={() => navigate('/receptionist/patients')}
+                  onClick={() => navigate('/dashboard/receptionist/patients')}
                   className="text-blue-500 hover:text-blue-600 font-medium"
                 >
                   View All
@@ -205,7 +205,7 @@ export default function ReceptionistDashboard() {
                   <h3 className="text-lg font-medium text-slate-600 mb-2">No Patients Yet</h3>
                   <p className="text-slate-500 mb-4">Start by adding your first patient.</p>
                   <button
-                    onClick={() => navigate('/receptionist/add-patient')}
+                    onClick={() => navigate('/dashboard/receptionist/add-patient')}
                     className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto"
                   >
                     <Plus className="h-4 w-4" />
@@ -238,7 +238,7 @@ export default function ReceptionistDashboard() {
                         </div>
                       </div>
                       <button
-                        onClick={() => navigate(`/receptionist/profile/${patient._id}`)}
+                        onClick={() => navigate(`/dashboard/receptionist/profile/${patient._id}`)}
                         className="text-blue-500 hover:text-blue-600 flex items-center gap-1"
                       >
                         <Eye className="h-4 w-4" />

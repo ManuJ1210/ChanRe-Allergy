@@ -107,14 +107,14 @@ const DoctorList = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <button
-              onClick={() => navigate('/dashboard/CenterAdmin/Dashboard')}
+                              onClick={() => navigate('/dashboard/centeradmin/dashboard')}
               className="flex items-center text-slate-600 hover:text-slate-800 transition-colors"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </button>
             <button
-              onClick={() => navigate('/dashboard/CenterAdmin/Docters/AddDocter')}
+                              onClick={() => navigate('/dashboard/centeradmin/doctors/adddoctor')}
               className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
             >
               <Plus className="h-4 w-4" />
@@ -316,14 +316,14 @@ const DoctorList = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex items-center justify-end gap-2">
                           <button
-                            onClick={() => navigate(`/dashboard/CenterAdmin/Docters/ViewDoctor/${doctor._id}`)}
+                            onClick={() => navigate(`/dashboard/centeradmin/doctors/viewdoctor/${doctor._id}`)}
                             className="text-blue-600 hover:text-blue-900 p-1"
                             title="View"
                           >
                             <Eye className="h-4 w-4" />
                           </button>
                           <button
-                            onClick={() => navigate(`/dashboard/CenterAdmin/Docters/EditDoctor/${doctor._id}`)}
+                            onClick={() => navigate(`/dashboard/centeradmin/doctors/editdoctor/${doctor._id}`)}
                             className="text-green-600 hover:text-green-900 p-1"
                             title="Edit"
                           >

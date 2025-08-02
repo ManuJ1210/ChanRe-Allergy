@@ -40,6 +40,8 @@ import SuperAdminReceptionistList from '../pages/Superadmin/Receptionists/Supera
 import AddSuperAdminReceptionist from '../pages/Superadmin/Receptionists/AddSuperadminReceptionist';
 import ViewSuperadminReceptionist from '../pages/Superadmin/Receptionists/ViewSuperadminReceptionist';
 import EditSuperadminReceptionist from '../pages/Superadmin/Receptionists/EditSuperadminReceptionist';
+import AllTestReports from '../pages/Superadmin/Docters/AllTestReports';
+import SuperadminTestRequestDetails from '../pages/Superadmin/Docters/SuperadminTestRequestDetails';
 
 // Lab Pages
 import LabDashboard from '../pages/Lab/Dashboard';
@@ -124,6 +126,8 @@ import DoctorPatientDetails from '../pages/Doctor/PatientDetails';
 import MyPatients from '../pages/Doctor/MyPatients';
 import TestRequests from '../pages/Doctor/TestRequests';
 import NewTestRequest from '../pages/Doctor/NewTestRequest';
+import CompletedReports from '../pages/Doctor/CompletedReports';
+import TestRequestDetails from '../pages/Doctor/TestRequestDetails';
 
 export default function AppRoutes() {
   return (
@@ -139,85 +143,90 @@ export default function AppRoutes() {
       {/* Protected Routes */}
       <Route path="/dashboard" element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
         {/* Superadmin Routes */}
-        <Route path="Superadmin/Dashboard" element={<SuperadminDashboard />} />
+        <Route path="superadmin/dashboard" element={<SuperadminDashboard />} />
+        <Route path="superadmin/dashboard" element={<SuperadminDashboard />} />
         
         {/* Centers Routes */}
-        <Route path="Superadmin/Centers/CentersList" element={<CentersList />} />
-        <Route path="Superadmin/Centers/AddCenter" element={<AddCenter />} />
-        <Route path="Superadmin/Centers/EditCenter/:id" element={<EditCenter />} />
-        <Route path="Superadmin/Centers/ViewCenterInfo/:id" element={<ViewCenterInfo />} />
-        <Route path="Superadmin/Centers/ManageAdmins" element={<ManageAdmins />} />
-        <Route path="Superadmin/Centers/EditCenterAdmin/:id" element={<EditCenterAdmin />} />
+        <Route path="superadmin/centers/centerslist" element={<CentersList />} />
+        <Route path="superadmin/centers/addcenter" element={<AddCenter />} />
+        <Route path="superadmin/centers/editcenter/:id" element={<EditCenter />} />
+        <Route path="superadmin/centers/viewcenterinfo/:id" element={<ViewCenterInfo />} />
+        <Route path="superadmin/centers/manageadmins" element={<ManageAdmins />} />
+        <Route path="superadmin/centers/editcenteradmin/:id" element={<EditCenterAdmin />} />
         
         {/* Followups Routes */}
-        <Route path="Superadmin/Followups/ViewFollowUpPatients" element={<ViewFollowUpPatients />} />
-        <Route path="Superadmin/Followups/ViewPatientFollowUps/:patientId" element={<ViewPatientFollowUps />} />
-        <Route path="Superadmin/Followups/ManageFollowUp" element={<ManageFollowUp />} />
-        <Route path="Superadmin/Followups/AllergicRhinitisList" element={<SuperadminAllergicRhinitisList />} />
-        <Route path="Superadmin/Followups/AtopicDermatitisList" element={<SuperadminAtopicDermatitisList />} />
-        <Route path="Superadmin/Followups/AllergicConjunctivitisList" element={<SuperadminAllergicConjunctivitisList />} />
-        <Route path="Superadmin/Followups/AllergicBronchitisList" element={<SuperadminAllergicBronchitisList />} />
-        <Route path="Superadmin/Followups/GPEList" element={<GPEList />} />
-        <Route path="Superadmin/Followups/ViewAllergicRhinitis/:patientId" element={<ViewAllergicRhinitis />} />
-        <Route path="Superadmin/Followups/ViewAtopicDermatitis/:patientId" element={<ViewAtopicDermatitis />} />
-        <Route path="Superadmin/Followups/ViewAllergicConjunctivitis/:patientId" element={<ViewAllergicConjunctivitis />} />
-        <Route path="Superadmin/Followups/ViewAllergicBronchitis/:patientId" element={<ViewAllergicBronchitis />} />
-        <Route path="Superadmin/Followups/ViewGPE/:patientId" element={<ViewGPE />} />
+        <Route path="superadmin/followups/viewfollowuppatients" element={<ViewFollowUpPatients />} />
+        <Route path="superadmin/followups/viewpatientfollowups/:patientId" element={<ViewPatientFollowUps />} />
+        <Route path="superadmin/followups/managefollowup" element={<ManageFollowUp />} />
+        <Route path="superadmin/followups/allergicrhinitislist" element={<SuperadminAllergicRhinitisList />} />
+        <Route path="superadmin/followups/atopicdermatitislist" element={<SuperadminAtopicDermatitisList />} />
+        <Route path="superadmin/followups/allergicconjunctivitislist" element={<SuperadminAllergicConjunctivitisList />} />
+        <Route path="superadmin/followups/allergicbronchitislist" element={<SuperadminAllergicBronchitisList />} />
+        <Route path="superadmin/followups/gpelist" element={<GPEList />} />
+        <Route path="superadmin/followups/viewallergicrhinitis/:patientId" element={<ViewAllergicRhinitis />} />
+        <Route path="superadmin/followups/viewatopicdermatitis/:patientId" element={<ViewAtopicDermatitis />} />
+        <Route path="superadmin/followups/viewallergicconjunctivitis/:patientId" element={<ViewAllergicConjunctivitis />} />
+        <Route path="superadmin/followups/viewallergicbronchitis/:patientId" element={<ViewAllergicBronchitis />} />
+        <Route path="superadmin/followups/viewgpe/:patientId" element={<ViewGPE />} />
         
         {/* Lab Routes */}
-        <Route path="Superadmin/Lab/LabStaffList" element={<LabStaffList />} />
-        <Route path="Superadmin/Lab/AddLabStaff" element={<AddLabStaff />} />
-        <Route path="Superadmin/Lab/EditLabStaff/:id" element={<EditLabStaff />} />
+        <Route path="superadmin/lab/labstafflist" element={<LabStaffList />} />
+        <Route path="superadmin/lab/addlabstaff" element={<AddLabStaff />} />
+        <Route path="superadmin/lab/editlabstaff/:id" element={<EditLabStaff />} />
         
         {/* Doctors Routes */}
-        <Route path="Superadmin/Docters/SuperAdminDoctorList" element={<SuperAdminDoctorList />} />
-        <Route path="Superadmin/Docters/AddSuperAdminDoctor" element={<AddSuperAdminDoctor />} />
-        <Route path="Superadmin/Docters/ViewSuperadminDoctor/:id" element={<ViewSuperadminDoctor />} />
-        <Route path="Superadmin/Docters/EditSuperadminDoctor/:id" element={<EditSuperadminDoctor />} />
+        <Route path="superadmin/doctors/superadmindoctorlist" element={<SuperAdminDoctorList />} />
+        <Route path="superadmin/doctors/addsuperadmindoctor" element={<AddSuperAdminDoctor />} />
+        <Route path="superadmin/doctors/viewsuperadmindoctor/:id" element={<ViewSuperadminDoctor />} />
+        <Route path="superadmin/doctors/editsuperadmindoctor/:id" element={<EditSuperadminDoctor />} />
+        <Route path="superadmin/doctors/all-test-reports" element={<AllTestReports />} />
+        <Route path="superadmin/doctors/test-request/:id" element={<SuperadminTestRequestDetails />} />
         
         {/* Receptionists Routes */}
-        <Route path="Superadmin/Receptionists/SuperAdminReceptionistList" element={<SuperAdminReceptionistList />} />
-        <Route path="Superadmin/Receptionists/AddSuperAdminReceptionist" element={<AddSuperAdminReceptionist />} />
-        <Route path="Superadmin/Receptionists/ViewSuperadminReceptionist/:id" element={<ViewSuperadminReceptionist />} />
-        <Route path="Superadmin/Receptionists/EditSuperadminReceptionist/:id" element={<EditSuperadminReceptionist />} />
+        <Route path="superadmin/receptionists/superadminreceptionistlist" element={<SuperAdminReceptionistList />} />
+        <Route path="superadmin/receptionists/addsuperadminreceptionist" element={<AddSuperAdminReceptionist />} />
+        <Route path="superadmin/receptionists/viewsuperadminreceptionist/:id" element={<ViewSuperadminReceptionist />} />
+        <Route path="superadmin/receptionists/editsuperadminreceptionist/:id" element={<EditSuperadminReceptionist />} />
 
         {/* Center Admin Routes */}
-        <Route path="CenterAdmin/Dashboard" element={<CenterAdminDashboard />} />
-        <Route path="CenterAdmin/center-profile" element={<CenterProfile />} />
-        <Route path='CenterAdmin/patients/addpatient' element={<AddPatient />} />
-        <Route path='CenterAdmin/patients/PatientList' element={<PatientList />} />
-        <Route path='CenterAdmin/patients/ManagePatients' element={<ManagePatients />} />
-        <Route path='CenterAdmin/patients/EditPatient/:id' element={<EditPatient />} />
-        <Route path="CenterAdmin/patients/ViewProfile/:id" element={<ViewProfile />} />
-        <Route path="CenterAdmin/patients/AddTest/:id" element={<AddTest />} />
-        <Route path="CenterAdmin/patients/show-tests/:id" element={<ShowTests />} />
-        <Route path="CenterAdmin/patients/AddHistory/:id" element={<AddHistory />} />
-        <Route path="CenterAdmin/patients/ViewHistory/:patientId" element={<ViewHistory />} />
-        <Route path="CenterAdmin/patients/AddMedications/:id" element={<AddMedications />} />
-        <Route path="CenterAdmin/Docters/AddDocter" element={<CenterAdminAddDoctor />} />
-        <Route path="CenterAdmin/Docters/DocterList" element={<CenterAdminDoctorList />} />
-        <Route path="CenterAdmin/Docters/ViewDoctor/:id" element={<CenterAdminViewDoctor />} />
-        <Route path="CenterAdmin/Docters/EditDoctor/:id" element={<CenterAdminEditDoctor />} />
-        <Route path="CenterAdmin/Receptionist/ManageReceptionists" element={<ManageReceptionists />} />
-        <Route path="CenterAdmin/Receptionist/AddReceptionist" element={<CenterAdminAddReceptionist />} />
-        <Route path="CenterAdmin/Receptionist/ViewReceptionist/:id" element={<CenterAdminViewReceptionist />} />
-        <Route path="CenterAdmin/Receptionist/EditReceptionist/:id" element={<EditReceptionist />} />
-        <Route path="CenterAdmin/patients/FollowUp/:id" element={<FollowUp />} />
-        <Route path="CenterAdmin/patients/FollowUp/AddAllergicRhinitis/:patientId" element={<AddAllergicRhinitis />} />
-        <Route path="CenterAdmin/patients/FollowUp/ViewAllergicRhinitis/:allergicRhinitisId" element={<CenterAdminViewAllergicRhinitis />} />
-        <Route path="CenterAdmin/patients/FollowUp/AddAllergicConjunctivitis/:patientId" element={<AddAllergicConjunctivitis />} />
-        <Route path="CenterAdmin/patients/FollowUp/ViewAllergicConjunctivitis/:id" element={<CenterAdminViewAllergicConjunctivitis />} />
-        <Route path="CenterAdmin/patients/FollowUp/AtopicDermatitis/:patientId" element={<AtopicDermatitis />} />
-        <Route path="CenterAdmin/patients/FollowUp/ViewAtopicDermatitis/:atopicDermatitisId" element={<CenterAdminViewAtopicDermatitis />} />
-        <Route path="CenterAdmin/patients/FollowUp/AddAllergicBronchitis/:patientId" element={<AddAllergicBronchitis />} />
-        <Route path="CenterAdmin/patients/FollowUp/ViewAllergicBronchitis/:id" element={<CenterAdminViewAllergicBronchitis />} />
-        <Route path="CenterAdmin/patients/FollowUp/AddGPE/:patientId" element={<AddGPE />} />
-        <Route path="CenterAdmin/patients/FollowUp/ViewGPE/:id" element={<CenterAdminViewGPE />} />
-        <Route path="CenterAdmin/patients/FollowUp/PrescriptionList/:patientId" element={<PrescriptionList />} />
-        <Route path="CenterAdmin/patients/FollowUp/AddPrescription/:patientId" element={<AddPrescription />} />
-        <Route path="CenterAdmin/patients/FollowUp/ViewPrescription/:id" element={<ViewPrescription />} />
+        <Route path="centeradmin/dashboard" element={<CenterAdminDashboard />} />
+        <Route path="centeradmin/dashboard" element={<CenterAdminDashboard />} />
+        <Route path="centeradmin/center-profile" element={<CenterProfile />} />
+        <Route path='centeradmin/patients/addpatient' element={<AddPatient />} />
+        <Route path='centeradmin/patients/patientlist' element={<PatientList />} />
+        <Route path='centeradmin/patients/managepatients' element={<ManagePatients />} />
+        <Route path='centeradmin/patients/editpatient/:id' element={<EditPatient />} />
+        <Route path="centeradmin/patients/viewprofile/:id" element={<ViewProfile />} />
+        <Route path="centeradmin/patients/addtest/:id" element={<AddTest />} />
+        <Route path="centeradmin/patients/show-tests/:id" element={<ShowTests />} />
+        <Route path="centeradmin/patients/addhistory/:id" element={<AddHistory />} />
+        <Route path="centeradmin/patients/viewhistory/:patientId" element={<ViewHistory />} />
+        <Route path="centeradmin/patients/addmedications/:id" element={<AddMedications />} />
+        <Route path="centeradmin/doctors/adddoctor" element={<CenterAdminAddDoctor />} />
+        <Route path="centeradmin/doctors/doctorlist" element={<CenterAdminDoctorList />} />
+        <Route path="centeradmin/doctors/viewdoctor/:id" element={<CenterAdminViewDoctor />} />
+        <Route path="centeradmin/doctors/editdoctor/:id" element={<CenterAdminEditDoctor />} />
+        <Route path="centeradmin/receptionist/managereceptionists" element={<ManageReceptionists />} />
+        <Route path="centeradmin/receptionist/addreceptionist" element={<CenterAdminAddReceptionist />} />
+        <Route path="centeradmin/receptionist/viewreceptionist/:id" element={<CenterAdminViewReceptionist />} />
+        <Route path="centeradmin/receptionist/editreceptionist/:id" element={<EditReceptionist />} />
+        <Route path="centeradmin/patients/followup/:id" element={<FollowUp />} />
+        <Route path="centeradmin/patients/followup/addallergicrhinitis/:patientId" element={<AddAllergicRhinitis />} />
+        <Route path="centeradmin/patients/followup/viewallergicrhinitis/:allergicRhinitisId" element={<CenterAdminViewAllergicRhinitis />} />
+        <Route path="centeradmin/patients/followup/addallergicconjunctivitis/:patientId" element={<AddAllergicConjunctivitis />} />
+        <Route path="centeradmin/patients/followup/viewallergicconjunctivitis/:id" element={<CenterAdminViewAllergicConjunctivitis />} />
+        <Route path="centeradmin/patients/followup/atopicdermatitis/:patientId" element={<AtopicDermatitis />} />
+        <Route path="centeradmin/patients/followup/viewatopicdermatitis/:atopicDermatitisId" element={<CenterAdminViewAtopicDermatitis />} />
+        <Route path="centeradmin/patients/followup/addallergicbronchitis/:patientId" element={<AddAllergicBronchitis />} />
+        <Route path="centeradmin/patients/followup/viewallergicbronchitis/:id" element={<CenterAdminViewAllergicBronchitis />} />
+        <Route path="centeradmin/patients/followup/addgpe/:patientId" element={<AddGPE />} />
+        <Route path="centeradmin/patients/followup/viewgpe/:id" element={<CenterAdminViewGPE />} />
+        <Route path="centeradmin/patients/followup/prescriptionlist/:patientId" element={<PrescriptionList />} />
+        <Route path="centeradmin/patients/followup/addprescription/:patientId" element={<AddPrescription />} />
+        <Route path="centeradmin/patients/followup/viewprescription/:id" element={<ViewPrescription />} />
 
         {/* Receptionist Routes */}
+        <Route path="receptionist/dashboard" element={<ReceptionistDashboard />} />
         <Route path="receptionist/dashboard" element={<ReceptionistDashboard />} />
         <Route path="receptionist/add-patient" element={<AddReceptionistPatient />} />
         <Route path="receptionist/patients" element={<ReceptionistPatientList />} />
@@ -265,10 +274,14 @@ export default function AppRoutes() {
 
         {/* Doctor Routes */}
         <Route path="doctor/dashboard" element={<DoctorDashboard />} />
+        <Route path="doctor" element={<DoctorDashboard />} />
+        <Route path="doctor/dashboard" element={<DoctorDashboard />} />
         <Route path="doctor/patient/:patientId" element={<DoctorPatientDetails />} />
         <Route path="doctor/patients" element={<MyPatients />} />
         <Route path="doctor/test-requests" element={<TestRequests />} />
         <Route path="doctor/new-test-request" element={<NewTestRequest />} />
+        <Route path="doctor/completed-reports" element={<CompletedReports />} />
+        <Route path="doctor/test-request/:id" element={<TestRequestDetails />} />
 
         {/* Lab Routes */}
         <Route path="lab/dashboard" element={<LabRouteProtection><LabDashboard /></LabRouteProtection>} />

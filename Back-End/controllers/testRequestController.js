@@ -105,11 +105,13 @@ export const getTestRequestsForCurrentDoctor = async (req, res) => {
       doctorId, 
       isActive: true 
     })
+      .populate('doctorId', 'name email phone')
       .populate('patientId', 'name phone address age gender')
       .populate('assignedLabStaffId', 'staffName phone')
       .populate('sampleCollectorId', 'staffName phone')
       .populate('labTechnicianId', 'staffName phone')
       .populate('reportGeneratedBy', 'staffName')
+      .populate('reportSentBy', 'staffName')
       .sort({ createdAt: -1 });
 
     console.log('Found test requests:', testRequests.length);
@@ -117,6 +119,36 @@ export const getTestRequestsForCurrentDoctor = async (req, res) => {
   } catch (error) {
     console.error('Error fetching test requests for current doctor:', error);
     res.status(500).json({ message: 'Failed to fetch test requests' });
+  }
+};
+
+// Get completed test requests for current doctor (authenticated)
+export const getCompletedTestRequestsForCurrentDoctor = async (req, res) => {
+  try {
+    const doctorId = req.user.id || req.user._id;
+    
+    if (!doctorId) {
+      return res.status(400).json({ message: 'Doctor ID not found in token' });
+    }
+    
+    const completedTestRequests = await TestRequest.find({ 
+      doctorId, 
+      status: { $in: ['Completed', 'Report_Sent'] },
+      isActive: true 
+    })
+      .populate('doctorId', 'name email phone')
+      .populate('patientId', 'name phone address age gender')
+      .populate('assignedLabStaffId', 'staffName phone')
+      .populate('sampleCollectorId', 'staffName phone')
+      .populate('labTechnicianId', 'staffName phone')
+      .populate('reportGeneratedBy', 'staffName')
+      .populate('reportSentBy', 'staffName')
+      .sort({ reportSentDate: -1, createdAt: -1 });
+
+    res.status(200).json(completedTestRequests);
+  } catch (error) {
+    console.error('Error fetching completed test requests for current doctor:', error);
+    res.status(500).json({ message: 'Failed to fetch completed test requests' });
   }
 };
 
@@ -611,11 +643,21 @@ export const sendReportToDoctor = async (req, res) => {
       deliveryConfirmation
     } = req.body;
 
-    const testRequest = await TestRequest.findById(id);
+    const testRequest = await TestRequest.findById(id)
+      .populate('doctorId', 'name email phone')
+      .populate('patientId', 'name phone address age gender')
+      .populate('assignedLabStaffId', 'staffName phone')
+      .populate('reportGeneratedBy', 'staffName');
+      
     if (!testRequest) {
       return res.status(404).json({ message: 'Test request not found' });
     }
 
+    // Get doctor email from populated doctorId
+    const doctorEmail = testRequest.doctorId?.email || testRequest.doctorEmail;
+    const doctorName = testRequest.doctorId?.name || testRequest.doctorName;
+
+    // Update test request with report sent information
     testRequest.reportSentDate = reportSentDate || new Date();
     testRequest.reportSentBy = req.user.id || req.user._id;
     testRequest.reportSentByName = req.user.staffName || req.user.name;
@@ -623,7 +665,7 @@ export const sendReportToDoctor = async (req, res) => {
     testRequest.emailSubject = emailSubject;
     testRequest.emailMessage = emailMessage;
     testRequest.notificationMessage = notificationMessage;
-    testRequest.sentTo = sentTo;
+    testRequest.sentTo = sentTo || doctorName;
     testRequest.deliveryConfirmation = deliveryConfirmation;
     testRequest.status = 'Completed'; // Set to Completed so it appears in completed tests
     testRequest.updatedAt = new Date();
@@ -636,9 +678,20 @@ export const sendReportToDoctor = async (req, res) => {
       .populate('assignedLabStaffId', 'staffName phone')
       .populate('reportGeneratedBy', 'staffName');
 
+    // Log the report sending for debugging
+    console.log('Report sent successfully:', {
+      testRequestId: id,
+      doctorName: doctorName,
+      doctorEmail: doctorEmail,
+      sendMethod: sendMethod,
+      status: 'Completed'
+    });
+
     res.status(200).json({
       message: 'Report sent to doctor successfully',
-      testRequest: populatedTestRequest
+      testRequest: populatedTestRequest,
+      doctorEmail: doctorEmail,
+      doctorName: doctorName
     });
   } catch (error) {
     console.error('Error sending report to doctor:', error);

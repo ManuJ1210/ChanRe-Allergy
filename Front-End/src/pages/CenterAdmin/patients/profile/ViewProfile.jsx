@@ -104,7 +104,7 @@ const ViewProfile = () => {
         {/* Header */}
           <div className="mb-8">
               <button
-              onClick={() => navigate('/CenterAdmin/patients/ManagePatients')}
+                              onClick={() => navigate('/dashboard/centeradmin/patients/managepatients')}
               className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
               >
               <ArrowLeft className="h-4 w-4 mr-2" />

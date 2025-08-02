@@ -52,7 +52,7 @@ const ShowTests = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
               <div>
                 <button
-                  onClick={() => navigate("/receptionist/patients")}
+                  onClick={() => navigate("/dashboard/receptionist/patients")}
                   className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />

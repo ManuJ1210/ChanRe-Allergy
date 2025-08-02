@@ -63,7 +63,7 @@ const AddTest = () => {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => navigate('/CenterAdmin/patients/PatientList')}
+                            onClick={() => navigate('/dashboard/centeradmin/patients/patientlist')}
             className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />

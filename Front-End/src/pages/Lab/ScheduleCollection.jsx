@@ -131,7 +131,7 @@ export default function ScheduleCollection() {
       
       setSuccess(true);
       setTimeout(() => {
-        navigate(`/lab/test-request/${id}`);
+        navigate(`/dashboard/lab/test-request/${id}`);
       }, 2000);
       
     } catch (error) {
@@ -204,7 +204,7 @@ export default function ScheduleCollection() {
             <h3 className="text-lg font-medium text-slate-900 mb-2">Error Loading Test Request</h3>
             <p className="text-slate-600">{error}</p>
             <button
-              onClick={() => navigate('/lab/test-requests')}
+              onClick={() => navigate('/dashboard/lab/test-requests')}
               className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               Back to Test Requests
@@ -221,7 +221,7 @@ export default function ScheduleCollection() {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => navigate(`/lab/test-request/${id}`)}
+            onClick={() => navigate(`/dashboard/lab/test-request/${id}`)}
             className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -395,7 +395,7 @@ export default function ScheduleCollection() {
             <div className="flex justify-end gap-3">
               <button
                 type="button"
-                onClick={() => navigate(`/lab/test-request/${id}`)}
+                onClick={() => navigate(`/dashboard/lab/test-request/${id}`)}
                 className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50"
               >
                 Cancel

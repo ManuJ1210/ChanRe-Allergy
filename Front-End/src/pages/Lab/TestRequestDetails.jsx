@@ -133,7 +133,7 @@ const TestRequestDetails = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
-                onClick={() => navigate('/lab/test-requests')}
+                onClick={() => navigate('/dashboard/lab/test-requests')}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Back to Test Requests
@@ -155,7 +155,7 @@ const TestRequestDetails = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-2">No Test Request Found</h2>
               <p className="text-gray-600 mb-4">The requested test request could not be found.</p>
               <button
-                onClick={() => navigate('/lab/test-requests')}
+                onClick={() => navigate('/dashboard/lab/test-requests')}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Back to Test Requests
@@ -175,7 +175,7 @@ const TestRequestDetails = () => {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => navigate('/lab/test-requests')}
+                onClick={() => navigate('/dashboard/lab/test-requests')}
                 className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
               >
                 <ArrowLeft size={20} />
@@ -273,7 +273,7 @@ const TestRequestDetails = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-500">Patient ID</label>
-                    <p className="text-gray-900 font-medium">{typeof testRequest.patientId === 'object' ? testRequest.patientId._id || 'N/A' : testRequest.patientId || 'N/A'}</p>
+                    <p className="text-gray-900 font-medium">{testRequest.patientId && typeof testRequest.patientId === 'object' ? testRequest.patientId._id || 'N/A' : testRequest.patientId || 'N/A'}</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-500">Patient Phone</label>
@@ -315,7 +315,7 @@ const TestRequestDetails = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Doctor ID</label>
-                <p className="text-gray-900 font-medium">{typeof testRequest.doctorId === 'object' ? testRequest.doctorId._id || 'N/A' : testRequest.doctorId || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{testRequest.doctorId && typeof testRequest.doctorId === 'object' ? testRequest.doctorId._id || 'N/A' : testRequest.doctorId || 'N/A'}</p>
               </div>
             </div>
           </div>
@@ -513,7 +513,7 @@ const TestRequestDetails = () => {
           {/* Action Buttons */}
           <div className="flex items-center justify-end space-x-4 pt-6 border-t">
             <button
-              onClick={() => navigate('/lab/test-requests')}
+              onClick={() => navigate('/dashboard/lab/test-requests')}
               className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
               Back to Test Requests
@@ -523,7 +523,7 @@ const TestRequestDetails = () => {
             {/* Show Schedule Collection button if no collection has been scheduled yet */}
             {!testRequest.sampleCollectionScheduledDate && (
               <button
-                onClick={() => navigate(`/lab/schedule-collection/${id}`)}
+                onClick={() => navigate(`/dashboard/lab/schedule-collection/${id}`)}
                 className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center"
               >
                 <Calendar className="h-4 w-4 mr-2" />
@@ -533,7 +533,7 @@ const TestRequestDetails = () => {
             
             {testRequest.status === 'Sample_Collection_Scheduled' && (
               <button
-                onClick={() => navigate(`/lab/update-status/${id}`)}
+                onClick={() => navigate(`/dashboard/lab/update-status/${id}`)}
                 className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center"
               >
                 <Play className="h-4 w-4 mr-2" />
@@ -543,7 +543,7 @@ const TestRequestDetails = () => {
             
             {testRequest.status === 'Sample_Collected' && (
               <button
-                onClick={() => navigate(`/lab/start-testing/${id}`)}
+                onClick={() => navigate(`/dashboard/lab/start-testing/${id}`)}
                 className="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors flex items-center"
               >
                 <TestTube className="h-4 w-4 mr-2" />
@@ -553,7 +553,7 @@ const TestRequestDetails = () => {
             
             {testRequest.status === 'In_Lab_Testing' && (
               <button
-                onClick={() => navigate(`/lab/complete-testing/${id}`)}
+                onClick={() => navigate(`/dashboard/lab/complete-testing/${id}`)}
                 className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors flex items-center"
               >
                 <StopCircle className="h-4 w-4 mr-2" />
@@ -563,7 +563,7 @@ const TestRequestDetails = () => {
             
             {testRequest.status === 'Testing_Completed' && (
               <button
-                onClick={() => navigate(`/lab/generate-report/${id}`)}
+                onClick={() => navigate(`/dashboard/lab/generate-report/${id}`)}
                 className="px-6 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors flex items-center"
               >
                 <FileText className="h-4 w-4 mr-2" />
@@ -573,7 +573,7 @@ const TestRequestDetails = () => {
             
             {testRequest.status === 'Report_Generated' && (
               <button
-                onClick={() => navigate(`/lab/send-report/${id}`)}
+                onClick={() => navigate(`/dashboard/lab/send-report/${id}`)}
                 className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors flex items-center"
               >
                 <Send className="h-4 w-4 mr-2" />

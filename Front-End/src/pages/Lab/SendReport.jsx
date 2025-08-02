@@ -32,15 +32,13 @@ const SendReport = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   
-  // Form state
+  // Simplified form state
   const [formData, setFormData] = useState({
-    sendMethod: 'email', // email, system, both
+    sendMethod: 'both', // email, system, both
     emailSubject: '',
     emailMessage: '',
     notificationMessage: '',
-    reportSentDate: '',
-    sentTo: '',
-    deliveryConfirmation: false
+    sentTo: ''
   });
 
   useEffect(() => {
@@ -53,28 +51,34 @@ const SendReport = () => {
     try {
       setLoading(true);
       const response = await API.get(`/test-requests/${id}`);
-      setTestRequest(response.data);
+      const testRequestData = response.data;
+      setTestRequest(testRequestData);
+      
+      // Get doctor email from populated doctorId
+      const doctorEmail = testRequestData.doctorId?.email || testRequestData.doctorEmail || 'N/A';
+      const doctorName = testRequestData.doctorId?.name || testRequestData.doctorName || 'Doctor';
       
       // Pre-fill form with default values
-      setFormData(prev => ({
-        ...prev,
-        emailSubject: `Test Report - ${response.data.patientName} - ${response.data.testType}`,
-        emailMessage: `Dear Dr. ${response.data.doctorName || 'Doctor'},
+      setFormData({
+        sendMethod: 'both',
+        emailSubject: `Test Report - ${testRequestData.patientName} - ${testRequestData.testType}`,
+        emailMessage: `Dear Dr. ${doctorName},
 
-Please find attached the test report for patient ${response.data.patientName}.
+Please find attached the test report for patient ${testRequestData.patientName}.
 
 Test Details:
-- Patient: ${response.data.patientName}
-- Test Type: ${response.data.testType}
-- Request ID: ${response.data._id}
+- Patient: ${testRequestData.patientName}
+- Test Type: ${testRequestData.testType}
+- Request ID: ${testRequestData._id}
+- Report Generated: ${testRequestData.reportGeneratedDate ? new Date(testRequestData.reportGeneratedDate).toLocaleDateString() : 'N/A'}
 
 The report has been completed and is ready for your review.
 
 Best regards,
 Lab Team`,
-        notificationMessage: `Test report for patient ${response.data.patientName} (${response.data.testType}) has been completed and is ready for review.`,
-        sentTo: response.data.doctorName || 'Doctor'
-      }));
+        notificationMessage: `Test report for patient ${testRequestData.patientName} (${testRequestData.testType}) has been completed and is ready for review.`,
+        sentTo: doctorName
+      });
     } catch (error) {
       console.error('Error fetching test request details:', error);
       setError('Failed to load test request details');
@@ -105,7 +109,7 @@ Lab Team`,
         notificationMessage: formData.notificationMessage,
         reportSentDate: new Date().toISOString(),
         sentTo: formData.sentTo,
-        deliveryConfirmation: formData.deliveryConfirmation,
+        deliveryConfirmation: true,
         status: 'Report_Sent'
       };
 
@@ -113,7 +117,7 @@ Lab Team`,
       
       setSuccess(true);
       setTimeout(() => {
-        navigate(`/lab/test-request/${id}`);
+        navigate(`/dashboard/lab/test-request/${id}`);
       }, 2000);
       
     } catch (error) {
@@ -213,7 +217,7 @@ Lab Team`,
               <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
-                onClick={() => navigate('/lab/test-requests')}
+                onClick={() => navigate('/dashboard/lab/test-requests')}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Back to Test Requests
@@ -235,7 +239,7 @@ Lab Team`,
               <h2 className="text-xl font-semibold text-gray-800 mb-2">No Test Request Found</h2>
               <p className="text-gray-600 mb-4">The requested test request could not be found.</p>
               <button
-                onClick={() => navigate('/lab/test-requests')}
+                onClick={() => navigate('/dashboard/lab/test-requests')}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Back to Test Requests
@@ -247,6 +251,10 @@ Lab Team`,
     );
   }
 
+  // Get doctor email from populated doctorId
+  const doctorEmail = testRequest.doctorId?.email || testRequest.doctorEmail || 'N/A';
+  const doctorName = testRequest.doctorId?.name || testRequest.doctorName || 'N/A';
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto p-6">
@@ -255,7 +263,7 @@ Lab Team`,
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => navigate(`/lab/test-request/${id}`)}
+                onClick={() => navigate(`/dashboard/lab/test-request/${id}`)}
                 className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
               >
                 <ArrowLeft size={20} />
@@ -327,11 +335,14 @@ Lab Team`,
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-500">Doctor Name</label>
-                <p className="text-gray-900 font-medium">{testRequest.doctorName || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{doctorName}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Doctor Email</label>
-                <p className="text-gray-900 font-medium">{testRequest.doctorEmail || 'N/A'}</p>
+                <p className="text-gray-900 font-medium flex items-center">
+                  <Mail className="h-4 w-4 mr-2 text-gray-500" />
+                  {doctorEmail}
+                </p>
               </div>
             </div>
           </div>
@@ -364,7 +375,7 @@ Lab Team`,
             </div>
           )}
 
-          {/* Send Report Form */}
+          {/* Simplified Send Report Form */}
           <div className="bg-gray-50 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
               <Send className="h-5 w-5 mr-2 text-blue-600" />
@@ -382,12 +393,23 @@ Lab Team`,
                     <input
                       type="radio"
                       name="sendMethod"
+                      value="both"
+                      checked={formData.sendMethod === 'both'}
+                      onChange={handleInputChange}
+                      className="mr-2"
+                    />
+                    <span>Both Email and System Notification (Recommended)</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="sendMethod"
                       value="email"
                       checked={formData.sendMethod === 'email'}
                       onChange={handleInputChange}
                       className="mr-2"
                     />
-                    <span>Email</span>
+                    <span>Email Only</span>
                   </label>
                   <label className="flex items-center">
                     <input
@@ -398,18 +420,7 @@ Lab Team`,
                       onChange={handleInputChange}
                       className="mr-2"
                     />
-                    <span>System Notification</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="sendMethod"
-                      value="both"
-                      checked={formData.sendMethod === 'both'}
-                      onChange={handleInputChange}
-                      className="mr-2"
-                    />
-                    <span>Both Email and System Notification</span>
+                    <span>System Notification Only</span>
                   </label>
                 </div>
               </div>
@@ -440,7 +451,7 @@ Lab Team`,
                     name="emailMessage"
                     value={formData.emailMessage}
                     onChange={handleInputChange}
-                    rows={8}
+                    rows={6}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
@@ -462,41 +473,11 @@ Lab Team`,
                 </div>
               )}
 
-              {/* Sent To */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Sent To
-                </label>
-                <input
-                  type="text"
-                  name="sentTo"
-                  value={formData.sentTo}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-
-              {/* Delivery Confirmation */}
-              <div>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="deliveryConfirmation"
-                    checked={formData.deliveryConfirmation}
-                    onChange={handleInputChange}
-                    className="mr-2"
-                  />
-                  <span className="text-sm font-medium text-gray-700">
-                    Request delivery confirmation
-                  </span>
-                </label>
-              </div>
-
               {/* Submit Button */}
               <div className="flex justify-end gap-3">
                 <button
                   type="button"
-                  onClick={() => navigate(`/lab/test-request/${id}`)}
+                  onClick={() => navigate(`/dashboard/lab/test-request/${id}`)}
                   className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                 >
                   Cancel
@@ -504,7 +485,7 @@ Lab Team`,
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {saving ? (
                     <>

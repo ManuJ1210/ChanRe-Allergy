@@ -35,7 +35,7 @@ export default function SuperadminDashboard() {
       icon: <Plus className="h-6 w-6" />,
       color: 'bg-blue-500',
       hoverColor: 'hover:bg-blue-600',
-      onClick: () => navigate('/dashboard/Superadmin/Centers/AddCenter')
+              onClick: () => navigate('/dashboard/superadmin/centers/addcenter')
     },
     {
       title: 'Manage Centers',
@@ -43,7 +43,7 @@ export default function SuperadminDashboard() {
       icon: <Eye className="h-6 w-6" />,
       color: 'bg-green-500',
       hoverColor: 'hover:bg-green-600',
-      onClick: () => navigate('/dashboard/Superadmin/Centers/CentersList')
+              onClick: () => navigate('/dashboard/superadmin/centers/centerslist')
     },
     {
       title: 'Manage Admins',
@@ -51,7 +51,7 @@ export default function SuperadminDashboard() {
       icon: <Shield className="h-6 w-6" />,
       color: 'bg-purple-500',
       hoverColor: 'hover:bg-purple-600',
-      onClick: () => navigate('/dashboard/Superadmin/Centers/ManageAdmins')
+              onClick: () => navigate('/dashboard/superadmin/centers/manageadmins')
     },
     {
       title: 'View Reports',
@@ -59,7 +59,7 @@ export default function SuperadminDashboard() {
       icon: <TrendingUp className="h-6 w-6" />,
       color: 'bg-orange-500',
       hoverColor: 'hover:bg-orange-600',
-      onClick: () => navigate('/dashboard/Superadmin/Followups/ViewFollowUpPatients')
+              onClick: () => navigate('/dashboard/superadmin/followups/viewfollowuppatients')
     },
     
   ];

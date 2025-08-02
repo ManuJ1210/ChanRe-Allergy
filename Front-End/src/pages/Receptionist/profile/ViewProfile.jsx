@@ -117,7 +117,7 @@ const ViewProfile = () => {
         {/* Header */}
           <div className="mb-8">
               <button
-              onClick={() => navigate('/receptionist/manage-patients')}
+                              onClick={() => navigate('/dashboard/receptionist/manage-patients')}
               className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
               >
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -169,7 +169,7 @@ const ViewProfile = () => {
                 </div>
             </div>
               <button
-                onClick={() => navigate(`/receptionist/edit-patient/${patient._id}`)}
+                                    onClick={() => navigate(`/dashboard/receptionist/edit-patient/${patient._id}`)}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
               >
                 <Edit className="h-4 w-4" />
@@ -596,7 +596,7 @@ const ViewProfile = () => {
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                   <h2 className="text-xl font-semibold text-slate-800">Allergic Rhinitis</h2>
                   <button
-                    onClick={() => navigate(`/receptionist/followup/allergic-rhinitis/add/${patient._id}`)}
+                                                onClick={() => navigate(`/dashboard/receptionist/followup/allergic-rhinitis/add/${patient._id}`)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                   >
                     Add Follow Up
@@ -628,7 +628,7 @@ const ViewProfile = () => {
                               </td>
                               <td className="px-4 py-3 text-sm text-slate-800">
                                 <button
-                                  onClick={() => navigate(`/receptionist/followup/allergic-rhinitis/view/${rhinitis._id}`)}
+                                  onClick={() => navigate(`/dashboard/receptionist/followup/allergic-rhinitis/view/${rhinitis._id}`)}
                                   className="text-blue-600 hover:text-blue-900 font-medium"
                                 >
                                   View
@@ -655,7 +655,7 @@ const ViewProfile = () => {
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                   <h2 className="text-xl font-semibold text-slate-800">Atopic Dermatitis</h2>
                   <button
-                    onClick={() => navigate(`/receptionist/followup/atopic-dermatitis/add/${patient._id}`)}
+                                                onClick={() => navigate(`/dashboard/receptionist/followup/atopic-dermatitis/add/${patient._id}`)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                   >
                     Add Follow Up
@@ -689,7 +689,7 @@ const ViewProfile = () => {
                               <td className="px-4 py-3 text-sm text-slate-800">{dermatitis.updatedBy || 'N/A'}</td>
                               <td className="px-4 py-3 text-sm text-slate-800">
                                 <button
-                                  onClick={() => navigate(`/receptionist/followup/atopic-dermatitis/view/${dermatitis._id}`)}
+                                  onClick={() => navigate(`/dashboard/receptionist/followup/atopic-dermatitis/view/${dermatitis._id}`)}
                                   className="text-blue-600 hover:text-blue-900 font-medium"
                                 >
                                   View
@@ -716,7 +716,7 @@ const ViewProfile = () => {
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                   <h2 className="text-xl font-semibold text-slate-800">Allergic Conjunctivitis</h2>
                   <button
-                    onClick={() => navigate(`/receptionist/followup/allergic-conjunctivitis/add/${patient._id}`)}
+                                                onClick={() => navigate(`/dashboard/receptionist/followup/allergic-conjunctivitis/add/${patient._id}`)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                   >
                     Add Follow Up
@@ -748,7 +748,7 @@ const ViewProfile = () => {
                               </td>
                               <td className="px-4 py-3 text-sm text-slate-800">
                                 <button
-                                  onClick={() => navigate(`/receptionist/followup/allergic-conjunctivitis/view/${conjunctivitis._id}`)}
+                                  onClick={() => navigate(`/dashboard/receptionist/followup/allergic-conjunctivitis/view/${conjunctivitis._id}`)}
                                   className="text-blue-600 hover:text-blue-900 font-medium"
                                 >
                                   View
@@ -775,7 +775,7 @@ const ViewProfile = () => {
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                   <h2 className="text-xl font-semibold text-slate-800">Allergic Bronchitis</h2>
               <button
-                    onClick={() => navigate(`/receptionist/followup/allergic-bronchitis/add/${patient._id}`)}
+                                                onClick={() => navigate(`/dashboard/receptionist/followup/allergic-bronchitis/add/${patient._id}`)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
               >
                     Add Follow Up
@@ -807,7 +807,7 @@ const ViewProfile = () => {
                               </td>
                               <td className="px-4 py-3 text-sm text-slate-800">
               <button
-                                  onClick={() => navigate(`/receptionist/followup/allergic-bronchitis/view/${bronchitis._id}`)}
+                                  onClick={() => navigate(`/dashboard/receptionist/followup/allergic-bronchitis/view/${bronchitis._id}`)}
                                   className="text-blue-600 hover:text-blue-900 font-medium"
               >
                                   View
@@ -834,7 +834,7 @@ const ViewProfile = () => {
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                   <h2 className="text-xl font-semibold text-slate-800">GPE</h2>
             <button
-                    onClick={() => navigate(`/receptionist/followup/gpe/add/${patient._id}`)}
+                                                onClick={() => navigate(`/dashboard/receptionist/followup/gpe/add/${patient._id}`)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
                     Add Follow Up
@@ -866,7 +866,7 @@ const ViewProfile = () => {
                               </td>
                               <td className="px-4 py-3 text-sm text-slate-800">
                     <button
-                                  onClick={() => navigate(`/receptionist/followup/gpe/view/${gpe._id}`)}
+                                  onClick={() => navigate(`/dashboard/receptionist/followup/gpe/view/${gpe._id}`)}
                                   className="text-blue-600 hover:text-blue-900 font-medium"
                     >
                                   View
@@ -894,7 +894,7 @@ const ViewProfile = () => {
               <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                 <h2 className="text-xl font-semibold text-slate-800">Prescription</h2>
             <button
-                  onClick={() => navigate(`/receptionist/followup/prescription/add/${patient._id}`)}
+                                              onClick={() => navigate(`/dashboard/receptionist/followup/prescription/add/${patient._id}`)}
                   className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
                   Add Prescription
@@ -927,7 +927,7 @@ const ViewProfile = () => {
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-800">
                     <button
-                                onClick={() => navigate(`/receptionist/followup/prescription/view/${prescription._id}`)}
+                                onClick={() => navigate(`/dashboard/receptionist/followup/prescription/view/${prescription._id}`)}
                                 className="text-blue-600 hover:text-blue-900 font-medium"
                     >
                                 View

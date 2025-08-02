@@ -59,10 +59,10 @@ export default function Sidebar(props) {
           {role === 'superadmin' && (
             <>
               <SidebarLink
-                to="/dashboard/Superadmin/Dashboard"
+                to="/dashboard/superadmin/dashboard"
                 label="Dashboard"
                 icon={<FaHospitalAlt />}
-                isActive={isActive("/dashboard/Superadmin/Dashboard")}
+                isActive={isActive("/dashboard/superadmin/dashboard")}
               />
               <SidebarGroup
                 label="Centers"
@@ -70,9 +70,9 @@ export default function Sidebar(props) {
                 open={centerOpen === 'center'}
                 toggle={() => setCenterOpen(centerOpen === 'center' ? null : 'center')}
                 links={[
-                  { to: "/dashboard/Superadmin/Centers/CentersList", label: "Manage Centers" },
-                  { to: "/dashboard/Superadmin/Centers/AddCenter", label: "Add Center" },
-                  { to: "/dashboard/Superadmin/Centers/ManageAdmins", label: "Manage Admins" },
+                  { to: "/dashboard/superadmin/centers/centerslist", label: "Manage Centers" },
+                  { to: "/dashboard/superadmin/centers/addcenter", label: "Add Center" },
+                  { to: "/dashboard/superadmin/centers/manageadmins", label: "Manage Admins" },
                 ]}
                 currentPath={location.pathname}
               />
@@ -82,8 +82,8 @@ export default function Sidebar(props) {
                 open={centerOpen === 'doctors'}
                 toggle={() => setCenterOpen(centerOpen === 'doctors' ? null : 'doctors')}
                 links={[
-                  { to: "/dashboard/Superadmin/Docters/SuperAdminDoctorList", label: "Manage Doctors" },
-                  { to: "/dashboard/Superadmin/Docters/AddSuperAdminDoctor", label: "Add Doctor" },
+                  { to: "/dashboard/superadmin/doctors/superadmindoctorlist", label: "Manage Doctors" },
+                  { to: "/dashboard/superadmin/doctors/addsuperadmindoctor", label: "Add Doctor" },
                 ]}
                 currentPath={location.pathname}
               />
@@ -93,8 +93,8 @@ export default function Sidebar(props) {
                 open={centerOpen === 'receptionists'}
                 toggle={() => setCenterOpen(centerOpen === 'receptionists' ? null : 'receptionists')}
                 links={[
-                  { to: "/dashboard/Superadmin/Receptionists/SuperAdminReceptionistList", label: "Manage Receptionists" },
-                  { to: "/dashboard/Superadmin/Receptionists/AddSuperAdminReceptionist", label: "Add Receptionist" },
+                  { to: "/dashboard/superadmin/receptionists/superadminreceptionistlist", label: "Manage Receptionists" },
+                  { to: "/dashboard/superadmin/receptionists/addsuperadminreceptionist", label: "Add Receptionist" },
                 ]}
                 currentPath={location.pathname}
               />
@@ -104,8 +104,8 @@ export default function Sidebar(props) {
                 open={centerOpen === 'lab'}
                 toggle={() => setCenterOpen(centerOpen === 'lab' ? null : 'lab')}
                 links={[
-                  { to: "/dashboard/Superadmin/Lab/LabStaffList", label: "Lab Staff List" },
-                  { to: "/dashboard/Superadmin/Lab/AddLabStaff", label: "Add Lab Staff" },
+                  { to: "/dashboard/superadmin/lab/labstafflist", label: "Lab Staff List" },
+                  { to: "/dashboard/superadmin/lab/addlabstaff", label: "Add Lab Staff" },
                 ]}
                 currentPath={location.pathname}
               />
@@ -115,8 +115,8 @@ export default function Sidebar(props) {
                 open={centerOpen === 'followup'}
                 toggle={() => setCenterOpen(centerOpen === 'followup' ? null : 'followup')}
                 links={[
-                  { to: "/dashboard/Superadmin/Followups/ViewFollowUpPatients", label: "View FollowUp Patients" },
-                  { to: "/dashboard/Superadmin/Followups/ManageFollowUp", label: "Manage FollowUp" },
+                  { to: "/dashboard/superadmin/followups/viewfollowuppatients", label: "View FollowUp Patients" },
+                  { to: "/dashboard/superadmin/followups/managefollowup", label: "Manage FollowUp" },
     
                 ]}
                 currentPath={location.pathname}
@@ -127,10 +127,10 @@ export default function Sidebar(props) {
           {role === 'centeradmin' && (
             <>
               <SidebarLink
-                to="/dashboard/CenterAdmin/Dashboard"
+                to="/dashboard/centeradmin/dashboard"
                 label="Dashboard"
                 icon={<FaHome />}
-                isActive={isActive("/dashboard/CenterAdmin/Dashboard")}
+                isActive={isActive("/dashboard/centeradmin/dashboard")}
               />
               <SidebarGroup
                 label="Doctors"
@@ -138,8 +138,8 @@ export default function Sidebar(props) {
                 open={centerOpen === 'doctors'}
                 toggle={() => setCenterOpen(centerOpen === 'doctors' ? null : 'doctors')}
                 links={[
-                  { to: "/dashboard/CenterAdmin/Docters/AddDocter", label: "Add Doctor" },
-                  { to: "/dashboard/CenterAdmin/Docters/DocterList", label: "Doctor List" },
+                  { to: "/dashboard/centeradmin/doctors/adddoctor", label: "Add Doctor" },
+                  { to: "/dashboard/centeradmin/doctors/doctorlist", label: "Doctor List" },
                 ]}
                 currentPath={location.pathname}
               />
@@ -149,8 +149,8 @@ export default function Sidebar(props) {
                 open={centerOpen === 'receptionists'}
                 toggle={() => setCenterOpen(centerOpen === 'receptionists' ? null : 'receptionists')}
                 links={[
-                  { to: "/dashboard/CenterAdmin/Receptionist/AddReceptionist", label: "Add Receptionist" },
-                  { to: "/dashboard/CenterAdmin/Receptionist/ManageReceptionists", label: "Receptionist List" },
+                  { to: "/dashboard/centeradmin/receptionist/addreceptionist", label: "Add Receptionist" },
+                  { to: "/dashboard/centeradmin/receptionist/managereceptionists", label: "Receptionist List" },
                 ]}
                 currentPath={location.pathname}
               />
@@ -160,17 +160,17 @@ export default function Sidebar(props) {
                 open={centerOpen === 'patients'}
                 toggle={() => setCenterOpen(centerOpen === 'patients' ? null : 'patients')}
                 links={[
-                  { to: "/dashboard/CenterAdmin/patients/addpatient", label: "Add patients" },
-                  { to: "/dashboard/CenterAdmin/patients/PatientList", label: "Patients List" },
-                  { to: "/dashboard/CenterAdmin/patients/ManagePatients", label: "Manage patients" },
+                  { to: "/dashboard/centeradmin/patients/addpatient", label: "Add patients" },
+                  { to: "/dashboard/centeradmin/patients/patientlist", label: "Patients List" },
+                  { to: "/dashboard/centeradmin/patients/managepatients", label: "Manage patients" },
                 ]}
                 currentPath={location.pathname}
               />
               <SidebarLink
-                to="/dashboard/CenterAdmin/center-profile"
+                to="/dashboard/centeradmin/center-profile"
                 label="Center Profile"
                 icon={<FaHospitalAlt />}
-                isActive={isActive("/dashboard/CenterAdmin/center-profile")}
+                isActive={isActive("/dashboard/centeradmin/center-profile")}
               />
             </>
           )}

@@ -245,7 +245,7 @@ const MyPatients = () => {
                             const id = typeof patient._id === 'object' && patient._id !== null
                               ? patient._id._id || patient._id.id || String(patient._id)
                               : String(patient._id);
-                            navigate(`/doctor/patient/${id}`);
+                            navigate(`/dashboard/doctor/patient/${id}`);
                           }}
                           className="flex items-center text-blue-600 hover:text-blue-700 font-medium"
                         >

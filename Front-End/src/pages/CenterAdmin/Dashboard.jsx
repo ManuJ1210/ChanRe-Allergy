@@ -58,7 +58,7 @@ export default function CenterAdminDashboard() {
       icon: <Users className="h-6 w-6" />,
       color: 'bg-blue-500',
       hoverColor: 'hover:bg-blue-600',
-      onClick: () => navigate('/CenterAdmin/patients/addpatient')
+              onClick: () => navigate('/dashboard/centeradmin/patients/addpatient')
     },
     {
       title: 'Add Doctor',
@@ -66,7 +66,7 @@ export default function CenterAdminDashboard() {
       icon: <User className="h-6 w-6" />,
       color: 'bg-green-500',
       hoverColor: 'hover:bg-green-600',
-              onClick: () => navigate('/dashboard/CenterAdmin/Docters/AddDocter')
+              onClick: () => navigate('/dashboard/centeradmin/doctors/adddoctor')
     },
     {
       title: 'Add Receptionist',
@@ -74,7 +74,7 @@ export default function CenterAdminDashboard() {
       icon: <UserCheck className="h-6 w-6" />,
       color: 'bg-purple-500',
       hoverColor: 'hover:bg-purple-600',
-      onClick: () => navigate('/CenterAdmin/Receptionist/AddReceptionist')
+              onClick: () => navigate('/dashboard/centeradmin/receptionist/addreceptionist')
     },
     {
       title: 'View Patients',
@@ -82,7 +82,7 @@ export default function CenterAdminDashboard() {
       icon: <Eye className="h-6 w-6" />,
       color: 'bg-orange-500',
       hoverColor: 'hover:bg-orange-600',
-      onClick: () => navigate('/CenterAdmin/patients/PatientList')
+              onClick: () => navigate('/dashboard/centeradmin/patients/patientlist')
     }
   ];
 
@@ -198,7 +198,7 @@ export default function CenterAdminDashboard() {
             <div className="p-6">
               <div className="space-y-3">
                 <button
-                  onClick={() => navigate('/CenterAdmin/patients/addpatient')}
+                  onClick={() => navigate('/dashboard/centeradmin/patients/addpatient')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -207,7 +207,7 @@ export default function CenterAdminDashboard() {
                   </div>
                 </button>
                 <button
-                  onClick={() => navigate('/CenterAdmin/patients/PatientList')}
+                  onClick={() => navigate('/dashboard/centeradmin/patients/patientlist')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -239,7 +239,7 @@ export default function CenterAdminDashboard() {
             <div className="p-6">
               <div className="space-y-3">
                 <button
-                  onClick={() => navigate('/dashboard/CenterAdmin/Docters/AddDocter')}
+                  onClick={() => navigate('/dashboard/centeradmin/doctors/adddoctor')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -248,7 +248,7 @@ export default function CenterAdminDashboard() {
                   </div>
                 </button>
                 <button
-                  onClick={() => navigate('/dashboard/CenterAdmin/Docters/DocterList')}
+                  onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -257,7 +257,7 @@ export default function CenterAdminDashboard() {
                   </div>
                 </button>
                 <button
-                  onClick={() => navigate('/CenterAdmin/Receptionist/AddReceptionist')}
+                  onClick={() => navigate('/dashboard/centeradmin/receptionist/addreceptionist')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
@@ -266,7 +266,7 @@ export default function CenterAdminDashboard() {
                   </div>
                 </button>
                 <button
-                  onClick={() => navigate('/CenterAdmin/Receptionist/ManageReceptionists')}
+                  onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
