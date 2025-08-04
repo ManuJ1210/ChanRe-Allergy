@@ -14,9 +14,19 @@ import {
   setHistory,
   setTests,
   setAddSuccess,
+  setAddHistorySuccess,
+  setAddMedicationSuccess,
   setAddAllergicRhinitisSuccess,
+  setAddAtopicDermatitisSuccess,
+  setAddAllergicBronchitisSuccess,
+  setAddGPESuccess,
+  setAddPrescriptionSuccess,
   setUpdateSuccess,
   setDeleteSuccess,
+  setMedLoading,
+  setMedError,
+  setHistoryLoading,
+  setHistoryError,
   resetCenterAdminState,
   addReceptionist,
   updateReceptionist,
@@ -27,7 +37,6 @@ import {
   addPrescription,
   addMedication,
   addTest,
-  setAddHistorySuccess,
   setAddFollowUpSuccess
 } from './centerAdminSlice';
 
@@ -372,11 +381,14 @@ export const fetchPatientHistory = createAsyncThunk(
   'centerAdmin/fetchPatientHistory',
   async (patientId, { dispatch }) => {
     try {
+      dispatch(setHistoryLoading(true));
       const res = await API.get(`/history/${patientId}`);
       dispatch(setHistory(res.data));
+      dispatch(setHistoryLoading(false));
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to fetch patient history'));
+      dispatch(setHistoryError(error.response?.data?.message || 'Failed to fetch patient history'));
+      dispatch(setHistoryLoading(false));
       throw error;
     }
   }
@@ -387,11 +399,14 @@ export const fetchPatientMedications = createAsyncThunk(
   'centerAdmin/fetchPatientMedications',
   async (patientId, { dispatch }) => {
     try {
+      dispatch(setMedLoading(true));
       const res = await API.get(`/medications?patientId=${patientId}`);
       dispatch(setMedications(res.data));
+      dispatch(setMedLoading(false));
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to fetch patient medications'));
+      dispatch(setMedError(error.response?.data?.message || 'Failed to fetch patient medications'));
+      dispatch(setMedLoading(false));
       throw error;
     }
   }

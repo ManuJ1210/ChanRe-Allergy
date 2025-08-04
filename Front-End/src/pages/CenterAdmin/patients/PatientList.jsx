@@ -24,7 +24,7 @@ export default function PatientList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredPatients, setFilteredPatients] = useState([]);
 
-  const { patients, getLoading } = useSelector((state) => state.patient);
+  const { patients = [], getLoading } = useSelector((state) => state.patient);
 
   useEffect(() => {
     dispatch(getPatients());
@@ -32,13 +32,13 @@ export default function PatientList() {
 
   // Filter patients based on search term
   useEffect(() => {
-    const filtered = patients.filter(patient =>
-      patient.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.contact?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.centerCode?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.assignedDoctor?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    const filtered = (patients || []).filter(patient =>
+      patient?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient?.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient?.contact?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient?.centerCode?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient?.assignedDoctor?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredPatients(filtered);
   }, [searchTerm, patients]);
@@ -51,9 +51,9 @@ export default function PatientList() {
   };
 
   const getGenderStats = () => {
-    const maleCount = patients.filter(p => p.gender === 'male').length;
-    const femaleCount = patients.filter(p => p.gender === 'female').length;
-    const otherCount = patients.filter(p => p.gender === 'other').length;
+    const maleCount = (patients || []).filter(p => p?.gender === 'male').length;
+    const femaleCount = (patients || []).filter(p => p?.gender === 'female').length;
+    const otherCount = (patients || []).filter(p => p?.gender === 'other').length;
     return { maleCount, femaleCount, otherCount };
   };
 
@@ -86,10 +86,10 @@ export default function PatientList() {
                   className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              <button
-                onClick={() => navigate('/dashboard/centeradmin/patients/addpatient')}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-              >
+                              <button
+                  onClick={() => navigate('/dashboard/CenterAdmin/patients/AddPatient')}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+                >
                 <Plus className="h-4 w-4" />
                 Add Patient
               </button>
@@ -103,7 +103,7 @@ export default function PatientList() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                <p className="text-2xl font-bold text-slate-800">{patients.length}</p>
+                <p className="text-2xl font-bold text-slate-800">{(patients || []).length}</p>
               </div>
               <Users className="h-8 w-8 text-blue-500" />
             </div>
@@ -131,7 +131,7 @@ export default function PatientList() {
               <div>
                 <p className="text-slate-600 text-sm font-medium">With Email</p>
                 <p className="text-2xl font-bold text-slate-800">
-                  {patients.filter(p => p.email).length}
+                  {(patients || []).filter(p => p?.email).length}
                 </p>
               </div>
               <Mail className="h-8 w-8 text-green-500" />
@@ -142,7 +142,7 @@ export default function PatientList() {
               <div>
                 <p className="text-slate-600 text-sm font-medium">With Phone</p>
                 <p className="text-2xl font-bold text-slate-800">
-                  {patients.filter(p => p.phone || p.contact).length}
+                  {(patients || []).filter(p => p?.phone || p?.contact).length}
                 </p>
               </div>
               <Phone className="h-8 w-8 text-orange-500" />
@@ -158,7 +158,7 @@ export default function PatientList() {
               Patients List
             </h2>
             <p className="text-slate-600 mt-1">
-              {filteredPatients.length} of {patients.length} patients
+              {filteredPatients.length} of {(patients || []).length} patients
             </p>
           </div>
           
@@ -202,22 +202,22 @@ export default function PatientList() {
                   </thead>
                   <tbody className="divide-y divide-slate-200">
                     {filteredPatients.map((patient, index) => (
-                      <tr key={patient._id} className="hover:bg-slate-50 transition-colors">
+                      <tr key={patient?._id || index} className="hover:bg-slate-50 transition-colors">
                         <td className="px-6 py-4">
-                          <div>
-                            <div className="font-semibold text-slate-800">{patient.name}</div>
-                            <div className="text-sm text-slate-500">#{index + 1}</div>
-                          </div>
+                                                      <div>
+                              <div className="font-semibold text-slate-800">{patient?.name || 'N/A'}</div>
+                              <div className="text-sm text-slate-500">#{index + 1}</div>
+                            </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="space-y-1">
-                            {patient.email && (
+                            {patient?.email && (
                               <div className="flex items-center text-sm text-slate-600">
                                 <Mail className="h-3 w-3 mr-2" />
                                 {patient.email}
                               </div>
                             )}
-                            {(patient.phone || patient.contact) && (
+                            {(patient?.phone || patient?.contact) && (
                               <div className="flex items-center text-sm text-slate-600">
                                 <Phone className="h-3 w-3 mr-2" />
                                 {patient.phone || patient.contact}
@@ -227,45 +227,45 @@ export default function PatientList() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center space-x-2">
-                            <span className="text-sm font-medium text-slate-800">{patient.age} years</span>
+                            <span className="text-sm font-medium text-slate-800">{patient?.age || 'N/A'} years</span>
                             <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
-                              patient.gender === 'male' ? 'bg-blue-100 text-blue-700' :
-                              patient.gender === 'female' ? 'bg-pink-100 text-pink-700' :
+                              patient?.gender === 'male' ? 'bg-blue-100 text-blue-700' :
+                              patient?.gender === 'female' ? 'bg-pink-100 text-pink-700' :
                               'bg-slate-100 text-slate-700'
                             }`}>
-                              {patient.gender}
+                              {patient?.gender || 'N/A'}
                             </span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center text-sm text-slate-600">
                             <MapPin className="h-3 w-3 mr-2" />
-                            {patient.centerCode || 'Not assigned'}
+                            {patient?.centerCode || 'Not assigned'}
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="text-sm text-slate-600">
-                            {patient.assignedDoctor?.name || 'Not assigned'}
+                            {patient?.assignedDoctor?.name || 'Not assigned'}
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center space-x-2">
                             <button
-                              onClick={() => navigate(`/CenterAdmin/patients/ViewProfile/${patient._id}`)}
+                              onClick={() => navigate(`/dashboard/CenterAdmin/patients/profile/ViewProfile/${patient?._id}`)}
                               className="text-blue-600 hover:text-blue-700 p-1 rounded transition-colors"
                               title="View Profile"
                             >
                               <Eye className="h-4 w-4" />
                             </button>
                             <button
-                              onClick={() => navigate(`/CenterAdmin/patients/EditPatient/${patient._id}`)}
+                              onClick={() => navigate(`/dashboard/CenterAdmin/patients/EditPatient/${patient?._id}`)}
                               className="text-green-600 hover:text-green-700 p-1 rounded transition-colors"
                               title="Edit"
                             >
                               <Edit className="h-4 w-4" />
                             </button>
                             <button
-                              onClick={() => handleDelete(patient._id)}
+                              onClick={() => handleDelete(patient?._id)}
                               className="text-red-600 hover:text-red-700 p-1 rounded transition-colors"
                               title="Delete"
                             >

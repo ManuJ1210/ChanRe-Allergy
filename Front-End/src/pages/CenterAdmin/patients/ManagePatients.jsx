@@ -7,7 +7,7 @@ export default function ManagePatients() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { patients, loading, error } = useSelector((state) => state.patient);
+  const { patients = [], loading, error } = useSelector((state) => state.patient);
   const [selectedPatient, setSelectedPatient] = useState(null);
 
   useEffect(() => {
@@ -42,29 +42,29 @@ export default function ManagePatients() {
                   </td>
                 </tr>
               ) : (
-                patients.map((patient, index) => (
-                  <tr key={patient._id} className="hover:bg-blue-50 transition">
+                (patients || []).map((patient, index) => (
+                  <tr key={patient?._id || index} className="hover:bg-blue-50 transition">
                     <td className="px-6 py-4 text-center font-semibold">{index + 1}</td>
-                    <td className="px-6 py-4 text-center text-slate-700">{patient.name}</td>
-                    <td className="px-6 py-4 text-center text-slate-500">{patient.email}</td>
-                    <td className="px-6 py-4 text-center text-slate-500">{patient.contact || patient.phone}</td>
-                    <td className="px-6 py-4 text-center text-slate-500">{patient.age}</td>
-                    <td className="px-6 py-4 text-center text-slate-500 capitalize">{patient.gender}</td>
+                    <td className="px-6 py-4 text-center text-slate-700">{patient?.name || 'N/A'}</td>
+                    <td className="px-6 py-4 text-center text-slate-500">{patient?.email || 'N/A'}</td>
+                    <td className="px-6 py-4 text-center text-slate-500">{patient?.contact || patient?.phone || 'N/A'}</td>
+                    <td className="px-6 py-4 text-center text-slate-500">{patient?.age || 'N/A'}</td>
+                    <td className="px-6 py-4 text-center text-slate-500 capitalize">{patient?.gender || 'N/A'}</td>
                     <td className="px-6 py-4 text-center space-x-2 whitespace-nowrap">
                       <button
-                        onClick={() => navigate(`/CenterAdmin/patients/AddTest/${patient._id}`)}
-                        className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg hover:bg-blue-200 font-semibold transition"
+                        onClick={() => navigate(`/dashboard/CenterAdmin/patients/AddTest/${patient?._id}`)}
+                        className="bg-purple-100 text-purple-700 px-3 py-1 rounded-lg hover:bg-purple-200 font-semibold transition"
                       >
                         Add Test
                       </button>
                       <button
-                        onClick={() => navigate(`/CenterAdmin/patients/AddHistory/${patient._id}`)}
+                        onClick={() => navigate(`/dashboard/CenterAdmin/patients/AddHistory/${patient?._id}`)}
                         className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-lg hover:bg-yellow-200 font-semibold transition"
                       >
                         Add History
                       </button>
                       <button
-                        onClick={() => navigate(`/CenterAdmin/patients/AddMedications/${patient._id}`)}
+                        onClick={() => navigate(`/dashboard/CenterAdmin/patients/profile/AddMedications/${patient?._id}`)}
                         className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-lg hover:bg-indigo-200 font-semibold transition"
                       >
                         Add Medications

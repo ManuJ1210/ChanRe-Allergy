@@ -23,6 +23,10 @@ const initialState = {
   patientHistory: null,
   loading: false,
   error: null,
+  medLoading: false,
+  medError: null,
+  historyLoading: false,
+  historyError: null,
   addSuccess: false,
   addHistorySuccess: false,
   addMedicationSuccess: false,
@@ -93,8 +97,23 @@ const centerAdminSlice = createSlice({
     setAddHistorySuccess: (state, action) => {
       state.addHistorySuccess = action.payload;
     },
+    setAddMedicationSuccess: (state, action) => {
+      state.addMedicationSuccess = action.payload;
+    },
     setAddAllergicRhinitisSuccess: (state, action) => {
       state.addAllergicRhinitisSuccess = action.payload;
+    },
+    setAddAtopicDermatitisSuccess: (state, action) => {
+      state.addAtopicDermatitisSuccess = action.payload;
+    },
+    setAddAllergicBronchitisSuccess: (state, action) => {
+      state.addAllergicBronchitisSuccess = action.payload;
+    },
+    setAddGPESuccess: (state, action) => {
+      state.addGPESuccess = action.payload;
+    },
+    setAddPrescriptionSuccess: (state, action) => {
+      state.addPrescriptionSuccess = action.payload;
     },
     setAddFollowUpSuccess: (state, action) => {
       state.addFollowUpSuccess = action.payload;
@@ -104,6 +123,20 @@ const centerAdminSlice = createSlice({
     },
     setDeleteSuccess: (state, action) => {
       state.deleteSuccess = action.payload;
+    },
+    setMedLoading: (state, action) => {
+      state.medLoading = action.payload;
+    },
+    setMedError: (state, action) => {
+      state.medError = action.payload;
+      state.medLoading = false;
+    },
+    setHistoryLoading: (state, action) => {
+      state.historyLoading = action.payload;
+    },
+    setHistoryError: (state, action) => {
+      state.historyError = action.payload;
+      state.historyLoading = false;
     },
     resetCenterAdminState: (state) => {
       state.addSuccess = false;
@@ -501,10 +534,19 @@ export const {
   setTests,
   setAddSuccess,
   setAddHistorySuccess,
+  setAddMedicationSuccess,
   setAddAllergicRhinitisSuccess,
+  setAddAtopicDermatitisSuccess,
+  setAddAllergicBronchitisSuccess,
+  setAddGPESuccess,
+  setAddPrescriptionSuccess,
   setAddFollowUpSuccess,
   setUpdateSuccess,
   setDeleteSuccess,
+  setMedLoading,
+  setMedError,
+  setHistoryLoading,
+  setHistoryError,
   resetCenterAdminState,
   addReceptionist,
   updateReceptionist,

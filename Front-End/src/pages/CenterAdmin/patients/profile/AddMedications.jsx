@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { addPatientMedication } from "../../../../features/centerAdmin/centerAdminThunks";
 import { resetCenterAdminState } from "../../../../features/centerAdmin/centerAdminSlice";
 import { Pill, Save, ArrowLeft, CheckCircle } from "lucide-react";
@@ -26,7 +26,7 @@ export default function AddMedications() {
     if (addMedicationSuccess) {
       setTimeout(() => {
         dispatch(resetCenterAdminState());
-        navigate('/center-admin/manage-patients');
+        navigate('/dashboard/CenterAdmin/patients/PatientList');
       }, 1500);
     }
   }, [addMedicationSuccess, dispatch, navigate]);
@@ -46,12 +46,12 @@ export default function AddMedications() {
   };
 
   return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-8">
             <button
-              onClick={() => navigate(`/center-admin/profile/${id}`)}
+                              onClick={() => navigate(`/dashboard/CenterAdmin/patients/profile/ViewProfile/${id}`)}
               className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -200,7 +200,7 @@ export default function AddMedications() {
               <div className="flex gap-4 pt-6">
                 <button
                   type="button"
-                  onClick={() => navigate(`/center-admin/profile/${id}`)}
+                  onClick={() => navigate(`/dashboard/CenterAdmin/patients/profile/ViewProfile/${id}`)}
                   className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
                 >
                   <ArrowLeft className="h-4 w-4" />
@@ -229,4 +229,4 @@ export default function AddMedications() {
         </div>
       </div>
   );
-}
+} 

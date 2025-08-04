@@ -109,7 +109,7 @@ export default function AddAllergicConjunctivitis() {
       
       
       alert("Submitted successfully!");
-              navigate(`/dashboard/receptionist/profile/${params.patientId}`);
+      navigate(`/Receptionist/profile/${params.patientId}`);
     } catch (err) {
       console.error('Error submitting form:', err);
       console.error('Error response:', err.response?.data);

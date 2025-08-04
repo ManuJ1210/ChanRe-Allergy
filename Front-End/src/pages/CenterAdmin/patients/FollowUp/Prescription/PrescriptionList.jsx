@@ -106,7 +106,7 @@ const PrescriptionList = ({ patientId: propPatientId }) => {
                         <div className="flex space-x-2">
                           <button
                             className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
-                            onClick={() => navigate(`/dashboard/receptionist/followup/prescription/view/${p._id}`)}
+                            onClick={() => navigate(`/receptionist/followup/prescription/view/${p._id}`)}
                           >
                             <Eye className="h-3 w-3" />
                             View
