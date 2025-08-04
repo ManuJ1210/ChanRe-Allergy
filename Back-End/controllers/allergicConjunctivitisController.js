@@ -36,17 +36,19 @@ export const createAllergicConjunctivitis = async (req, res) => {
 export const getAllergicConjunctivitisByPatient = async (req, res) => {
   try {
     const { patientId } = req.query;
+    console.log('getAllergicConjunctivitisByPatient called with patientId:', patientId);
+    
     let records;
-    if (patientId) {
+    if (patientId && patientId !== 'undefined') {
       records = await AllergicConjunctivitis.find({ patientId })
         .populate('patientId', 'name age centerCode phone gender')
         .sort({ createdAt: -1 });
+      console.log(`Found ${records.length} records for patientId: ${patientId}`);
     } else {
-      records = await AllergicConjunctivitis.find()
-        .populate('patientId', 'name age centerCode phone gender')
-        .sort({ createdAt: -1 });
+      console.log('No valid patientId provided, returning empty array');
+      records = [];
     }
-    console.log('Fetched Allergic Conjunctivitis records:', records);
+    
     res.status(200).json(records);
   } catch (err) {
     console.error('Error fetching allergic conjunctivitis records:', err);

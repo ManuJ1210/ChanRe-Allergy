@@ -125,9 +125,12 @@ export const fetchPatientAndTests = createAsyncThunk(
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      // The backend returns just the tests array directly
+      const tests = Array.isArray(response.data) ? response.data : [];
+      
       return {
-        patient: response.data.patient || null,
-        tests: response.data.tests || [],
+        patient: null, // We'll fetch patient separately if needed
+        tests: tests,
       };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to load patient tests');
@@ -138,3 +141,20 @@ export const fetchPatientAndTests = createAsyncThunk(
 // ✅ Aliases for legacy component imports (AddTest.jsx & ShowTests.jsx)
 export const submitTestReport = submitPatientTests;
 export const fetchPatientTests = fetchPatientAndTests;
+
+// FETCH PATIENT HISTORY
+export const fetchPatientHistory = createAsyncThunk(
+  'patient/fetchPatientHistory',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`http://localhost:5000/api/history/${patientId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient history');
+    }
+  }
+);

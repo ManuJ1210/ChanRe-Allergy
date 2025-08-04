@@ -7,7 +7,10 @@ import {
   fetchReceptionistGPE,
   fetchReceptionistPrescription,
   deleteReceptionistPrescription,
-  fetchReceptionistPrescriptions
+  fetchReceptionistPrescriptions,
+  fetchReceptionistPatientHistory,
+  fetchReceptionistPatientMedications,
+  fetchReceptionistPatientTests
 } from './receptionistThunks';
 
 const initialState = {
@@ -44,7 +47,9 @@ const initialState = {
   addAllergicBronchitisSuccess: false,
   addGPESuccess: false,
   updateSuccess: false,
-  deleteSuccess: false
+  deleteSuccess: false,
+  historyLoading: false,
+  historyError: null
 };
 
 const receptionistSlice = createSlice({
@@ -298,6 +303,48 @@ const receptionistSlice = createSlice({
         state.prescriptions = action.payload;
       })
       .addCase(fetchReceptionistPrescriptions.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch patient medications
+      .addCase(fetchReceptionistPatientMedications.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchReceptionistPatientMedications.fulfilled, (state, action) => {
+        state.loading = false;
+        state.medications = action.payload;
+      })
+      .addCase(fetchReceptionistPatientMedications.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch patient history
+      .addCase(fetchReceptionistPatientHistory.pending, (state) => {
+        state.historyLoading = true;
+        state.historyError = null;
+      })
+      .addCase(fetchReceptionistPatientHistory.fulfilled, (state, action) => {
+        state.historyLoading = false;
+        state.history = action.payload;
+      })
+      .addCase(fetchReceptionistPatientHistory.rejected, (state, action) => {
+        state.historyLoading = false;
+        state.historyError = action.payload;
+      })
+      
+      // Fetch patient tests
+      .addCase(fetchReceptionistPatientTests.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchReceptionistPatientTests.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tests = action.payload;
+      })
+      .addCase(fetchReceptionistPatientTests.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

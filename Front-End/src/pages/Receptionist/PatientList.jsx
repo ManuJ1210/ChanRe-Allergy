@@ -270,27 +270,45 @@ export default function PatientList() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                           <div className="flex items-center justify-center gap-2">
-                            <button
-                              onClick={() => navigate(`/dashboard/receptionist/profile/${patient._id}`)}
-                              className="text-blue-600 hover:text-blue-900 p-1 rounded transition-colors"
-                              title="View patient"
-                            >
-                              <Eye className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => navigate(`/dashboard/receptionist/edit-patient/${patient._id}`)}
-                              className="text-green-600 hover:text-green-900 p-1 rounded transition-colors"
-                              title="Edit patient"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(patient._id)}
-                              className="text-red-600 hover:text-red-900 p-1 rounded transition-colors"
-                              title="Delete patient"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
+                            {patient._id ? (
+                              <button
+                                onClick={() => navigate(`/dashboard/receptionist/profile/${patient._id}`)}
+                                className="text-blue-600 hover:text-blue-900 p-1 rounded transition-colors"
+                                title="View patient"
+                              >
+                                <Eye className="h-4 w-4" />
+                              </button>
+                            ) : (
+                              <span className="text-slate-400 p-1" title="No patient ID available">
+                                <Eye className="h-4 w-4" />
+                              </span>
+                            )}
+                            {patient._id ? (
+                              <button
+                                onClick={() => navigate(`/dashboard/receptionist/edit-patient/${patient._id}`)}
+                                className="text-green-600 hover:text-green-900 p-1 rounded transition-colors"
+                                title="Edit patient"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </button>
+                            ) : (
+                              <span className="text-slate-400 p-1" title="No patient ID available">
+                                <Edit className="h-4 w-4" />
+                              </span>
+                            )}
+                            {patient._id ? (
+                              <button
+                                onClick={() => handleDelete(patient._id)}
+                                className="text-red-600 hover:text-red-900 p-1 rounded transition-colors"
+                                title="Delete patient"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            ) : (
+                              <span className="text-slate-400 p-1" title="No patient ID available">
+                                <Trash2 className="h-4 w-4" />
+                              </span>
+                            )}
                           </div>
                         </td>
                       </tr>

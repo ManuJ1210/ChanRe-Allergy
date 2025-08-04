@@ -35,6 +35,9 @@ const PatientDetails = () => {
     loading 
   } = useSelector((state) => state.doctor);
 
+  // Destructure the data from patientDetails
+  const { patient, history, medications, tests } = patientDetails || {};
+
   const [activeTab, setActiveTab] = useState('overview');
   const [showTestForm, setShowTestForm] = useState(false);
   const [testForm, setTestForm] = useState({
@@ -123,8 +126,6 @@ const PatientDetails = () => {
   if (!patientDetails) {
     return null;
   }
-
-  const { patient, history, medications, tests } = patientDetails;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
@@ -258,267 +259,419 @@ const PatientDetails = () => {
                 <h3 className="text-lg font-semibold text-slate-800 mb-4">Patient History</h3>
                 {history ? (
                   <div className="space-y-6">
-                    {/* Section One - Medical Conditions */}
-                    {history.sectionOne?.conditions && (
+                                         {/* Medical Conditions */}
+                     <div className="bg-slate-50 rounded-lg p-6">
+                       <h4 className="font-semibold text-slate-800 mb-4 text-lg">Medical Conditions</h4>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         {history.hayFever && (
+                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium">Hay Fever:</span>
+                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                               history.hayFever === 'yes' ? 'bg-green-100 text-green-700' : 
+                               history.hayFever === 'no' ? 'bg-red-100 text-red-700' : 
+                               'bg-blue-100 text-blue-700'
+                             }`}>
+                               {history.hayFever}
+                             </span>
+                           </div>
+                         )}
+                         {history.asthma && (
+                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium">Asthma:</span>
+                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                               history.asthma === 'yes' ? 'bg-green-100 text-green-700' : 
+                               history.asthma === 'no' ? 'bg-red-100 text-red-700' : 
+                               'bg-blue-100 text-blue-700'
+                             }`}>
+                               {history.asthma}
+                             </span>
+                           </div>
+                         )}
+                         {history.breathingProblems && (
+                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium">Breathing Problems:</span>
+                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                               history.breathingProblems === 'yes' ? 'bg-green-100 text-green-700' : 
+                               history.breathingProblems === 'no' ? 'bg-red-100 text-red-700' : 
+                               'bg-blue-100 text-blue-700'
+                             }`}>
+                               {history.breathingProblems}
+                             </span>
+                           </div>
+                         )}
+                         {history.hivesSwelling && (
+                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium">Hives/Swelling:</span>
+                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                               history.hivesSwelling === 'yes' ? 'bg-green-100 text-green-700' : 
+                               history.hivesSwelling === 'no' ? 'bg-red-100 text-red-700' : 
+                               'bg-blue-100 text-blue-700'
+                             }`}>
+                               {history.hivesSwelling}
+                             </span>
+                           </div>
+                         )}
+                         {history.sinusTrouble && (
+                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium">Sinus Trouble:</span>
+                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                               history.sinusTrouble === 'yes' ? 'bg-green-100 text-green-700' : 
+                               history.sinusTrouble === 'no' ? 'bg-red-100 text-red-700' : 
+                               'bg-blue-100 text-blue-700'
+                             }`}>
+                               {history.sinusTrouble}
+                             </span>
+                           </div>
+                         )}
+                         {history.eczemaRashes && (
+                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium">Eczema/Rashes:</span>
+                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                               history.eczemaRashes === 'yes' ? 'bg-green-100 text-green-700' : 
+                               history.eczemaRashes === 'no' ? 'bg-red-100 text-red-700' : 
+                               'bg-blue-100 text-blue-700'
+                             }`}>
+                               {history.eczemaRashes}
+                             </span>
+                           </div>
+                         )}
+                         {history.foodAllergies && (
+                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium">Food Allergies:</span>
+                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                               history.foodAllergies === 'yes' ? 'bg-green-100 text-green-700' : 
+                               history.foodAllergies === 'no' ? 'bg-red-100 text-red-700' : 
+                               'bg-blue-100 text-blue-700'
+                             }`}>
+                               {history.foodAllergies}
+                             </span>
+                           </div>
+                         )}
+                         {history.arthriticDiseases && (
+                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium">Arthritic Diseases:</span>
+                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                               history.arthriticDiseases === 'yes' ? 'bg-green-100 text-green-700' : 
+                               history.arthriticDiseases === 'no' ? 'bg-red-100 text-red-700' : 
+                               'bg-blue-100 text-blue-700'
+                             }`}>
+                               {history.arthriticDiseases}
+                             </span>
+                           </div>
+                         )}
+                         {history.immuneDefect && (
+                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium">Immune Defect:</span>
+                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                               history.immuneDefect === 'yes' ? 'bg-green-100 text-green-700' : 
+                               history.immuneDefect === 'no' ? 'bg-red-100 text-red-700' : 
+                               'bg-blue-100 text-blue-700'
+                             }`}>
+                               {history.immuneDefect}
+                             </span>
+                           </div>
+                         )}
+                         {history.drugAllergy && (
+                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium">Drug Allergy:</span>
+                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                               history.drugAllergy === 'yes' ? 'bg-green-100 text-green-700' : 
+                               history.drugAllergy === 'no' ? 'bg-red-100 text-red-700' : 
+                               'bg-blue-100 text-blue-700'
+                             }`}>
+                               {history.drugAllergy}
+                             </span>
+                           </div>
+                         )}
+                         {history.beeStingHypersensitivity && (
+                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium">Bee Sting Hypersensitivity:</span>
+                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                               history.beeStingHypersensitivity === 'yes' ? 'bg-green-100 text-green-700' : 
+                               history.beeStingHypersensitivity === 'no' ? 'bg-red-100 text-red-700' : 
+                               'bg-blue-100 text-blue-700'
+                             }`}>
+                               {history.beeStingHypersensitivity}
+                             </span>
+                           </div>
+                         )}
+                       </div>
+                     </div>
+
+                    {/* Asthma Details */}
+                    {(history.asthmaType || history.exacerbationsFrequency || history.coughWheezeFrequency) && (
                       <div className="bg-slate-50 rounded-lg p-6">
-                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Medical Conditions</h4>
+                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Asthma Details</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {Object.entries(history.sectionOne.conditions).map(([condition, value]) => (
-                            <div key={condition} className="flex justify-between items-center p-3 bg-white rounded-lg">
-                              <span className="text-slate-700 font-medium">{condition}:</span>
-                              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                value === 'yes' ? 'bg-green-100 text-green-700' : 
-                                value === 'no' ? 'bg-red-100 text-red-700' : 
-                                'bg-blue-100 text-blue-700'
-                              }`}>
-                                {value}
-                              </span>
+                          {history.asthmaType && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Asthma Type:</span>
+                              <span className="text-slate-600">{history.asthmaType}</span>
                             </div>
-                          ))}
+                          )}
+                          {history.exacerbationsFrequency && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Exacerbations Frequency:</span>
+                              <span className="text-slate-600">{history.exacerbationsFrequency}</span>
+                            </div>
+                          )}
+                          {history.coughWheezeFrequency && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Cough/Wheeze Frequency:</span>
+                              <span className="text-slate-600">{history.coughWheezeFrequency}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}
 
-                    {/* Section Two - Symptoms and Asthma */}
-                    {history.sectionTwo && (
+                    {/* Allergic Rhinitis */}
+                    {(history.allergicRhinitisType || history.rhinitisSneezing || history.rhinitisNasalCongestion) && (
                       <div className="bg-slate-50 rounded-lg p-6">
-                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Symptoms & Asthma Details</h4>
+                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Allergic Rhinitis</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {Object.entries(history.sectionTwo).map(([key, value]) => (
-                            value && (
-                              <div key={key} className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                <span className="text-slate-700 font-medium">
-                                  {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:
-                                </span>
-                                <span className="text-slate-600">{value}</span>
-                              </div>
-                            )
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Section Three - Questions and Triggers */}
-                    {history.sectionThree && (
-                      <div className="bg-slate-50 rounded-lg p-6">
-                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Medical Questions & Triggers</h4>
-                        
-                        {history.sectionThree.questions && (
-                          <div className="mb-4">
-                            <h5 className="font-medium text-slate-700 mb-3">Medical Questions</h5>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              {Object.entries(history.sectionThree.questions).map(([question, answer]) => (
-                                <div key={question} className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                  <span className="text-slate-700 font-medium">{question}:</span>
-                                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                    answer === 'yes' ? 'bg-green-100 text-green-700' : 
-                                    answer === 'no' ? 'bg-red-100 text-red-700' : 
-                                    'bg-blue-100 text-blue-700'
-                                  }`}>
-                                    {answer}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {history.sectionThree.triggers && history.sectionThree.triggers.length > 0 && (
-                          <div className="mb-4">
-                            <h5 className="font-medium text-slate-700 mb-3">Triggers</h5>
-                            <div className="flex flex-wrap gap-2">
-                              {history.sectionThree.triggers.map((trigger, index) => (
-                                <span key={index} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                                  {trigger}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {history.sectionThree.otherTrigger && (
-                          <div>
-                            <h5 className="font-medium text-slate-700 mb-2">Other Triggers</h5>
-                            <p className="text-slate-600 p-3 bg-white rounded-lg">{history.sectionThree.otherTrigger}</p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Section Four - Rhinitis */}
-                    {history.sectionFour && (
-                      <div className="bg-slate-50 rounded-lg p-6">
-                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Rhinitis Information</h4>
-                        <div className="space-y-4">
-                          {history.sectionFour.rhinitisType && (
+                          {history.allergicRhinitisType && (
                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                              <span className="text-slate-700 font-medium">Rhinitis Type:</span>
-                              <span className="text-slate-600">{history.sectionFour.rhinitisType}</span>
+                              <span className="text-slate-700 font-medium">Type:</span>
+                              <span className="text-slate-600">{history.allergicRhinitisType}</span>
                             </div>
                           )}
-                          
-                          {history.sectionFour.symptoms && (
-                            <div>
-                              <h5 className="font-medium text-slate-700 mb-3">Symptoms</h5>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {Object.entries(history.sectionFour.symptoms).map(([symptom, severity]) => (
-                                  <div key={symptom} className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                    <span className="text-slate-700 font-medium">{symptom}:</span>
-                                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                      severity === 'Mild' ? 'bg-yellow-100 text-yellow-700' :
-                                      severity === 'Moderate' ? 'bg-orange-100 text-orange-700' :
-                                      severity === 'Severe' ? 'bg-red-100 text-red-700' :
-                                      'bg-blue-100 text-blue-700'
-                                    }`}>
-                                      {severity}
-                                    </span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Section Five - Allergies */}
-                    {history.sectionFive && (
-                      <div className="bg-slate-50 rounded-lg p-6">
-                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Allergy Information</h4>
-                        <div className="space-y-4">
-                          {history.sectionFive.allergyType && (
+                          {history.rhinitisSneezing && (
                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                              <span className="text-slate-700 font-medium">Allergy Type:</span>
-                              <span className="text-slate-600">{history.sectionFive.allergyType}</span>
+                              <span className="text-slate-700 font-medium">Sneezing:</span>
+                              <span className="text-slate-600">{history.rhinitisSneezing}</span>
                             </div>
                           )}
-
-                          {history.sectionFive.skinAllergy && (
-                            <div>
-                              <h5 className="font-medium text-slate-700 mb-3">Skin Allergy</h5>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {Object.entries(history.sectionFive.skinAllergy).map(([type, details]) => (
-                                  <div key={type} className="p-3 bg-white rounded-lg">
-                                    <div className="font-medium text-slate-700 mb-2">{type}</div>
-                                    <div className="text-sm text-slate-600">
-                                      <div>Answer: {details.answer}</div>
-                                      {details.distribution && <div>Distribution: {details.distribution}</div>}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          {history.sectionFive.history && (
-                            <div>
-                              <h5 className="font-medium text-slate-700 mb-3">Medical History</h5>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {Object.entries(history.sectionFive.history).map(([condition, status]) => (
-                                  <div key={condition} className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                    <span className="text-slate-700 font-medium">{condition}:</span>
-                                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                      status === 'Yes' ? 'bg-green-100 text-green-700' : 
-                                      status === 'No' ? 'bg-red-100 text-red-700' : 
-                                      'bg-blue-100 text-blue-700'
-                                    }`}>
-                                      {status}
-                                    </span>
-                                  </div>
-                                ))}
-                              </div>
+                          {history.rhinitisNasalCongestion && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Nasal Congestion:</span>
+                              <span className="text-slate-600">{history.rhinitisNasalCongestion}</span>
                             </div>
                           )}
                         </div>
                       </div>
                     )}
 
-                    {/* Section Six - Comprehensive Examination */}
-                    {history.sectionSix && (
+                    {/* Skin Allergy */}
+                    {(history.skinAllergyType || history.skinHeavesPresent || history.skinEczemaPresent) && (
                       <div className="bg-slate-50 rounded-lg p-6">
-                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Comprehensive Examination</h4>
-                        <div className="space-y-4">
-                          {/* Drug Allergy */}
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            {history.sectionSix.DrugAllergyKnown && (
-                              <div className="p-3 bg-white rounded-lg">
-                                <div className="font-medium text-slate-700 mb-1">Drug Allergy Known</div>
-                                <div className="text-slate-600">{history.sectionSix.DrugAllergyKnown}</div>
-                              </div>
-                            )}
-                            {history.sectionSix.Probable && (
-                              <div className="p-3 bg-white rounded-lg">
-                                <div className="font-medium text-slate-700 mb-1">Probable</div>
-                                <div className="text-slate-600">{history.sectionSix.Probable}</div>
-                              </div>
-                            )}
-                            {history.sectionSix.Definite && (
-                              <div className="p-3 bg-white rounded-lg">
-                                <div className="font-medium text-slate-700 mb-1">Definite</div>
-                                <div className="text-slate-600">{history.sectionSix.Definite}</div>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Occupation and Exposure */}
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            {history.sectionSix.Occupation && (
-                              <div className="p-3 bg-white rounded-lg">
-                                <div className="font-medium text-slate-700 mb-1">Occupation</div>
-                                <div className="text-slate-600">{history.sectionSix.Occupation}</div>
-                              </div>
-                            )}
-                            {history.sectionSix.ProbableChemicalExposure && (
-                              <div className="p-3 bg-white rounded-lg">
-                                <div className="font-medium text-slate-700 mb-1">Chemical Exposure</div>
-                                <div className="text-slate-600">{history.sectionSix.ProbableChemicalExposure}</div>
-                              </div>
-                            )}
-                            {history.sectionSix.Location && (
-                              <div className="p-3 bg-white rounded-lg">
-                                <div className="font-medium text-slate-700 mb-1">Location</div>
-                                <div className="text-slate-600">{history.sectionSix.Location}</div>
-                              </div>
-                            )}
-                          </div>
-
-                          {history.sectionSix.FamilyHistory && (
-                            <div className="p-3 bg-white rounded-lg">
-                              <div className="font-medium text-slate-700 mb-1">Family History</div>
-                              <div className="text-slate-600">{history.sectionSix.FamilyHistory}</div>
+                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Skin Allergy</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {history.skinAllergyType && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Type:</span>
+                              <span className="text-slate-600">{history.skinAllergyType}</span>
                             </div>
                           )}
-
-                          {/* Physical Examination */}
-                          <div>
-                            <h5 className="font-medium text-slate-700 mb-3">Physical Examination</h5>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              {['OralCavity', 'Skin', 'ENT', 'Eye', 'RespiratorySystem', 'CVS', 'CNS', 'Abdomen'].map(system => (
-                                history.sectionSix[system] && (
-                                  <div key={system} className="p-3 bg-white rounded-lg">
-                                    <div className="font-medium text-slate-700 mb-1">
-                                      {system.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                                    </div>
-                                    <div className="text-slate-600">{history.sectionSix[system]}</div>
-                                  </div>
-                                )
-                              ))}
-                            </div>
-                          </div>
-
-                          {history.sectionSix.AnyOtherFindings && (
-                            <div className="p-3 bg-white rounded-lg">
-                              <div className="font-medium text-slate-700 mb-1">Other Findings</div>
-                              <div className="text-slate-600">{history.sectionSix.AnyOtherFindings}</div>
+                          {history.skinHeavesPresent && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Heaves Present:</span>
+                              <span className="text-slate-600">{history.skinHeavesPresent}</span>
                             </div>
                           )}
-
-                          {history.sectionSix.reportFile && (
-                            <div className="p-3 bg-white rounded-lg">
-                              <div className="font-medium text-slate-700 mb-1">Report File</div>
-                              <div className="text-slate-600">{history.sectionSix.reportFile}</div>
+                          {history.skinEczemaPresent && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Eczema Present:</span>
+                              <span className="text-slate-600">{history.skinEczemaPresent}</span>
                             </div>
                           )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Medical History */}
+                    {(history.hypertension || history.diabetes || history.epilepsy || history.ihd) && (
+                      <div className="bg-slate-50 rounded-lg p-6">
+                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Medical History</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {history.hypertension && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Hypertension:</span>
+                              <span className="text-slate-600">{history.hypertension}</span>
+                            </div>
+                          )}
+                          {history.diabetes && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Diabetes:</span>
+                              <span className="text-slate-600">{history.diabetes}</span>
+                            </div>
+                          )}
+                          {history.epilepsy && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Epilepsy:</span>
+                              <span className="text-slate-600">{history.epilepsy}</span>
+                            </div>
+                          )}
+                          {history.ihd && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">IHD:</span>
+                              <span className="text-slate-600">{history.ihd}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Examination */}
+                    {(history.oralCavity || history.skin || history.ent || history.eye || history.respiratorySystem) && (
+                      <div className="bg-slate-50 rounded-lg p-6">
+                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Examination</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {history.oralCavity && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Oral Cavity:</span>
+                              <span className="text-slate-600">{history.oralCavity}</span>
+                            </div>
+                          )}
+                          {history.skin && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Skin:</span>
+                              <span className="text-slate-600">{history.skin}</span>
+                            </div>
+                          )}
+                          {history.ent && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">ENT:</span>
+                              <span className="text-slate-600">{history.ent}</span>
+                            </div>
+                          )}
+                          {history.eye && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Eye:</span>
+                              <span className="text-slate-600">{history.eye}</span>
+                            </div>
+                          )}
+                          {history.respiratorySystem && (
+                            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                              <span className="text-slate-700 font-medium">Respiratory System:</span>
+                              <span className="text-slate-600">{history.respiratorySystem}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                                         {/* Triggers */}
+                     {(history.triggersUrtis !== undefined || history.triggersColdWeather !== undefined || history.triggersPollen !== undefined || history.triggersSmoke !== undefined || history.triggersExercise !== undefined || history.triggersPets !== undefined || history.triggersOthers) && (
+                       <div className="bg-slate-50 rounded-lg p-6">
+                         <h4 className="font-semibold text-slate-800 mb-4 text-lg">Triggers</h4>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                           {history.triggersUrtis !== undefined && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">URTIs:</span>
+                               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                 history.triggersUrtis ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                               }`}>
+                                 {history.triggersUrtis ? 'Yes' : 'No'}
+                               </span>
+                             </div>
+                           )}
+                           {history.triggersColdWeather !== undefined && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">Cold Weather:</span>
+                               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                 history.triggersColdWeather ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                               }`}>
+                                 {history.triggersColdWeather ? 'Yes' : 'No'}
+                               </span>
+                             </div>
+                           )}
+                           {history.triggersPollen !== undefined && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">Pollen:</span>
+                               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                 history.triggersPollen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                               }`}>
+                                 {history.triggersPollen ? 'Yes' : 'No'}
+                               </span>
+                             </div>
+                           )}
+                           {history.triggersSmoke !== undefined && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">Smoke:</span>
+                               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                 history.triggersSmoke ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                               }`}>
+                                 {history.triggersSmoke ? 'Yes' : 'No'}
+                               </span>
+                             </div>
+                           )}
+                           {history.triggersExercise !== undefined && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">Exercise:</span>
+                               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                 history.triggersExercise ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                               }`}>
+                                 {history.triggersExercise ? 'Yes' : 'No'}
+                               </span>
+                             </div>
+                           )}
+                           {history.triggersPets !== undefined && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">Pets:</span>
+                               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                 history.triggersPets ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                               }`}>
+                                 {history.triggersPets ? 'Yes' : 'No'}
+                               </span>
+                             </div>
+                           )}
+                           {history.triggersOthers && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">Other Triggers:</span>
+                               <span className="text-slate-600">{history.triggersOthers}</span>
+                             </div>
+                           )}
+                         </div>
+                       </div>
+                     )}
+
+                     {/* Other Information */}
+                     {(history.occupation || history.location || history.familyHistory || history.otherFindings || history.probableChemicalExposure) && (
+                       <div className="bg-slate-50 rounded-lg p-6">
+                         <h4 className="font-semibold text-slate-800 mb-4 text-lg">Other Information</h4>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                           {history.occupation && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">Occupation:</span>
+                               <span className="text-slate-600">{history.occupation}</span>
+                             </div>
+                           )}
+                           {history.location && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">Location:</span>
+                               <span className="text-slate-600">{history.location}</span>
+                             </div>
+                           )}
+                           {history.probableChemicalExposure && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">Chemical Exposure:</span>
+                               <span className="text-slate-600">{history.probableChemicalExposure}</span>
+                             </div>
+                           )}
+                           {history.familyHistory && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">Family History:</span>
+                               <span className="text-slate-600">{history.familyHistory}</span>
+                             </div>
+                           )}
+                           {history.otherFindings && (
+                             <div className="flex justify-between items-center p-3 bg-white rounded-lg">
+                               <span className="text-slate-700 font-medium">Other Findings:</span>
+                               <span className="text-slate-600">{history.otherFindings}</span>
+                             </div>
+                           )}
+                         </div>
+                       </div>
+                     )}
+
+                    {/* Report File */}
+                    {history.reportFile && (
+                      <div className="bg-slate-50 rounded-lg p-6">
+                        <h4 className="font-semibold text-slate-800 mb-4 text-lg">Report File</h4>
+                        <div className="p-3 bg-white rounded-lg">
+                          <div className="font-medium text-slate-700 mb-1">Report File</div>
+                          <div className="text-slate-600">{history.reportFile}</div>
                         </div>
                       </div>
                     )}

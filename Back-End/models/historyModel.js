@@ -1,65 +1,110 @@
 import mongoose from 'mongoose';
 
 const historySchema = new mongoose.Schema({
-  patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
 
-  sectionOne: {
-    conditions: { type: Map, of: String } // e.g., { "Asthma": "yes", ... }
-  },
+  // Medical Conditions
+  hayFever: String,
+  asthma: String,
+  breathingProblems: String,
+  hivesSwelling: String,
+  sinusTrouble: String,
+  eczemaRashes: String,
+  foodAllergies: String,
+  arthriticDiseases: String,
+  immuneDefect: String,
+  drugAllergy: String,
+  beeStingHypersensitivity: String,
+  
+  // Hay Fever Details
+  feverGrade: String,
+  itchingSoreThroat: String,
+  specificDayExposure: String,
+  
+  // Asthma Details
+  asthmaType: String,
+  exacerbationsFrequency: String,
+  
+  // Medical Events
+  hospitalAdmission: String,
+  gpAttendances: String,
+  aeAttendances: String,
+  ituAdmissions: String,
+  coughWheezeFrequency: String,
+  intervalSymptoms: String,
+  nightCoughFrequency: String,
+  earlyMorningCough: String,
+  exerciseInducedSymptoms: String,
+  familySmoking: String,
+  petsAtHome: String,
+  
+  // Triggers
+  triggersUrtis: Boolean,
+  triggersColdWeather: Boolean,
+  triggersPollen: Boolean,
+  triggersSmoke: Boolean,
+  triggersExercise: Boolean,
+  triggersPets: Boolean,
+  triggersOthers: String,
+  
+  // Allergic Rhinitis
+  allergicRhinitisType: String,
+  rhinitisSneezing: String,
+  rhinitisNasalCongestion: String,
+  rhinitisRunningNose: String,
+  rhinitisItchingNose: String,
+  rhinitisItchingEyes: String,
+  rhinitisCoughing: String,
+  rhinitisWheezing: String,
+  rhinitisCoughingWheezing: String,
+  rhinitisWithExercise: String,
+  rhinitisHeadaches: String,
+  rhinitisPostNasalDrip: String,
+  
+  // Skin Allergy
+  skinAllergyType: String,
+  skinHeavesPresent: String,
+  skinHeavesDistribution: String,
+  skinEczemaPresent: String,
+  skinEczemaDistribution: String,
+  skinUlcerPresent: String,
+  skinUlcerDistribution: String,
+  skinPapuloSquamousRashesPresent: String,
+  skinPapuloSquamousRashesDistribution: String,
+  skinItchingNoRashesPresent: String,
+  skinItchingNoRashesDistribution: String,
+  
+  // Medical History
+  hypertension: String,
+  diabetes: String,
+  epilepsy: String,
+  ihd: String,
+  
+  // New Drugs
+  drugAllergyKnown: String,
+  probable: String,
+  definite: String,
+  
+  // Occupation and Exposure
+  occupation: String,
+  probableChemicalExposure: String,
+  location: String,
+  familyHistory: String,
+  
+  // Examination
+  oralCavity: String,
+  skin: String,
+  ent: String,
+  eye: String,
+  respiratorySystem: String,
+  cvs: String,
+  cns: String,
+  abdomen: String,
+  otherFindings: String,
+  
+  // Report File
+  reportFile: String
 
-  sectionTwo: {
-    feverGrade: String,
-    itchingThroat: String,
-    specificDay: String,
-    asthmaType: String,
-    asthmaFrequency: String,
-  },
-
-  sectionThree: {
-    questions: { type: Map, of: String }, // e.g., { "Admission to hospital": "yes" }
-    triggers: [String],
-    otherTrigger: String,
-  },
-
-  sectionFour: {
-    rhinitisType: String,
-    symptoms: { type: Map, of: String } // e.g., { Sneezing: "Mild", ... }
-  },
-
-  sectionFive: {
-    allergyType: String,
-    skinAllergy: {
-      type: Map,
-      of: new mongoose.Schema({
-        answer: String, // "Yes" or "No"
-        distribution: String
-      }, { _id: false })
-    },
-    history: { type: Map, of: String } // e.g., { Hypertension: "Yes" }
-  },
-
-  sectionSix: {
-    DrugAllergyKnown: String,
-    Probable: String,
-    Definite: String,
-
-    Occupation: String,
-    ProbableChemicalExposure: String,
-    Location: String,
-    FamilyHistory: String,
-
-    OralCavity: String,
-    Skin: String,
-    ENT: String,
-    Eye: String,
-    RespiratorySystem: String,
-    CVS: String,
-    CNS: String,
-    Abdomen: String,
-    AnyOtherFindings: String,
-
-    reportFile: String, // path or filename of uploaded report
-  }
 }, { timestamps: true });
 
 const History = mongoose.model("History", historySchema);

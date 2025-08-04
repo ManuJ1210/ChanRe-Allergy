@@ -121,7 +121,7 @@ export default function EditPatient() {
   }
 
   return (
-    <ReceptionistLayout>
+
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
@@ -336,6 +336,6 @@ export default function EditPatient() {
           </div>
         </div>
       </div>
-    </ReceptionistLayout>
+    
   );
 }

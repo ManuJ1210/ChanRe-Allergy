@@ -191,6 +191,10 @@ export const fetchFollowUps = createAsyncThunk(
   'centerAdmin/fetchFollowUps',
   async (patientId, { dispatch }) => {
     try {
+      if (!patientId) {
+        return [];
+      }
+      
       const res = await API.get(`/followups?patientId=${patientId}`);
       dispatch(setFollowUps(res.data));
       return res.data;
@@ -232,6 +236,10 @@ export const fetchPatientDetails = createAsyncThunk(
   'centerAdmin/fetchPatientDetails',
   async (patientId, { rejectWithValue }) => {
     try {
+      if (!patientId) {
+        return rejectWithValue('Patient ID is required');
+      }
+      
       const res = await API.get(`/patients/${patientId}`);
       return res.data;
     } catch (error) {
@@ -381,6 +389,10 @@ export const fetchPatientHistory = createAsyncThunk(
   'centerAdmin/fetchPatientHistory',
   async (patientId, { dispatch }) => {
     try {
+      if (!patientId) {
+        return [];
+      }
+      
       dispatch(setHistoryLoading(true));
       const res = await API.get(`/history/${patientId}`);
       dispatch(setHistory(res.data));
@@ -399,6 +411,10 @@ export const fetchPatientMedications = createAsyncThunk(
   'centerAdmin/fetchPatientMedications',
   async (patientId, { dispatch }) => {
     try {
+      if (!patientId) {
+        return [];
+      }
+      
       dispatch(setMedLoading(true));
       const res = await API.get(`/medications?patientId=${patientId}`);
       dispatch(setMedications(res.data));
@@ -466,6 +482,10 @@ export const fetchTests = createAsyncThunk(
   'centerAdmin/fetchTests',
   async (patientId, { dispatch }) => {
     try {
+      if (!patientId) {
+        return [];
+      }
+      
       const res = await API.get(`/patients/${patientId}/show-tests`);
       dispatch(setTests(res.data));
       return res.data;
@@ -526,10 +546,13 @@ export const fetchAllergicRhinitis = createAsyncThunk(
   'centerAdmin/fetchAllergicRhinitis',
   async (patientId, { dispatch }) => {
     try {
+      if (!patientId) {
+        return [];
+      }
+      
       const res = await API.get(`/allergic-rhinitis?patientId=${patientId}`);
       return res.data;
     } catch (error) {
-      console.error('❌ fetchAllergicRhinitis error:', error);
       dispatch(setError(error.response?.data?.message || 'Failed to fetch allergic rhinitis'));
       throw error;
     }
@@ -541,6 +564,10 @@ export const fetchAllergicConjunctivitis = createAsyncThunk(
   'centerAdmin/fetchAllergicConjunctivitis',
   async (patientId, { dispatch }) => {
     try {
+      if (!patientId) {
+        return [];
+      }
+      
       const res = await API.get(`/allergic-conjunctivitis?patientId=${patientId}`);
       return res.data;
     } catch (error) {
@@ -613,6 +640,10 @@ export const fetchAllergicBronchitis = createAsyncThunk(
   'centerAdmin/fetchAllergicBronchitis',
   async (patientId, { dispatch }) => {
     try {
+      if (!patientId) {
+        return [];
+      }
+      
       const res = await API.get(`/allergic-bronchitis?patientId=${patientId}`);
       return res.data;
     } catch (error) {
@@ -655,6 +686,10 @@ export const fetchGPE = createAsyncThunk(
   'centerAdmin/fetchGPE',
   async (patientId, { dispatch }) => {
     try {
+      if (!patientId) {
+        return [];
+      }
+      
       const res = await API.get(`/gpe?patientId=${patientId}`);
       return res.data;
     } catch (error) {
@@ -684,6 +719,10 @@ export const fetchPrescription = createAsyncThunk(
   'centerAdmin/fetchPrescription',
   async (patientId, { dispatch }) => {
     try {
+      if (!patientId) {
+        return [];
+      }
+      
       const res = await API.get(`/prescriptions?patientId=${patientId}`);
       return res.data;
     } catch (error) {
@@ -724,6 +763,10 @@ export const fetchAtopicDermatitis = createAsyncThunk(
   'centerAdmin/fetchAtopicDermatitis',
   async (patientId, { dispatch }) => {
     try {
+      if (!patientId) {
+        return [];
+      }
+      
       const res = await API.get(`/atopic-dermatitis?patientId=${patientId}`);
       return res.data;
     } catch (error) {

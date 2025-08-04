@@ -232,7 +232,7 @@ export default function ReceptionistDashboard() {
                             </span>
                             <span className="flex items-center gap-1">
                               <Phone className="h-3 w-3" />
-                              {patient.contact || 'No phone'}
+                              {patient.phone || 'No phone'}
                             </span>
                           </div>
                         </div>

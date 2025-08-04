@@ -101,9 +101,10 @@ import ReceptionistPatientList from '../pages/Receptionist/PatientList';
 import ReceptionistManagePatients from '../pages/Receptionist/ManagePatients';
 import ReceptionistEditPatient from '../pages/Receptionist/EditPatient';
 import ReceptionistViewProfile from '../pages/Receptionist/profile/ViewProfile';
+import ReceptionistLayout from '../pages/Receptionist/ReceptionistLayout';
 import ReceptionistAddTest from '../pages/Receptionist/AddTest';
 import ReceptionistShowTests from '../pages/Receptionist/ShowTests';
-import ReceptionistAddHistory from '../pages/CenterAdmin/patients/AddHistory/AddHistory';
+import ReceptionistAddHistory from '../pages/Receptionist/AddHistory/AddHistory';
 import ReceptionistAddMedications from '../pages/Receptionist/profile/AddMedications';
 import ReceptionistPatientHistory from '../pages/Receptionist/PatientHistory';
 import ReceptionistPatientFollowUp from '../pages/Receptionist/PatientFollowUp';
@@ -155,6 +156,16 @@ export default function AppRoutes() {
       <Route path="/CenterAdmin/patients/AddMedications/:id" element={<PrivateRoute><DashboardLayout><ErrorBoundary><AddMedications /></ErrorBoundary></DashboardLayout></PrivateRoute>} />
       <Route path="/CenterAdmin/patients/profile/AddMedications/:id" element={<PrivateRoute><DashboardLayout><ErrorBoundary><AddMedications /></ErrorBoundary></DashboardLayout></PrivateRoute>} />
       <Route path="/CenterAdmin/patients/profile/ViewProfile/:id" element={<PrivateRoute><DashboardLayout><ViewProfile /></DashboardLayout></PrivateRoute>} />
+      
+      {/* Receptionist Routes at Root Level (for direct navigation) */}
+      <Route path="/receptionist/profile/:id" element={<PrivateRoute><ReceptionistLayout><ReceptionistViewProfile /></ReceptionistLayout></PrivateRoute>} />
+      <Route path="/receptionist/add-history/:id" element={<PrivateRoute><ReceptionistLayout><ReceptionistAddHistory /></ReceptionistLayout></PrivateRoute>} />
+      <Route path="/receptionist/patient-history/:id" element={<PrivateRoute><ReceptionistLayout><ReceptionistPatientHistory /></ReceptionistLayout></PrivateRoute>} />
+      <Route path="/receptionist/edit-patient/:id" element={<PrivateRoute><ReceptionistLayout><ReceptionistEditPatient /></ReceptionistLayout></PrivateRoute>} />
+      <Route path="/receptionist/add-test/:id" element={<PrivateRoute><ReceptionistLayout><ReceptionistAddTest /></ReceptionistLayout></PrivateRoute>} />
+      <Route path="/receptionist/add-medications/:id" element={<PrivateRoute><ReceptionistLayout><ReceptionistAddMedications /></ReceptionistLayout></PrivateRoute>} />
+      <Route path="/receptionist/manage-patients" element={<PrivateRoute><ReceptionistLayout><ReceptionistManagePatients /></ReceptionistLayout></PrivateRoute>} />
+      <Route path="/receptionist/patients" element={<PrivateRoute><ReceptionistLayout><ReceptionistPatientList /></ReceptionistLayout></PrivateRoute>} />
       
       {/* CenterAdmin FollowUp Routes at Root Level */}
       <Route path="/CenterAdmin/patients/FollowUp/:id" element={<PrivateRoute><DashboardLayout><FollowUp /></DashboardLayout></PrivateRoute>} />
@@ -349,7 +360,7 @@ export default function AppRoutes() {
         <Route path="receptionist/patients" element={<ReceptionistPatientList />} />
         <Route path="receptionist/manage-patients" element={<ReceptionistManagePatients />} />
         <Route path="receptionist/edit-patient/:id" element={<ReceptionistEditPatient />} />
-        <Route path="receptionist/profile/:id" element={<ReceptionistViewProfile />} />
+        <Route path="receptionist/profile/:id" element={<ReceptionistLayout><ReceptionistViewProfile /></ReceptionistLayout>} />
         <Route path="receptionist/add-test/:id" element={<ReceptionistAddTest />} />
         <Route path="receptionist/patients/show-tests/:id" element={<ReceptionistShowTests />} />
         <Route path="receptionist/add-history/:id" element={<ReceptionistAddHistory />} />

@@ -354,7 +354,7 @@ export default function ManagePatients() {
                             </div>
                             <div className="flex items-center text-sm text-slate-500">
                               <Phone className="h-3 w-3 mr-2 text-slate-400" />
-                              {patient.contact || 'No phone'}
+                              {patient.phone || 'No phone'}
                             </div>
                           </div>
                         </td>

@@ -17,20 +17,22 @@ export const createAtopicDermatitis = async (req, res) => {
 export const getAtopicDermatitisByPatient = async (req, res) => {
   try {
     const { patientId } = req.query;
+    console.log('getAtopicDermatitisByPatient called with patientId:', patientId);
+    
     let records;
-    if (patientId) {
+    if (patientId && patientId !== 'undefined') {
       records = await AtopicDermatitis.find({ patientId })
         .populate('patientId', 'name age centerCode phone gender')
         .sort({ createdAt: -1 });
+      console.log(`Found ${records.length} records for patientId: ${patientId}`);
     } else {
-      // Fallback: fetch all records if no patientId is provided
-      records = await AtopicDermatitis.find()
-        .populate('patientId', 'name age centerCode phone gender')
-        .sort({ createdAt: -1 });
+      console.log('No valid patientId provided, returning empty array');
+      records = [];
     }
-    console.log('Fetched Atopic Dermatitis records:', records);
+    
     res.status(200).json(records);
   } catch (err) {
+    console.error('Error in getAtopicDermatitisByPatient:', err);
     res.status(500).json({ message: 'Failed to fetch records', error: err.message });
   }
 };

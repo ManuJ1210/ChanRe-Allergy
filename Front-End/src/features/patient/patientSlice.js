@@ -7,6 +7,7 @@ import {
   deletePatient,
   fetchPatientAndTests, // ✅ Combined patient + test reports
   getSinglePatient, // <-- import the thunk
+  fetchPatientHistory, // <-- import the history thunk
 } from './patientThunks';
 
 const initialState = {
@@ -40,6 +41,11 @@ const initialState = {
   patientLoading: false,
   patientError: null,
   singlePatient: null,
+
+  // For patient history
+  historyLoading: false,
+  historyError: null,
+  patientHistory: [],
 };
 
 const patientSlice = createSlice({
@@ -163,6 +169,20 @@ const patientSlice = createSlice({
         state.patientLoading = false;
         state.patientError = action.payload;
         state.singlePatient = null;
+      })
+
+      // --- FETCH PATIENT HISTORY ---
+      .addCase(fetchPatientHistory.pending, (state) => {
+        state.historyLoading = true;
+        state.historyError = null;
+      })
+      .addCase(fetchPatientHistory.fulfilled, (state, action) => {
+        state.historyLoading = false;
+        state.patientHistory = action.payload;
+      })
+      .addCase(fetchPatientHistory.rejected, (state, action) => {
+        state.historyLoading = false;
+        state.historyError = action.payload;
       });
   },
 });

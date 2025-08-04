@@ -60,10 +60,21 @@ const getPatients = async (req, res) => {
 const getPatientById = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('getPatientById called with ID:', id);
+    
+    // Check if ID is valid
+    if (!id || id === 'undefined' || id === 'null' || id === '') {
+      console.log('❌ Invalid patient ID provided:', id);
+      return res.status(400).json({ message: 'Invalid patient ID' });
+    }
+    
     const patient = await Patient.findById(id).populate('assignedDoctor', 'name');
     if (!patient) {
+      console.log('❌ Patient not found with ID:', id);
       return res.status(404).json({ message: 'Patient not found' });
     }
+    
+    console.log('✅ Patient found:', patient._id);
     res.json(patient);
   } catch (error) {
     console.error("Get patient by ID error:", error);
@@ -187,7 +198,8 @@ const getTestsByPatient = async (req, res) => {
       return res.status(404).json({ message: 'Patient not found' });
     }
 
-    res.status(200).json({ tests: patient.tests });
+    // Return embedded tests from patient
+    res.status(200).json({ tests: patient.tests || [] });
   } catch (error) {
     console.error('Get tests error:', error);
     res.status(500).json({ message: 'Failed to fetch tests' });
@@ -196,14 +208,35 @@ const getTestsByPatient = async (req, res) => {
 
 export const getPatientAndTests = async (req, res) => {
   try {
+    console.log('getPatientAndTests called with patient ID:', req.params.id);
+    
     const patient = await Patient.findById(req.params.id);
-    if (!patient) return res.status(404).json({ message: "Patient not found" });
+    if (!patient) {
+      console.log('Patient not found with ID:', req.params.id);
+      return res.status(404).json({ message: "Patient not found" });
+    }
 
-    // Fetch tests from Test collection
-    const tests = await Test.find({ patient: patient._id });
+    console.log('Patient found:', patient._id);
 
-    res.json({ patient, tests });
+    // First try to get tests from Test collection
+    let tests = [];
+    try {
+      tests = await Test.find({ patient: patient._id });
+      console.log('Found tests from Test collection:', tests.length);
+    } catch (error) {
+      console.log('No tests found in Test collection, checking embedded tests');
+    }
+
+    // If no tests in Test collection, use embedded tests from patient
+    if (tests.length === 0 && patient.tests && patient.tests.length > 0) {
+      tests = patient.tests;
+      console.log('Using embedded tests from patient:', tests.length);
+    }
+
+    // Return just the tests array to match frontend expectations
+    res.json(tests);
   } catch (err) {
+    console.error('Error in getPatientAndTests:', err);
     res.status(500).json({ message: "Failed to fetch patient tests", error: err.message });
   }
 };

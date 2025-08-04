@@ -48,15 +48,22 @@ export const getAllergicRhinitisById = async (req, res) => {
 export const getAllergicRhinitisByPatient = async (req, res) => {
   try {
     const { patientId } = req.query;
-    if (!patientId) {
-      return res.status(400).json({ message: 'patientId is required' });
+    console.log('getAllergicRhinitisByPatient called with patientId:', patientId);
+    
+    if (!patientId || patientId === 'undefined') {
+      console.log('No valid patientId provided, returning empty array');
+      return res.status(200).json([]);
     }
+    
     const records = await AllergicRhinitis.find({ patientId })
       .populate('patientId', 'name age centerCode phone gender')
       .populate('updatedBy', 'name')
       .sort({ date: -1 });
+    
+    console.log(`Found ${records.length} records for patientId: ${patientId}`);
     res.status(200).json(records);
   } catch (err) {
+    console.error('Error in getAllergicRhinitisByPatient:', err);
     res.status(500).json({ message: 'Failed to fetch records', error: err.message });
   }
 }; 

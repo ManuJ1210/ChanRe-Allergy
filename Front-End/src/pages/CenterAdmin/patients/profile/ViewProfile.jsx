@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPatientDetails, fetchPatientMedications, fetchPatientHistory, fetchFollowUps, fetchAllergicRhinitis, fetchAllergicConjunctivitis, fetchAllergicBronchitis, fetchAtopicDermatitis, fetchGPE, fetchPrescriptions } from '../../../../features/centerAdmin/centerAdminThunks';
+import { fetchPatientDetails, fetchPatientMedications, fetchPatientHistory, fetchFollowUps, fetchAllergicRhinitis, fetchAllergicConjunctivitis, fetchAllergicBronchitis, fetchAtopicDermatitis, fetchGPE, fetchPrescriptions, fetchTests } from '../../../../features/centerAdmin/centerAdminThunks';
 import { 
   ArrowLeft, User, Phone, Calendar, MapPin, Activity, Pill, FileText, Eye, Edit, Plus, AlertCircle, Mail, UserCheck
 } from 'lucide-react';
@@ -18,6 +18,7 @@ const ViewProfile = () => {
     patientDetails: patient,
     medications, 
     history, 
+    tests,
     followUps,
     allergicRhinitis,
     atopicDermatitis,
@@ -29,11 +30,23 @@ const ViewProfile = () => {
   } = useSelector(state => state.centerAdmin);
 
   useEffect(() => {
+    // Check if ID is valid (not undefined, null, or empty string)
+    if (!id || id === 'undefined' || id === 'null' || id === '') {
+      return;
+    }
+    
     if (id) {
-      console.log('Fetching patient details for ID:', id);
+      // Check if user is authenticated
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
       dispatch(fetchPatientDetails(id));
       dispatch(fetchPatientMedications(id));
       dispatch(fetchPatientHistory(id));
+      dispatch(fetchTests(id));
       dispatch(fetchFollowUps(id));
       dispatch(fetchAllergicRhinitis(id));
       dispatch(fetchAllergicConjunctivitis(id));
@@ -42,25 +55,9 @@ const ViewProfile = () => {
       dispatch(fetchGPE(id));
       dispatch(fetchPrescriptions(id));
     }
-  }, [dispatch, id]);
+  }, [dispatch, id, navigate]);
 
-  // Debug logging
-  useEffect(() => {
-    console.log('ViewProfile state:', {
-      patient,
-      loading,
-      error,
-      medications,
-      history,
-      followUps,
-      allergicRhinitis,
-      atopicDermatitis,
-      allergicConjunctivitis,
-      allergicBronchitis,
-      gpe,
-      prescriptions
-    });
-  }, [patient, loading, error, medications, history, followUps, allergicRhinitis, atopicDermatitis, allergicConjunctivitis, allergicBronchitis, gpe, prescriptions]);
+
 
   if (!id) return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
@@ -180,13 +177,15 @@ const ViewProfile = () => {
             </div>
               <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/EditPatient/${patient?._id}`)}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
               >
                 <Edit className="h-4 w-4" />
-                Edit Profile
+                Edit Patient
               </button>
             </div>
           </div>
+
+
 
           {/* Tabs */}
           <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-2 mb-8">
@@ -308,10 +307,10 @@ const ViewProfile = () => {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-200">
-                        {patient.tests && patient.tests.length > 0 ? (
-                          patient.tests.map((test, idx) => (
-                            <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-4 py-3 text-sm text-slate-600">{test.date ? new Date(test.date).toLocaleDateString() : ''}</td>
+                        {tests && tests.length > 0 ? (
+                          tests.map((test, idx) => (
+                            <tr key={test._id || idx} className="hover:bg-slate-50 transition-colors">
+                              <td className="px-4 py-3 text-sm text-slate-600">{test.createdAt ? new Date(test.createdAt).toLocaleDateString() : ''}</td>
                               <td className="px-4 py-3 text-sm text-slate-800">{test.CBC || ''}</td>
                               <td className="px-4 py-3 text-sm text-slate-800">{test.Hb || ''}</td>
                               <td className="px-4 py-3 text-sm text-slate-800">{test.TC || ''}</td>
@@ -439,155 +438,243 @@ const ViewProfile = () => {
                             {h.createdAt ? new Date(h.createdAt).toLocaleDateString() : ""}
                           </div>
 
-                          {/* Section 1: Conditions */}
-                          {h.sectionOne?.conditions && (
+                          {/* Medical Conditions */}
+                          <div className="mb-4">
+                            <h4 className="font-semibold text-slate-800 mb-2">Medical Conditions</h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              {h.hayFever && (
+                                <div className="flex justify-between">
+                                  <span className="text-sm font-medium text-slate-600">Hay Fever:</span>
+                                  <span className="text-sm text-slate-800">{h.hayFever}</span>
+                                </div>
+                              )}
+                              {h.asthma && (
+                                <div className="flex justify-between">
+                                  <span className="text-sm font-medium text-slate-600">Asthma:</span>
+                                  <span className="text-sm text-slate-800">{h.asthma}</span>
+                                </div>
+                              )}
+                              {h.breathingProblems && (
+                                <div className="flex justify-between">
+                                  <span className="text-sm font-medium text-slate-600">Breathing Problems:</span>
+                                  <span className="text-sm text-slate-800">{h.breathingProblems}</span>
+                                </div>
+                              )}
+                              {h.hivesSwelling && (
+                                <div className="flex justify-between">
+                                  <span className="text-sm font-medium text-slate-600">Hives/Swelling:</span>
+                                  <span className="text-sm text-slate-800">{h.hivesSwelling}</span>
+                                </div>
+                              )}
+                              {h.sinusTrouble && (
+                                <div className="flex justify-between">
+                                  <span className="text-sm font-medium text-slate-600">Sinus Trouble:</span>
+                                  <span className="text-sm text-slate-800">{h.sinusTrouble}</span>
+                                </div>
+                              )}
+                              {h.eczemaRashes && (
+                                <div className="flex justify-between">
+                                  <span className="text-sm font-medium text-slate-600">Eczema/Rashes:</span>
+                                  <span className="text-sm text-slate-800">{h.eczemaRashes}</span>
+                                </div>
+                              )}
+                              {h.foodAllergies && (
+                                <div className="flex justify-between">
+                                  <span className="text-sm font-medium text-slate-600">Food Allergies:</span>
+                                  <span className="text-sm text-slate-800">{h.foodAllergies}</span>
+                                </div>
+                              )}
+                              {h.drugAllergy && (
+                                <div className="flex justify-between">
+                                  <span className="text-sm font-medium text-slate-600">Drug Allergy:</span>
+                                  <span className="text-sm text-slate-800">{h.drugAllergy}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Asthma Details */}
+                          {(h.asthmaType || h.exacerbationsFrequency || h.coughWheezeFrequency) && (
                             <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Medical Conditions</h4>
+                              <h4 className="font-semibold text-slate-800 mb-2">Asthma Details</h4>
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {Object.entries(h.sectionOne.conditions).map(([key, value]) => (
-                                  <div key={key} className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">{key}:</span>
-                                    <span className="text-sm text-slate-800">{value}</span>
+                                {h.asthmaType && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Asthma Type:</span>
+                                    <span className="text-sm text-slate-800">{h.asthmaType}</span>
                                   </div>
-                                ))}
+                                )}
+                                {h.exacerbationsFrequency && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Exacerbations Frequency:</span>
+                                    <span className="text-sm text-slate-800">{h.exacerbationsFrequency}</span>
+                                  </div>
+                                )}
+                                {h.coughWheezeFrequency && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Cough/Wheeze Frequency:</span>
+                                    <span className="text-sm text-slate-800">{h.coughWheezeFrequency}</span>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           )}
 
-                          {/* Section 2: Hay Fever & Asthma */}
-                          {h.sectionTwo && Object.keys(h.sectionTwo).length > 0 && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Hay Fever & Asthma</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {Object.entries(h.sectionTwo).map(([key, value]) => (
-                                  <div key={key} className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">{key}:</span>
-                                    <span className="text-sm text-slate-800">{value}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Section 3: Frequency and Triggers */}
-                          {h.sectionThree && Object.keys(h.sectionThree).length > 0 && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Frequency and Triggers</h4>
-                              {h.sectionThree.questions && (
-                                <div className="mb-3">
-                                  <h5 className="text-sm font-medium text-slate-600 mb-2">Questions:</h5>
-                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {Object.entries(h.sectionThree.questions).map(([key, value]) => (
-                                      <div key={key} className="flex justify-between">
-                                        <span className="text-sm text-slate-600">{key}:</span>
-                                        <span className="text-sm text-slate-800">{value}</span>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-                              {h.sectionThree.triggers && h.sectionThree.triggers.length > 0 && (
-                                <div className="mb-3">
-                                  <h5 className="text-sm font-medium text-slate-600 mb-2">Triggers:</h5>
-                                  <div className="flex flex-wrap gap-2">
-                                    {h.sectionThree.triggers.map((trigger, i) => (
-                                      <span key={i} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
-                                        {trigger}
-                                      </span>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-                              {h.sectionThree.otherTrigger && (
-                                <div>
-                                  <span className="text-sm font-medium text-slate-600">Other Trigger:</span>
-                                  <span className="text-sm text-slate-800 ml-2">{h.sectionThree.otherTrigger}</span>
-                                </div>
-                              )}
-                            </div>
-                          )}
-
-                          {/* Section 4: Allergic Rhinitis */}
-                          {h.sectionFour && Object.keys(h.sectionFour).length > 0 && (
+                          {/* Allergic Rhinitis */}
+                          {(h.allergicRhinitisType || h.rhinitisSneezing || h.rhinitisNasalCongestion) && (
                             <div className="mb-4">
                               <h4 className="font-semibold text-slate-800 mb-2">Allergic Rhinitis</h4>
-                              {h.sectionFour.rhinitisType && (
-                                <div className="mb-2">
-                                  <span className="text-sm font-medium text-slate-600">Type:</span>
-                                  <span className="text-sm text-slate-800 ml-2">{h.sectionFour.rhinitisType}</span>
-                                </div>
-                              )}
-                              {h.sectionFour.symptoms && Object.keys(h.sectionFour.symptoms).length > 0 && (
-                                <div>
-                                  <h5 className="text-sm font-medium text-slate-600 mb-2">Symptoms:</h5>
-                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {Object.entries(h.sectionFour.symptoms).map(([symptom, severity]) => (
-                                      <div key={symptom} className="flex justify-between">
-                                        <span className="text-sm text-slate-600">{symptom}:</span>
-                                        <span className="text-sm text-slate-800">{severity}</span>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          )}
-
-                          {/* Section 5: Skin Allergy & History */}
-                          {h.sectionFive && Object.keys(h.sectionFive).length > 0 && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Skin Allergy & History</h4>
-                              {h.sectionFive.allergyType && (
-                                <div className="mb-2">
-                                  <span className="text-sm font-medium text-slate-600">Allergy Type:</span>
-                                  <span className="text-sm text-slate-800 ml-2">{h.sectionFive.allergyType}</span>
-                                </div>
-                              )}
-                              {h.sectionFive.skinAllergy && Object.keys(h.sectionFive.skinAllergy).length > 0 && (
-                                <div className="mb-3">
-                                  <h5 className="text-sm font-medium text-slate-600 mb-2">Skin Conditions:</h5>
-                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {Object.entries(h.sectionFive.skinAllergy).map(([cond, details]) => (
-                                      <div key={cond} className="flex justify-between">
-                                        <span className="text-sm text-slate-600">{cond}:</span>
-                                        <span className="text-sm text-slate-800">
-                                          {details.answer && <span>Answer: {details.answer}; </span>}
-                                          {details.distribution && <span>Distribution: {details.distribution}</span>}
-                                        </span>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-                              {h.sectionFive.history && Object.keys(h.sectionFive.history).length > 0 && (
-                                <div>
-                                  <h5 className="text-sm font-medium text-slate-600 mb-2">Medical History:</h5>
-                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {Object.entries(h.sectionFive.history).map(([cond, value]) => (
-                                      <div key={cond} className="flex justify-between">
-                                        <span className="text-sm text-slate-600">{cond}:</span>
-                                        <span className="text-sm text-slate-800">{value}</span>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          )}
-
-                          {/* Section 6: Drugs, Exposure & Examination */}
-                          {h.sectionSix && Object.keys(h.sectionSix).length > 0 && (
-                            <div>
-                              <h4 className="font-semibold text-slate-800 mb-2">Drugs, Exposure & Examination</h4>
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {Object.entries(h.sectionSix).map(([key, value]) => (
-                                  <div key={key} className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">{key}:</span>
-                                    <span className="text-sm text-slate-800">
-                                      {typeof value === 'object' ? JSON.stringify(value) : value}
-                                    </span>
+                                {h.allergicRhinitisType && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Type:</span>
+                                    <span className="text-sm text-slate-800">{h.allergicRhinitisType}</span>
                                   </div>
-                                ))}
+                                )}
+                                {h.rhinitisSneezing && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Sneezing:</span>
+                                    <span className="text-sm text-slate-800">{h.rhinitisSneezing}</span>
+                                  </div>
+                                )}
+                                {h.rhinitisNasalCongestion && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Nasal Congestion:</span>
+                                    <span className="text-sm text-slate-800">{h.rhinitisNasalCongestion}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Skin Allergy */}
+                          {(h.skinAllergyType || h.skinHeavesPresent || h.skinEczemaPresent) && (
+                            <div className="mb-4">
+                              <h4 className="font-semibold text-slate-800 mb-2">Skin Allergy</h4>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {h.skinAllergyType && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Type:</span>
+                                    <span className="text-sm text-slate-800">{h.skinAllergyType}</span>
+                                  </div>
+                                )}
+                                {h.skinHeavesPresent && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Heaves Present:</span>
+                                    <span className="text-sm text-slate-800">{h.skinHeavesPresent}</span>
+                                  </div>
+                                )}
+                                {h.skinEczemaPresent && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Eczema Present:</span>
+                                    <span className="text-sm text-slate-800">{h.skinEczemaPresent}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Medical History */}
+                          {(h.hypertension || h.diabetes || h.epilepsy || h.ihd) && (
+                            <div className="mb-4">
+                              <h4 className="font-semibold text-slate-800 mb-2">Medical History</h4>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {h.hypertension && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Hypertension:</span>
+                                    <span className="text-sm text-slate-800">{h.hypertension}</span>
+                                  </div>
+                                )}
+                                {h.diabetes && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Diabetes:</span>
+                                    <span className="text-sm text-slate-800">{h.diabetes}</span>
+                                  </div>
+                                )}
+                                {h.epilepsy && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Epilepsy:</span>
+                                    <span className="text-sm text-slate-800">{h.epilepsy}</span>
+                                  </div>
+                                )}
+                                {h.ihd && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">IHD:</span>
+                                    <span className="text-sm text-slate-800">{h.ihd}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Examination */}
+                          {(h.oralCavity || h.skin || h.ent || h.eye || h.respiratorySystem) && (
+                            <div className="mb-4">
+                              <h4 className="font-semibold text-slate-800 mb-2">Examination</h4>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {h.oralCavity && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Oral Cavity:</span>
+                                    <span className="text-sm text-slate-800">{h.oralCavity}</span>
+                                  </div>
+                                )}
+                                {h.skin && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Skin:</span>
+                                    <span className="text-sm text-slate-800">{h.skin}</span>
+                                  </div>
+                                )}
+                                {h.ent && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">ENT:</span>
+                                    <span className="text-sm text-slate-800">{h.ent}</span>
+                                  </div>
+                                )}
+                                {h.eye && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Eye:</span>
+                                    <span className="text-sm text-slate-800">{h.eye}</span>
+                                  </div>
+                                )}
+                                {h.respiratorySystem && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Respiratory System:</span>
+                                    <span className="text-sm text-slate-800">{h.respiratorySystem}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Other Information */}
+                          {(h.occupation || h.location || h.familyHistory || h.otherFindings) && (
+                            <div className="mb-4">
+                              <h4 className="font-semibold text-slate-800 mb-2">Other Information</h4>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {h.occupation && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Occupation:</span>
+                                    <span className="text-sm text-slate-800">{h.occupation}</span>
+                                  </div>
+                                )}
+                                {h.location && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Location:</span>
+                                    <span className="text-sm text-slate-800">{h.location}</span>
+                                  </div>
+                                )}
+                                {h.familyHistory && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Family History:</span>
+                                    <span className="text-sm text-slate-800">{h.familyHistory}</span>
+                                  </div>
+                                )}
+                                {h.otherFindings && (
+                                  <div className="flex justify-between">
+                                    <span className="text-sm font-medium text-slate-600">Other Findings:</span>
+                                    <span className="text-sm text-slate-800">{h.otherFindings}</span>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           )}
@@ -664,12 +751,12 @@ const ViewProfile = () => {
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                   <h2 className="text-xl font-semibold text-slate-800">Atopic Dermatitis</h2>
-                  <button
-                                                onClick={() => navigate(`/dashboard/receptionist/followup/atopic-dermatitis/add/${patient._id}`)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                  >
-                    Add Follow Up
-                  </button>
+                                <button
+                onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AtopicDermatitis/${patient._id}`)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              >
+                Add Follow Up
+              </button>
                 </div>
                 <div className="p-6">
                   <div className="overflow-x-auto">
@@ -699,7 +786,7 @@ const ViewProfile = () => {
                               <td className="px-4 py-3 text-sm text-slate-800">{dermatitis.updatedBy || 'N/A'}</td>
                               <td className="px-4 py-3 text-sm text-slate-800">
                                 <button
-                                  onClick={() => navigate(`/dashboard/receptionist/followup/atopic-dermatitis/view/${dermatitis._id}`)}
+                                  onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/ViewAtopicDermatitis/${dermatitis._id}`)}
                                   className="text-blue-600 hover:text-blue-900 font-medium"
                                 >
                                   View
@@ -725,12 +812,12 @@ const ViewProfile = () => {
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                   <h2 className="text-xl font-semibold text-slate-800">Allergic Conjunctivitis</h2>
-                  <button
-                                                onClick={() => navigate(`/dashboard/receptionist/followup/allergic-conjunctivitis/add/${patient._id}`)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                  >
-                    Add Follow Up
-                  </button>
+                                <button
+                onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddAllergicConjunctivitis/${patient._id}`)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              >
+                Add Follow Up
+              </button>
                 </div>
                 <div className="p-6">
                   <div className="overflow-x-auto">
@@ -758,7 +845,7 @@ const ViewProfile = () => {
                               </td>
                               <td className="px-4 py-3 text-sm text-slate-800">
                                 <button
-                                  onClick={() => navigate(`/dashboard/receptionist/followup/allergic-conjunctivitis/view/${conjunctivitis._id}`)}
+                                  onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/ViewAllergicConjunctivitis/${conjunctivitis._id}`)}
                                   className="text-blue-600 hover:text-blue-900 font-medium"
                                 >
                                   View
@@ -784,11 +871,11 @@ const ViewProfile = () => {
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                   <h2 className="text-xl font-semibold text-slate-800">Allergic Bronchitis</h2>
-              <button
-                                                onClick={() => navigate(`/dashboard/receptionist/followup/allergic-bronchitis/add/${patient._id}`)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                            <button
+                onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddAllergicBronchitis/${patient._id}`)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
               >
-                    Add Follow Up
+                Add Follow Up
               </button>
                 </div>
                 <div className="p-6">
@@ -816,11 +903,11 @@ const ViewProfile = () => {
                                 {bronchitis.updatedAt ? new Date(bronchitis.updatedAt).toLocaleDateString() : 'N/A'}
                               </td>
                               <td className="px-4 py-3 text-sm text-slate-800">
-              <button
-                                  onClick={() => navigate(`/dashboard/receptionist/followup/allergic-bronchitis/view/${bronchitis._id}`)}
-                                  className="text-blue-600 hover:text-blue-900 font-medium"
+                            <button
+                onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/ViewAllergicBronchitis/${bronchitis._id}`)}
+                className="text-blue-600 hover:text-blue-900 font-medium"
               >
-                                  View
+                View
               </button>
                               </td>
                             </tr>
@@ -843,11 +930,11 @@ const ViewProfile = () => {
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                   <h2 className="text-xl font-semibold text-slate-800">GPE</h2>
-            <button
-                                                onClick={() => navigate(`/dashboard/receptionist/followup/gpe/add/${patient._id}`)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                        <button
+              onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddGPE/${patient._id}`)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
-                    Add Follow Up
+              Add Follow Up
             </button>
           </div>
                 <div className="p-6">
@@ -875,11 +962,11 @@ const ViewProfile = () => {
                                 {gpe.updatedAt ? new Date(gpe.updatedAt).toLocaleDateString() : 'N/A'}
                               </td>
                               <td className="px-4 py-3 text-sm text-slate-800">
-                    <button
-                                  onClick={() => navigate(`/dashboard/receptionist/followup/gpe/view/${gpe._id}`)}
-                                  className="text-blue-600 hover:text-blue-900 font-medium"
+                                        <button
+                      onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/ViewGPE/${gpe._id}`)}
+                      className="text-blue-600 hover:text-blue-900 font-medium"
                     >
-                                  View
+                      View
                     </button>
                               </td>
                             </tr>
@@ -903,11 +990,11 @@ const ViewProfile = () => {
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
               <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                 <h2 className="text-xl font-semibold text-slate-800">Prescription</h2>
-            <button
-                                              onClick={() => navigate(`/dashboard/receptionist/followup/prescription/add/${patient._id}`)}
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                        <button
+              onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddPrescription/${patient._id}`)}
+              className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
-                  Add Prescription
+              Add Prescription
             </button>
           </div>
               <div className="p-6">
@@ -936,11 +1023,11 @@ const ViewProfile = () => {
                                typeof prescription.updatedBy === 'object' && prescription.updatedBy?.name ? prescription.updatedBy.name : 'N/A'}
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-800">
-                    <button
-                                onClick={() => navigate(`/dashboard/receptionist/followup/prescription/view/${prescription._id}`)}
-                                className="text-blue-600 hover:text-blue-900 font-medium"
+                                        <button
+                      onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/ViewPrescription/${prescription._id}`)}
+                      className="text-blue-600 hover:text-blue-900 font-medium"
                     >
-                                View
+                      View
                     </button>
                             </td>
                           </tr>

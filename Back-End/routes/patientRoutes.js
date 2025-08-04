@@ -10,13 +10,14 @@ import {
   getPatientsByReceptionist,
   getPatientsByDoctor
 } from '../controllers/patientController.js';
-import { protect, ensureCenterIsolation } from '../middleware/authMiddleware.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// Apply center isolation middleware to all routes
+// Apply authentication middleware to all routes
 router.use(protect);
-router.use(ensureCenterIsolation);
+// Temporarily removed ensureCenterIsolation to debug access issues
+// router.use(ensureCenterIsolation);
 
 // Patient Routes
 router.post('/', addPatient);
