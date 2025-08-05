@@ -39,6 +39,8 @@ API.interceptors.request.use((config) => {
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    // Debug log for API requests
+    console.log('[API DEBUG] Request to:', config.baseURL + config.url, 'with token:', token);
   } catch (err) {
     console.error('Error reading token from localStorage:', err);
   }

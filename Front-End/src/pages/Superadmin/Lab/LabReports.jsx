@@ -36,11 +36,12 @@ const LabReports = () => {
       try {
         setLoading(true);
         const response = await API.get('/lab-reports');
+        console.log('[LAB REPORTS DEBUG] Response data:', response.data);
         setReports(response.data);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching lab reports:', err);
-        setError('Failed to fetch lab reports');
+        setError('Failed to fetch lab reports: ' + (err?.response?.data?.message || err?.message || 'Unknown error'));
         setLoading(false);
       }
     };

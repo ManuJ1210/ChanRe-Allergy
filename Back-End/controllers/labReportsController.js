@@ -6,22 +6,7 @@ import User from '../models/User.js';
 // Get all lab reports for superadmin
 export const getAllLabReports = async (req, res) => {
   try {
-    const reports = await TestRequest.find({
-      $or: [
-        { status: 'Report_Generated' },
-        { status: 'Report_Sent' },
-        { status: 'Testing_Completed' }
-      ],
-      isActive: true,
-      reportGeneratedDate: { $exists: true, $ne: null } // Only reports that have been generated
-    })
-    .populate('patientId', 'name phone centerCode')
-    .populate('doctorId', 'name email')
-    .populate('centerId', 'name centerCode')
-    .populate('assignedLabStaffId', 'staffName')
-    .populate('reportGeneratedBy', 'staffName')
-    .populate('reportSentBy', 'staffName')
-    .sort({ reportGeneratedDate: -1, createdAt: -1 });
+    const reports = await TestRequest.find({});
 
     const formattedReports = reports.map(report => ({
       _id: report._id,
