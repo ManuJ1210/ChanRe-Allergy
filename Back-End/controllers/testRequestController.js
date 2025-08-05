@@ -580,17 +580,39 @@ export const completeLabTesting = async (req, res) => {
 export const generateTestReport = async (req, res) => {
   try {
     const { id } = req.params;
-    const { reportSummary } = req.body;
-    const testRequest = await TestRequest.findById(id);
-    if (!testRequest) return res.status(404).json({ message: 'Test request not found' });
-    const { filename, filepath } = await generateLabReportPDF(testRequest, { reportSummary });
+    const { reportSummary, clinicalInterpretation } = req.body;
+    
+    const testRequest = await TestRequest.findById(id)
+      .populate('doctorId', 'name email phone')
+      .populate('patientId', 'name phone address age gender')
+      .populate('assignedLabStaffId', 'staffName phone');
+      
+    if (!testRequest) {
+      return res.status(404).json({ message: 'Test request not found' });
+    }
+
+    const { filename, filepath } = await generateLabReportPDF(testRequest, { 
+      reportSummary,
+      clinicalInterpretation 
+    });
+    
     testRequest.reportGeneratedDate = new Date();
     testRequest.reportFilePath = filepath;
     testRequest.reportSummary = reportSummary;
+    testRequest.clinicalInterpretation = clinicalInterpretation;
+    testRequest.reportGeneratedBy = req.user.id || req.user._id;
+    testRequest.reportGeneratedByName = req.user.staffName || req.user.name;
     testRequest.status = 'Report_Generated';
+    
     await testRequest.save();
-    res.status(200).json({ message: 'Test report generated successfully', pdfFile: filename });
+    
+    res.status(200).json({ 
+      message: 'Test report generated successfully', 
+      pdfFile: filename,
+      reportPath: filepath 
+    });
   } catch (error) {
+    console.error('Error generating test report:', error);
     res.status(500).json({ message: 'Failed to generate test report', error: error.message });
   }
 };
@@ -633,7 +655,7 @@ export const sendReportToDoctor = async (req, res) => {
     testRequest.notificationMessage = notificationMessage;
     testRequest.sentTo = sentTo || doctorName;
     testRequest.deliveryConfirmation = deliveryConfirmation;
-    testRequest.status = 'Completed'; // Set to Completed so it appears in completed tests
+    testRequest.status = 'Report_Sent'; // Changed from 'Completed' to 'Report_Sent'
     testRequest.updatedAt = new Date();
 
     const updatedTestRequest = await testRequest.save();
@@ -650,7 +672,7 @@ export const sendReportToDoctor = async (req, res) => {
       doctorName: doctorName,
       doctorEmail: doctorEmail,
       sendMethod: sendMethod,
-      status: 'Completed'
+      status: 'Report_Sent'
     });
 
     res.status(200).json({
@@ -799,14 +821,45 @@ export const downloadTestReport = async (req, res) => {
   try {
     const { id } = req.params;
     const testRequest = await TestRequest.findById(id);
-    if (!testRequest) return res.status(404).json({ message: 'Test request not found' });
+    
+    if (!testRequest) {
+      return res.status(404).json({ message: 'Test request not found' });
+    }
+
     const reportFilePath = testRequest.reportFilePath;
-    if (!reportFilePath || !fs.existsSync(path.resolve(reportFilePath)))
+    
+    if (!reportFilePath) {
       return res.status(404).json({ message: 'Report file not found' });
+    }
+
+    // Check if file exists
+    const fullPath = path.resolve(reportFilePath);
+    if (!fs.existsSync(fullPath)) {
+      return res.status(404).json({ message: 'Report file not found on server' });
+    }
+
+    // Set proper headers for PDF
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `inline; filename="${path.basename(reportFilePath)}"`);
-    fs.createReadStream(path.resolve(reportFilePath)).pipe(res);
+    res.setHeader('Content-Disposition', `attachment; filename="test-report-${id}.pdf"`);
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
+    // Stream the PDF file
+    const readStream = fs.createReadStream(fullPath);
+    readStream.pipe(res);
+    
+    readStream.on('error', (error) => {
+      console.error('Error streaming PDF:', error);
+      if (!res.headersSent) {
+        res.status(500).json({ message: 'Error streaming PDF file' });
+      }
+    });
+
   } catch (error) {
-    res.status(500).json({ message: 'Failed to download test report', error: error.message });
+    console.error('Error downloading test report:', error);
+    if (!res.headersSent) {
+      res.status(500).json({ message: 'Failed to download test report', error: error.message });
+    }
   }
 };

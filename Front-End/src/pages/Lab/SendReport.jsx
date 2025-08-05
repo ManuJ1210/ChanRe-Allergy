@@ -130,33 +130,122 @@ Lab Team`,
 
   const downloadReport = async () => {
     try {
-      const response = await API.get(`/test-requests/${id}/download-report`);
+      const response = await API.get(`/test-requests/${id}/download-report`, {
+        responseType: 'blob', // This is crucial for binary data
+        headers: {
+          'Accept': 'application/pdf'
+        }
+      });
       
-      // Since we're returning JSON metadata, create a text file with the report data
-      const reportData = {
-        patientName: testRequest.patientName,
-        testType: testRequest.testType,
-        testResults: testRequest.testResults,
-        conclusion: testRequest.conclusion,
-        recommendations: testRequest.recommendations,
-        reportSummary: testRequest.reportSummary,
-        clinicalInterpretation: testRequest.clinicalInterpretation,
-        reportGeneratedDate: testRequest.reportGeneratedDate,
-        reportGeneratedBy: testRequest.reportGeneratedByName
-      };
+      // Check if response is actually PDF
+      const contentType = response.headers['content-type'] || response.headers['Content-Type'];
       
-      const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `test-report-${testRequest._id}.json`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
+      if (contentType && contentType.includes('application/pdf')) {
+        // Handle proper PDF response
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `test-report-${testRequest._id}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      } else {
+        // Handle the current issue where PDF comes as text/JSON
+        let pdfContent = response.data;
+        
+        // If it's a JSON response with PDF content as string
+        if (typeof pdfContent === 'object' && pdfContent.pdfContent) {
+          pdfContent = pdfContent.pdfContent;
+        } else if (typeof pdfContent === 'string') {
+          // If it's the raw PDF string you showed in your question
+          pdfContent = pdfContent;
+        }
+        
+        // Clean up the PDF string (remove JSON escape characters)
+        const cleanedPdfContent = pdfContent
+          .replace(/\\n/g, '\n')
+          .replace(/\\r/g, '\r')
+          .replace(/\\t/g, '\t')
+          .replace(/\\\\/g, '\\')
+          .replace(/\\"/g, '"');
+        
+        // Convert string to binary
+        const byteCharacters = cleanedPdfContent;
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        
+        // Create PDF blob
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `test-report-${testRequest._id}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      }
     } catch (error) {
       console.error('Error downloading report:', error);
       setError('Failed to download report');
+    }
+  };
+
+  // Alternative function to view PDF in browser instead of downloading
+  const viewReport = async () => {
+    try {
+      const response = await API.get(`/test-requests/${id}/download-report`, {
+        responseType: 'blob',
+        headers: {
+          'Accept': 'application/pdf'
+        }
+      });
+      
+      const contentType = response.headers['content-type'] || response.headers['Content-Type'];
+      
+      let blob;
+      if (contentType && contentType.includes('application/pdf')) {
+        blob = new Blob([response.data], { type: 'application/pdf' });
+      } else {
+        // Handle text/JSON response
+        let pdfContent = response.data;
+        if (typeof pdfContent === 'object' && pdfContent.pdfContent) {
+          pdfContent = pdfContent.pdfContent;
+        }
+        
+        const cleanedPdfContent = pdfContent
+          .replace(/\\n/g, '\n')
+          .replace(/\\r/g, '\r')
+          .replace(/\\t/g, '\t')
+          .replace(/\\\\/g, '\\')
+          .replace(/\\"/g, '"');
+        
+        const byteCharacters = cleanedPdfContent;
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        blob = new Blob([byteArray], { type: 'application/pdf' });
+      }
+      
+      // Open PDF in new tab for viewing
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      
+      // Clean up the URL after a delay
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Error viewing report:', error);
+      setError('Failed to view report');
     }
   };
 
@@ -363,13 +452,22 @@ Lab Team`,
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-500">Report File</label>
-                  <button
-                    onClick={downloadReport}
-                    className="flex items-center text-blue-600 hover:text-blue-700"
-                  >
-                    <Download className="h-4 w-4 mr-2" />
-                    Download Report
-                  </button>
+                  <div className="flex space-x-3">
+                    <button
+                      onClick={viewReport}
+                      className="flex items-center text-blue-600 hover:text-blue-700"
+                    >
+                      <Eye className="h-4 w-4 mr-2" />
+                      View Report
+                    </button>
+                    <button
+                      onClick={downloadReport}
+                      className="flex items-center text-green-600 hover:text-green-700"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Download Report
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -508,4 +606,4 @@ Lab Team`,
   );
 };
 
-export default SendReport; 
+export default SendReport;

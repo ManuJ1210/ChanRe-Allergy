@@ -11,15 +11,17 @@ export const getAllLabReports = async (req, res) => {
         { status: 'Report_Generated' },
         { status: 'Report_Sent' },
         { status: 'Testing_Completed' }
-      ]
+      ],
+      isActive: true,
+      reportGeneratedDate: { $exists: true, $ne: null } // Only reports that have been generated
     })
     .populate('patientId', 'name phone centerCode')
     .populate('doctorId', 'name email')
     .populate('centerId', 'name centerCode')
-    .populate('assignedLabStaffId', 'name')
-    .populate('reportGeneratedBy', 'name')
-    .populate('reportSentBy', 'name')
-    .sort({ createdAt: -1 });
+    .populate('assignedLabStaffId', 'staffName')
+    .populate('reportGeneratedBy', 'staffName')
+    .populate('reportSentBy', 'staffName')
+    .sort({ reportGeneratedDate: -1, createdAt: -1 });
 
     const formattedReports = reports.map(report => ({
       _id: report._id,
@@ -41,6 +43,8 @@ export const getAllLabReports = async (req, res) => {
       resultDetails: report.resultDetails,
       resultValues: report.resultValues,
       notes: report.notes,
+      conclusion: report.conclusion,
+      recommendations: report.recommendations,
       createdAt: report.createdAt,
       updatedAt: report.updatedAt
     }));
@@ -63,15 +67,17 @@ export const getLabReportsByCenter = async (req, res) => {
         { status: 'Report_Generated' },
         { status: 'Report_Sent' },
         { status: 'Testing_Completed' }
-      ]
+      ],
+      isActive: true,
+      reportGeneratedDate: { $exists: true, $ne: null }
     })
     .populate('patientId', 'name phone centerCode')
     .populate('doctorId', 'name email')
     .populate('centerId', 'name centerCode')
-    .populate('assignedLabStaffId', 'name')
-    .populate('reportGeneratedBy', 'name')
-    .populate('reportSentBy', 'name')
-    .sort({ createdAt: -1 });
+    .populate('assignedLabStaffId', 'staffName')
+    .populate('reportGeneratedBy', 'staffName')
+    .populate('reportSentBy', 'staffName')
+    .sort({ reportGeneratedDate: -1, createdAt: -1 });
 
     const formattedReports = reports.map(report => ({
       _id: report._id,
@@ -93,6 +99,8 @@ export const getLabReportsByCenter = async (req, res) => {
       resultDetails: report.resultDetails,
       resultValues: report.resultValues,
       notes: report.notes,
+      conclusion: report.conclusion,
+      recommendations: report.recommendations,
       createdAt: report.createdAt,
       updatedAt: report.updatedAt
     }));
@@ -113,9 +121,9 @@ export const getLabReportById = async (req, res) => {
       .populate('patientId', 'name phone centerCode age gender')
       .populate('doctorId', 'name email phone')
       .populate('centerId', 'name centerCode address phone')
-      .populate('assignedLabStaffId', 'name email phone')
-      .populate('reportGeneratedBy', 'name email')
-      .populate('reportSentBy', 'name email');
+      .populate('assignedLabStaffId', 'staffName email phone')
+      .populate('reportGeneratedBy', 'staffName email')
+      .populate('reportSentBy', 'staffName email');
 
     if (!report) {
       return res.status(404).json({ message: 'Lab report not found' });
@@ -153,17 +161,18 @@ export const getLabReportById = async (req, res) => {
       qualityControl: report.qualityControl,
       methodUsed: report.methodUsed,
       equipmentUsed: report.equipmentUsed,
-      labTechnicianName: report.assignedLabStaffId?.name || report.labTechnicianName,
+      labTechnicianName: report.assignedLabStaffId?.staffName || report.labTechnicianName,
       labTechnicianEmail: report.assignedLabStaffId?.email,
       labTechnicianPhone: report.assignedLabStaffId?.phone,
-      reportGeneratedByName: report.reportGeneratedBy?.name || report.reportGeneratedByName,
-      reportSentByName: report.reportSentBy?.name || report.reportSentByName,
+      reportGeneratedByName: report.reportGeneratedBy?.staffName || report.reportGeneratedByName,
+      reportSentByName: report.reportSentBy?.staffName || report.reportSentByName,
       sendMethod: report.sendMethod,
       sentTo: report.sentTo,
       emailSubject: report.emailSubject,
       emailMessage: report.emailMessage,
       notificationMessage: report.notificationMessage,
       deliveryConfirmation: report.deliveryConfirmation,
+      testResults: report.testResults,
       createdAt: report.createdAt,
       updatedAt: report.updatedAt
     };
@@ -183,12 +192,28 @@ export const getLabReportsStats = async (req, res) => {
         { status: 'Report_Generated' },
         { status: 'Report_Sent' },
         { status: 'Testing_Completed' }
-      ]
+      ],
+      isActive: true,
+      reportGeneratedDate: { $exists: true, $ne: null }
     });
 
-    const sentReports = await TestRequest.countDocuments({ status: 'Report_Sent' });
-    const generatedReports = await TestRequest.countDocuments({ status: 'Report_Generated' });
-    const completedTests = await TestRequest.countDocuments({ status: 'Testing_Completed' });
+    const sentReports = await TestRequest.countDocuments({ 
+      status: 'Report_Sent',
+      isActive: true,
+      reportGeneratedDate: { $exists: true, $ne: null }
+    });
+    
+    const generatedReports = await TestRequest.countDocuments({ 
+      status: 'Report_Generated',
+      isActive: true,
+      reportGeneratedDate: { $exists: true, $ne: null }
+    });
+    
+    const completedTests = await TestRequest.countDocuments({ 
+      status: 'Testing_Completed',
+      isActive: true,
+      reportGeneratedDate: { $exists: true, $ne: null }
+    });
 
     // Get reports by center
     const reportsByCenter = await TestRequest.aggregate([
@@ -198,7 +223,9 @@ export const getLabReportsStats = async (req, res) => {
             { status: 'Report_Generated' },
             { status: 'Report_Sent' },
             { status: 'Testing_Completed' }
-          ]
+          ],
+          isActive: true,
+          reportGeneratedDate: { $exists: true, $ne: null }
         }
       },
       {
@@ -216,12 +243,15 @@ export const getLabReportsStats = async (req, res) => {
         }
       },
       {
-        $unwind: '$center'
+        $unwind: {
+          path: '$center',
+          preserveNullAndEmptyArrays: true
+        }
       },
       {
         $project: {
-          centerName: '$center.name',
-          centerCode: '$center.centerCode',
+          centerName: { $ifNull: ['$center.name', 'Unknown Center'] },
+          centerCode: { $ifNull: ['$center.centerCode', 'Unknown'] },
           count: 1
         }
       }
@@ -235,7 +265,9 @@ export const getLabReportsStats = async (req, res) => {
             { status: 'Report_Generated' },
             { status: 'Report_Sent' },
             { status: 'Testing_Completed' }
-          ]
+          ],
+          isActive: true,
+          reportGeneratedDate: { $exists: true, $ne: null }
         }
       },
       {
@@ -246,16 +278,105 @@ export const getLabReportsStats = async (req, res) => {
       }
     ]);
 
+    // Get reports by month (last 12 months)
+    const twelveMonthsAgo = new Date();
+    twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+
+    const reportsByMonth = await TestRequest.aggregate([
+      {
+        $match: {
+          $or: [
+            { status: 'Report_Generated' },
+            { status: 'Report_Sent' },
+            { status: 'Testing_Completed' }
+          ],
+          isActive: true,
+          reportGeneratedDate: { 
+            $exists: true, 
+            $ne: null,
+            $gte: twelveMonthsAgo 
+          }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: '$reportGeneratedDate' },
+            month: { $month: '$reportGeneratedDate' }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { '_id.year': 1, '_id.month': 1 }
+      }
+    ]);
+
     res.status(200).json({
       totalReports,
       sentReports,
       generatedReports,
       completedTests,
       reportsByCenter,
-      reportsByStatus
+      reportsByStatus,
+      reportsByMonth
     });
   } catch (error) {
     console.error('Error fetching lab reports statistics:', error);
     res.status(500).json({ message: 'Failed to fetch lab reports statistics', error: error.message });
   }
-}; 
+};
+
+// Get lab reports for a specific doctor
+export const getLabReportsForDoctor = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+    
+    const reports = await TestRequest.find({
+      doctorId: doctorId,
+      $or: [
+        { status: 'Report_Generated' },
+        { status: 'Report_Sent' },
+        { status: 'Testing_Completed' }
+      ],
+      isActive: true,
+      reportGeneratedDate: { $exists: true, $ne: null }
+    })
+    .populate('patientId', 'name phone centerCode')
+    .populate('doctorId', 'name email')
+    .populate('centerId', 'name centerCode')
+    .populate('assignedLabStaffId', 'staffName')
+    .populate('reportGeneratedBy', 'staffName')
+    .populate('reportSentBy', 'staffName')
+    .sort({ reportSentDate: -1, reportGeneratedDate: -1, createdAt: -1 });
+
+    const formattedReports = reports.map(report => ({
+      _id: report._id,
+      patientName: report.patientId?.name || report.patientName,
+      patientId: report.patientId?.centerCode || report.patientId?._id,
+      centerName: report.centerId?.name || report.centerName,
+      centerCode: report.centerId?.centerCode || report.centerCode,
+      doctorName: report.doctorId?.name || report.doctorName,
+      testType: report.testType,
+      testDescription: report.testDescription,
+      status: report.status,
+      urgency: report.urgency,
+      reportGeneratedDate: report.reportGeneratedDate,
+      reportSentDate: report.reportSentDate,
+      reportFile: report.reportFile,
+      reportFilePath: report.reportFilePath,
+      resultSummary: report.reportSummary,
+      clinicalInterpretation: report.clinicalInterpretation,
+      testResults: report.testResults,
+      conclusion: report.conclusion,
+      recommendations: report.recommendations,
+      createdAt: report.createdAt,
+      updatedAt: report.updatedAt
+    }));
+
+    res.status(200).json(formattedReports);
+  } catch (error) {
+    console.error('Error fetching lab reports for doctor:', error);
+    res.status(500).json({ message: 'Failed to fetch lab reports for doctor', error: error.message });
+  }
+};

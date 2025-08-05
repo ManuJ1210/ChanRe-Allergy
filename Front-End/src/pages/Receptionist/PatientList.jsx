@@ -286,19 +286,8 @@ export default function PatientList() {
                                 <Eye className="h-4 w-4" />
                               </span>
                             )}
-                            {patient._id ? (
-                              <button
-                                onClick={() => navigate(`/dashboard/receptionist/AddHistory/ViewHistory/${patient._id}`)}
-                                className="text-purple-600 hover:text-purple-900 p-1 rounded transition-colors"
-                                title="View medical history"
-                              >
-                                <FileText className="h-4 w-4" />
-                              </button>
-                            ) : (
-                              <span className="text-slate-400 p-1" title="No patient ID available">
-                                <FileText className="h-4 w-4" />
-                              </span>
-                            )}
+                              
+                          
                             {patient._id ? (
                               <button
                                 onClick={() => navigate(`/dashboard/receptionist/edit-patient/${patient._id}`)}

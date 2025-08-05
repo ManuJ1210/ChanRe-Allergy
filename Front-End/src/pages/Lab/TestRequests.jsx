@@ -28,6 +28,7 @@ export default function TestRequests() {
   const [testRequests, setTestRequests] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [urgencyFilter, setUrgencyFilter] = useState('All');
@@ -71,11 +72,14 @@ export default function TestRequests() {
   const fetchTestRequests = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await API.get('/test-requests/lab-staff');
       const data = response.data;
       setTestRequests(data);
       setLastRefreshTime(new Date());
     } catch (error) {
+      console.error('Error fetching test requests:', error);
+      setError('Failed to load test requests');
       setTestRequests([]);
     } finally {
       setLoading(false);
@@ -193,53 +197,163 @@ export default function TestRequests() {
   };
 
   const handleViewDetails = (requestId) => {
-            navigate(`/dashboard/lab/test-request/${requestId}`);
+    navigate(`/dashboard/lab/test-request/${requestId}`);
   };
 
   const handleUpdateStatus = (requestId) => {
-            navigate(`/dashboard/lab/update-status/${requestId}`);
+    navigate(`/dashboard/lab/update-status/${requestId}`);
   };
 
-  const handleViewReport = (requestId) => {
-    // Open PDF in new tab
-    const token = localStorage.getItem('token');
-    const viewUrl = `http://localhost:5000/api/test-requests/${requestId}/download-report`;
-    
-    // Add token to URL as query parameter for the new tab
-    const urlWithToken = `${viewUrl}?token=${encodeURIComponent(token)}`;
-    window.open(urlWithToken, '_blank');
-  };
+  const handleViewReport = async (requestId) => {
+    try {
+      setError(null);
+      
+      // Check if user is authenticated
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Please login to view reports');
+        return;
+      }
 
-  const handleDownloadReport = (requestId) => {
-    // Download the report file using the new API endpoint
-    const token = localStorage.getItem('token');
-    const downloadUrl = `http://localhost:5000/api/test-requests/${requestId}/download-report`;
-    
-    fetch(downloadUrl, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+      const response = await API.get(`/test-requests/${requestId}/download-report`, {
+        responseType: 'blob',
+        headers: {
+          'Accept': 'application/pdf',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const contentType = response.headers['content-type'] || response.headers['Content-Type'];
+      
+      let blob;
+      if (contentType && contentType.includes('application/pdf')) {
+        blob = new Blob([response.data], { type: 'application/pdf' });
+      } else {
+        // Handle text/JSON response
+        let pdfContent = response.data;
+        if (typeof pdfContent === 'object' && pdfContent.pdfContent) {
+          pdfContent = pdfContent.pdfContent;
+        }
+        
+        const cleanedPdfContent = pdfContent
+          .replace(/\\n/g, '\n')
+          .replace(/\\r/g, '\r')
+          .replace(/\\t/g, '\t')
+          .replace(/\\\\/g, '\\')
+          .replace(/\\"/g, '"');
+        
+        const byteCharacters = cleanedPdfContent;
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        blob = new Blob([byteArray], { type: 'application/pdf' });
       }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to download report');
-      }
-      return response.blob();
-    })
-    .then(blob => {
+      
+      // Open PDF in new tab for viewing
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `lab-report-${requestId}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    })
-    .catch(error => {
+      window.open(url, '_blank');
+      
+      // Clean up the URL after a delay
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Error viewing report:', error);
+      if (error.response?.status === 401) {
+        setError('Authentication failed. Please login again to view reports.');
+      } else if (error.response?.status === 404) {
+        setError('Report not found. The report may not have been generated yet.');
+      } else {
+        setError('Failed to view report. Please try again.');
+      }
+    }
+  };
+
+  const handleDownloadReport = async (requestId) => {
+    try {
+      setError(null);
+      
+      // Check if user is authenticated
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Please login to download reports');
+        return;
+      }
+
+      const response = await API.get(`/test-requests/${requestId}/download-report`, {
+        responseType: 'blob', // This is crucial for binary data
+        headers: {
+          'Accept': 'application/pdf',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      // Check if response is actually PDF
+      const contentType = response.headers['content-type'] || response.headers['Content-Type'];
+      
+      if (contentType && contentType.includes('application/pdf')) {
+        // Handle proper PDF response
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `lab-report-${requestId}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      } else {
+        // Handle the current issue where PDF comes as text/JSON
+        let pdfContent = response.data;
+        
+        // If it's a JSON response with PDF content as string
+        if (typeof pdfContent === 'object' && pdfContent.pdfContent) {
+          pdfContent = pdfContent.pdfContent;
+        } else if (typeof pdfContent === 'string') {
+          // If it's the raw PDF string you showed in your question
+          pdfContent = pdfContent;
+        }
+        
+        // Clean up the PDF string (remove JSON escape characters)
+        const cleanedPdfContent = pdfContent
+          .replace(/\\n/g, '\n')
+          .replace(/\\r/g, '\r')
+          .replace(/\\t/g, '\t')
+          .replace(/\\\\/g, '\\')
+          .replace(/\\"/g, '"');
+        
+        // Convert string to binary
+        const byteCharacters = cleanedPdfContent;
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        
+        // Create PDF blob
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `lab-report-${requestId}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      }
+    } catch (error) {
       console.error('Error downloading report:', error);
-      alert('Failed to download report');
-    });
+      if (error.response?.status === 401) {
+        setError('Authentication failed. Please login again to download reports.');
+      } else if (error.response?.status === 404) {
+        setError('Report not found. The report may not have been generated yet.');
+      } else {
+        setError('Failed to download report. Please try again.');
+      }
+    }
   };
 
   const handleDeleteRequest = async (requestId, patientName) => {
@@ -317,6 +431,24 @@ export default function TestRequests() {
             </p>
           )}
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="flex items-center">
+              <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
+              <p className="text-red-700">{error}</p>
+              {error.includes('login') && (
+                <button
+                  onClick={() => navigate('/login')}
+                  className="ml-4 px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
+                >
+                  Login
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Filters */}
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
@@ -464,7 +596,7 @@ export default function TestRequests() {
                         <Edit className="h-4 w-4 mr-1" />
                         Update Status
                       </button>
-                      {(request.status === 'Report_Generated' || request.status === 'Report_Sent' || request.status === 'Completed') && (
+                      {(request.status === 'Report_Generated' || request.status === 'Report_Sent' || request.status === 'Completed') && request.reportFilePath && (
                         <>
                           <button
                             onClick={() => handleViewReport(request._id)}
@@ -501,4 +633,4 @@ export default function TestRequests() {
       </div>
     </div>
   );
-} 
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import API from '../../../services/api';
 import { 
   FileText, 
   Download, 
@@ -34,20 +35,8 @@ const LabReports = () => {
     const fetchReports = async () => {
       try {
         setLoading(true);
-        const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/lab-reports', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch lab reports');
-        }
-        
-        const data = await response.json();
-        setReports(data);
+        const response = await API.get('/lab-reports');
+        setReports(response.data);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching lab reports:', err);
@@ -105,52 +94,124 @@ const LabReports = () => {
     return matchesSearch && matchesStatus && matchesCenter;
   });
 
-  const handleViewReport = (reportId) => {
-    // Open PDF in new tab
-    const token = localStorage.getItem('token');
-    const viewUrl = `http://localhost:5000/api/test-requests/${reportId}/download-report`;
-    
-    // Create a temporary link to open in new tab
-    const link = document.createElement('a');
-    link.href = viewUrl;
-    link.target = '_blank';
-    link.setAttribute('Authorization', `Bearer ${token}`);
-    
-    // Add token to URL as query parameter for the new tab
-    const urlWithToken = `${viewUrl}?token=${encodeURIComponent(token)}`;
-    window.open(urlWithToken, '_blank');
+  const handleViewReport = async (reportId) => {
+    try {
+      const response = await API.get(`/test-requests/${reportId}/download-report`, {
+        responseType: 'blob',
+        headers: {
+          'Accept': 'application/pdf'
+        }
+      });
+      
+      const contentType = response.headers['content-type'] || response.headers['Content-Type'];
+      
+      let blob;
+      if (contentType && contentType.includes('application/pdf')) {
+        blob = new Blob([response.data], { type: 'application/pdf' });
+      } else {
+        // Handle text/JSON response
+        let pdfContent = response.data;
+        if (typeof pdfContent === 'object' && pdfContent.pdfContent) {
+          pdfContent = pdfContent.pdfContent;
+        }
+        
+        const cleanedPdfContent = pdfContent
+          .replace(/\\n/g, '\n')
+          .replace(/\\r/g, '\r')
+          .replace(/\\t/g, '\t')
+          .replace(/\\\\/g, '\\')
+          .replace(/\\"/g, '"');
+        
+        const byteCharacters = cleanedPdfContent;
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        blob = new Blob([byteArray], { type: 'application/pdf' });
+      }
+      
+      // Open PDF in new tab for viewing
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      
+      // Clean up the URL after a delay
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Error viewing report:', error);
+      alert('Failed to view report');
+    }
   };
 
-  const handleDownloadReport = (reportId) => {
-    // Download the report file using the new API endpoint
-    const token = localStorage.getItem('token');
-    const downloadUrl = `http://localhost:5000/api/test-requests/${reportId}/download-report`;
-    
-    fetch(downloadUrl, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+  const handleDownloadReport = async (reportId) => {
+    try {
+      const response = await API.get(`/test-requests/${reportId}/download-report`, {
+        responseType: 'blob', // This is crucial for binary data
+        headers: {
+          'Accept': 'application/pdf'
+        }
+      });
+      
+      // Check if response is actually PDF
+      const contentType = response.headers['content-type'] || response.headers['Content-Type'];
+      
+      if (contentType && contentType.includes('application/pdf')) {
+        // Handle proper PDF response
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `lab-report-${reportId}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      } else {
+        // Handle the current issue where PDF comes as text/JSON
+        let pdfContent = response.data;
+        
+        // If it's a JSON response with PDF content as string
+        if (typeof pdfContent === 'object' && pdfContent.pdfContent) {
+          pdfContent = pdfContent.pdfContent;
+        } else if (typeof pdfContent === 'string') {
+          // If it's the raw PDF string you showed in your question
+          pdfContent = pdfContent;
+        }
+        
+        // Clean up the PDF string (remove JSON escape characters)
+        const cleanedPdfContent = pdfContent
+          .replace(/\\n/g, '\n')
+          .replace(/\\r/g, '\r')
+          .replace(/\\t/g, '\t')
+          .replace(/\\\\/g, '\\')
+          .replace(/\\"/g, '"');
+        
+        // Convert string to binary
+        const byteCharacters = cleanedPdfContent;
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        
+        // Create PDF blob
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `lab-report-${reportId}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
       }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to download report');
-      }
-      return response.blob();
-    })
-    .then(blob => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `lab-report-${reportId}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    })
-    .catch(error => {
+    } catch (error) {
       console.error('Error downloading report:', error);
       alert('Failed to download report');
-    });
+    }
   };
 
   const handleSendReport = (reportId) => {
@@ -395,4 +456,4 @@ const LabReports = () => {
   );
 };
 
-export default LabReports; 
+export default LabReports;

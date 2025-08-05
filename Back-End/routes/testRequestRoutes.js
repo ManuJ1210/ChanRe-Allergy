@@ -64,6 +64,9 @@ router.get('/lab-staff/:labStaffId', protect, getTestRequestsByLabStaff);
 // Get test requests by patient
 router.get('/patient/:patientId', protect, getTestRequestsByPatient);
 
+// Download test report (PDF) - Use regular protect middleware instead of pdfAuth
+router.get('/:id/download-report', protect, downloadTestReport);
+
 // Get test request by ID
 router.get('/:id', protect, getTestRequestById);
 
@@ -100,7 +103,4 @@ router.put('/:id/cancel', protect, cancelTestRequest);
 // Delete test request
 router.delete('/:id', protect, deleteTestRequest);
 
-// Download test report (PDF)
-router.get('/:id/download-report', pdfAuth, downloadTestReport);
-
-export default router; 
+export default router;
