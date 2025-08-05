@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCenterAdminReceptionistById } from '../../../redux/slices/centerAdminReceptionistSlice';
+import { fetchCenterAdminReceptionistById } from '../../../features/centerAdmin/centerAdminReceptionistSlice';
 import { ArrowLeft, User, Mail, Phone, Calendar, Clock } from 'lucide-react';
 
 const ViewReceptionist = () => {

@@ -164,7 +164,7 @@ const PatientDetails = () => {
                 </button>
               </div>
               <button
-                onClick={() => setShowTestForm(true)}
+                  onClick={() => navigate('/dashboard/doctor/new-test-request')}
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center"
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -197,7 +197,7 @@ const PatientDetails = () => {
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-6">
           <div className="border-b border-blue-100">
             <nav className="flex space-x-8 px-6">
-              {['overview', 'history', 'medications', 'tests', 'test-requests'].map((tab) => (
+              {['overview', 'history', 'medications',  'test-requests'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}

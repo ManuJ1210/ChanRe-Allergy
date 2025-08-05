@@ -7,7 +7,7 @@ import {
   updateSuperAdminReceptionist, 
   clearError, 
   clearSuccess 
-} from '../../../redux/slices/superAdminReceptionistSlice';
+} from '../../../features/superadmin/superAdminReceptionistSlice';
 
 const EditSuperadminReceptionist = () => {
   const { id } = useParams();

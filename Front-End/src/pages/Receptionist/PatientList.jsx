@@ -15,13 +15,16 @@ import {
   Phone,
   User,
   Calendar,
-  MapPin
+  MapPin,
+  FileText
 } from 'lucide-react';
 
 export default function PatientList() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { patients, loading, error, deleteSuccess } = useSelector((state) => state.receptionist);
+  
+
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredPatients, setFilteredPatients] = useState([]);
@@ -281,6 +284,19 @@ export default function PatientList() {
                             ) : (
                               <span className="text-slate-400 p-1" title="No patient ID available">
                                 <Eye className="h-4 w-4" />
+                              </span>
+                            )}
+                            {patient._id ? (
+                              <button
+                                onClick={() => navigate(`/dashboard/receptionist/AddHistory/ViewHistory/${patient._id}`)}
+                                className="text-purple-600 hover:text-purple-900 p-1 rounded transition-colors"
+                                title="View medical history"
+                              >
+                                <FileText className="h-4 w-4" />
+                              </button>
+                            ) : (
+                              <span className="text-slate-400 p-1" title="No patient ID available">
+                                <FileText className="h-4 w-4" />
                               </span>
                             )}
                             {patient._id ? (

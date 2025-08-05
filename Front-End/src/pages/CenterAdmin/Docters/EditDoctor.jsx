@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateCenterAdminDoctor, fetchCenterAdminDoctorById, clearError, clearSuccess } from '../../../redux/slices/centerAdminDoctorSlice';
+import { updateCenterAdminDoctor, fetchCenterAdminDoctorById, clearError, clearSuccess } from '../../../features/centerAdmin/centerAdminDoctorSlice';
 import { Eye, EyeOff, UserCheck, ArrowLeft } from 'lucide-react';
 
 const EditDoctor = () => {

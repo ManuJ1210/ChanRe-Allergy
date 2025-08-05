@@ -15,7 +15,8 @@ import {
   AlertCircle,
   XCircle,
   Plus,
-  RefreshCw
+  RefreshCw,
+  Download
 } from 'lucide-react';
 
 const TestRequests = () => {
@@ -119,28 +120,37 @@ const TestRequests = () => {
     return testRequests.filter(test => test.status === status).length;
   };
 
+  const handleViewReport = (testRequestId) => {
+    // Open PDF in new tab
+    const token = localStorage.getItem('token');
+    const viewUrl = `http://localhost:5000/api/test-requests/${testRequestId}/download-report`;
+    
+    // Add token to URL as query parameter for the new tab
+    const urlWithToken = `${viewUrl}?token=${encodeURIComponent(token)}`;
+    window.open(urlWithToken, '_blank');
+  };
+
   const handleDownloadReport = async (testRequestId) => {
     try {
-      const result = await dispatch(downloadTestReport(testRequestId)).unwrap();
+      // Download the report file using the new API endpoint
+      const token = localStorage.getItem('token');
+      const downloadUrl = `http://localhost:5000/api/test-requests/${testRequestId}/download-report`;
       
-      // Since we're returning JSON metadata, create a text file with the report data
-      const reportData = {
-        patientName: result.patientName,
-        testType: result.testType,
-        testResults: result.testResults,
-        conclusion: result.conclusion,
-        recommendations: result.recommendations,
-        reportSummary: result.reportSummary,
-        clinicalInterpretation: result.clinicalInterpretation,
-        reportGeneratedDate: result.reportGeneratedDate,
-        reportGeneratedBy: result.reportGeneratedBy
-      };
+      const response = await fetch(downloadUrl, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       
-      const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+      if (!response.ok) {
+        throw new Error('Failed to download report');
+      }
+      
+      const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `test-report-${testRequestId}.json`;
+      link.download = `lab-report-${testRequestId}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -427,14 +437,23 @@ const TestRequests = () => {
                             <Eye className="h-4 w-4 mr-1" />
                             View Patient
                           </button>
-                          {test.status === 'Completed' && (
-                            <button
-                              onClick={() => handleDownloadReport(test._id)}
-                              className="flex items-center text-green-600 hover:text-green-700 font-medium"
-                            >
-                              <FileText className="h-4 w-4 mr-1" />
-                              Download Report
-                            </button>
+                          {(test.status === 'Report_Generated' || test.status === 'Report_Sent' || test.status === 'Completed') && (
+                            <>
+                              <button
+                                onClick={() => handleViewReport(test._id)}
+                                className="flex items-center text-blue-600 hover:text-blue-700 font-medium"
+                              >
+                                <Eye className="h-4 w-4 mr-1" />
+                                View Report
+                              </button>
+                              <button
+                                onClick={() => handleDownloadReport(test._id)}
+                                className="flex items-center text-green-600 hover:text-green-700 font-medium"
+                              >
+                                <Download className="h-4 w-4 mr-1" />
+                                Download Report
+                              </button>
+                            </>
                           )}
                         </div>
                       </td>

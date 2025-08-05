@@ -251,7 +251,13 @@ export default function PatientList() {
                         <td className="px-6 py-4">
                           <div className="flex items-center space-x-2">
                             <button
-                              onClick={() => navigate(`/dashboard/CenterAdmin/patients/profile/ViewProfile/${patient?._id}`)}
+                              onClick={() => {
+                                if (patient?._id) {
+                                  navigate(`/dashboard/CenterAdmin/patients/profile/ViewProfile/${patient._id}`);
+                                } else {
+                                  alert('Patient ID not found. Please refresh the page and try again.');
+                                }
+                              }}
                               className="text-blue-600 hover:text-blue-700 p-1 rounded transition-colors"
                               title="View Profile"
                             >

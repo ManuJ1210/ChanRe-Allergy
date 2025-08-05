@@ -22,7 +22,7 @@ import {
   deleteSuperAdminDoctor,
   clearError, 
   clearSuccess 
-} from '../../../redux/slices/superAdminDoctorSlice';
+} from '../../../features/superadmin/superAdminDoctorSlice';
 
 const ViewSuperadminDoctor = () => {
   const { id } = useParams();
@@ -83,7 +83,7 @@ const ViewSuperadminDoctor = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-4xl mx-auto">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-            <p className="text-red-600">{error}</p>
+            
             <button
               onClick={() => navigate('/dashboard/Superadmin/Docters/SuperAdminDoctorList')}
               className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"

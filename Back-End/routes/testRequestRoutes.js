@@ -1,5 +1,6 @@
 import express from 'express';
 import { protect } from '../middleware/authMiddleware.js';
+import { pdfAuth } from '../middleware/pdfAuthMiddleware.js';
 import upload from '../middleware/uploadMiddleware.js';
 import {
   getAllTestRequests,
@@ -23,6 +24,7 @@ import {
   sendReportToDoctor,
   updateTestRequestStatus,
   cancelTestRequest,
+  deleteTestRequest,
   getTestRequestStats,
   downloadTestReport
 } from '../controllers/testRequestController.js';
@@ -83,8 +85,8 @@ router.put('/:id/start-testing', protect, startLabTesting);
 // Complete lab testing
 router.put('/:id/complete-testing', protect, completeLabTesting);
 
-// Generate test report
-router.put('/:id/generate-report', protect, upload.single('reportFile'), generateTestReport);
+// Generate test report (PDF)
+router.put('/:id/generate-report', protect, generateTestReport);
 
 // Send report to doctor
 router.put('/:id/send-report', protect, sendReportToDoctor);
@@ -95,7 +97,10 @@ router.put('/:id/status', protect, updateTestRequestStatus);
 // Cancel test request
 router.put('/:id/cancel', protect, cancelTestRequest);
 
-// Download test report
-router.get('/:id/download-report', protect, downloadTestReport);
+// Delete test request
+router.delete('/:id', protect, deleteTestRequest);
+
+// Download test report (PDF)
+router.get('/:id/download-report', pdfAuth, downloadTestReport);
 
 export default router; 

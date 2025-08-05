@@ -99,13 +99,14 @@ export default function Sidebar(props) {
                 currentPath={location.pathname}
               />
               <SidebarGroup
-                label="Lab Staff"
+                label="Laboratory"
                 icon={<FaVials />}
                 open={centerOpen === 'lab'}
                 toggle={() => setCenterOpen(centerOpen === 'lab' ? null : 'lab')}
                 links={[
                   { to: "/dashboard/superadmin/lab/labstafflist", label: "Lab Staff List" },
                   { to: "/dashboard/superadmin/lab/addlabstaff", label: "Add Lab Staff" },
+                  { to: "/dashboard/superadmin/lab/labreports", label: "Lab Reports" },
                 ]}
                 currentPath={location.pathname}
               />

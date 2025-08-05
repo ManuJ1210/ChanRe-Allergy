@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCenterAdminDoctorById } from '../../../redux/slices/centerAdminDoctorSlice';
+import { fetchCenterAdminDoctorById } from '../../../features/centerAdmin/centerAdminDoctorSlice';
 import { ArrowLeft, User, Mail, Phone, GraduationCap, Building, Calendar, Clock } from 'lucide-react';
 
 const ViewDoctor = () => {

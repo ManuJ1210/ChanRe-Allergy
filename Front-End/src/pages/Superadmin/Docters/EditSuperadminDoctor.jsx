@@ -7,7 +7,7 @@ import {
   updateSuperAdminDoctor, 
   clearError, 
   clearSuccess 
-} from '../../../redux/slices/superAdminDoctorSlice';
+} from '../../../features/superadmin/superAdminDoctorSlice';
 
 const EditSuperadminDoctor = () => {
   const { id } = useParams();

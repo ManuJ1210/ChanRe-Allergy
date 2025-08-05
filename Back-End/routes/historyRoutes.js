@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { createHistory, getHistoryByPatient } from '../controllers/historyController.js';
+import { createHistory, getHistoryByPatient, getHistoryById } from '../controllers/historyController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import path from 'path';
 import fs from 'fs';
@@ -32,5 +32,7 @@ router.post('/', protect, upload.single('reportFile'), createHistory);
 router.post('/add', protect, upload.single('reportFile'), createHistory);
 // GET /api/history/:patientId — fetch all history for a patient
 router.get('/:patientId', protect, getHistoryByPatient);
+// GET /api/history/single/:id — fetch single history record by ID
+router.get('/single/:id', protect, getHistoryById);
 
 export default router;

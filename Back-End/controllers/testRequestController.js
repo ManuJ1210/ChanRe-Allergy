@@ -3,6 +3,9 @@ import User from '../models/User.js';
 import Patient from '../models/Patient.js';
 import Center from '../models/Center.js';
 import LabStaff from '../models/LabStaff.js';
+import { generateLabReportPDF } from '../utils/pdfGenerator.js';
+import path from 'path';
+import fs from 'fs';
 
 // Get all test requests (for superadmin)
 export const getAllTestRequests = async (req, res) => {
@@ -574,58 +577,21 @@ export const completeLabTesting = async (req, res) => {
   }
 };
 
-// Generate and upload test report
 export const generateTestReport = async (req, res) => {
   try {
     const { id } = req.params;
-    const { 
-      reportNotes,
-      reportSummary,
-      clinicalInterpretation,
-      qualityControl,
-      methodUsed,
-      equipmentUsed
-    } = req.body;
-
+    const { reportSummary } = req.body;
     const testRequest = await TestRequest.findById(id);
-    if (!testRequest) {
-      return res.status(404).json({ message: 'Test request not found' });
-    }
-
-    // Handle file upload if present
-    let reportFilePath = null;
-    if (req.file) {
-      reportFilePath = req.file.path;
-    }
-
+    if (!testRequest) return res.status(404).json({ message: 'Test request not found' });
+    const { filename, filepath } = await generateLabReportPDF(testRequest, { reportSummary });
     testRequest.reportGeneratedDate = new Date();
-    testRequest.reportGeneratedBy = req.user.id || req.user._id;
-    testRequest.reportGeneratedByName = req.user.staffName || req.user.name;
-    testRequest.reportFilePath = reportFilePath;
-    testRequest.reportNotes = reportNotes;
+    testRequest.reportFilePath = filepath;
     testRequest.reportSummary = reportSummary;
-    testRequest.clinicalInterpretation = clinicalInterpretation;
-    testRequest.qualityControl = qualityControl;
-    testRequest.methodUsed = methodUsed;
-    testRequest.equipmentUsed = equipmentUsed;
     testRequest.status = 'Report_Generated';
-    testRequest.updatedAt = new Date();
-
-    const updatedTestRequest = await testRequest.save();
-    
-    const populatedTestRequest = await TestRequest.findById(updatedTestRequest._id)
-      .populate('doctorId', 'name email phone')
-      .populate('patientId', 'name phone address age gender')
-      .populate('assignedLabStaffId', 'staffName phone')
-      .populate('reportGeneratedBy', 'staffName');
-
-    res.status(200).json({
-      message: 'Test report generated successfully',
-      testRequest: populatedTestRequest
-    });
+    await testRequest.save();
+    res.status(200).json({ message: 'Test report generated successfully', pdfFile: filename });
   } catch (error) {
-    console.error('Error generating test report:', error);
-    res.status(500).json({ message: 'Failed to generate test report' });
+    res.status(500).json({ message: 'Failed to generate test report', error: error.message });
   }
 };
 
@@ -797,8 +763,8 @@ export const getTestRequestStats = async (req, res) => {
   }
 };
 
-// Download test report
-export const downloadTestReport = async (req, res) => {
+// Delete test request
+export const deleteTestRequest = async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -807,27 +773,40 @@ export const downloadTestReport = async (req, res) => {
       return res.status(404).json({ message: 'Test request not found' });
     }
 
-    // Check for report file path (new field) or report file (old field)
-    const reportFilePath = testRequest.reportFilePath || testRequest.reportFile;
-    
-    if (!reportFilePath) {
-      return res.status(404).json({ message: 'Report file not found' });
+    // Check if the test request can be deleted (only pending or cancelled requests)
+    if (testRequest.status !== 'Pending' && testRequest.status !== 'Cancelled') {
+      return res.status(400).json({ 
+        message: 'Cannot delete test request. Only pending or cancelled requests can be deleted.' 
+      });
     }
 
-    // For now, return the file path and metadata. In production, you'd serve the actual file
-    res.status(200).json({
-      message: 'Report file found',
-      reportFile: reportFilePath,
-      reportGeneratedDate: testRequest.reportGeneratedDate,
-      reportGeneratedBy: testRequest.reportGeneratedByName,
-      reportSummary: testRequest.reportSummary,
-      clinicalInterpretation: testRequest.clinicalInterpretation,
-      testResults: testRequest.testResults,
-      conclusion: testRequest.conclusion,
-      recommendations: testRequest.recommendations
+    // Soft delete by setting isActive to false
+    testRequest.isActive = false;
+    testRequest.updatedAt = new Date();
+    await testRequest.save();
+
+    res.status(200).json({ 
+      message: 'Test request deleted successfully',
+      deletedRequest: testRequest
     });
   } catch (error) {
-    console.error('Error downloading test report:', error);
-    res.status(500).json({ message: 'Failed to download test report' });
+    console.error('Error deleting test request:', error);
+    res.status(500).json({ message: 'Failed to delete test request' });
+  }
+};
+
+export const downloadTestReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const testRequest = await TestRequest.findById(id);
+    if (!testRequest) return res.status(404).json({ message: 'Test request not found' });
+    const reportFilePath = testRequest.reportFilePath;
+    if (!reportFilePath || !fs.existsSync(path.resolve(reportFilePath)))
+      return res.status(404).json({ message: 'Report file not found' });
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `inline; filename="${path.basename(reportFilePath)}"`);
+    fs.createReadStream(path.resolve(reportFilePath)).pipe(res);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to download test report', error: error.message });
   }
 };

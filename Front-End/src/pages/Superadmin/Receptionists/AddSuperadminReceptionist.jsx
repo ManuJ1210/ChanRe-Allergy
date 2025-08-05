@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Eye, EyeOff, UserCheck, ArrowLeft } from 'lucide-react';
-import { addSuperAdminReceptionist, clearError, clearSuccess } from '../../../redux/slices/superAdminReceptionistSlice';
+import { addSuperAdminReceptionist, clearError, clearSuccess } from '../../../features/superadmin/superAdminReceptionistSlice';
 
 const AddSuperadminReceptionist = () => {
   const navigate = useNavigate();

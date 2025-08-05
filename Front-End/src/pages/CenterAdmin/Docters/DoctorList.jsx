@@ -22,7 +22,7 @@ import {
   setFilters,
   clearError,
   clearSuccess 
-} from '../../../redux/slices/centerAdminDoctorSlice';
+} from '../../../features/centerAdmin/centerAdminDoctorSlice';
 
 const DoctorList = () => {
   const navigate = useNavigate();

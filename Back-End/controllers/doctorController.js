@@ -297,8 +297,22 @@ export const getPatientDetails = async (req, res) => {
       return res.status(404).json({ message: 'Patient not found or not assigned to you' });
     }
 
-    // Get patient history
-    const history = await History.findOne({ patientId: patient._id });
+    // Get patient history - try both ObjectId and string formats
+    console.log('Doctor fetching history for patient:', patient._id, 'Type:', typeof patient._id);
+    let history = await History.findOne({ patientId: patient._id });
+    console.log('History found with ObjectId:', !!history);
+    
+    // If not found with ObjectId, try with string
+    if (!history) {
+      history = await History.findOne({ patientId: patient._id.toString() });
+      console.log('History found with string:', !!history);
+    }
+    
+    // If still not found, try with the original patientId from params
+    if (!history) {
+      history = await History.findOne({ patientId: patientId });
+      console.log('History found with original patientId:', !!history);
+    }
     
     // Get patient medications
     const medications = await Medication.find({ patientId: patient._id });

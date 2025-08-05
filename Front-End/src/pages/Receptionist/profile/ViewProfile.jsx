@@ -29,10 +29,7 @@ const ViewProfile = () => {
   const [activeTab, setActiveTab] = useState("Overview");
   const [dataFetched, setDataFetched] = useState(false);
 
-  // Debug logging for route parameters and location
-  console.log('ViewProfile - useParams id:', id);
-  console.log('ViewProfile - location.pathname:', location.pathname);
-  console.log('ViewProfile - location.search:', location.search);
+
 
   const { 
     singlePatient: patient,
@@ -55,21 +52,15 @@ const ViewProfile = () => {
   } = useSelector(state => state.receptionist);
 
   useEffect(() => {
-    console.log('🔍 useEffect triggered - id:', id, 'dataFetched:', dataFetched);
-    
     // Check if ID is valid (not undefined, null, or empty string)
     if (!id || id === 'undefined' || id === 'null' || id === '') {
-      console.log('❌ Invalid patient ID:', id);
       return;
     }
     
     if (id && !dataFetched) {
-      console.log('✅ Valid patient ID found:', id);
-      
       // Check if user is authenticated
       const token = localStorage.getItem('token');
       if (!token) {
-        console.error('❌ No authentication token found');
         navigate('/login');
         return;
       }
@@ -77,8 +68,6 @@ const ViewProfile = () => {
       // Fetch all patient data
       const fetchData = async () => {
         try {
-          console.log('🔄 Starting to fetch data for patient ID:', id);
-          
           await Promise.all([
             dispatch(fetchReceptionistSinglePatient(id)),
             dispatch(fetchReceptionistPatientMedications(id)),
@@ -93,10 +82,9 @@ const ViewProfile = () => {
             dispatch(fetchReceptionistPrescriptions(id))
           ]);
           
-          console.log('✅ All data fetched successfully');
           setDataFetched(true);
         } catch (error) {
-          console.error('❌ Error fetching patient data:', error);
+          console.error('Error fetching patient data:', error);
         }
       };
 
@@ -522,206 +510,68 @@ const ViewProfile = () => {
                       <p className="text-slate-500">No history found</p>
                     </div>
                   ) : (
-                    <div className="space-y-6">
-                      {(Array.isArray(history) ? history : [history]).map((h, idx) => (
-                        <div
-                          key={h._id || idx}
-                          className="bg-slate-50 border border-slate-200 rounded-lg p-6"
-                        >
-                          <div className="flex items-center gap-2 text-sm text-blue-500 mb-4">
-                            <Calendar className="h-4 w-4" />
-                            {h.createdAt ? new Date(h.createdAt).toLocaleDateString() : ""}
-                          </div>
-
-                          {/* Medical Conditions */}
-                          <div className="mb-4">
-                            <h4 className="font-semibold text-slate-800 mb-2">Medical Conditions</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                              {h.hayFever && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Hay Fever:</span>
-                                  <span className="text-sm text-slate-800">{h.hayFever}</span>
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="bg-slate-50 border-b border-slate-200">
+                            <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                              Date
+                            </th>
+                            <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                              Medical Conditions
+                            </th>
+                            <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                              Triggers
+                            </th>
+                            <th className="px-6 py-4 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
+                              Actions
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-slate-200">
+                          {(Array.isArray(history) ? history : [history]).map((h, idx) => (
+                            <tr key={h._id || idx} className="hover:bg-slate-50">
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="flex items-center text-sm text-slate-900">
+                                  <Calendar className="h-4 w-4 mr-2 text-slate-400" />
+                                  {h.createdAt ? new Date(h.createdAt).toLocaleDateString() : "N/A"}
                                 </div>
-                              )}
-                              {h.asthma && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Asthma:</span>
-                                  <span className="text-sm text-slate-800">{h.asthma}</span>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="text-sm text-slate-900">
+                                  <div className="flex flex-wrap gap-1">
+                                    {h.hayFever && <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Hay Fever</span>}
+                                    {h.asthma && <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Asthma</span>}
+                                    {h.breathingProblems && <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Breathing Problems</span>}
+                                    {h.foodAllergies && <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">Food Allergies</span>}
+                                    {h.drugAllergy && <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium">Drug Allergy</span>}
+                                  </div>
                                 </div>
-                              )}
-                              {h.breathingProblems && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Breathing Problems:</span>
-                                  <span className="text-sm text-slate-800">{h.breathingProblems}</span>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="text-sm text-slate-900">
+                                  <div className="flex flex-wrap gap-1">
+                                    {h.triggersUrtis && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">URTIs</span>}
+                                    {h.triggersColdWeather && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Cold Weather</span>}
+                                    {h.triggersPollen && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Pollen</span>}
+                                    {h.triggersSmoke && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Smoke</span>}
+                                    {h.triggersExercise && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Exercise</span>}
+                                    {h.triggersPets && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Pets</span>}
+                                  </div>
                                 </div>
-                              )}
-                              {h.hivesSwelling && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Hives/Swelling:</span>
-                                  <span className="text-sm text-slate-800">{h.hivesSwelling}</span>
-                                </div>
-                              )}
-                              {h.foodAllergies && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Food Allergies:</span>
-                                  <span className="text-sm text-slate-800">{h.foodAllergies}</span>
-                                </div>
-                              )}
-                              {h.drugAllergy && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Drug Allergy:</span>
-                                  <span className="text-sm text-slate-800">{h.drugAllergy}</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Hay Fever Details */}
-                          {(h.feverGrade || h.itchingSoreThroat || h.specificDayExposure) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Hay Fever Details</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {h.feverGrade && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Fever Grade:</span>
-                                    <span className="text-sm text-slate-800">{h.feverGrade}</span>
-                                  </div>
-                                )}
-                                {h.itchingSoreThroat && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Itching/Sore Throat:</span>
-                                    <span className="text-sm text-slate-800">{h.itchingSoreThroat}</span>
-                                  </div>
-                                )}
-                                {h.specificDayExposure && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Specific Day Exposure:</span>
-                                    <span className="text-sm text-slate-800">{h.specificDayExposure}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Asthma Details */}
-                          {(h.asthmaType || h.exacerbationsFrequency) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Asthma Details</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {h.asthmaType && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Asthma Type:</span>
-                                    <span className="text-sm text-slate-800">{h.asthmaType}</span>
-                                  </div>
-                                )}
-                                {h.exacerbationsFrequency && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Exacerbations Frequency:</span>
-                                    <span className="text-sm text-slate-800">{h.exacerbationsFrequency}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Medical Events */}
-                          {(h.hospitalAdmission || h.gpAttendances || h.aeAttendances) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Medical Events</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {h.hospitalAdmission && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Hospital Admission:</span>
-                                    <span className="text-sm text-slate-800">{h.hospitalAdmission}</span>
-                                  </div>
-                                )}
-                                {h.gpAttendances && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">GP Attendances:</span>
-                                    <span className="text-sm text-slate-800">{h.gpAttendances}</span>
-                                  </div>
-                                )}
-                                {h.aeAttendances && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">AE Attendances:</span>
-                                    <span className="text-sm text-slate-800">{h.aeAttendances}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Triggers */}
-                          {(h.triggersUrtis || h.triggersColdWeather || h.triggersPollen || h.triggersSmoke || h.triggersExercise || h.triggersPets || h.triggersOthers) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Triggers</h4>
-                              <div className="flex flex-wrap gap-2">
-                                {h.triggersUrtis && <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">URTIs</span>}
-                                {h.triggersColdWeather && <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Cold Weather</span>}
-                                {h.triggersPollen && <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Pollen</span>}
-                                {h.triggersSmoke && <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Smoke</span>}
-                                {h.triggersExercise && <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Exercise</span>}
-                                {h.triggersPets && <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Pets</span>}
-                                {h.triggersOthers && <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">{h.triggersOthers}</span>}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Allergic Rhinitis */}
-                          {(h.allergicRhinitisType || h.rhinitisSneezing || h.rhinitisNasalCongestion) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Allergic Rhinitis</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {h.allergicRhinitisType && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Type:</span>
-                                    <span className="text-sm text-slate-800">{h.allergicRhinitisType}</span>
-                                  </div>
-                                )}
-                                {h.rhinitisSneezing && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Sneezing:</span>
-                                    <span className="text-sm text-slate-800">{h.rhinitisSneezing}</span>
-                                  </div>
-                                )}
-                                {h.rhinitisNasalCongestion && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Nasal Congestion:</span>
-                                    <span className="text-sm text-slate-800">{h.rhinitisNasalCongestion}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Additional Information */}
-                          {(h.occupation || h.familyHistory || h.notes) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Additional Information</h4>
-                              <div className="space-y-2">
-                                {h.occupation && (
-                                  <div>
-                                    <span className="text-sm font-medium text-slate-600">Occupation:</span>
-                                    <span className="text-sm text-slate-800 ml-2">{h.occupation}</span>
-                                  </div>
-                                )}
-                                {h.familyHistory && (
-                                  <div>
-                                    <span className="text-sm font-medium text-slate-600">Family History:</span>
-                                    <span className="text-sm text-slate-800 ml-2">{h.familyHistory}</span>
-                                  </div>
-                                )}
-                                {h.notes && (
-                                  <div>
-                                    <span className="text-sm font-medium text-slate-600">Notes:</span>
-                                    <span className="text-sm text-slate-800 ml-2">{h.notes}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                              </td>
+                              <td className="px-6 py-4 text-center text-sm font-medium">
+                                <button
+                                  onClick={() => navigate(`/dashboard/receptionist/AddHistory/ViewHistory/${h._id}`)}
+                                  className="text-blue-600 hover:text-blue-900 font-medium"
+                                >
+                                  View Details
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   )}
                 </div>
@@ -1033,7 +883,7 @@ const ViewProfile = () => {
               <div className="p-6 border-b border-blue-100 flex justify-between items-center">
                 <h2 className="text-xl font-semibold text-slate-800">Prescription</h2>
             <button
-                                              onClick={() => navigate(`/receptionist/followup/prescription/add/${patient._id}`)}
+                                              onClick={() => navigate(`/dashboard/receptionist/followup/prescription/add/${patient._id}`)}
                   className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
                   Add Prescription
@@ -1066,7 +916,7 @@ const ViewProfile = () => {
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-800">
                     <button
-                                onClick={() => navigate(`/receptionist/followup/prescription/view/${prescription._id}`)}
+                                onClick={() => navigate(`/dashboard/receptionist/followup/prescription/view/${prescription._id}`)}
                                 className="text-blue-600 hover:text-blue-900 font-medium"
                     >
                                 View

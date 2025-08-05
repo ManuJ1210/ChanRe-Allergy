@@ -33,6 +33,7 @@ import ViewGPE from '../pages/Superadmin/Followups/ViewGPE';
 import LabStaffList from '../pages/Superadmin/Lab/LabStaffList';
 import AddLabStaff from '../pages/Superadmin/Lab/AddLabStaff';
 import EditLabStaff from '../pages/Superadmin/Lab/EditLabStaff';
+import LabReports from '../pages/Superadmin/Lab/LabReports';
 import SuperAdminDoctorList from '../pages/Superadmin/Docters/SuperadminDoctorList';
 import AddSuperAdminDoctor from '../pages/Superadmin/Docters/AddSuperadminDoctor';
 import ViewSuperadminDoctor from '../pages/Superadmin/Docters/ViewSuperadminDoctor';
@@ -105,6 +106,7 @@ import ReceptionistLayout from '../pages/Receptionist/ReceptionistLayout';
 import ReceptionistAddTest from '../pages/Receptionist/AddTest';
 import ReceptionistShowTests from '../pages/Receptionist/ShowTests';
 import ReceptionistAddHistory from '../pages/Receptionist/AddHistory/AddHistory';
+import ReceptionistViewHistory from '../pages/Receptionist/AddHistory/ViewHistory';
 import ReceptionistAddMedications from '../pages/Receptionist/profile/AddMedications';
 import ReceptionistPatientHistory from '../pages/Receptionist/PatientHistory';
 import ReceptionistPatientFollowUp from '../pages/Receptionist/PatientFollowUp';
@@ -130,6 +132,7 @@ import TestRequests from '../pages/Doctor/TestRequests';
 import NewTestRequest from '../pages/Doctor/NewTestRequest';
 import CompletedReports from '../pages/Doctor/CompletedReports';
 import TestRequestDetails from '../pages/Doctor/TestRequestDetails';
+import DoctorViewHistory from '../pages/Doctor/ViewHistory';
 
 export default function AppRoutes() {
   return (
@@ -216,6 +219,7 @@ export default function AppRoutes() {
         <Route path="Superadmin/Lab/LabStaffList" element={<LabStaffList />} />
         <Route path="Superadmin/Lab/AddLabStaff" element={<AddLabStaff />} />
         <Route path="Superadmin/Lab/EditLabStaff/:id" element={<EditLabStaff />} />
+        <Route path="Superadmin/Lab/LabReports" element={<LabReports />} />
         
         {/* Superadmin Followups Routes with capital S */}
         <Route path="Superadmin/Followups/ManageFollowUp" element={<ManageFollowUp />} />
@@ -259,6 +263,7 @@ export default function AppRoutes() {
         <Route path="superadmin/lab/labstafflist" element={<LabStaffList />} />
         <Route path="superadmin/lab/addlabstaff" element={<AddLabStaff />} />
         <Route path="superadmin/lab/editlabstaff/:id" element={<EditLabStaff />} />
+        <Route path="superadmin/lab/labreports" element={<LabReports />} />
         
         {/* Doctors Routes */}
         <Route path="superadmin/doctors/superadmindoctorlist" element={<SuperAdminDoctorList />} />
@@ -350,6 +355,7 @@ export default function AppRoutes() {
         <Route path="centeradmin/patients/followup/addgpe/:patientId" element={<AddGPE />} />
         <Route path="centeradmin/patients/followup/viewgpe/:id" element={<CenterAdminViewGPE />} />
         <Route path="centeradmin/patients/followup/prescriptionlist/:patientId" element={<PrescriptionList />} />
+        <Route path="CenterAdmin/patients/FollowUp/prescriptionlist/:patientId" element={<PrescriptionList />} />
         <Route path="centeradmin/patients/followup/addprescription/:patientId" element={<AddPrescription />} />
         <Route path="centeradmin/patients/followup/viewprescription/:id" element={<ViewPrescription />} />
         
@@ -364,6 +370,7 @@ export default function AppRoutes() {
         <Route path="receptionist/add-test/:id" element={<ReceptionistAddTest />} />
         <Route path="receptionist/patients/show-tests/:id" element={<ReceptionistShowTests />} />
         <Route path="receptionist/add-history/:id" element={<ReceptionistAddHistory />} />
+        <Route path="receptionist/AddHistory/ViewHistory/:patientId" element={<ReceptionistViewHistory />} />
         <Route path="receptionist/add-medications/:id" element={<ReceptionistAddMedications />} />
         <Route path="receptionist/patient-history/:id" element={<ReceptionistPatientHistory />} />
         <Route path="receptionist/patient-followup/:id" element={<ReceptionistPatientFollowUp />} />
@@ -410,6 +417,7 @@ export default function AppRoutes() {
         <Route path="doctor/new-test-request" element={<NewTestRequest />} />
         <Route path="doctor/completed-reports" element={<CompletedReports />} />
         <Route path="doctor/test-request/:id" element={<TestRequestDetails />} />
+        <Route path="doctor/ViewHistory/:patientId" element={<DoctorViewHistory />} />
 
         {/* Lab Routes */}
         <Route path="lab/dashboard" element={<LabRouteProtection><LabDashboard /></LabRouteProtection>} />

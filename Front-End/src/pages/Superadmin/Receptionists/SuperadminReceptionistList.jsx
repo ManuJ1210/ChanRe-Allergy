@@ -22,7 +22,7 @@ import {
   setFilters,
   clearError,
   clearSuccess 
-} from '../../../redux/slices/superAdminReceptionistSlice';
+} from '../../../features/superadmin/superAdminReceptionistSlice';
 
 const SuperAdminReceptionistList = () => {
   const navigate = useNavigate();

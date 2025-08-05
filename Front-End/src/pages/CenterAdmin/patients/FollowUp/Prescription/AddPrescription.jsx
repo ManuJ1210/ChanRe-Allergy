@@ -47,7 +47,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
       );
       setSuccess(true);
       setTimeout(() => {
-        navigate(`/receptionist/followup/prescription/list/${patientId}`);
+        navigate(`/dashboard/CenterAdmin/patients/FollowUp/prescriptionlist/${patientId}`);
       }, 1000);
     } catch (err) {
       setError("Failed to add prescription");
@@ -62,7 +62,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => navigate(`/receptionist/followup/prescription/list/${patientId}`)}
+            onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/prescriptionlist/${patientId}`)}
             className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />

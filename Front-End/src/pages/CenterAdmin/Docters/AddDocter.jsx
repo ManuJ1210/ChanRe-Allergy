@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, UserCheck, ArrowLeft, Save } from 'lucide-react';
-import { addCenterAdminDoctor, clearError, clearSuccess } from '../../../redux/slices/centerAdminDoctorSlice';
+import { addCenterAdminDoctor, clearError, clearSuccess } from '../../../features/centerAdmin/centerAdminDoctorSlice';
 
 const AddDocter = () => {
   const navigate = useNavigate();

@@ -15,7 +15,9 @@ import {
   User,
   Phone,
   MapPin,
-  RefreshCw
+  RefreshCw,
+  Trash2,
+  Download
 } from 'lucide-react';
 
 export default function TestRequests() {
@@ -196,6 +198,67 @@ export default function TestRequests() {
 
   const handleUpdateStatus = (requestId) => {
             navigate(`/dashboard/lab/update-status/${requestId}`);
+  };
+
+  const handleViewReport = (requestId) => {
+    // Open PDF in new tab
+    const token = localStorage.getItem('token');
+    const viewUrl = `http://localhost:5000/api/test-requests/${requestId}/download-report`;
+    
+    // Add token to URL as query parameter for the new tab
+    const urlWithToken = `${viewUrl}?token=${encodeURIComponent(token)}`;
+    window.open(urlWithToken, '_blank');
+  };
+
+  const handleDownloadReport = (requestId) => {
+    // Download the report file using the new API endpoint
+    const token = localStorage.getItem('token');
+    const downloadUrl = `http://localhost:5000/api/test-requests/${requestId}/download-report`;
+    
+    fetch(downloadUrl, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to download report');
+      }
+      return response.blob();
+    })
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `lab-report-${requestId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    })
+    .catch(error => {
+      console.error('Error downloading report:', error);
+      alert('Failed to download report');
+    });
+  };
+
+  const handleDeleteRequest = async (requestId, patientName) => {
+    if (window.confirm(`Are you sure you want to delete the test request for ${patientName}? This action cannot be undone.`)) {
+      try {
+        const response = await API.delete(`/test-requests/${requestId}`);
+        if (response.status === 200) {
+          // Remove the deleted request from the state
+          setTestRequests(prevRequests => 
+            prevRequests.filter(request => request._id !== requestId)
+          );
+          alert('Test request deleted successfully');
+        }
+      } catch (error) {
+        console.error('Error deleting test request:', error);
+        const errorMessage = error.response?.data?.message || 'Failed to delete test request';
+        alert(errorMessage);
+      }
+    }
   };
 
   if (!user || (!user._id && !user.id)) {
@@ -401,6 +464,33 @@ export default function TestRequests() {
                         <Edit className="h-4 w-4 mr-1" />
                         Update Status
                       </button>
+                      {(request.status === 'Report_Generated' || request.status === 'Report_Sent' || request.status === 'Completed') && (
+                        <>
+                          <button
+                            onClick={() => handleViewReport(request._id)}
+                            className="flex items-center px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
+                          >
+                            <Eye className="h-4 w-4 mr-1" />
+                            View Report
+                          </button>
+                          <button
+                            onClick={() => handleDownloadReport(request._id)}
+                            className="flex items-center px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm"
+                          >
+                            <Download className="h-4 w-4 mr-1" />
+                            Download Report
+                          </button>
+                        </>
+                      )}
+                      {(request.status === 'Pending' || request.status === 'Cancelled') && (
+                        <button
+                          onClick={() => handleDeleteRequest(request._id, request.patientName)}
+                          className="flex items-center px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
+                        >
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          Delete
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -8,10 +8,10 @@ import adminReducer from '../features/admin/adminSlice';
 import receptionistReducer from '../features/receptionist/receptionistSlice';
 import centerAdminReducer from '../features/centerAdmin/centerAdminSlice';
 import superadminReducer from '../features/superadmin/superadminSlice';
-import superAdminDoctorReducer from '../redux/slices/superAdminDoctorSlice';
-import superAdminReceptionistReducer from '../redux/slices/superAdminReceptionistSlice';
-import centerAdminDoctorReducer from '../redux/slices/centerAdminDoctorSlice';
-import centerAdminReceptionistReducer from '../redux/slices/centerAdminReceptionistSlice';
+import superAdminDoctorReducer from '../features/superadmin/superAdminDoctorSlice';
+import superAdminReceptionistReducer from '../features/superadmin/superAdminReceptionistSlice';
+import centerAdminDoctorReducer from '../features/centerAdmin/centerAdminDoctorSlice';
+import centerAdminReceptionistReducer from '../features/centerAdmin/centerAdminReceptionistSlice';
 
 export const store = configureStore({
   reducer: {

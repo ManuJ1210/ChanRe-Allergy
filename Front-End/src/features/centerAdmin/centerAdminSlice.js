@@ -86,7 +86,13 @@ const centerAdminSlice = createSlice({
       state.medications = action.payload;
     },
     setHistory: (state, action) => {
-      state.history = action.payload;
+      if (!action.payload) {
+        state.history = [];
+      } else if (Array.isArray(action.payload)) {
+        state.history = action.payload;
+      } else {
+        state.history = [action.payload];
+      }
     },
     setTests: (state, action) => {
       state.tests = action.payload;

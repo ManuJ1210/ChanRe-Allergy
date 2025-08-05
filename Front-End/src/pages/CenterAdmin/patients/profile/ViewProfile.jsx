@@ -14,6 +14,8 @@ const ViewProfile = () => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("Overview");
 
+
+
   const { 
     patientDetails: patient,
     medications, 
@@ -28,6 +30,8 @@ const ViewProfile = () => {
     prescriptions,
     loading, error, medLoading, medError, historyLoading, historyError
   } = useSelector(state => state.centerAdmin);
+  
+
 
   useEffect(() => {
     // Check if ID is valid (not undefined, null, or empty string)
@@ -421,265 +425,54 @@ const ViewProfile = () => {
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                       <p className="text-red-600">{historyError}</p>
                     </div>
-                  ) : !history || history.length === 0 ? (
+                  ) : !Array.isArray(history) || history.length === 0 ? (
                     <div className="text-center py-8">
                       <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
                       <p className="text-slate-500">No history found</p>
                     </div>
                   ) : (
-                    <div className="space-y-6">
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="bg-slate-50 border-b border-slate-200">
+                            <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
+                            <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Hay Fever</th>
+                            <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Asthma</th>
+                            <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Breathing Problems</th>
+                            <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Hives/Swelling</th>
+                            <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Sinus Trouble</th>
+                            <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Eczema/Rashes</th>
+                            <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Food Allergies</th>
+                            <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Drug Allergy</th>
+                            <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200">
                       {history.map((h, idx) => (
-                        <div
-                          key={h._id || idx}
-                          className="bg-slate-50 border border-slate-200 rounded-lg p-6"
-                        >
-                          <div className="flex items-center gap-2 text-sm text-blue-500 mb-4">
-                            <Calendar className="h-4 w-4" />
-                            {h.createdAt ? new Date(h.createdAt).toLocaleDateString() : ""}
-                          </div>
-
-                          {/* Medical Conditions */}
-                          <div className="mb-4">
-                            <h4 className="font-semibold text-slate-800 mb-2">Medical Conditions</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                              {h.hayFever && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Hay Fever:</span>
-                                  <span className="text-sm text-slate-800">{h.hayFever}</span>
-                                </div>
-                              )}
-                              {h.asthma && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Asthma:</span>
-                                  <span className="text-sm text-slate-800">{h.asthma}</span>
-                                </div>
-                              )}
-                              {h.breathingProblems && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Breathing Problems:</span>
-                                  <span className="text-sm text-slate-800">{h.breathingProblems}</span>
-                                </div>
-                              )}
-                              {h.hivesSwelling && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Hives/Swelling:</span>
-                                  <span className="text-sm text-slate-800">{h.hivesSwelling}</span>
-                                </div>
-                              )}
-                              {h.sinusTrouble && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Sinus Trouble:</span>
-                                  <span className="text-sm text-slate-800">{h.sinusTrouble}</span>
-                                </div>
-                              )}
-                              {h.eczemaRashes && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Eczema/Rashes:</span>
-                                  <span className="text-sm text-slate-800">{h.eczemaRashes}</span>
-                                </div>
-                              )}
-                              {h.foodAllergies && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Food Allergies:</span>
-                                  <span className="text-sm text-slate-800">{h.foodAllergies}</span>
-                                </div>
-                              )}
-                              {h.drugAllergy && (
-                                <div className="flex justify-between">
-                                  <span className="text-sm font-medium text-slate-600">Drug Allergy:</span>
-                                  <span className="text-sm text-slate-800">{h.drugAllergy}</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Asthma Details */}
-                          {(h.asthmaType || h.exacerbationsFrequency || h.coughWheezeFrequency) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Asthma Details</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {h.asthmaType && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Asthma Type:</span>
-                                    <span className="text-sm text-slate-800">{h.asthmaType}</span>
-                                  </div>
-                                )}
-                                {h.exacerbationsFrequency && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Exacerbations Frequency:</span>
-                                    <span className="text-sm text-slate-800">{h.exacerbationsFrequency}</span>
-                                  </div>
-                                )}
-                                {h.coughWheezeFrequency && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Cough/Wheeze Frequency:</span>
-                                    <span className="text-sm text-slate-800">{h.coughWheezeFrequency}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Allergic Rhinitis */}
-                          {(h.allergicRhinitisType || h.rhinitisSneezing || h.rhinitisNasalCongestion) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Allergic Rhinitis</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {h.allergicRhinitisType && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Type:</span>
-                                    <span className="text-sm text-slate-800">{h.allergicRhinitisType}</span>
-                                  </div>
-                                )}
-                                {h.rhinitisSneezing && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Sneezing:</span>
-                                    <span className="text-sm text-slate-800">{h.rhinitisSneezing}</span>
-                                  </div>
-                                )}
-                                {h.rhinitisNasalCongestion && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Nasal Congestion:</span>
-                                    <span className="text-sm text-slate-800">{h.rhinitisNasalCongestion}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Skin Allergy */}
-                          {(h.skinAllergyType || h.skinHeavesPresent || h.skinEczemaPresent) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Skin Allergy</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {h.skinAllergyType && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Type:</span>
-                                    <span className="text-sm text-slate-800">{h.skinAllergyType}</span>
-                                  </div>
-                                )}
-                                {h.skinHeavesPresent && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Heaves Present:</span>
-                                    <span className="text-sm text-slate-800">{h.skinHeavesPresent}</span>
-                                  </div>
-                                )}
-                                {h.skinEczemaPresent && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Eczema Present:</span>
-                                    <span className="text-sm text-slate-800">{h.skinEczemaPresent}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Medical History */}
-                          {(h.hypertension || h.diabetes || h.epilepsy || h.ihd) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Medical History</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {h.hypertension && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Hypertension:</span>
-                                    <span className="text-sm text-slate-800">{h.hypertension}</span>
-                                  </div>
-                                )}
-                                {h.diabetes && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Diabetes:</span>
-                                    <span className="text-sm text-slate-800">{h.diabetes}</span>
-                                  </div>
-                                )}
-                                {h.epilepsy && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Epilepsy:</span>
-                                    <span className="text-sm text-slate-800">{h.epilepsy}</span>
-                                  </div>
-                                )}
-                                {h.ihd && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">IHD:</span>
-                                    <span className="text-sm text-slate-800">{h.ihd}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Examination */}
-                          {(h.oralCavity || h.skin || h.ent || h.eye || h.respiratorySystem) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Examination</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {h.oralCavity && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Oral Cavity:</span>
-                                    <span className="text-sm text-slate-800">{h.oralCavity}</span>
-                                  </div>
-                                )}
-                                {h.skin && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Skin:</span>
-                                    <span className="text-sm text-slate-800">{h.skin}</span>
-                                  </div>
-                                )}
-                                {h.ent && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">ENT:</span>
-                                    <span className="text-sm text-slate-800">{h.ent}</span>
-                                  </div>
-                                )}
-                                {h.eye && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Eye:</span>
-                                    <span className="text-sm text-slate-800">{h.eye}</span>
-                                  </div>
-                                )}
-                                {h.respiratorySystem && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Respiratory System:</span>
-                                    <span className="text-sm text-slate-800">{h.respiratorySystem}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Other Information */}
-                          {(h.occupation || h.location || h.familyHistory || h.otherFindings) && (
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-slate-800 mb-2">Other Information</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {h.occupation && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Occupation:</span>
-                                    <span className="text-sm text-slate-800">{h.occupation}</span>
-                                  </div>
-                                )}
-                                {h.location && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Location:</span>
-                                    <span className="text-sm text-slate-800">{h.location}</span>
-                                  </div>
-                                )}
-                                {h.familyHistory && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Family History:</span>
-                                    <span className="text-sm text-slate-800">{h.familyHistory}</span>
-                                  </div>
-                                )}
-                                {h.otherFindings && (
-                                  <div className="flex justify-between">
-                                    <span className="text-sm font-medium text-slate-600">Other Findings:</span>
-                                    <span className="text-sm text-slate-800">{h.otherFindings}</span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                            <tr key={h._id || idx} className="hover:bg-slate-50 transition-colors">
+                              <td className="px-4 py-3 text-sm text-slate-600">
+                                {h.createdAt ? new Date(h.createdAt).toLocaleDateString() : 'N/A'}
+                              </td>
+                              <td className="px-4 py-3 text-sm text-slate-800">{h.hayFever || 'N/A'}</td>
+                              <td className="px-4 py-3 text-sm text-slate-800">{h.asthma || 'N/A'}</td>
+                              <td className="px-4 py-3 text-sm text-slate-800">{h.breathingProblems || 'N/A'}</td>
+                              <td className="px-4 py-3 text-sm text-slate-800">{h.hivesSwelling || 'N/A'}</td>
+                              <td className="px-4 py-3 text-sm text-slate-800">{h.sinusTrouble || 'N/A'}</td>
+                              <td className="px-4 py-3 text-sm text-slate-800">{h.eczemaRashes || 'N/A'}</td>
+                              <td className="px-4 py-3 text-sm text-slate-800">{h.foodAllergies || 'N/A'}</td>
+                              <td className="px-4 py-3 text-sm text-slate-800">{h.drugAllergy || 'N/A'}</td>
+                              <td className="px-4 py-3 text-sm text-slate-800">
+                                <button
+                                  onClick={() => navigate(`/dashboard/CenterAdmin/patients/ViewHistory/${h._id}`)}
+                                  className="text-blue-600 hover:text-blue-900 font-medium"
+                                >
+                                  View Details
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   )}
                 </div>
@@ -1029,6 +822,7 @@ const ViewProfile = () => {
                     >
                       View
                     </button>
+                              
                             </td>
                           </tr>
                         ))

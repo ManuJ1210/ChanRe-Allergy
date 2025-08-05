@@ -24,6 +24,7 @@ import prescriptionRoutes from './routes/prescriptionRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import labStaffRoutes from './routes/labStaffRoutes.js';
 import testRequestRoutes from './routes/testRequestRoutes.js';
+import labReportsRoutes from './routes/labReportsRoutes.js';
 
 dotenv.config();
 
@@ -70,6 +71,9 @@ app.options('*', cors(corsOptions));
 app.use(cors());
 app.use(express.json());
 
+// Serve uploaded files
+app.use('/uploads', express.static('uploads'));
+
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
@@ -94,6 +98,7 @@ app.use('/api/prescriptions', prescriptionRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/lab-staff', labStaffRoutes);
 app.use('/api/test-requests', testRequestRoutes);
+app.use('/api/lab-reports', labReportsRoutes);
 
 // Use environment variable or fallback to local MongoDB
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/chenre-allergy';

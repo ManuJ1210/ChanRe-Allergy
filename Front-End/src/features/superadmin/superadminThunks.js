@@ -62,12 +62,12 @@ export const fetchFollowUpPatients = createAsyncThunk(
   'superadmin/fetchFollowUpPatients',
   async (_, { rejectWithValue }) => {
     try {
-      console.log('🔍 Fetching follow-up patients...');
+  
       const res = await API.get('/followups/patients');
-      console.log('📊 Follow-up patients response:', res.data);
+
       return res.data;
     } catch (error) {
-      console.error('Followup patients error:', error.response?.data || error.message);
+     
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch follow-up patients');
     }
   }
@@ -112,7 +112,7 @@ export const fetchPatientFollowUps = createAsyncThunk(
       const res = await API.get(`${url}?patientId=${patientId}`);
       return res.data;
     } catch (error) {
-      console.error('Patient followups error:', error.response?.data || error.message);
+   
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient follow-ups');
     }
   }

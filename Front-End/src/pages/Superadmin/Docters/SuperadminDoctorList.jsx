@@ -22,7 +22,7 @@ import {
   setFilters,
   clearError,
   clearSuccess 
-} from '../../../redux/slices/superAdminDoctorSlice';
+} from '../../../features/superadmin/superAdminDoctorSlice';
 
 const SuperAdminDoctorList = () => {
   const navigate = useNavigate();

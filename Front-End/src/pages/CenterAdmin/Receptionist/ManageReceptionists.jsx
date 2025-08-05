@@ -22,7 +22,7 @@ import {
   setFilters,
   clearError,
   clearSuccess 
-} from '../../../redux/slices/centerAdminReceptionistSlice';
+} from '../../../features/centerAdmin/centerAdminReceptionistSlice';
 
 const ManageReceptionists = () => {
   const navigate = useNavigate();
