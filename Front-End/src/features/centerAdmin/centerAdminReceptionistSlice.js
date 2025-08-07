@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import API from '../../services/api';
 
 // Async thunks
 export const fetchCenterAdminReceptionists = createAsyncThunk(
@@ -11,21 +12,10 @@ export const fetchCenterAdminReceptionists = createAsyncThunk(
       if (search) params.append('search', search);
       if (status) params.append('status', status);
 
-      const response = await fetch(`/api/receptionists?${params.toString()}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch receptionists');
-      }
-
-      const data = await response.json();
-      return data;
+      const response = await API.get(`/receptionists?${params.toString()}`);
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch receptionists');
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch receptionists');
     }
   }
 );
@@ -34,21 +24,10 @@ export const fetchCenterAdminReceptionistById = createAsyncThunk(
   'centerAdminReceptionists/fetchCenterAdminReceptionistById',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/receptionists/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch receptionist');
-      }
-
-      const data = await response.json();
-      return data;
+      const response = await API.get(`/receptionists/${id}`);
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch receptionist');
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch receptionist');
     }
   }
 );
@@ -57,24 +36,10 @@ export const addCenterAdminReceptionist = createAsyncThunk(
   'centerAdminReceptionists/addCenterAdminReceptionist',
   async (receptionistData, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/receptionists', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(receptionistData)
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to add receptionist');
-      }
-
-      const data = await response.json();
-      return data;
+      const response = await API.post('/receptionists', receptionistData);
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to add receptionist');
+      return rejectWithValue(error.response?.data?.message || 'Failed to add receptionist');
     }
   }
 );
@@ -83,24 +48,10 @@ export const updateCenterAdminReceptionist = createAsyncThunk(
   'centerAdminReceptionists/updateCenterAdminReceptionist',
   async ({ id, data }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/receptionists/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(data)
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to update receptionist');
-      }
-
-      const responseData = await response.json();
-      return responseData;
+      const response = await API.put(`/receptionists/${id}`, data);
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to update receptionist');
+      return rejectWithValue(error.response?.data?.message || 'Failed to update receptionist');
     }
   }
 );
@@ -109,21 +60,10 @@ export const deleteCenterAdminReceptionist = createAsyncThunk(
   'centerAdminReceptionists/deleteCenterAdminReceptionist',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/receptionists/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to delete receptionist');
-      }
-
+      await API.delete(`/receptionists/${id}`);
       return id;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to delete receptionist');
+      return rejectWithValue(error.response?.data?.message || 'Failed to delete receptionist');
     }
   }
 );
@@ -132,22 +72,10 @@ export const toggleCenterAdminReceptionistStatus = createAsyncThunk(
   'centerAdminReceptionists/toggleCenterAdminReceptionistStatus',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/receptionists/${id}/toggle-status`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to toggle receptionist status');
-      }
-
-      const data = await response.json();
-      return data;
+      const response = await API.patch(`/receptionists/${id}/toggle-status`);
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to toggle receptionist status');
+      return rejectWithValue(error.response?.data?.message || 'Failed to toggle receptionist status');
     }
   }
 );
@@ -156,21 +84,10 @@ export const fetchCenterAdminReceptionistStats = createAsyncThunk(
   'centerAdminReceptionists/fetchCenterAdminReceptionistStats',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/receptionists/stats', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch receptionist stats');
-      }
-
-      const data = await response.json();
-      return data;
+      const response = await API.get('/receptionists/stats');
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch receptionist stats');
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch receptionist stats');
     }
   }
 );

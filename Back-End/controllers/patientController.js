@@ -1,8 +1,134 @@
 import Patient from '../models/Patient.js';
 import Test from '../models/Test.js'; // Make sure this import is correct
 
-// ✅ Add New Patient
 const addPatient = async (req, res) => {
+  try {
+    const {
+      name,
+      gender,
+      age,
+      contact,
+      email,
+      address,
+      assignedDoctor,
+      centerCode,
+      centerId
+    } = req.body;
+
+    const patientCenterId = req.user.centerId;
+    if (!patientCenterId) {
+      return res.status(400).json({ message: "Center ID is required." });
+    }
+
+    const patientData = {
+      name,
+      gender,
+      age,
+      phone: contact,
+      email,
+      address,
+      centerId: patientCenterId,
+      assignedDoctor,
+      centerCode,
+      registeredBy: req.user._id
+    };
+
+    const newPatient = new Patient(patientData);
+    const savedPatient = await newPatient.save();
+    
+    res.status(201).json({ message: "Patient created successfully", patient: savedPatient });
+  } catch (error) {
+    console.error("Create patient error:", error);
+    res.status(500).json({ message: "Failed to create patient" });
+  }
+};
+
+const getPatients = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, search = '', status = '' } = req.query;
+    
+    let query = { centerId: req.user.centerId };
+    
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } }
+      ];
+    }
+    
+    if (status) {
+      query.status = status;
+    }
+
+    const patients = await Patient.find(query)
+      .populate('centerId', 'name code')
+      .populate('assignedDoctor', 'name')
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: -1 });
+
+    const total = await Patient.countDocuments(query);
+
+    // Calculate today's patients
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayPatients = await Patient.countDocuments({
+      ...query,
+      createdAt: { $gte: today }
+    });
+
+    // Get test counts
+    const patientIds = patients.map(p => p._id);
+    const [pendingTests, completedTests] = await Promise.all([
+      Test.countDocuments({ 
+        patient: { $in: patientIds },
+        status: { $in: ['pending', 'in_progress'] }
+      }),
+      Test.countDocuments({ 
+        patient: { $in: patientIds },
+        status: 'completed'
+      })
+    ]);
+
+    res.json({
+      patients,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        total,
+        limit: parseInt(limit)
+      },
+      stats: {
+        totalPatients: total,
+        todayPatients,
+        pendingTests,
+        completedTests
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching patients:', error);
+    res.status(500).json({ message: 'Failed to fetch patients' });
+  }
+};
+
+const getPatientById = async (req, res) => {
+  try {
+    const patient = await Patient.findById(req.params.id)
+      .populate('centerId', 'name code')
+      .populate('assignedDoctor', 'name');
+    
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+    
+    res.json(patient);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch patient', error: err.message });
+  }
+};
+
+const updatePatient = async (req, res) => {
   try {
     const {
       name,
@@ -15,173 +141,66 @@ const addPatient = async (req, res) => {
       centerCode
     } = req.body;
 
-    const centerId = req.user.centerId;
-    if (!centerId) {
-      return res.status(400).json({ message: "Center ID is missing from user." });
-    }
-
-    const patientData = {
-      name,
-      gender,
-      age,
-      phone: contact,
-      email,
-      address,
-      centerId,
-      assignedDoctor,
-      centerCode,
-    };
-    if (req.user.role === 'receptionist') {
-      patientData.registeredBy = req.user._id;
-    }
-
-    const newPatient = new Patient(patientData);
-    const savedPatient = await newPatient.save();
-    res.status(201).json({ message: "Patient created successfully", patient: savedPatient });
-  } catch (error) {
-    console.error("Create patient error:", error);
-    res.status(500).json({ message: "Failed to create patient" });
-  }
-};
-
-// ✅ Get All Patients
-const getPatients = async (req, res) => {
-  try {
-    const patients = await Patient.find({ centerId: req.user.centerId })
-      .populate('centerId', 'name code')
-      .populate('assignedDoctor', 'name'); // populate doctor name
-    res.json(patients);
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to fetch patients', error: err.message });
-  }
-};
-
-// ✅ Get Single Patient by ID
-const getPatientById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    console.log('getPatientById called with ID:', id);
+    const patient = await Patient.findById(req.params.id);
     
-    // Check if ID is valid
-    if (!id || id === 'undefined' || id === 'null' || id === '') {
-      console.log('❌ Invalid patient ID provided:', id);
-      return res.status(400).json({ message: 'Invalid patient ID' });
-    }
-    
-    const patient = await Patient.findById(id).populate('assignedDoctor', 'name');
     if (!patient) {
-      console.log('❌ Patient not found with ID:', id);
       return res.status(404).json({ message: 'Patient not found' });
     }
+
+    // Update fields
+    if (name) patient.name = name;
+    if (gender) patient.gender = gender;
+    if (age) patient.age = age;
+    if (contact) patient.phone = contact;
+    if (email) patient.email = email;
+    if (address) patient.address = address;
+    if (assignedDoctor) patient.assignedDoctor = assignedDoctor;
+    if (centerCode) patient.centerCode = centerCode;
+
+    await patient.save();
     
-    console.log('✅ Patient found:', patient._id);
-    res.json(patient);
-  } catch (error) {
-    console.error("Get patient by ID error:", error);
-    res.status(500).json({ message: "Failed to fetch patient" });
+    res.json({ message: 'Patient updated successfully', patient });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to update patient', error: err.message });
   }
 };
 
-// ✅ Update Patient
-const updatePatient = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const {
-      name,
-      gender,
-      age,
-      contact,
-      email,
-      address,
-      referringPhysician
-    } = req.body;
-
-    const updatedPatient = await Patient.findByIdAndUpdate(
-      id,
-      {
-        name,
-        gender,
-        age,
-        phone: contact,
-        email,
-        address,
-        referringPhysician
-      },
-      { new: true }
-    );
-
-    if (!updatedPatient) {
-      return res.status(404).json({ message: "Patient not found" });
-    }
-
-    res.json({ message: "Patient updated successfully", patient: updatedPatient });
-  } catch (error) {
-    console.error("Update patient error:", error);
-    res.status(500).json({ message: "Failed to update patient" });
-  }
-};
-
-// ✅ Delete Patient
 const deletePatient = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const deletedPatient = await Patient.findByIdAndDelete(id);
-    if (!deletedPatient) {
-      return res.status(404).json({ message: "Patient not found" });
+    const patient = await Patient.findById(req.params.id);
+    
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
     }
 
-    res.json({ message: "Patient deleted successfully" });
-  } catch (error) {
-    console.error("Delete patient error:", error);
-    res.status(500).json({ message: "Failed to delete patient" });
+    await patient.deleteOne();
+    res.json({ message: 'Patient deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to delete patient', error: err.message });
   }
 };
 
-// ✅ Add Test to Patient
 const addTestToPatient = async (req, res) => {
   try {
     const { id } = req.params;
-    // Map frontend keys to schema keys (as before)
-    const fieldMap = {
-      "CBC": "CBC",
-      "Hb": "Hb",
-      "TC": "TC",
-      "DC": "DC",
-      "Neutrophils": "Neutrophils",
-      "Eosinophil": "Eosinophil",
-      "Lymphocytes": "Lymphocytes",
-      "Monocytes": "Monocytes",
-      "Platelets": "Platelets",
-      "ESR": "ESR",
-      "Serum Creatinine": "SerumCreatinine",
-      "Serum IgE Levels": "SerumIgELevels",
-      "C3, C4 Levels": "C3C4Levels",
-      "ANA (IF)": "ANA_IF",
-      "Urine Routine": "UrineRoutine",
-      "Allergy Panel": "AllergyPanel"
-    };
-    const testData = {};
-    for (const [frontendKey, value] of Object.entries(req.body)) {
-      if (fieldMap[frontendKey]) {
-        testData[fieldMap[frontendKey]] = value;
-      }
-    }
-    testData.date = new Date();
-    testData.patient = id; // Add patient reference
+    const { testType, testDate, results, status } = req.body;
 
-    // Save to Test collection
-    const newTest = await Test.create(testData);
-
-    // Optionally, also push to embedded array
     const patient = await Patient.findById(id);
     if (!patient) {
       return res.status(404).json({ message: 'Patient not found' });
     }
-    patient.tests.push(testData);
+
+    const newTest = {
+      testType,
+      testDate: new Date(testDate),
+      results,
+      status: status || 'pending'
+    };
+
+    patient.tests.push(newTest);
     await patient.save();
 
-    res.status(200).json({ message: 'Test added successfully', test: newTest });
+    res.status(201).json({ message: 'Test added successfully', test: newTest });
   } catch (error) {
     console.error('Add test error:', error);
     res.status(500).json({ message: 'Failed to add test' });
@@ -206,7 +225,7 @@ const getTestsByPatient = async (req, res) => {
   }
 };
 
-export const getPatientAndTests = async (req, res) => {
+const getPatientAndTests = async (req, res) => {
   try {
     console.log('getPatientAndTests called with patient ID:', req.params.id);
     
@@ -279,6 +298,7 @@ export {
   deletePatient,
   addTestToPatient,
   getTestsByPatient,
+  getPatientAndTests,
   getPatientsByReceptionist,
   getPatientsByDoctor
 };

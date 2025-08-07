@@ -87,17 +87,7 @@ export default function Sidebar(props) {
                 ]}
                 currentPath={location.pathname}
               />
-              <SidebarGroup
-                label="Receptionists"
-                icon={<FaUserTie />}
-                open={centerOpen === 'receptionists'}
-                toggle={() => setCenterOpen(centerOpen === 'receptionists' ? null : 'receptionists')}
-                links={[
-                  { to: "/dashboard/superadmin/receptionists/superadminreceptionistlist", label: "Manage Receptionists" },
-                  { to: "/dashboard/superadmin/receptionists/addsuperadminreceptionist", label: "Add Receptionist" },
-                ]}
-                currentPath={location.pathname}
-              />
+             
               <SidebarGroup
                 label="Laboratory"
                 icon={<FaVials />}
@@ -125,25 +115,20 @@ export default function Sidebar(props) {
             </>
           )}
 
-          {role === 'centeradmin' && (
+          {role === 'doctor' && userInfo?.isSuperAdminStaff === true && (
             <>
               <SidebarLink
-                to="/dashboard/centeradmin/dashboard"
+                to="/dashboard/superadmin/doctor/dashboard"
                 label="Dashboard"
                 icon={<FaHome />}
-                isActive={isActive("/dashboard/centeradmin/dashboard")}
+                isActive={isActive("/dashboard/superadmin/doctor/dashboard")}
               />
-              <SidebarGroup
-                label="Doctors"
-                icon={<FaUserMd />}
-                open={centerOpen === 'doctors'}
-                toggle={() => setCenterOpen(centerOpen === 'doctors' ? null : 'doctors')}
-                links={[
-                  { to: "/dashboard/centeradmin/doctors/adddoctor", label: "Add Doctor" },
-                  { to: "/dashboard/centeradmin/doctors/doctorlist", label: "Doctor List" },
-                ]}
-                currentPath={location.pathname}
-              />
+            </>
+          )}
+
+          {role === 'centeradmin' && (
+            
+              <>
               <SidebarGroup
                 label="Receptionists"
                 icon={<FaUserTie />}

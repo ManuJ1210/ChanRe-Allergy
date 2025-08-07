@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import API from '../../services/api';
 
 // Async thunks
 export const fetchCenterAdminDoctors = createAsyncThunk(
@@ -11,21 +12,10 @@ export const fetchCenterAdminDoctors = createAsyncThunk(
       if (search) params.append('search', search);
       if (status) params.append('status', status);
 
-      const response = await fetch(`/api/doctors?${params.toString()}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch doctors');
-      }
-
-      const data = await response.json();
-      return data;
+      const response = await API.get(`/doctors?${params.toString()}`);
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch doctors');
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch doctors');
     }
   }
 );
@@ -34,21 +24,10 @@ export const fetchCenterAdminDoctorById = createAsyncThunk(
   'centerAdminDoctors/fetchCenterAdminDoctorById',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/doctors/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch doctor');
-      }
-
-      const data = await response.json();
-      return data;
+      const response = await API.get(`/doctors/${id}`);
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch doctor');
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch doctor');
     }
   }
 );
@@ -57,24 +36,10 @@ export const addCenterAdminDoctor = createAsyncThunk(
   'centerAdminDoctors/addCenterAdminDoctor',
   async (doctorData, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/doctors', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(doctorData)
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to add doctor');
-      }
-
-      const data = await response.json();
-      return data;
+      const response = await API.post('/doctors', doctorData);
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to add doctor');
+      return rejectWithValue(error.response?.data?.message || 'Failed to add doctor');
     }
   }
 );
@@ -83,24 +48,10 @@ export const updateCenterAdminDoctor = createAsyncThunk(
   'centerAdminDoctors/updateCenterAdminDoctor',
   async ({ id, data }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/doctors/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(data)
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to update doctor');
-      }
-
-      const responseData = await response.json();
-      return responseData;
+      const response = await API.put(`/doctors/${id}`, data);
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to update doctor');
+      return rejectWithValue(error.response?.data?.message || 'Failed to update doctor');
     }
   }
 );
@@ -109,21 +60,10 @@ export const deleteCenterAdminDoctor = createAsyncThunk(
   'centerAdminDoctors/deleteCenterAdminDoctor',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/doctors/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to delete doctor');
-      }
-
+      await API.delete(`/doctors/${id}`);
       return id;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to delete doctor');
+      return rejectWithValue(error.response?.data?.message || 'Failed to delete doctor');
     }
   }
 );
@@ -132,22 +72,10 @@ export const toggleCenterAdminDoctorStatus = createAsyncThunk(
   'centerAdminDoctors/toggleCenterAdminDoctorStatus',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/doctors/${id}/toggle-status`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to toggle doctor status');
-      }
-
-      const data = await response.json();
-      return data;
+      const response = await API.patch(`/doctors/${id}/toggle-status`);
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to toggle doctor status');
+      return rejectWithValue(error.response?.data?.message || 'Failed to toggle doctor status');
     }
   }
 );
@@ -156,21 +84,10 @@ export const fetchCenterAdminDoctorStats = createAsyncThunk(
   'centerAdminDoctors/fetchCenterAdminDoctorStats',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/doctors/stats', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || 'Failed to fetch doctor stats');
-      }
-
-      const data = await response.json();
-      return data;
+      const response = await API.get('/doctors/stats');
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch doctor stats');
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch doctor stats');
     }
   }
 );

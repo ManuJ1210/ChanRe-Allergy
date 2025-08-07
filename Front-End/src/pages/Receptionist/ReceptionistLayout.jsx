@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import { useState } from 'react';
 
 export default function ReceptionistLayout({ children }) {
-  const userInfo = useSelector((state) => state.user?.userInfo) || JSON.parse(localStorage.getItem('user'));
+  const storedUser = localStorage.getItem('user');
+  const userInfo = useSelector((state) => state.user?.userInfo) || (storedUser ? JSON.parse(storedUser) : null);
   const receptionistUserInfo = userInfo && userInfo.role === 'receptionist' ? userInfo : { role: 'receptionist' };
   const [drawerOpen, setDrawerOpen] = useState(false);
 

@@ -59,11 +59,19 @@ export const getAllReceptionists = async (req, res) => {
   try {
     let query = { 
       role: 'receptionist',
-      centerId: { $exists: true, $ne: null } // Only receptionists with centerId (center-specific)
+      centerId: { $exists: true, $ne: null }, // Only receptionists with centerId (center-specific)
+      $or: [
+        { isSuperAdminStaff: { $exists: false } }, // No isSuperAdminStaff field
+        { isSuperAdminStaff: false }, // Or explicitly set to false
+        { isSuperAdminStaff: { $ne: true } } // Or not true
+      ]
     };
 
-    // If user is not superadmin, filter by their center
-    if (req.user.role !== 'superadmin') {
+    // Superadmin and center admin can see all receptionists (except superadmin staff)
+    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
+      console.log('🔍 Superadmin/Center Admin - showing all receptionists (excluding superadmin staff)');
+    } else {
+      // Other users can only see receptionists from their center
       if (!req.user.centerId) {
         return res.status(403).json({ 
           message: 'Access denied. Center-specific access required.' 
@@ -72,36 +80,18 @@ export const getAllReceptionists = async (req, res) => {
       query.centerId = req.user.centerId;
     }
 
-    // Explicitly exclude super admin staff receptionists from User model
-    // AND ensure they don't have isSuperAdminStaff flag
-    query.$and = [
-      {
-        $or: [
-          { isSuperAdminStaff: { $exists: false } }, // No isSuperAdminStaff field
-          { isSuperAdminStaff: false }, // Or explicitly set to false
-          { isSuperAdminStaff: { $ne: true } } // Or not true
-        ]
-      },
-      // Additional check to ensure they are not superadmin staff
-      { 
-        $or: [
-          { isSuperAdminStaff: { $exists: false } },
-          { isSuperAdminStaff: false }
-        ]
-      }
-    ];
-
     const receptionists = await User.find(query).select('-password');
     
-    console.log(`🔍 Found ${receptionists.length} center-specific receptionists for center: ${req.user.centerId || 'all centers (superadmin)'}`);
+    console.log(`🔍 Found ${receptionists.length} center-specific receptionists for center: ${req.user.centerId || 'all centers (superadmin/center admin)'}`);
     
     // Log sample receptionist data for debugging
     if (receptionists.length > 0) {
       console.log('🏥 Sample receptionist data:', {
         receptionistId: receptionists[0]._id,
-        name: receptionists[0].name,
-        centerId: receptionists[0].centerId,
-        isSuperAdminStaff: receptionists[0].isSuperAdminStaff
+        receptionistName: receptionists[0].name,
+        receptionistRole: receptionists[0].role,
+        receptionistCenterId: receptionists[0].centerId,
+        receptionistCenterIdType: typeof receptionists[0].centerId
       });
     }
     
@@ -115,17 +105,37 @@ export const getAllReceptionists = async (req, res) => {
 // Get a single receptionist by ID
 export const getReceptionistById = async (req, res) => {
   try {
-    let query = { _id: req.params.id, role: 'receptionist' };
+    let receptionist;
     
-    // If not superadmin, ensure receptionist belongs to same center
-    if (req.user.role !== 'superadmin') {
-      query.centerId = req.user.centerId;
+    // Superadmin and center admin can view any receptionist (except superadmin staff)
+    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
+      receptionist = await User.findOne({ 
+        _id: req.params.id,
+        role: 'receptionist', // Only get receptionists
+        $or: [
+          { isSuperAdminStaff: { $exists: false } },
+          { isSuperAdminStaff: false },
+          { isSuperAdminStaff: { $ne: true } }
+        ]
+      }).select('-password');
+    } else {
+      // Other users can only view receptionists from their center
+      receptionist = await User.findOne({ 
+        _id: req.params.id,
+        role: 'receptionist', // Only get receptionists
+        centerId: req.user.centerId,
+        $or: [
+          { isSuperAdminStaff: { $exists: false } },
+          { isSuperAdminStaff: false },
+          { isSuperAdminStaff: { $ne: true } }
+        ]
+      }).select('-password');
     }
-
-    const receptionist = await User.findOne(query).select('-password');
+    
     if (!receptionist) {
       return res.status(404).json({ message: 'Receptionist not found or access denied' });
     }
+    
     res.status(200).json(receptionist);
   } catch (err) {
     console.error('❌ Error fetching receptionist:', err);
@@ -136,21 +146,40 @@ export const getReceptionistById = async (req, res) => {
 // Delete a receptionist by ID
 export const deleteReceptionist = async (req, res) => {
   try {
-    let query = { _id: req.params.id, role: 'receptionist' };
-    
-    // If not superadmin, ensure receptionist belongs to same center
-    if (req.user.role !== 'superadmin') {
-      query.centerId = req.user.centerId;
+    const receptionist = await User.findById(req.params.id);
+
+    if (!receptionist) {
+      return res.status(404).json({ message: 'Receptionist not found' });
     }
 
-    const receptionist = await User.findOne(query);
-    if (!receptionist) {
-      return res.status(404).json({ message: 'Receptionist not found or access denied' });
+    // Check if it's a superadmin staff receptionist (should not be deleted through this endpoint)
+    if (receptionist.isSuperAdminStaff) {
+      console.log('❌ Cannot delete superadmin staff receptionist through this endpoint');
+      return res.status(403).json({ message: 'Access denied. You can only delete regular receptionists.' });
     }
-    
-    await receptionist.deleteOne();
-    console.log(`✅ Receptionist deleted successfully from center: ${req.user.centerId || 'all centers (superadmin)'}`);
-    res.status(200).json({ message: 'Receptionist deleted successfully' });
+
+    // Allow superadmin to delete any receptionist (except superadmin staff)
+    if (req.user.role === 'superadmin') {
+      await receptionist.deleteOne();
+      console.log(`✅ Receptionist deleted successfully by superadmin`);
+      return res.status(200).json({ message: 'Receptionist deleted successfully' });
+    }
+
+    // Allow center admin to delete any receptionist (except superadmin staff)
+    if (req.user.role === 'centeradmin') {
+      await receptionist.deleteOne();
+      console.log(`✅ Receptionist deleted successfully by center admin`);
+      return res.status(200).json({ message: 'Receptionist deleted successfully' });
+    }
+
+    // Allow regular receptionists to delete themselves (if needed)
+    if (req.user.role === 'receptionist' && req.user._id.toString() === receptionist._id.toString()) {
+      await receptionist.deleteOne();
+      console.log(`✅ Receptionist deleted themselves`);
+      return res.status(200).json({ message: 'Receptionist deleted successfully' });
+    }
+
+    return res.status(403).json({ message: 'Access denied. You can only delete receptionists from your own center.' });
   } catch (err) {
     console.error('❌ Error deleting receptionist:', err);
     res.status(500).json({ message: 'Failed to delete receptionist', error: err.message });
@@ -160,16 +189,37 @@ export const deleteReceptionist = async (req, res) => {
 // Update a receptionist by ID
 export const updateReceptionist = async (req, res) => {
   try {
-    let query = { _id: req.params.id, role: 'receptionist' };
+    let receptionist;
     
-    // If not superadmin, ensure receptionist belongs to same center
-    if (req.user.role !== 'superadmin') {
-      query.centerId = req.user.centerId;
-    }
-
-    const receptionist = await User.findOne(query);
-    if (!receptionist) {
-      return res.status(404).json({ message: 'Receptionist not found or access denied' });
+    // Superadmin and center admin can update any receptionist (except superadmin staff)
+    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
+      receptionist = await User.findOne({ 
+        _id: req.params.id,
+        role: 'receptionist', // Only update receptionists
+        $or: [
+          { isSuperAdminStaff: { $exists: false } },
+          { isSuperAdminStaff: false },
+          { isSuperAdminStaff: { $ne: true } }
+        ]
+      });
+      if (!receptionist) {
+        return res.status(404).json({ message: 'Receptionist not found' });
+      }
+    } else {
+      // Other users can only update receptionists from their center
+      receptionist = await User.findOne({ 
+        _id: req.params.id,
+        role: 'receptionist', // Only update receptionists
+        centerId: req.user.centerId,
+        $or: [
+          { isSuperAdminStaff: { $exists: false } },
+          { isSuperAdminStaff: false },
+          { isSuperAdminStaff: { $ne: true } }
+        ]
+      });
+      if (!receptionist) {
+        return res.status(404).json({ message: 'Receptionist not found or access denied' });
+      }
     }
     
     // Update fields
@@ -179,19 +229,9 @@ export const updateReceptionist = async (req, res) => {
         receptionist[field] = req.body[field];
       }
     });
-    
-    // Only superadmin can change centerId
-    if (req.user.role === 'superadmin' && req.body.centerId) {
-      receptionist.centerId = req.body.centerId;
-    }
-    
-    // Only update password if provided
-    if (req.body.password) {
-      receptionist.password = req.body.password;
-    }
-    
+
     await receptionist.save();
-    console.log(`✅ Receptionist updated successfully in center: ${req.user.centerId || 'all centers (superadmin)'}`);
+    console.log(`✅ Receptionist updated successfully`);
     res.status(200).json({ message: 'Receptionist updated successfully', receptionist });
   } catch (err) {
     console.error('❌ Error updating receptionist:', err);

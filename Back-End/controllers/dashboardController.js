@@ -94,43 +94,30 @@ export const getDoctorStats = async (req, res) => {
 export const getReceptionistStats = async (req, res) => {
   try {
     const centerId = req.user.centerId;
-    
     if (!centerId) {
-      return res.status(400).json({ message: 'Center ID not found' });
+      return res.status(400).json({ message: 'Center ID is required' });
     }
 
-    // Get all patients for this center
-    const allPatients = await Patient.find({ centerId });
-    const totalPatients = allPatients.length;
-    
-    // Get patient IDs for test queries
-    const patientIdArray = allPatients.map(p => p._id);
-    
-    // Count today's patients
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayPatients = allPatients.filter(p => 
-      new Date(p.createdAt) >= today
-    ).length;
-    
-    // Count tests for this center
-    const [pendingTests, completedTests] = await Promise.all([
-      Test.countDocuments({ 
-        patient: { $in: patientIdArray },
+    const [totalPatients, pendingTests, completedTests] = await Promise.all([
+      Patient.countDocuments({ centerId }),
+      Test.countDocuments({
+        patient: { $in: await Patient.find({ centerId }).distinct('_id') },
         status: { $in: ['pending', 'in_progress'] }
       }),
-      Test.countDocuments({ 
-        patient: { $in: patientIdArray },
+      Test.countDocuments({
+        patient: { $in: await Patient.find({ centerId }).distinct('_id') },
         status: 'completed'
       })
     ]);
 
-    res.json({
-      totalPatients,
-      todayPatients,
-      pendingTests,
-      completedTests
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayPatients = await Patient.countDocuments({ 
+      centerId, 
+      createdAt: { $gte: today } 
     });
+
+    res.json({ totalPatients, todayPatients, pendingTests, completedTests });
   } catch (error) {
     console.error('Error fetching receptionist stats:', error);
     res.status(500).json({ message: 'Failed to fetch dashboard statistics' });

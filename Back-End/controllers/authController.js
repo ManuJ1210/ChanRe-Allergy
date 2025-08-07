@@ -5,7 +5,10 @@ import SuperAdminReceptionist from '../models/SuperAdminReceptionist.js';
 import jwt from 'jsonwebtoken';
 
 // Generate JWT Token
-const generateToken = (user) => {
+const generateToken = (user, userType = 'user') => {
+  console.log('🔍 GenerateToken Debug - userType:', userType);
+  console.log('🔍 GenerateToken Debug - user role:', user.role);
+  
   const payload = {
     id: user._id,
     role: user.role,
@@ -16,6 +19,14 @@ const generateToken = (user) => {
   if (user.labId) {
     payload.labId = user.labId;
   }
+  
+  // Add isSuperAdminStaff flag for superadmin staff
+  if (userType === 'superAdminDoctor' || userType === 'superAdminReceptionist') {
+    console.log('🔍 GenerateToken Debug - Adding isSuperAdminStaff flag');
+    payload.isSuperAdminStaff = true;
+  }
+  
+  console.log('🔍 GenerateToken Debug - Final payload:', payload);
   
   // Use environment variable or fallback to a default secret
   const jwtSecret = process.env.JWT_SECRET || 'fallback-secret-key-for-development';
@@ -62,32 +73,50 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
+  console.log('🔍 Login attempt for email:', email);
+
   try {
     // First try to find user in User model
     let user = await User.findOne({ email }).populate('centerId', 'name code');
     let userType = 'user';
+    console.log('🔍 Checked User model, found:', !!user);
 
     // If not found in User model, try LabStaff model
     if (!user) {
       user = await LabStaff.findOne({ email });
       userType = 'labStaff';
+      console.log('🔍 Checked LabStaff model, found:', !!user);
     }
 
     // If not found in LabStaff model, try SuperAdminDoctor model
     if (!user) {
       user = await SuperAdminDoctor.findOne({ email });
       userType = 'superAdminDoctor';
+      console.log('🔍 Checked SuperAdminDoctor model, found:', !!user);
     }
 
     // If not found in SuperAdminDoctor model, try SuperAdminReceptionist model
     if (!user) {
       user = await SuperAdminReceptionist.findOne({ email });
       userType = 'superAdminReceptionist';
+      console.log('🔍 Checked SuperAdminReceptionist model, found:', !!user);
     }
 
-    if (!user || !(await user.matchPassword(password))) {
+    if (!user) {
+      console.log('🔍 No user found with email:', email);
       return res.status(401).json({ message: 'Invalid credentials' });
     }
+
+    console.log('🔍 User found, checking password...');
+    const passwordMatch = await user.matchPassword(password);
+    console.log('🔍 Password match result:', passwordMatch);
+
+    if (!passwordMatch) {
+      console.log('🔍 Password does not match');
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    console.log('🔍 Password matched successfully');
 
     // Prepare user data based on type
     let userData;
@@ -136,9 +165,16 @@ export const login = async (req, res) => {
       };
     }
 
+    // Debug logging
+    console.log('🔍 Backend Debug - userType:', userType);
+    console.log('🔍 Backend Debug - userData:', userData);
+    
+    const token = generateToken(user, userType);
+    console.log('🔍 Backend Debug - Generated token payload:', jwt.decode(token));
+    
     res.json({
       user: userData,
-      token: generateToken(user),
+      token: token,
     });
   } catch (err) {
     res.status(500).json({ message: 'Login failed', error: err.message });

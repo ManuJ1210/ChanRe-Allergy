@@ -47,6 +47,23 @@ const testSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Patient',
     required: true
+  },
+  
+  // Superadmin review fields
+  superadminReview: {
+    reviewedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    reviewedAt: { type: Date },
+    status: {
+      type: String,
+      enum: ['pending', 'reviewed', 'feedback_sent'],
+      default: 'pending'
+    },
+    additionalTests: { type: String },
+    patientInstructions: { type: String },
+    notes: { type: String }
   }
 });
 

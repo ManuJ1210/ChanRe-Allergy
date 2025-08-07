@@ -35,13 +35,17 @@ const LabReports = () => {
     const fetchReports = async () => {
       try {
         setLoading(true);
+        setError(null);
         const response = await API.get('/lab-reports');
-        console.log('[LAB REPORTS DEBUG] Response data:', response.data);
         setReports(response.data);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching lab reports:', err);
-        setError('Failed to fetch lab reports: ' + (err?.response?.data?.message || err?.message || 'Unknown error'));
+        if (err.response?.status === 401) {
+          setError('Authentication failed. Please login again.');
+        } else {
+          setError('Failed to fetch lab reports');
+        }
         setLoading(false);
       }
     };
@@ -97,19 +101,67 @@ const LabReports = () => {
 
   const handleViewReport = async (reportId) => {
     try {
+      setError(null); // Clear any previous errors
+      console.log('[PDF DEBUG] Starting view report for ID:', reportId);
+      
+      // Check if user is authenticated
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Please login to view reports');
+        return;
+      }
+
+      console.log('[PDF DEBUG] Making request to:', `/test-requests/${reportId}/download-report`);
       const response = await API.get(`/test-requests/${reportId}/download-report`, {
         responseType: 'blob',
         headers: {
-          'Accept': 'application/pdf'
+          'Accept': 'application/pdf',
+          'Authorization': `Bearer ${token}` // Explicitly add token
         }
       });
       
+      console.log('[PDF DEBUG] Response received:', {
+        status: response.status,
+        headers: response.headers,
+        dataType: typeof response.data,
+        dataSize: response.data?.size || 'unknown'
+      });
+      
       const contentType = response.headers['content-type'] || response.headers['Content-Type'];
+      console.log('[PDF DEBUG] Content-Type:', contentType);
       
       let blob;
       if (contentType && contentType.includes('application/pdf')) {
+        console.log('[PDF DEBUG] Processing as PDF blob');
+        
+        // Check if the PDF is too small (likely an error response)
+        if (response.data.size < 1000) {
+          console.warn('[PDF DEBUG] PDF file is suspiciously small:', response.data.size, 'bytes');
+          // Try to read the response as text to see the actual error
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            console.error('[PDF DEBUG] Small PDF content:', e.target.result);
+            
+            // Check if it's a JSON response indicating the file is not a PDF
+            try {
+              const jsonData = JSON.parse(e.target.result);
+              if (jsonData.reportFile && jsonData.reportFile.includes('.txt')) {
+                setError('Report file is in text format, not PDF. Please regenerate the report as PDF.');
+                return;
+              }
+            } catch (parseError) {
+              // Not JSON, continue with generic error
+            }
+          };
+          reader.readAsText(response.data);
+          
+          setError('PDF file is corrupted or not generated properly. Please regenerate the report.');
+          return;
+        }
+        
         blob = new Blob([response.data], { type: 'application/pdf' });
       } else {
+        console.log('[PDF DEBUG] Processing as text/JSON response');
         // Handle text/JSON response
         let pdfContent = response.data;
         if (typeof pdfContent === 'object' && pdfContent.pdfContent) {
@@ -132,27 +184,57 @@ const LabReports = () => {
         blob = new Blob([byteArray], { type: 'application/pdf' });
       }
       
+      console.log('[PDF DEBUG] Final blob created:', {
+        size: blob.size,
+        type: blob.type
+      });
+      
       // Open PDF in new tab for viewing
       const url = window.URL.createObjectURL(blob);
+      console.log('[PDF DEBUG] Opening URL in new tab:', url);
       window.open(url, '_blank');
       
       // Clean up the URL after a delay
       setTimeout(() => {
         window.URL.revokeObjectURL(url);
+        console.log('[PDF DEBUG] URL revoked');
       }, 1000);
       
     } catch (error) {
-      console.error('Error viewing report:', error);
-      alert('Failed to view report');
+      console.error('[PDF DEBUG] Error viewing report:', error);
+      console.error('[PDF DEBUG] Error details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message
+      });
+      
+      if (error.response?.status === 401) {
+        setError('Authentication failed. Please login again to view reports.');
+      } else if (error.response?.status === 404) {
+        setError('Report not found. The report may not have been generated yet.');
+      } else {
+        setError(`Failed to view report: ${error.response?.data?.message || error.message}`);
+      }
     }
   };
 
   const handleDownloadReport = async (reportId) => {
     try {
+      setError(null); // Clear any previous errors
+      
+      // Check if user is authenticated
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Please login to download reports');
+        return;
+      }
+
       const response = await API.get(`/test-requests/${reportId}/download-report`, {
         responseType: 'blob', // This is crucial for binary data
         headers: {
-          'Accept': 'application/pdf'
+          'Accept': 'application/pdf',
+          'Authorization': `Bearer ${token}` // Explicitly add token
         }
       });
       
@@ -160,6 +242,20 @@ const LabReports = () => {
       const contentType = response.headers['content-type'] || response.headers['Content-Type'];
       
       if (contentType && contentType.includes('application/pdf')) {
+        // Check if the PDF is too small (likely an error response)
+        if (response.data.size < 1000) {
+          console.warn('[PDF DEBUG] Download PDF file is suspiciously small:', response.data.size, 'bytes');
+          // Try to read the response as text to see the actual error
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            console.error('[PDF DEBUG] Small download PDF content:', e.target.result);
+          };
+          reader.readAsText(response.data);
+          
+          setError('PDF file is corrupted or not generated properly. Please regenerate the report.');
+          return;
+        }
+        
         // Handle proper PDF response
         const blob = new Blob([response.data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
@@ -211,7 +307,13 @@ const LabReports = () => {
       }
     } catch (error) {
       console.error('Error downloading report:', error);
-      alert('Failed to download report');
+      if (error.response?.status === 401) {
+        setError('Authentication failed. Please login again to download reports.');
+      } else if (error.response?.status === 404) {
+        setError('Report not found. The report may not have been generated yet.');
+      } else {
+        setError('Failed to download report. Please try again.');
+      }
     }
   };
 
@@ -219,10 +321,11 @@ const LabReports = () => {
     // TODO: Implement send report functionality
     console.log('Sending report:', reportId);
     // This would typically trigger an email or notification to the doctor/patient
+    alert('Send report functionality not yet implemented');
   };
 
-  const centers = [...new Set(reports.map(report => report.centerCode))];
-  const statuses = [...new Set(reports.map(report => report.status))];
+  const centers = [...new Set(reports.map(report => report.centerCode).filter(Boolean))];
+  const statuses = [...new Set(reports.map(report => report.status).filter(Boolean))];
 
   if (loading) {
     return (
@@ -249,6 +352,14 @@ const LabReports = () => {
               <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
               <p className="text-red-700 font-medium">{error}</p>
               <p className="text-red-600 text-sm mt-1">Please try refreshing the page</p>
+              {error.includes('login') && (
+                <button
+                  onClick={() => navigate('/login')}
+                  className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                >
+                  Login
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -284,6 +395,16 @@ const LabReports = () => {
             </div>
           </div>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center">
+              <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
+              <p className="text-red-700">{error}</p>
+            </div>
+          </div>
+        )}
 
         {/* Filters */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
@@ -416,32 +537,23 @@ const LabReports = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          {(report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed') && (
+                        {(report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed') && report.reportFilePath && (
                             <>
                               <button
-                                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors flex items-center gap-1"
                                 onClick={() => handleViewReport(report._id)}
+                                className="px-3 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-md hover:bg-purple-200"
                               >
-                                <Eye className="h-3 w-3" />
-                                View
+                                <Eye className="inline mr-1 h-3 w-3" />
+                                View PDF
                               </button>
                               <button
-                                className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors flex items-center gap-1"
                                 onClick={() => handleDownloadReport(report._id)}
+                                className="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-md hover:bg-green-200"
                               >
-                                <Download className="h-3 w-3" />
+                                <Download className="inline mr-1 h-3 w-3" />
                                 Download
                               </button>
                             </>
-                          )}
-                          {report.status === 'Report_Generated' && !report.reportSentDate && (
-                            <button
-                              className="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors flex items-center gap-1"
-                              onClick={() => handleSendReport(report._id)}
-                            >
-                              <Mail className="h-3 w-3" />
-                              Send
-                            </button>
                           )}
                         </div>
                       </td>

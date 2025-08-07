@@ -1,6 +1,9 @@
+// Front-End/src/pages/Doctor/CompletedReports.jsx
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../../services/api';
+import { downloadPDFReport, viewPDFReport, isReportAvailable } from '../../utils/pdfHandler';
 import { 
   FileText, 
   Search, 
@@ -30,6 +33,8 @@ const CompletedReports = () => {
   const [filterStatus, setFilterStatus] = useState('');
   const [filterDate, setFilterDate] = useState('');
   const [lastRefreshTime, setLastRefreshTime] = useState(new Date());
+  const [downloadingReports, setDownloadingReports] = useState(new Set());
+  const [viewingReports, setViewingReports] = useState(new Set());
 
   useEffect(() => {
     fetchCompletedReports();
@@ -121,121 +126,49 @@ const CompletedReports = () => {
 
   const handleDownloadReport = async (reportId) => {
     try {
-      const response = await API.get(`/test-requests/${reportId}/download-report`, {
-        responseType: 'blob', // This is crucial for binary data
-        headers: {
-          'Accept': 'application/pdf'
-        }
-      });
+      // Add to downloading set
+      setDownloadingReports(prev => new Set(prev).add(reportId));
+      setError(null);
       
-      // Check if response is actually PDF
-      const contentType = response.headers['content-type'] || response.headers['Content-Type'];
+      await downloadPDFReport(reportId);
       
-      if (contentType && contentType.includes('application/pdf')) {
-        // Handle proper PDF response
-        const blob = new Blob([response.data], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `test-report-${reportId}.pdf`);
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
-      } else {
-        // Handle the current issue where PDF comes as text/JSON
-        let pdfContent = response.data;
-        
-        // If it's a JSON response with PDF content as string
-        if (typeof pdfContent === 'object' && pdfContent.pdfContent) {
-          pdfContent = pdfContent.pdfContent;
-        } else if (typeof pdfContent === 'string') {
-          // If it's the raw PDF string you showed in your question
-          pdfContent = pdfContent;
-        }
-        
-        // Clean up the PDF string (remove JSON escape characters)
-        const cleanedPdfContent = pdfContent
-          .replace(/\\n/g, '\n')
-          .replace(/\\r/g, '\r')
-          .replace(/\\t/g, '\t')
-          .replace(/\\\\/g, '\\')
-          .replace(/\\"/g, '"');
-        
-        // Convert string to binary
-        const byteCharacters = cleanedPdfContent;
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        
-        // Create PDF blob
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `test-report-${reportId}.pdf`);
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
-      }
+      // Show success message (optional)
+      console.log('Report downloaded successfully');
     } catch (error) {
       console.error('Error downloading report:', error);
-      alert('Failed to download report');
+      setError(error.message || 'Failed to download report. Please try again.');
+    } finally {
+      // Remove from downloading set
+      setDownloadingReports(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(reportId);
+        return newSet;
+      });
     }
   };
 
   const handleViewReportInBrowser = async (reportId) => {
     try {
-      const response = await API.get(`/test-requests/${reportId}/download-report`, {
-        responseType: 'blob',
-        headers: {
-          'Accept': 'application/pdf'
-        }
-      });
+      // Add to viewing set
+      setViewingReports(prev => new Set(prev).add(reportId));
+      setError(null);
       
-      const contentType = response.headers['content-type'] || response.headers['Content-Type'];
+      const result = await viewPDFReport(reportId);
       
-      let blob;
-      if (contentType && contentType.includes('application/pdf')) {
-        blob = new Blob([response.data], { type: 'application/pdf' });
-      } else {
-        // Handle text/JSON response
-        let pdfContent = response.data;
-        if (typeof pdfContent === 'object' && pdfContent.pdfContent) {
-          pdfContent = pdfContent.pdfContent;
-        }
-        
-        const cleanedPdfContent = pdfContent
-          .replace(/\\n/g, '\n')
-          .replace(/\\r/g, '\r')
-          .replace(/\\t/g, '\t')
-          .replace(/\\\\/g, '\\')
-          .replace(/\\"/g, '"');
-        
-        const byteCharacters = cleanedPdfContent;
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        blob = new Blob([byteArray], { type: 'application/pdf' });
+      if (result.fallback) {
+        // If popup was blocked, inform user that file was downloaded instead
+        console.log('Popup blocked, report downloaded instead');
       }
-      
-      // Open PDF in new tab for viewing
-      const url = window.URL.createObjectURL(blob);
-      window.open(url, '_blank');
-      
-      // Clean up the URL after a delay
-      setTimeout(() => {
-        window.URL.revokeObjectURL(url);
-      }, 1000);
-      
     } catch (error) {
       console.error('Error viewing report:', error);
-      alert('Failed to view report');
+      setError(error.message || 'Failed to view report. Please try again.');
+    } finally {
+      // Remove from viewing set
+      setViewingReports(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(reportId);
+        return newSet;
+      });
     }
   };
 
@@ -288,6 +221,12 @@ const CompletedReports = () => {
             <div className="flex items-center">
               <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
               <p className="text-red-800">{error}</p>
+              <button
+                onClick={() => setError(null)}
+                className="ml-auto text-red-500 hover:text-red-700"
+              >
+                <XCircle className="h-5 w-5" />
+              </button>
             </div>
           </div>
         )}
@@ -498,20 +437,30 @@ const CompletedReports = () => {
                             <Eye className="h-4 w-4 mr-1" />
                             Details
                           </button>
-                          {report.reportFilePath && (
+                          {isReportAvailable(report) && (
                             <>
                               <button
                                 onClick={() => handleViewReportInBrowser(report._id)}
-                                className="flex items-center text-purple-600 hover:text-purple-900"
+                                disabled={viewingReports.has(report._id)}
+                                className="flex items-center text-purple-600 hover:text-purple-900 disabled:opacity-50"
                               >
-                                <Eye className="h-4 w-4 mr-1" />
+                                {viewingReports.has(report._id) ? (
+                                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600 mr-1" />
+                                ) : (
+                                  <Eye className="h-4 w-4 mr-1" />
+                                )}
                                 View PDF
                               </button>
                               <button
                                 onClick={() => handleDownloadReport(report._id)}
-                                className="flex items-center text-green-600 hover:text-green-900"
+                                disabled={downloadingReports.has(report._id)}
+                                className="flex items-center text-green-600 hover:text-green-900 disabled:opacity-50"
                               >
-                                <Download className="h-4 w-4 mr-1" />
+                                {downloadingReports.has(report._id) ? (
+                                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600 mr-1" />
+                                ) : (
+                                  <Download className="h-4 w-4 mr-1" />
+                                )}
                                 Download
                               </button>
                             </>

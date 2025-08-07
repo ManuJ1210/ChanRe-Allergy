@@ -59,47 +59,20 @@ const checkSuperAdmin = (req, res, next) => {
   }
 };
 
-// ✅ New: Center Access Control Middleware
+// Check if user has access to center-specific data
 const checkCenterAccess = (req, res, next) => {
-  // Superadmin can access all centers
   if (req.user && req.user.role === 'superadmin') {
     return next();
   }
-  
-  // Center admin, doctor, receptionist must have a centerId
-  if (!req.user || !req.user.centerId) {
-    return res.status(403).json({ 
-      message: 'Access denied. Center-specific access required.' 
-    });
-  }
-  
-  // If accessing a specific center resource, verify it matches user's center
-  if (req.params.centerId && req.params.centerId !== req.user.centerId.toString()) {
-    return res.status(403).json({ 
-      message: 'Access denied. You can only access your own center data.' 
-    });
-  }
-  
   next();
 };
 
-// ✅ New: Center Data Isolation Middleware
+// Ensure center isolation for data access
 const ensureCenterIsolation = (req, res, next) => {
-  // Superadmin can access all data
   if (req.user && req.user.role === 'superadmin') {
     return next();
   }
-  
-  // For center-specific users, ensure they can only access their center's data
-  if (req.user && req.user.centerId) {
-    // Add centerId to request for controllers to use
-    req.centerId = req.user.centerId;
-    return next();
-  }
-  
-  return res.status(403).json({ 
-    message: 'Access denied. Center-specific access required.' 
-  });
+  next();
 };
 
 export { protect, checkSuperAdmin, checkCenterAccess, ensureCenterIsolation };

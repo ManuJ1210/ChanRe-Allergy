@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Eye, EyeOff, UserCheck, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, UserCheck, ArrowLeft, Plus, X } from 'lucide-react';
 import { addSuperAdminDoctor, clearError, clearSuccess } from '../../../features/superadmin/superAdminDoctorSlice';
 
 const AddSuperadminDoctor = () => {
@@ -20,15 +20,33 @@ const AddSuperadminDoctor = () => {
     designation: '',
     kmcNumber: '',
     hospitalName: '',
-    specializations: [],
     experience: '',
+    specializations: [],
     bio: '',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [newSpecialization, setNewSpecialization] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddSpecialization = () => {
+    if (newSpecialization.trim() && !formData.specializations.includes(newSpecialization.trim())) {
+      setFormData(prev => ({
+        ...prev,
+        specializations: [...prev.specializations, newSpecialization.trim()]
+      }));
+      setNewSpecialization('');
+    }
+  };
+
+  const handleRemoveSpecialization = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      specializations: prev.specializations.filter((_, i) => i !== index)
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -101,6 +119,7 @@ const AddSuperadminDoctor = () => {
 
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Full Name */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Full Name *
@@ -116,6 +135,7 @@ const AddSuperadminDoctor = () => {
                 />
               </div>
 
+              {/* Mobile Number */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Mobile Number *
@@ -131,6 +151,7 @@ const AddSuperadminDoctor = () => {
                 />
               </div>
 
+              {/* Email Address */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Email Address *
@@ -146,6 +167,7 @@ const AddSuperadminDoctor = () => {
                 />
               </div>
 
+              {/* Username */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Username *
@@ -161,20 +183,7 @@ const AddSuperadminDoctor = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Qualification
-                </label>
-                <input
-                  type="text"
-                  name="qualification"
-                  value={formData.qualification}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter qualification"
-                />
-              </div>
-
+              {/* Password */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Password *
@@ -199,6 +208,22 @@ const AddSuperadminDoctor = () => {
                 </div>
               </div>
 
+              {/* Qualification */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Qualification
+                </label>
+                <input
+                  type="text"
+                  name="qualification"
+                  value={formData.qualification}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter qualification"
+                />
+              </div>
+
+              {/* Designation */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Designation
@@ -213,6 +238,7 @@ const AddSuperadminDoctor = () => {
                 />
               </div>
 
+              {/* KMC Number */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   KMC Number
@@ -227,6 +253,7 @@ const AddSuperadminDoctor = () => {
                 />
               </div>
 
+              {/* Hospital Name */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Hospital Name
@@ -241,6 +268,7 @@ const AddSuperadminDoctor = () => {
                 />
               </div>
 
+              {/* Experience */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Experience
@@ -254,20 +282,73 @@ const AddSuperadminDoctor = () => {
                   placeholder="Enter experience (e.g., 5 years)"
                 />
               </div>
+            </div>
 
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Bio
-                </label>
-                <textarea
-                  name="bio"
-                  value={formData.bio}
-                  onChange={handleChange}
-                  rows="3"
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter doctor bio"
-                />
+            {/* Specializations */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Specializations
+              </label>
+              <div className="space-y-3">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newSpecialization}
+                    onChange={(e) => setNewSpecialization(e.target.value)}
+                    className="flex-1 px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="Add specialization"
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddSpecialization();
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddSpecialization}
+                    className="px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center gap-2 transition-colors"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add
+                  </button>
+                </div>
+                
+                {formData.specializations.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {formData.specializations.map((spec, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full"
+                      >
+                        <span className="text-sm">{spec}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSpecialization(index)}
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
+            </div>
+
+            {/* Bio */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Bio
+              </label>
+              <textarea
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+                rows="3"
+                className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                placeholder="Enter doctor bio"
+              />
             </div>
 
             <div className="flex gap-4 pt-6">

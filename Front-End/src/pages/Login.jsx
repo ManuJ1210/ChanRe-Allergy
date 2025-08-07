@@ -13,27 +13,62 @@ export default function Login() {
 
 
 
-  useEffect(() => {
+    useEffect(() => {
     if (user && !hasNavigated.current) {
       hasNavigated.current = true;
+      
+      // Debug: Log user object to see what we're working with
+      console.log('🔍 Login Debug - Full user object:', user);
+      console.log('🔍 Login Debug - User role:', user.role);
+      console.log('🔍 Login Debug - isSuperAdminStaff:', user.isSuperAdminStaff);
+      console.log('🔍 Login Debug - User ID:', user.id);
+      console.log('🔍 Login Debug - User name:', user.name);
+      
       // Store centerId for centeradmin
       if (user.role && user.role.toLowerCase() === 'centeradmin' && user.centerId) {
         localStorage.setItem('centerId', user.centerId);
       }
       const role = user.role.toLowerCase();
-      if (role === 'superadmin') navigate('/dashboard/superadmin/dashboard');
-      else if (role === 'centeradmin') navigate('/dashboard/centeradmin/dashboard');
-      else if (role === 'doctor') navigate('/dashboard/doctor/dashboard');
-      else if (role === 'receptionist') navigate('/dashboard/receptionist/dashboard');
-      else if (role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') navigate('/dashboard/lab/dashboard');
+      console.log('🔍 Login Debug - Processed role:', role);
+      
+      if (role === 'superadmin') {
+        console.log('🔍 Login Debug - Redirecting to superadmin dashboard');
+        navigate('/dashboard/superadmin/dashboard');
+      }
+      else if (role === 'centeradmin') {
+        console.log('🔍 Login Debug - Redirecting to centeradmin dashboard');
+        navigate('/dashboard/centeradmin/dashboard');
+      }
+      else if (role === 'doctor') {
+        // Check if it's a superadmin doctor
+        console.log('🔍 Login Debug - Doctor detected, checking isSuperAdminStaff:', user.isSuperAdminStaff);
+        console.log('🔍 Login Debug - isSuperAdminStaff type:', typeof user.isSuperAdminStaff);
+        console.log('🔍 Login Debug - isSuperAdminStaff === true:', user.isSuperAdminStaff === true);
+        
+        if (user.isSuperAdminStaff === true) {
+          console.log('🔍 Login Debug - Redirecting to superadmin doctor dashboard');
+          navigate('/dashboard/superadmin/doctor/dashboard');
+        } else {
+          console.log('🔍 Login Debug - Redirecting to regular doctor dashboard');
+          navigate('/dashboard/doctor/dashboard');
+        }
+      }
+      else if (role === 'receptionist') {
+        console.log('🔍 Login Debug - Redirecting to receptionist dashboard');
+        navigate('/dashboard/receptionist/dashboard');
+      }
+      else if (role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') {
+        console.log('🔍 Login Debug - Redirecting to lab dashboard');
+        navigate('/dashboard/lab/dashboard');
+      }
       else if (role === 'lab staff') {
         // Lab Staff can only be used for sample collection, not dashboard access
         alert('Lab Staff accounts are for sample collection only. Please contact your administrator for dashboard access.');
         return;
       }
-      // Note: Patient role doesn't have a dashboard - they access the system through other means
+     
     }
-  }, [user]); // Remove navigate from dependencies
+  }, [user]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

@@ -39,6 +39,8 @@ const SuperAdminDoctorList = () => {
     stats 
   } = useSelector((state) => state.superAdminDoctors);
 
+
+
   const [searchTerm, setSearchTerm] = useState(filters.search || '');
   const [statusFilter, setStatusFilter] = useState(filters.status || '');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -46,13 +48,13 @@ const SuperAdminDoctorList = () => {
 
   useEffect(() => {
     dispatch(fetchSuperAdminDoctors({ 
-      page: pagination.currentPage, 
-      limit: pagination.limit, 
-      search: filters.search, 
-      status: filters.status 
+      page: pagination?.currentPage || 1, 
+      limit: pagination?.limit || 10, 
+      search: filters?.search || '', 
+      status: filters?.status || '' 
     }));
     dispatch(fetchSuperAdminDoctorStats());
-  }, [dispatch, pagination.currentPage, filters.search, filters.status]);
+  }, [dispatch, pagination?.currentPage, filters?.search, filters?.status]);
 
   useEffect(() => {
     return () => {
@@ -74,9 +76,9 @@ const SuperAdminDoctorList = () => {
   const handlePageChange = (page) => {
     dispatch(fetchSuperAdminDoctors({ 
       page, 
-      limit: pagination.limit, 
-      search: filters.search, 
-      status: filters.status 
+      limit: pagination?.limit || 10, 
+      search: filters?.search || '', 
+      status: filters?.status || '' 
     }));
   };
 
@@ -135,7 +137,7 @@ const SuperAdminDoctorList = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Total Doctors</p>
-                <p className="text-3xl font-bold text-slate-800">{stats.total}</p>
+                <p className="text-3xl font-bold text-slate-800">{stats?.total || 0}</p>
               </div>
               <div className="bg-blue-100 p-3 rounded-lg">
                 <UserCheck className="h-6 w-6 text-blue-600" />
@@ -146,7 +148,7 @@ const SuperAdminDoctorList = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Active Doctors</p>
-                <p className="text-3xl font-bold text-green-600">{stats.active}</p>
+                <p className="text-3xl font-bold text-green-600">{stats?.active || 0}</p>
               </div>
               <div className="bg-green-100 p-3 rounded-lg">
                 <UserCheck className="h-6 w-6 text-green-600" />
@@ -157,7 +159,7 @@ const SuperAdminDoctorList = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Inactive Doctors</p>
-                <p className="text-3xl font-bold text-red-600">{stats.inactive}</p>
+                <p className="text-3xl font-bold text-red-600">{stats?.inactive || 0}</p>
               </div>
               <div className="bg-red-100 p-3 rounded-lg">
                 <UserX className="h-6 w-6 text-red-600" />
@@ -243,7 +245,7 @@ const SuperAdminDoctorList = () => {
                     Contact
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    Qualification
+                    Specializations
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                     Status
@@ -293,7 +295,12 @@ const SuperAdminDoctorList = () => {
                         <div className="text-sm text-slate-500">{doctor.mobile}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-slate-900">{doctor.qualification || 'N/A'}</div>
+                        <div className="text-sm text-slate-900">
+                          {doctor.specializations && doctor.specializations.length > 0 
+                            ? doctor.specializations.join(', ') 
+                            : 'N/A'
+                          }
+                        </div>
                         <div className="text-sm text-slate-500">{doctor.designation || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -356,7 +363,7 @@ const SuperAdminDoctorList = () => {
         </div>
 
         {/* Pagination */}
-        {pagination.totalPages > 1 && (
+        {pagination?.totalPages > 1 && (
           <div className="mt-6 flex items-center justify-between">
             <div className="text-sm text-slate-700">
               Showing {((pagination.currentPage - 1) * pagination.limit) + 1} to{' '}

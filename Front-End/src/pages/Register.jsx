@@ -13,18 +13,25 @@ export default function Register() {
     try {
       const res = await API.post('/auth/register', form);
       localStorage.setItem('token', res.data.token);
-      navigateRole(res.data.user.role);
+      navigateRole(res.data.user.role, res.data.user);
     } catch (err) {
       alert(err.response?.data?.message || 'Registration failed');
     }
   };
 
-  const navigateRole = (role) => {
-          if (role === 'superadmin') navigate('/dashboard/superadmin/dashboard');
-      else if (role === 'centeradmin') navigate('/dashboard/centeradmin/dashboard');
-      else if (role === 'doctor') navigate('/dashboard/doctor/dashboard');
-      else if (role === 'receptionist') navigate('/dashboard/receptionist/dashboard');
-      else if (role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') navigate('/dashboard/lab/dashboard');
+  const navigateRole = (role, user) => {
+    if (role === 'superadmin') navigate('/dashboard/superadmin/dashboard');
+    else if (role === 'centeradmin') navigate('/dashboard/centeradmin/dashboard');
+    else if (role === 'doctor') {
+      // Check if it's a superadmin doctor
+      if (user && user.isSuperAdminStaff === true) {
+        navigate('/dashboard/superadmin/doctor/dashboard');
+      } else {
+        navigate('/dashboard/doctor/dashboard');
+      }
+    }
+    else if (role === 'receptionist') navigate('/dashboard/receptionist/dashboard');
+    else if (role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') navigate('/dashboard/lab/dashboard');
     else if (role === 'lab staff') {
       // Lab Staff can only be used for sample collection, not dashboard access
       alert('Lab Staff accounts are for sample collection only. Please contact your administrator for dashboard access.');

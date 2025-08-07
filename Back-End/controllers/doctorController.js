@@ -4,6 +4,53 @@ import History from '../models/historyModel.js';
 import Medication from '../models/Medication.js';
 import Test from '../models/Test.js';
 
+export const getAllDoctors = async (req, res) => {
+  try {
+    let query = { 
+      role: 'doctor',
+      $or: [
+        { isSuperAdminStaff: { $exists: false } }, // No isSuperAdminStaff field
+        { isSuperAdminStaff: false }, // Or explicitly set to false
+        { isSuperAdminStaff: { $ne: true } } // Or not true
+      ]
+    };
+    
+    console.log('🔍 getAllDoctors - User info:', {
+      userId: req.user._id,
+      userRole: req.user.role,
+      userCenterId: req.user.centerId,
+      userCenterIdType: typeof req.user.centerId
+    });
+    
+    // Superadmin and center admin can see all doctors (except superadmin staff)
+    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
+      console.log('🔍 Superadmin/Center Admin - showing all doctors (excluding superadmin staff)');
+    } else {
+      // Other users can only see doctors from their center
+      query.centerId = req.user.centerId;
+      console.log('🔍 Filtering by centerId:', req.user.centerId);
+    }
+
+    const doctors = await User.find(query).select('-password');
+    
+    console.log('🔍 Found doctors:', doctors.length);
+    if (doctors.length > 0) {
+      console.log('🔍 Sample doctor data:', {
+        doctorId: doctors[0]._id,
+        doctorName: doctors[0].name,
+        doctorRole: doctors[0].role,
+        doctorCenterId: doctors[0].centerId,
+        doctorCenterIdType: typeof doctors[0].centerId
+      });
+    }
+    
+    res.json(doctors);
+  } catch (error) {
+    console.error('❌ Error fetching doctors:', error);
+    res.status(500).json({ message: 'Failed to fetch doctors' });
+  }
+};
+
 export const addDoctor = async (req, res) => {
   try {
     const {
@@ -13,40 +60,13 @@ export const addDoctor = async (req, res) => {
       phone,
       mobile,
       role,
-      qualification,
-      designation,
-      kmcNumber,
-      centerCode,
-      hospitalName,
       username,
-      specializations,
-      experience,
-      bio,
+      centerId,
       status
     } = req.body;
 
     if (!name || !email || !password || !username) {
       return res.status(400).json({ message: 'Please fill all required fields.' });
-    }
-
-    // Ensure centerId is set to current user's center (unless superadmin)
-    let centerId = req.user.centerId;
-    
-    // If superadmin is creating a doctor, they must specify centerId
-    if (req.user.role === 'superadmin') {
-      if (!req.body.centerId) {
-        return res.status(400).json({ 
-          message: 'Superadmin must specify centerId when creating a doctor.' 
-        });
-      }
-      centerId = req.body.centerId;
-    } else {
-      // For non-superadmin users, ensure they have a centerId
-      if (!centerId) {
-        return res.status(403).json({ 
-          message: 'Access denied. Center-specific access required.' 
-        });
-      }
     }
 
     const existingEmail = await User.findOne({ email });
@@ -59,30 +79,28 @@ export const addDoctor = async (req, res) => {
       return res.status(400).json({ message: 'Username already in use' });
     }
 
+    let doctorCenterId;
+    if (req.user.role !== 'superadmin') {
+      doctorCenterId = req.user.centerId;
+    } else {
+      doctorCenterId = centerId;
+    }
+
     const doctor = new User({
       name,
       email,
       password,
-      phone: phone || mobile, // Use phone or mobile
+      phone: phone || mobile,
       mobile,
       role: role || 'doctor',
-      qualification,
-      designation,
-      kmcNumber,
-      centerCode,
-      hospitalName,
       username,
-      specializations: specializations || [],
-      experience,
-      bio,
-      status: status || 'active',
-      centerId, // Automatically set to current user's center
-      isSuperAdminStaff: false // Explicitly mark as center-specific doctor
+      centerId: doctorCenterId,
+      status: status || 'active'
     });
 
     await doctor.save();
     
-    console.log(`✅ Center-specific doctor added successfully to center: ${centerId}`);
+    console.log(`✅ Doctor added successfully`);
     res.status(201).json({ message: 'Doctor added successfully', doctor });
   } catch (err) {
     console.error('❌ Error adding doctor:', err);
@@ -90,151 +108,160 @@ export const addDoctor = async (req, res) => {
   }
 };
 
-// Existing: Get All Doctors (Center-specific only)
-export const getAllDoctors = async (req, res) => {
-  try {
-    let query = { 
-      role: 'doctor',
-      centerId: { $exists: true, $ne: null } // Only doctors with centerId (center-specific)
-    };
-
-    // If user is not superadmin, filter by their center
-    if (req.user.role !== 'superadmin') {
-      if (!req.user.centerId) {
-        return res.status(403).json({ 
-          message: 'Access denied. Center-specific access required.' 
-        });
-      }
-      query.centerId = req.user.centerId;
-    }
-
-    // Explicitly exclude super admin staff doctors from User model
-    // AND ensure they don't have isSuperAdminStaff flag
-    query.$and = [
-      {
-        $or: [
-          { isSuperAdminStaff: { $exists: false } }, // No isSuperAdminStaff field
-          { isSuperAdminStaff: false }, // Or explicitly set to false
-          { isSuperAdminStaff: { $ne: true } } // Or not true
-        ]
-      },
-      // Additional check to ensure they are not superadmin staff
-      { 
-        $or: [
-          { isSuperAdminStaff: { $exists: false } },
-          { isSuperAdminStaff: false }
-        ]
-      }
-    ];
-
-    const doctors = await User.find(query).select('-password');
-    
-    console.log(`🔍 Found ${doctors.length} center-specific doctors for center: ${req.user.centerId || 'all centers (superadmin)'}`);
-    
-    // Log sample doctor data for debugging
-    if (doctors.length > 0) {
-      console.log('🏥 Sample doctor data:', {
-        doctorId: doctors[0]._id,
-        name: doctors[0].name,
-        centerId: doctors[0].centerId,
-        isSuperAdminStaff: doctors[0].isSuperAdminStaff
-      });
-    }
-    
-    res.status(200).json(doctors);
-  } catch (error) {
-    console.error('❌ Error fetching doctors:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-};
-
-// ✅ New: Delete Doctor by ID
 export const deleteDoctor = async (req, res) => {
   try {
-    let query = { _id: req.params.id, role: 'doctor' };
-    
-    // If not superadmin, ensure doctor belongs to same center
-    if (req.user.role !== 'superadmin') {
-      query.centerId = req.user.centerId;
-    }
+    const doctor = await User.findById(req.params.id);
 
-    const doctor = await User.findOne(query);
+    console.log('🔍 deleteDoctor - Request info:', {
+      doctorId: req.params.id,
+      userId: req.user._id,
+      userRole: req.user.role,
+      userCenterId: req.user.centerId,
+      userCenterIdType: typeof req.user.centerId
+    });
 
     if (!doctor) {
-      return res.status(404).json({ message: 'Doctor not found or access denied' });
+      console.log('❌ Doctor not found');
+      return res.status(404).json({ message: 'Doctor not found' });
     }
 
-    await doctor.deleteOne();
-    console.log(`✅ Doctor deleted successfully from center: ${req.user.centerId || 'all centers (superadmin)'}`);
-    res.status(200).json({ message: 'Doctor deleted successfully' });
+    // Check if it's a superadmin staff doctor (should not be deleted through this endpoint)
+    if (doctor.isSuperAdminStaff) {
+      console.log('❌ Cannot delete superadmin staff doctor through this endpoint');
+      return res.status(403).json({ message: 'Access denied. You can only delete regular doctors.' });
+    }
+
+    console.log('🔍 Doctor found:', {
+      doctorId: doctor._id,
+      doctorName: doctor.name,
+      doctorRole: doctor.role,
+      doctorCenterId: doctor.centerId,
+      doctorCenterIdType: typeof doctor.centerId
+    });
+
+    // Allow superadmin to delete any doctor (except superadmin staff)
+    if (req.user.role === 'superadmin') {
+      await doctor.deleteOne();
+      console.log(`✅ Doctor deleted successfully by superadmin`);
+      return res.status(200).json({ message: 'Doctor deleted successfully' });
+    }
+
+    // Allow center admin to delete any doctor (except superadmin staff)
+    if (req.user.role === 'centeradmin') {
+      await doctor.deleteOne();
+      console.log(`✅ Doctor deleted successfully by center admin`);
+      return res.status(200).json({ message: 'Doctor deleted successfully' });
+    }
+
+    // Allow regular doctors to delete themselves (if needed)
+    if (req.user.role === 'doctor' && req.user._id.toString() === doctor._id.toString()) {
+      await doctor.deleteOne();
+      console.log(`✅ Doctor deleted themselves`);
+      return res.status(200).json({ message: 'Doctor deleted successfully' });
+    }
+
+    console.log('❌ Access denied - User cannot delete this doctor');
+    return res.status(403).json({ message: 'Access denied. You can only delete doctors from your own center.' });
   } catch (error) {
     console.error('❌ Error deleting doctor:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
-// ✅ New: Get Single Doctor by ID (for Edit Page)
 export const getDoctorById = async (req, res) => {
   try {
-    let query = { _id: req.params.id, role: 'doctor' };
+    let doctor;
     
-    // If not superadmin, ensure doctor belongs to same center
-    if (req.user.role !== 'superadmin') {
-      query.centerId = req.user.centerId;
+    // Superadmin and center admin can view any doctor (except superadmin staff)
+    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
+      doctor = await User.findOne({ 
+        _id: req.params.id,
+        role: 'doctor', // Only get doctors
+        $or: [
+          { isSuperAdminStaff: { $exists: false } },
+          { isSuperAdminStaff: false },
+          { isSuperAdminStaff: { $ne: true } }
+        ]
+      }).select('-password');
+    } else {
+      // Other users can only view doctors from their center
+      doctor = await User.findOne({ 
+        _id: req.params.id,
+        role: 'doctor', // Only get doctors
+        centerId: req.user.centerId,
+        $or: [
+          { isSuperAdminStaff: { $exists: false } },
+          { isSuperAdminStaff: false },
+          { isSuperAdminStaff: { $ne: true } }
+        ]
+      }).select('-password');
     }
-
-    const doctor = await User.findOne(query).select('-password');
-
+    
     if (!doctor) {
       return res.status(404).json({ message: 'Doctor not found or access denied' });
     }
 
-    res.status(200).json(doctor);
+    res.json(doctor);
   } catch (error) {
     console.error('❌ Error fetching doctor:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
-// Update Doctor by ID
 export const updateDoctor = async (req, res) => {
   try {
-    let query = { _id: req.params.id, role: 'doctor' };
+    let doctor;
     
-    // If not superadmin, ensure doctor belongs to same center
-    if (req.user.role !== 'superadmin') {
-      query.centerId = req.user.centerId;
-    }
-
-    const doctor = await User.findOne(query);
-    if (!doctor) {
-      return res.status(404).json({ message: 'Doctor not found or access denied' });
-    }
-
-    // Update fields
-    const fields = [
-      'name', 'qualification', 'designation', 'kmcNumber', 'hospitalName',
-      'centerCode', 'phone', 'mobile', 'email', 'username', 'specializations',
-      'experience', 'bio', 'status'
-    ];
-    fields.forEach((field) => {
-      if (req.body[field] !== undefined) {
-        doctor[field] = req.body[field];
+    // Superadmin and center admin can update any doctor (except superadmin staff)
+    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
+      doctor = await User.findOne({ 
+        _id: req.params.id,
+        role: 'doctor', // Only update doctors
+        $or: [
+          { isSuperAdminStaff: { $exists: false } },
+          { isSuperAdminStaff: false },
+          { isSuperAdminStaff: { $ne: true } }
+        ]
+      });
+      if (!doctor) {
+        return res.status(404).json({ message: 'Doctor not found' });
       }
-    });
-
-    // Only superadmin can change centerId
-    if (req.user.role === 'superadmin' && req.body.centerId) {
-      doctor.centerId = req.body.centerId;
+    } else {
+      // Other users can only update doctors from their center
+      doctor = await User.findOne({ 
+        _id: req.params.id,
+        role: 'doctor', // Only update doctors
+        centerId: req.user.centerId,
+        $or: [
+          { isSuperAdminStaff: { $exists: false } },
+          { isSuperAdminStaff: false },
+          { isSuperAdminStaff: { $ne: true } }
+        ]
+      });
+      if (!doctor) {
+        return res.status(404).json({ message: 'Doctor not found or access denied' });
+      }
     }
 
-    // Only update password if provided
-    if (req.body.password) {
-      doctor.password = req.body.password;
-    }
+    const {
+      name,
+      email,
+      phone,
+      mobile,
+      username,
+      status
+    } = req.body;
+
+    if (name) doctor.name = name;
+    if (email) doctor.email = email;
+    if (phone) doctor.phone = phone;
+    if (mobile) doctor.mobile = mobile;
+    if (username) doctor.username = username;
+    if (status) doctor.status = status;
 
     await doctor.save();
-    console.log(`✅ Doctor updated successfully in center: ${req.user.centerId || 'all centers (superadmin)'}`);
+    
+    console.log(`✅ Doctor updated successfully`);
     res.status(200).json({ message: 'Doctor updated successfully', doctor });
   } catch (error) {
     console.error('❌ Error updating doctor:', error);

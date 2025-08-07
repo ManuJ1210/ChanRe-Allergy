@@ -12,7 +12,7 @@ import historyRoutes from './routes/historyRoutes.js';
 import doctorRoutes from './routes/doctorRoutes.js';
 import receptionistRoutes from './routes/receptionistRoutes.js';
 import superAdminDoctorRoutes from './routes/superAdminDoctorRoutes.js';
-import superAdminReceptionistRoutes from './routes/superAdminReceptionistRoutes.js';
+
 import medicationRoutes from './routes/medicationRoutes.js';
 import followUpRoutes from './routes/followUpRoutes.js';
 import allergicRhinitisRoutes from './routes/allergicRhinitisRoutes.js';
@@ -86,7 +86,7 @@ app.use('/api/history', historyRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/receptionists', receptionistRoutes);
 app.use('/api/superadmin/doctors', superAdminDoctorRoutes);
-app.use('/api/superadmin/receptionists', superAdminReceptionistRoutes);
+
 app.use('/api/medications', medicationRoutes);
 app.use('/api/followups', followUpRoutes);
 app.use('/api/allergic-rhinitis', allergicRhinitisRoutes);

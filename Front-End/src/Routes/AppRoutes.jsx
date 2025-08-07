@@ -38,12 +38,18 @@ import SuperAdminDoctorList from '../pages/Superadmin/Docters/SuperadminDoctorLi
 import AddSuperAdminDoctor from '../pages/Superadmin/Docters/AddSuperadminDoctor';
 import ViewSuperadminDoctor from '../pages/Superadmin/Docters/ViewSuperadminDoctor';
 import EditSuperadminDoctor from '../pages/Superadmin/Docters/EditSuperadminDoctor';
-import SuperAdminReceptionistList from '../pages/Superadmin/Receptionists/SuperadminReceptionistList';
-import AddSuperAdminReceptionist from '../pages/Superadmin/Receptionists/AddSuperadminReceptionist';
-import ViewSuperadminReceptionist from '../pages/Superadmin/Receptionists/ViewSuperadminReceptionist';
-import EditSuperadminReceptionist from '../pages/Superadmin/Receptionists/EditSuperadminReceptionist';
+
 import AllTestReports from '../pages/Superadmin/Docters/AllTestReports';
 import SuperadminTestRequestDetails from '../pages/Superadmin/Docters/SuperadminTestRequestDetails';
+
+// Superadmin Doctor Working Pages
+import SuperadminDoctorDashboard from '../pages/Superadmin/DoctorsLogin/Dashboard';
+import SuperadminDoctorMyPatients from '../pages/Superadmin/DoctorsLogin/MyPatients';
+import SuperadminDoctorPatientDetails from '../pages/Superadmin/DoctorsLogin/PatientDetails';
+import SuperadminDoctorReviewLabReports from '../pages/Superadmin/DoctorsLogin/ReviewLabReports';
+import SuperadminDoctorPatientHistory from '../pages/Superadmin/DoctorsLogin/PatientHistory';
+
+
 
 // Lab Pages
 import LabDashboard from '../pages/Lab/Dashboard';
@@ -195,6 +201,15 @@ export default function AppRoutes() {
         <Route path="Superadmin/dashboard" element={<SuperadminDashboard />} />
         <Route path="Superadmin" element={<SuperadminDashboard />} />
         
+        {/* Superadmin Doctor Working Routes */}
+        <Route path="superadmin/doctor/dashboard" element={<SuperadminDoctorDashboard />} />
+                    <Route path="superadmin/doctor/my-patients" element={<SuperadminDoctorMyPatients />} />
+            <Route path="superadmin/doctor/patient/:patientId" element={<SuperadminDoctorPatientDetails />} />
+            <Route path="superadmin/doctor/review-reports" element={<SuperadminDoctorReviewLabReports />} />
+            <Route path="superadmin/doctor/patient-history" element={<SuperadminDoctorPatientHistory />} />
+        
+
+        
         {/* Superadmin Centers Routes with capital S */}
         <Route path="Superadmin/Centers/AddCenter" element={<AddCenter />} />
         <Route path="Superadmin/Centers/CentersList" element={<CentersList />} />
@@ -209,11 +224,7 @@ export default function AppRoutes() {
         <Route path="Superadmin/Docters/ViewSuperadminDoctor/:id" element={<ViewSuperadminDoctor />} />
         <Route path="Superadmin/Docters/EditSuperadminDoctor/:id" element={<EditSuperadminDoctor />} />
         
-        {/* Superadmin Receptionists Routes with capital S */}
-        <Route path="Superadmin/Receptionists/SuperAdminReceptionistList" element={<SuperAdminReceptionistList />} />
-        <Route path="Superadmin/Receptionists/AddSuperadminReceptionist" element={<AddSuperAdminReceptionist />} />
-        <Route path="Superadmin/Receptionists/ViewSuperadminReceptionist/:id" element={<ViewSuperadminReceptionist />} />
-        <Route path="Superadmin/Receptionists/EditSuperadminReceptionist/:id" element={<EditSuperadminReceptionist />} />
+
         
         {/* Superadmin Lab Routes with capital S */}
         <Route path="Superadmin/Lab/LabStaffList" element={<LabStaffList />} />
@@ -279,11 +290,7 @@ export default function AppRoutes() {
         <Route path="Superadmin/Docters/ViewSuperadminDoctor/:id" element={<ViewSuperadminDoctor />} />
         <Route path="Superadmin/Docters/EditSuperadminDoctor/:id" element={<EditSuperadminDoctor />} />
         
-        {/* Receptionists Routes */}
-        <Route path="superadmin/receptionists/superadminreceptionistlist" element={<SuperAdminReceptionistList />} />
-        <Route path="superadmin/receptionists/addsuperadminreceptionist" element={<AddSuperAdminReceptionist />} />
-        <Route path="superadmin/receptionists/viewsuperadminreceptionist/:id" element={<ViewSuperadminReceptionist />} />
-        <Route path="superadmin/receptionists/editsuperadminreceptionist/:id" element={<EditSuperadminReceptionist />} />
+
 
         {/* Center Admin Routes */}
         <Route path="centeradmin/dashboard" element={<CenterAdminDashboard />} />
