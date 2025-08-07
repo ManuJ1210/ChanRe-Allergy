@@ -257,3 +257,93 @@ export const fetchPatientTestRequests = createAsyncThunk(
     }
   }
 );
+
+// Notification and Feedback thunks
+export const fetchDoctorNotifications = createAsyncThunk(
+  'doctor/fetchNotifications',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/notifications/doctor', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch notifications');
+    }
+  }
+);
+
+export const markNotificationAsRead = createAsyncThunk(
+  'doctor/markNotificationAsRead',
+  async (notificationId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.patch(
+        `http://localhost:5000/api/notifications/${notificationId}/read`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to mark notification as read');
+    }
+  }
+);
+
+export const markAllNotificationsAsRead = createAsyncThunk(
+  'doctor/markAllNotificationsAsRead',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.patch(
+        'http://localhost:5000/api/notifications/mark-all-read',
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to mark all notifications as read');
+    }
+  }
+);
+
+export const fetchTestRequestFeedback = createAsyncThunk(
+  'doctor/fetchTestRequestFeedback',
+  async (testRequestId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `http://localhost:5000/api/notifications/test-request/${testRequestId}/feedback`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch feedback');
+    }
+  }
+);
+
+export const fetchTestRequestsWithFeedback = createAsyncThunk(
+  'doctor/fetchTestRequestsWithFeedback',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        'http://localhost:5000/api/notifications/doctor/test-requests-with-feedback',
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch test requests with feedback');
+    }
+  }
+);

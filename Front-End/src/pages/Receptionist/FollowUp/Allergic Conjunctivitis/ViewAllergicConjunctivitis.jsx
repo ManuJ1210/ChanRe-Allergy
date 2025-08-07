@@ -1,19 +1,21 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchReceptionistAllergicConjunctivitis, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
+import { fetchReceptionistAllergicConjunctivitis, fetchPatient, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
 import { 
   ArrowLeft, 
-  AlertCircle,
   Activity,
-  User,
+  AlertCircle,
   Calendar,
-  FileText,
+  User,
   Eye,
+  FileText,
+  Stethoscope,
+  Pill,
+  UserCheck,
   CheckCircle,
   XCircle,
-  Clock,
-  UserCheck
+  Clock
 } from 'lucide-react';
 
 const ViewAllergicConjunctivitis = () => {
@@ -21,11 +23,12 @@ const ViewAllergicConjunctivitis = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { allergicConjunctivitis, loading, error } = useSelector(state => state.receptionist);
+  const { allergicConjunctivitis, singlePatient, loading, error } = useSelector(state => state.receptionist);
 
   useEffect(() => {
     if (patientId) {
       dispatch(fetchReceptionistAllergicConjunctivitis(patientId));
+      dispatch(fetchPatient(patientId));
     }
   }, [dispatch, patientId]);
 
@@ -189,11 +192,11 @@ const ViewAllergicConjunctivitis = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-500">Patient Name</label>
-                <p className="text-gray-900 font-medium">{latestRecord.patientId?.name || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{singlePatient?.name || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Patient ID</label>
-                <p className="text-gray-900 font-medium">{latestRecord.patientId?._id || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{singlePatient?._id || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Assessment Date</label>

@@ -29,7 +29,7 @@ const AddFollowUp = () => {
   useEffect(() => {
     if (addFollowUpSuccess) {
       dispatch(resetReceptionistState());
-      navigate(`/receptionist/followup`);
+              navigate(`/dashboard/receptionist/followup`);
     }
   }, [addFollowUpSuccess, dispatch, navigate]);
 

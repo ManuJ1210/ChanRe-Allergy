@@ -12,8 +12,7 @@ export default function Login() {
   const { user, loading, error } = useSelector((state) => state.auth);
 
 
-
-    useEffect(() => {
+  useEffect(() => {
     if (user && !hasNavigated.current) {
       hasNavigated.current = true;
       

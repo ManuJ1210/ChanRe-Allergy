@@ -2,50 +2,40 @@ import AllergicBronchitis from '../models/AllergicBronchitis.js';
 
 export const createAllergicBronchitis = async (req, res) => {
   try {
-    const { patientId, symptoms, type, ginaGrading, pftGrading, habits } = req.body;
-    const updatedBy = req.user._id;
-    if (!patientId) {
-      return res.status(400).json({ message: 'patientId is required' });
-    }
-    const record = await AllergicBronchitis.create({ patientId, symptoms, type, ginaGrading, pftGrading, habits, updatedBy });
-    res.status(201).json({ message: 'Allergic Bronchitis record added', data: record });
+    const record = await AllergicBronchitis.create(req.body);
+    res.status(201).json(record);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to add record', error: err.message });
+    res.status(500).json({ message: 'Error creating allergic bronchitis record', error: err.message });
   }
 };
 
 export const getAllergicBronchitisByPatient = async (req, res) => {
   try {
     const { patientId } = req.query;
-    console.log('getAllergicBronchitisByPatient called with patientId:', patientId);
     
-    let records;
-    if (patientId && patientId !== 'undefined') {
-      records = await AllergicBronchitis.find({ patientId })
-        .populate('patientId', 'name age centerCode phone gender')
-        .sort({ createdAt: -1 });
-      console.log(`Found ${records.length} records for patientId: ${patientId}`);
-    } else {
-      console.log('No valid patientId provided, returning empty array');
-      records = [];
+    if (!patientId) {
+      return res.status(400).json({ message: 'Patient ID is required' });
     }
+
+    const records = await AllergicBronchitis.find({ patientId }).sort({ createdAt: -1 });
     
-    res.status(200).json(records);
+    res.json(records);
   } catch (err) {
-    console.error('Error in getAllergicBronchitisByPatient:', err);
-    res.status(500).json({ message: 'Failed to fetch records', error: err.message });
+    res.status(500).json({ message: 'Error fetching allergic bronchitis records', error: err.message });
   }
 };
 
 export const getAllergicBronchitisById = async (req, res) => {
   try {
-    const record = await AllergicBronchitis.findById(req.params.id)
-      .populate('patientId', 'name age centerCode phone gender');
+    const { id } = req.params;
+    const record = await AllergicBronchitis.findById(id);
+    
     if (!record) {
-      return res.status(404).json({ message: 'Not found' });
+      return res.status(404).json({ message: 'Record not found' });
     }
+    
     res.json(record);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to fetch record', error: err.message });
+    res.status(500).json({ message: 'Error fetching allergic bronchitis record by ID', error: err.message });
   }
 }; 

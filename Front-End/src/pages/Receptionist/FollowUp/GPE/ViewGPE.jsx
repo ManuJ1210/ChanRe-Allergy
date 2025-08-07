@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchReceptionistGPE, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
+import { fetchReceptionistGPE, fetchPatient, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
 import { 
   ArrowLeft, 
-  AlertCircle,
-  Stethoscope,
-  User,
-  Calendar,
-  FileText,
-  Eye,
   Activity,
-  Clock,
-  UserCheck
+  AlertCircle,
+  Calendar,
+  User,
+  Eye,
+  FileText,
+  Stethoscope,
+  Pill,
+  UserCheck,
+  Clock
 } from 'lucide-react';
 
 const ViewGPE = () => {
@@ -20,11 +21,12 @@ const ViewGPE = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { gpe, loading, error } = useSelector(state => state.receptionist);
+  const { gpe, singlePatient, loading, error } = useSelector(state => state.receptionist);
 
   useEffect(() => {
     if (patientId) {
       dispatch(fetchReceptionistGPE(patientId));
+      dispatch(fetchPatient(patientId));
     }
   }, [dispatch, patientId]);
 
@@ -173,11 +175,11 @@ const ViewGPE = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-500">Patient Name</label>
-                <p className="text-gray-900 font-medium">{latestRecord.patientId?.name || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{singlePatient?.name || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Patient ID</label>
-                <p className="text-gray-900 font-medium">{latestRecord.patientId?._id || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{singlePatient?._id || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Assessment Date</label>

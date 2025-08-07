@@ -279,9 +279,36 @@ const ReviewLabReports = () => {
               <div className="mb-6">
                 <h4 className="text-md font-semibold text-gray-800 mb-3">Test Results</h4>
                 <div className="bg-gray-50 rounded-lg p-4">
-                  <pre className="text-sm text-gray-800 whitespace-pre-wrap">
-                    {selectedReport.results || 'No results available'}
-                  </pre>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm font-medium text-gray-700">Results Summary:</p>
+                      <p className="text-sm text-gray-800">{selectedReport.results || 'No results available'}</p>
+                    </div>
+                    {selectedReport.reportSummary && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">Report Summary:</p>
+                        <p className="text-sm text-gray-800">{selectedReport.reportSummary}</p>
+                      </div>
+                    )}
+                    {selectedReport.clinicalInterpretation && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">Clinical Interpretation:</p>
+                        <p className="text-sm text-gray-800">{selectedReport.clinicalInterpretation}</p>
+                      </div>
+                    )}
+                    {selectedReport.conclusion && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">Conclusion:</p>
+                        <p className="text-sm text-gray-800">{selectedReport.conclusion}</p>
+                      </div>
+                    )}
+                    {selectedReport.recommendations && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">Recommendations:</p>
+                        <pre className="text-sm text-gray-800 whitespace-pre-wrap">{selectedReport.recommendations}</pre>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 

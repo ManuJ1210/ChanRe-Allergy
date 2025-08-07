@@ -13,7 +13,12 @@ import {
   createTestRequest,
   fetchTestRequestById,
   downloadTestReport,
-  fetchPatientTestRequests
+  fetchPatientTestRequests,
+  fetchDoctorNotifications,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+  fetchTestRequestFeedback,
+  fetchTestRequestsWithFeedback
 } from './doctorThunks';
 
 const initialState = {
@@ -39,6 +44,15 @@ const initialState = {
   patientDetailsError: null,
   testRequestsError: null,
   singleTestRequestError: null,
+  
+  // Notification and Feedback state
+  notifications: [],
+  unreadNotificationsCount: 0,
+  notificationsLoading: false,
+  notificationsError: null,
+  testRequestsWithFeedback: [],
+  feedbackLoading: false,
+  feedbackError: null,
 };
 
 const doctorSlice = createSlice({
@@ -258,6 +272,70 @@ const doctorSlice = createSlice({
       .addCase(fetchPatientTestRequests.rejected, (state, action) => {
         state.testRequestsLoading = false;
         state.testRequestsError = action.payload || 'Failed to fetch patient test requests';
+      })
+
+      // Fetch doctor notifications
+      .addCase(fetchDoctorNotifications.pending, (state) => {
+        state.notificationsLoading = true;
+        state.notificationsError = null;
+      })
+      .addCase(fetchDoctorNotifications.fulfilled, (state, action) => {
+        state.notificationsLoading = false;
+        state.notifications = action.payload.notifications;
+        state.unreadNotificationsCount = action.payload.unreadCount;
+        state.notificationsError = null;
+      })
+      .addCase(fetchDoctorNotifications.rejected, (state, action) => {
+        state.notificationsLoading = false;
+        state.notificationsError = action.payload || 'Failed to fetch notifications';
+      })
+
+      // Mark notification as read
+      .addCase(markNotificationAsRead.fulfilled, (state, action) => {
+        const notificationId = action.payload.notification._id;
+        const notification = state.notifications.find(n => n._id === notificationId);
+        if (notification) {
+          notification.read = true;
+        }
+        state.unreadNotificationsCount = Math.max(0, state.unreadNotificationsCount - 1);
+      })
+
+      // Mark all notifications as read
+      .addCase(markAllNotificationsAsRead.fulfilled, (state) => {
+        state.notifications.forEach(notification => {
+          notification.read = true;
+        });
+        state.unreadNotificationsCount = 0;
+      })
+
+      // Fetch test request feedback
+      .addCase(fetchTestRequestFeedback.pending, (state) => {
+        state.feedbackLoading = true;
+        state.feedbackError = null;
+      })
+      .addCase(fetchTestRequestFeedback.fulfilled, (state, action) => {
+        state.feedbackLoading = false;
+        state.singleTestRequest = action.payload;
+        state.feedbackError = null;
+      })
+      .addCase(fetchTestRequestFeedback.rejected, (state, action) => {
+        state.feedbackLoading = false;
+        state.feedbackError = action.payload || 'Failed to fetch feedback';
+      })
+
+      // Fetch test requests with feedback
+      .addCase(fetchTestRequestsWithFeedback.pending, (state) => {
+        state.feedbackLoading = true;
+        state.feedbackError = null;
+      })
+      .addCase(fetchTestRequestsWithFeedback.fulfilled, (state, action) => {
+        state.feedbackLoading = false;
+        state.testRequestsWithFeedback = action.payload.testRequestsWithFeedback;
+        state.feedbackError = null;
+      })
+      .addCase(fetchTestRequestsWithFeedback.rejected, (state, action) => {
+        state.feedbackLoading = false;
+        state.feedbackError = action.payload || 'Failed to fetch test requests with feedback';
       });
   },
 });

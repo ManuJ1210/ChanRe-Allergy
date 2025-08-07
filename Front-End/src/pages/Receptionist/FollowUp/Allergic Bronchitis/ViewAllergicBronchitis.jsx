@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchReceptionistAllergicBronchitis, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
+import { fetchReceptionistAllergicBronchitis, fetchPatient, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
 import { 
   ArrowLeft, 
   Activity,
   AlertCircle,
   Calendar,
   User,
-  FileText,
   Eye,
-  CheckCircle,
-  XCircle,
-  Clock,
-  UserCheck
+  FileText,
+  Stethoscope,
+  Pill,
+  UserCheck,
+  Clock
 } from 'lucide-react';
 
 const ViewAllergicBronchitis = () => {
@@ -21,11 +21,12 @@ const ViewAllergicBronchitis = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { allergicBronchitis, loading, error } = useSelector(state => state.receptionist);
+  const { allergicBronchitis, singlePatient, loading, error } = useSelector(state => state.receptionist);
 
   useEffect(() => {
     if (patientId) {
       dispatch(fetchReceptionistAllergicBronchitis(patientId));
+      dispatch(fetchPatient(patientId));
     }
   }, [dispatch, patientId]);
 
@@ -174,11 +175,11 @@ const ViewAllergicBronchitis = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-500">Patient Name</label>
-                <p className="text-gray-900 font-medium">{latestRecord.patientId?.name || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{singlePatient?.name || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Patient ID</label>
-                <p className="text-gray-900 font-medium">{latestRecord.patientId?._id || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{singlePatient?._id || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Assessment Date</label>

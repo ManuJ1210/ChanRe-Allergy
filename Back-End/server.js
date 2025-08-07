@@ -25,6 +25,7 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 import labStaffRoutes from './routes/labStaffRoutes.js';
 import testRequestRoutes from './routes/testRequestRoutes.js';
 import labReportsRoutes from './routes/labReportsRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 
 dotenv.config();
 
@@ -99,6 +100,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/lab-staff', labStaffRoutes);
 app.use('/api/test-requests', testRequestRoutes);
 app.use('/api/lab-reports', labReportsRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Use environment variable or fallback to local MongoDB
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/chenre-allergy';

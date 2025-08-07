@@ -10,7 +10,8 @@ import {
   fetchReceptionistPrescriptions,
   fetchReceptionistPatientHistory,
   fetchReceptionistPatientMedications,
-  fetchReceptionistPatientTests
+  fetchReceptionistPatientTests,
+  fetchPatient
 } from './receptionistThunks';
 
 const initialState = {
@@ -347,6 +348,23 @@ const receptionistSlice = createSlice({
       .addCase(fetchReceptionistPatientTests.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      
+      // Fetch single patient
+      .addCase(fetchPatient.pending, (state) => {
+        console.log('🔄 Fetching patient...');
+        state.patientLoading = true;
+        state.patientError = null;
+      })
+      .addCase(fetchPatient.fulfilled, (state, action) => {
+        console.log('✅ Patient fetched successfully:', action.payload);
+        state.patientLoading = false;
+        state.singlePatient = action.payload;
+      })
+      .addCase(fetchPatient.rejected, (state, action) => {
+        console.error('❌ Patient fetch failed:', action.payload);
+        state.patientLoading = false;
+        state.patientError = action.payload;
       });
   }
 });
@@ -363,6 +381,11 @@ export const {
   setMedications,
   setHistory,
   setTests,
+  setAllergicRhinitis,
+  setAllergicConjunctivitis,
+  setAllergicBronchitis,
+  setAtopicDermatitis,
+  setGPE,
   setSinglePatient,
   setPatientLoading,
   setPatientError,

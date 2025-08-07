@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchAssignedPatients, fetchTestRequests } from '../../features/doctor/doctorThunks';
-import { User, Users, FileText, Clock, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react';
+import { fetchAssignedPatients, fetchTestRequests, fetchDoctorNotifications } from '../../features/doctor/doctorThunks';
+import { User, Users, FileText, Clock, AlertCircle, CheckCircle, RefreshCw, Bell } from 'lucide-react';
 
 const DoctorDashboard = () => {
   const dispatch = useDispatch();
@@ -14,7 +14,8 @@ const DoctorDashboard = () => {
     patientsLoading, 
     testRequestsLoading,
     patientsError,
-    testRequestsError 
+    testRequestsError,
+    unreadNotificationsCount
   } = useSelector((state) => state.doctor);
 
   const [activeTab, setActiveTab] = useState('patients');
@@ -22,6 +23,7 @@ const DoctorDashboard = () => {
   useEffect(() => {
     dispatch(fetchAssignedPatients());
     dispatch(fetchTestRequests());
+    dispatch(fetchDoctorNotifications());
   }, [dispatch]);
 
   // Refresh data when component becomes visible
@@ -87,17 +89,32 @@ const DoctorDashboard = () => {
                 Manage your patients and test requests
               </p>
             </div>
-            <button
-              onClick={() => {
-                dispatch(fetchAssignedPatients());
-                dispatch(fetchTestRequests());
-              }}
-              disabled={patientsLoading || testRequestsLoading}
-              className="bg-slate-500 text-white px-4 py-2 rounded-lg hover:bg-slate-600 flex items-center disabled:opacity-50"
-            >
-              <RefreshCw className={`h-4 w-4 mr-2 ${(patientsLoading || testRequestsLoading) ? 'animate-spin' : ''}`} />
-              Refresh Data
-            </button>
+            <div className="flex items-center space-x-3">
+              {unreadNotificationsCount > 0 && (
+                <button
+                  onClick={() => navigate('/dashboard/doctor/notifications')}
+                  className="relative bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+                >
+                  <Bell className="h-4 w-4 mr-2" />
+                  Notifications
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {unreadNotificationsCount}
+                  </span>
+                </button>
+              )}
+              <button
+                onClick={() => {
+                  dispatch(fetchAssignedPatients());
+                  dispatch(fetchTestRequests());
+                  dispatch(fetchDoctorNotifications());
+                }}
+                disabled={patientsLoading || testRequestsLoading}
+                className="bg-slate-500 text-white px-4 py-2 rounded-lg hover:bg-slate-600 flex items-center disabled:opacity-50"
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${(patientsLoading || testRequestsLoading) ? 'animate-spin' : ''}`} />
+                Refresh Data
+              </button>
+            </div>
           </div>
         </div>
 

@@ -2,68 +2,40 @@ import AllergicRhinitis from '../models/AllergicRhinitis.js';
 
 export const createAllergicRhinitis = async (req, res) => {
   try {
-    const { patientId, nasalSymptoms, nonNasalSymptoms, qualityOfLife, medications, entExamination } = req.body;
-    const updatedBy = req.user._id;
-    if (!patientId) {
-      return res.status(400).json({ message: 'patientId is required' });
-    }
-    // 1. Create AllergicRhinitis record
-    const record = await AllergicRhinitis.create({
-      patientId,
-      nasalSymptoms,
-      nonNasalSymptoms,
-      qualityOfLife,
-      medications,
-      entExamination,
-      updatedBy
-    });
-    // 2. Create FollowUp record linked to this Allergic Rhinitis
-    const followUp = await (await import('../models/FollowUp.js')).default.create({
-      patientId,
-      type: 'Allergic Rhinitis',
-      allergicRhinitisId: record._id,
-      updatedBy
-    });
-    // 3. Return both records
-    res.status(201).json({ message: 'Allergic Rhinitis record and follow-up added', allergicRhinitis: record, followUp });
+    const record = await AllergicRhinitis.create(req.body);
+    res.status(201).json(record);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to add record', error: err.message });
-  }
-};
-
-export const getAllergicRhinitisById = async (req, res) => {
-  try {
-    console.log('Fetching AllergicRhinitis with ID:', req.params.id);
-    const record = await AllergicRhinitis.findById(req.params.id)
-      .populate('patientId', 'name age centerCode phone gender');
-    if (!record) {
-      return res.status(404).json({ message: 'Not found' });
-    }
-    res.json(record);
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to fetch record', error: err.message });
+    res.status(500).json({ message: 'Error creating allergic rhinitis record', error: err.message });
   }
 };
 
 export const getAllergicRhinitisByPatient = async (req, res) => {
   try {
     const { patientId } = req.query;
-    console.log('getAllergicRhinitisByPatient called with patientId:', patientId);
     
-    if (!patientId || patientId === 'undefined') {
-      console.log('No valid patientId provided, returning empty array');
-      return res.status(200).json([]);
+    if (!patientId) {
+      return res.status(400).json({ message: 'Patient ID is required' });
+    }
+
+    const records = await AllergicRhinitis.find({ patientId }).sort({ createdAt: -1 });
+    
+    res.json(records);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching allergic rhinitis records', error: err.message });
+  }
+};
+
+export const getAllergicRhinitisById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const record = await AllergicRhinitis.findById(id);
+    
+    if (!record) {
+      return res.status(404).json({ message: 'Record not found' });
     }
     
-    const records = await AllergicRhinitis.find({ patientId })
-      .populate('patientId', 'name age centerCode phone gender')
-      .populate('updatedBy', 'name')
-      .sort({ date: -1 });
-    
-    console.log(`Found ${records.length} records for patientId: ${patientId}`);
-    res.status(200).json(records);
+    res.json(record);
   } catch (err) {
-    console.error('Error in getAllergicRhinitisByPatient:', err);
-    res.status(500).json({ message: 'Failed to fetch records', error: err.message });
+    res.status(500).json({ message: 'Error fetching allergic rhinitis record by ID', error: err.message });
   }
 }; 

@@ -13,6 +13,8 @@ import {
   FaHome,
   FaClock,
   FaCheckCircle,
+  FaBell,
+  FaComments,
 } from 'react-icons/fa';
 
 export default function Sidebar(props) {
@@ -123,12 +125,42 @@ export default function Sidebar(props) {
                 icon={<FaHome />}
                 isActive={isActive("/dashboard/superadmin/doctor/dashboard")}
               />
+              <SidebarLink
+                to="/dashboard/superadmin/doctor/patients"
+                label="Patient Details"
+                icon={<FaUsers />}
+                isActive={isActive("/dashboard/superadmin/doctor/patients")}
+              />
+              <SidebarLink
+                to="/dashboard/superadmin/doctor/lab-reports"
+                label="Review Lab Reports"
+                icon={<FaVials />}
+                isActive={isActive("/dashboard/superadmin/doctor/lab-reports")}
+              />
             </>
           )}
 
           {role === 'centeradmin' && (
             
               <>
+              <SidebarLink
+                to="/dashboard/centeradmin/dashboard"
+                label="Dashboard"
+                icon={<FaHome />}
+                isActive={isActive("/dashboard/centeradmin/dashboard")}
+              />
+              <SidebarGroup
+                label="Doctors"
+                icon={<FaUserMd />}
+                open={centerOpen === 'doctors'}
+                toggle={() => setCenterOpen(centerOpen === 'doctors' ? null : 'doctors')}
+                links={[
+                  { to: "/dashboard/centeradmin/doctors/adddoctor", label: "Add Doctor" },
+                  { to: "/dashboard/centeradmin/doctors/doctorlist", label: "Doctors List" },
+                  
+                ]}
+                currentPath={location.pathname}
+              />
               <SidebarGroup
                 label="Receptionists"
                 icon={<FaUserTie />}
@@ -190,7 +222,7 @@ export default function Sidebar(props) {
             </>
           )}
 
-          {role === 'doctor' && (
+          {role === 'doctor' && !userInfo?.isSuperAdminStaff && (
             <>
               <SidebarLink
                 to="/dashboard/doctor/dashboard"
@@ -209,6 +241,18 @@ export default function Sidebar(props) {
                 label="Test Requests"
                 icon={<FaVials />}
                 isActive={isActive("/dashboard/doctor/test-requests")}
+              />
+              <SidebarLink
+                to="/dashboard/doctor/notifications"
+                label="Notifications"
+                icon={<FaBell />}
+                isActive={isActive("/dashboard/doctor/notifications")}
+              />
+              <SidebarLink
+                to="/dashboard/doctor/feedback"
+                label="Superadmin Feedback"
+                icon={<FaComments />}
+                isActive={isActive("/dashboard/doctor/feedback")}
               />
             </>
           )}

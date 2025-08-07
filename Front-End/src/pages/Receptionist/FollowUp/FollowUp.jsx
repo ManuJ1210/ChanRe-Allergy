@@ -37,7 +37,7 @@ const FollowUp = () => {
   };
 
   const handleViewFollowUp = (patientId, followUpType) => {
-    navigate(`/receptionist/followup/${followUpType}/view/${patientId}`);
+            navigate(`/dashboard/receptionist/followup/${followUpType}/view/${patientId}`);
   };
 
   const filteredFollowUps = followUps?.filter(followUp => {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchReceptionistAllergicRhinitis, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
+import { fetchReceptionistAllergicRhinitis, fetchPatient, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
 import { 
   ArrowLeft, 
   Activity,
@@ -19,13 +19,19 @@ const ViewAllergicRhinitis = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { allergicRhinitis, loading, error } = useSelector(state => state.receptionist);
+  const { allergicRhinitis, singlePatient, loading, error } = useSelector(state => state.receptionist);
 
   useEffect(() => {
     if (patientId) {
+      console.log('🔍 ViewAllergicRhinitis: Fetching data for patientId:', patientId);
       dispatch(fetchReceptionistAllergicRhinitis(patientId));
+      dispatch(fetchPatient(patientId));
     }
   }, [dispatch, patientId]);
+
+  useEffect(() => {
+    console.log('📊 ViewAllergicRhinitis: singlePatient state:', singlePatient);
+  }, [singlePatient]);
 
   if (loading) {
     return (
@@ -135,10 +141,10 @@ const ViewAllergicRhinitis = () => {
                 Patient Information
               </h3>
               <div className="space-y-2">
-                <p><span className="font-medium">Name:</span> {record.patientId?.name || 'N/A'}</p>
-                <p><span className="font-medium">Age:</span> {record.patientId?.age || 'N/A'}</p>
-                <p><span className="font-medium">Gender:</span> {record.patientId?.gender || 'N/A'}</p>
-                <p><span className="font-medium">Phone:</span> {record.patientId?.phone || 'N/A'}</p>
+                <p><span className="font-medium">Name:</span> {singlePatient?.name || 'N/A'}</p>
+                <p><span className="font-medium">Age:</span> {singlePatient?.age || 'N/A'}</p>
+                <p><span className="font-medium">Gender:</span> {singlePatient?.gender || 'N/A'}</p>
+                <p><span className="font-medium">Phone:</span> {singlePatient?.phone || 'N/A'}</p>
               </div>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg">

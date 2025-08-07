@@ -1,6 +1,13 @@
 import User from '../models/User.js';
 import Patient from '../models/Patient.js';
+import TestRequest from '../models/TestRequest.js';
 import History from '../models/historyModel.js';
+import AllergicRhinitis from '../models/AllergicRhinitis.js';
+import AllergicConjunctivitis from '../models/AllergicConjunctivitis.js';
+import AllergicBronchitis from '../models/AllergicBronchitis.js';
+import AtopicDermatitis from '../models/AtopicDermatitis.js';
+import GPE from '../models/GPE.js';
+import Prescription from '../models/Prescription.js';
 import Medication from '../models/Medication.js';
 import Test from '../models/Test.js';
 

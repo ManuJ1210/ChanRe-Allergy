@@ -93,11 +93,71 @@ export const fetchSuperAdminDoctorById = createAsyncThunk(
 );
 
 // Working thunks (for superadmin doctors to perform their duties)
+export const fetchSuperAdminDoctorPatients = createAsyncThunk(
+  'superAdminDoctor/fetchSuperAdminDoctorPatients',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await API.get('/superadmin/doctors/working/patients');
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patients');
+    }
+  }
+);
+
+export const fetchSuperAdminDoctorPatientHistory = createAsyncThunk(
+  'superAdminDoctor/fetchSuperAdminDoctorPatientHistory',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const response = await API.get(`/superadmin/doctors/working/patients/${patientId}/history`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient history');
+    }
+  }
+);
+
+export const fetchSuperAdminDoctorPatientFollowups = createAsyncThunk(
+  'superAdminDoctor/fetchSuperAdminDoctorPatientFollowups',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const response = await API.get(`/superadmin/doctors/working/patients/${patientId}/followups`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient followups');
+    }
+  }
+);
+
+export const fetchSuperAdminDoctorPatientMedications = createAsyncThunk(
+  'superAdminDoctor/fetchSuperAdminDoctorPatientMedications',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const response = await API.get(`/superadmin/doctors/working/patients/${patientId}/medications`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient medications');
+    }
+  }
+);
+
+export const fetchSuperAdminDoctorPatientLabReports = createAsyncThunk(
+  'superAdminDoctor/fetchSuperAdminDoctorPatientLabReports',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const response = await API.get(`/superadmin/doctors/working/patients/${patientId}/lab-reports`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient lab reports');
+    }
+  }
+);
+
 export const fetchSuperAdminDoctorAssignedPatients = createAsyncThunk(
   'superAdminDoctor/fetchSuperAdminDoctorAssignedPatients',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await API.get('/superadmin/doctors/working/assigned-patients');
+      const response = await API.get('/superadmin/doctors/working/patients');
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch assigned patients');
@@ -116,6 +176,8 @@ export const fetchSuperAdminDoctorPatientById = createAsyncThunk(
     }
   }
 );
+
+
 
 
 
@@ -146,9 +208,15 @@ export const fetchSuperAdminDoctorWorkingStats = createAsyncThunk(
 // Lab Reports functionality
 export const fetchSuperAdminDoctorLabReports = createAsyncThunk(
   'superAdminDoctor/fetchSuperAdminDoctorLabReports',
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
-      const response = await API.get('/superadmin/doctors/working/lab-reports');
+      const { status = 'all', page = 1, limit = 10 } = params;
+      const queryParams = new URLSearchParams();
+      if (status) queryParams.append('status', status);
+      if (page) queryParams.append('page', page);
+      if (limit) queryParams.append('limit', limit);
+
+      const response = await API.get(`/superadmin/doctors/working/lab-reports?${queryParams}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch lab reports');
@@ -189,13 +257,28 @@ const initialState = {
   },
   
   // Working state
+  patients: [],
+  patientsLoading: false,
+  patientsError: null,
   assignedPatients: [],
   selectedPatient: null,
+  patientHistory: null,
+  patientFollowups: null,
+  patientMedications: null,
+  patientLabReports: null,
   completedReports: [],
   labReports: [],
+  labReportsPagination: {
+    currentPage: 1,
+    totalPages: 1,
+    total: 0,
+    limit: 10
+  },
   workingStats: null,
   workingLoading: false,
-  workingError: null
+  workingError: null,
+  dataLoading: false,
+  dataError: null
 };
 
 const superAdminDoctorSlice = createSlice({
@@ -327,29 +410,89 @@ const superAdminDoctorSlice = createSlice({
 
     // Working reducers
     builder
+      .addCase(fetchSuperAdminDoctorPatients.pending, (state) => {
+        state.patientsLoading = true;
+        state.patientsError = null;
+      })
+      .addCase(fetchSuperAdminDoctorPatients.fulfilled, (state, action) => {
+        state.patientsLoading = false;
+        state.patients = action.payload.patients || action.payload;
+      })
+      .addCase(fetchSuperAdminDoctorPatients.rejected, (state, action) => {
+        state.patientsLoading = false;
+        state.patientsError = action.payload;
+      })
       .addCase(fetchSuperAdminDoctorAssignedPatients.pending, (state) => {
         state.workingLoading = true;
         state.workingError = null;
       })
       .addCase(fetchSuperAdminDoctorAssignedPatients.fulfilled, (state, action) => {
         state.workingLoading = false;
-        state.assignedPatients = action.payload;
+        state.assignedPatients = action.payload.patients || action.payload;
       })
       .addCase(fetchSuperAdminDoctorAssignedPatients.rejected, (state, action) => {
         state.workingLoading = false;
         state.workingError = action.payload;
       })
       .addCase(fetchSuperAdminDoctorPatientById.pending, (state) => {
+        state.dataLoading = true;
+        state.dataError = null;
+      })
+      .addCase(fetchSuperAdminDoctorPatientById.fulfilled, (state, action) => {
+        state.dataLoading = false;
+        state.singlePatient = action.payload.patient || action.payload;
+      })
+      .addCase(fetchSuperAdminDoctorPatientById.rejected, (state, action) => {
+        state.dataLoading = false;
+        state.dataError = action.payload;
+      })
+      .addCase(fetchSuperAdminDoctorPatientHistory.pending, (state) => {
         state.workingLoading = true;
         state.workingError = null;
       })
-      .addCase(fetchSuperAdminDoctorPatientById.fulfilled, (state, action) => {
+      .addCase(fetchSuperAdminDoctorPatientHistory.fulfilled, (state, action) => {
         state.workingLoading = false;
-        state.selectedPatient = action.payload;
+        state.patientHistory = action.payload;
       })
-      .addCase(fetchSuperAdminDoctorPatientById.rejected, (state, action) => {
+      .addCase(fetchSuperAdminDoctorPatientHistory.rejected, (state, action) => {
         state.workingLoading = false;
         state.workingError = action.payload;
+      })
+      .addCase(fetchSuperAdminDoctorPatientFollowups.pending, (state) => {
+        state.dataLoading = true;
+        state.dataError = null;
+      })
+      .addCase(fetchSuperAdminDoctorPatientFollowups.fulfilled, (state, action) => {
+        state.dataLoading = false;
+        state.patientFollowups = action.payload;
+      })
+      .addCase(fetchSuperAdminDoctorPatientFollowups.rejected, (state, action) => {
+        state.dataLoading = false;
+        state.dataError = action.payload;
+      })
+      .addCase(fetchSuperAdminDoctorPatientMedications.pending, (state) => {
+        state.dataLoading = true;
+        state.dataError = null;
+      })
+      .addCase(fetchSuperAdminDoctorPatientMedications.fulfilled, (state, action) => {
+        state.dataLoading = false;
+        state.patientMedications = action.payload;
+      })
+      .addCase(fetchSuperAdminDoctorPatientMedications.rejected, (state, action) => {
+        state.dataLoading = false;
+        state.dataError = action.payload;
+      })
+      .addCase(fetchSuperAdminDoctorPatientLabReports.pending, (state) => {
+        state.dataLoading = true;
+        state.dataError = null;
+      })
+      .addCase(fetchSuperAdminDoctorPatientLabReports.fulfilled, (state, action) => {
+        state.dataLoading = false;
+        state.patientLabReports = action.payload;
+      })
+      .addCase(fetchSuperAdminDoctorPatientLabReports.rejected, (state, action) => {
+        state.dataLoading = false;
+        state.dataError = action.payload;
       })
 
       .addCase(fetchSuperAdminDoctorCompletedReports.pending, (state) => {
@@ -382,7 +525,10 @@ const superAdminDoctorSlice = createSlice({
       })
       .addCase(fetchSuperAdminDoctorLabReports.fulfilled, (state, action) => {
         state.workingLoading = false;
-        state.labReports = action.payload;
+        state.labReports = action.payload.reports || action.payload;
+        if (action.payload.pagination) {
+          state.labReportsPagination = action.payload.pagination;
+        }
       })
       .addCase(fetchSuperAdminDoctorLabReports.rejected, (state, action) => {
         state.workingLoading = false;

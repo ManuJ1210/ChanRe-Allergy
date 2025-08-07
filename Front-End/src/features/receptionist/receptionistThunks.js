@@ -636,3 +636,19 @@ export const resetReceptionistState = createAsyncThunk(
     dispatch(resetState());
   }
 ); 
+
+// Fetch single patient
+export const fetchPatient = createAsyncThunk(
+  'receptionist/fetchPatient',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      console.log('🔍 Fetching patient with ID:', patientId);
+      const response = await API.get(`/patients/${patientId}`);
+      console.log('✅ Patient response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ Patient fetch error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient');
+    }
+  }
+); 

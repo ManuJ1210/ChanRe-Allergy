@@ -45,7 +45,9 @@ import SuperadminTestRequestDetails from '../pages/Superadmin/Docters/Superadmin
 // Superadmin Doctor Working Pages
 import SuperadminDoctorDashboard from '../pages/Superadmin/DoctorsLogin/Dashboard';
 import SuperadminDoctorMyPatients from '../pages/Superadmin/DoctorsLogin/MyPatients';
-import SuperadminDoctorPatientDetails from '../pages/Superadmin/DoctorsLogin/PatientDetails';
+import PatientDetails from '../pages/Superadmin/DoctorsLogin/PatientDetails';
+import PatientProfile from '../pages/Superadmin/DoctorsLogin/PatientProfile';
+import PatientLabReports from '../pages/Superadmin/DoctorsLogin/PatientLabReports';
 import SuperadminDoctorReviewLabReports from '../pages/Superadmin/DoctorsLogin/ReviewLabReports';
 import SuperadminDoctorPatientHistory from '../pages/Superadmin/DoctorsLogin/PatientHistory';
 
@@ -139,6 +141,8 @@ import NewTestRequest from '../pages/Doctor/NewTestRequest';
 import CompletedReports from '../pages/Doctor/CompletedReports';
 import TestRequestDetails from '../pages/Doctor/TestRequestDetails';
 import DoctorViewHistory from '../pages/Doctor/ViewHistory';
+import Notifications from '../pages/Doctor/Notifications';
+import Feedback from '../pages/Doctor/Feedback';
 
 export default function AppRoutes() {
   return (
@@ -203,10 +207,10 @@ export default function AppRoutes() {
         
         {/* Superadmin Doctor Working Routes */}
         <Route path="superadmin/doctor/dashboard" element={<SuperadminDoctorDashboard />} />
-                    <Route path="superadmin/doctor/my-patients" element={<SuperadminDoctorMyPatients />} />
-            <Route path="superadmin/doctor/patient/:patientId" element={<SuperadminDoctorPatientDetails />} />
-            <Route path="superadmin/doctor/review-reports" element={<SuperadminDoctorReviewLabReports />} />
-            <Route path="superadmin/doctor/patient-history" element={<SuperadminDoctorPatientHistory />} />
+        <Route path="superadmin/doctor/patients" element={<PatientDetails />} />
+        <Route path="superadmin/doctor/lab-reports" element={<SuperadminDoctorReviewLabReports />} />
+        <Route path="superadmin/doctor/patient/:patientId/profile" element={<PatientProfile />} />
+        <Route path="superadmin/doctor/patient/:patientId/lab-reports" element={<PatientLabReports />} />
         
 
         
@@ -425,6 +429,8 @@ export default function AppRoutes() {
         <Route path="doctor/completed-reports" element={<CompletedReports />} />
         <Route path="doctor/test-request/:id" element={<TestRequestDetails />} />
         <Route path="doctor/ViewHistory/:patientId" element={<DoctorViewHistory />} />
+        <Route path="doctor/notifications" element={<Notifications />} />
+        <Route path="doctor/feedback" element={<Feedback />} />
 
         {/* Lab Routes */}
         <Route path="lab/dashboard" element={<LabRouteProtection><LabDashboard /></LabRouteProtection>} />

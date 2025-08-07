@@ -1,33 +1,32 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchReceptionistPrescription, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
+import { fetchReceptionistPrescription, fetchPatient, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
 import { 
-  Eye, 
   ArrowLeft, 
-  Download, 
-  Printer, 
-  AlertCircle,
   Activity,
-  FileText,
-  User,
+  AlertCircle,
   Calendar,
-  Clock,
-  UserCheck
+  User,
+  Eye,
+  FileText,
+  Stethoscope,
+  Pill
 } from 'lucide-react';
 
 const ViewPrescription = () => {
-  const { id } = useParams();
+  const { patientId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
-  const { prescription, loading, error } = useSelector(state => state.receptionist);
+
+  const { prescription, singlePatient, loading, error } = useSelector(state => state.receptionist);
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchReceptionistPrescription(id));
+    if (patientId) {
+      dispatch(fetchReceptionistPrescription(patientId));
+      dispatch(fetchPatient(patientId));
     }
-  }, [dispatch, id]);
+  }, [dispatch, patientId]);
 
   const handlePrint = () => {
     window.print();
@@ -37,7 +36,7 @@ const ViewPrescription = () => {
     const element = document.createElement('a');
     const file = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
     element.href = URL.createObjectURL(file);
-    element.download = `prescription-${id}.html`;
+    element.download = `prescription-${patientId}.html`;
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
@@ -143,14 +142,14 @@ const ViewPrescription = () => {
                 onClick={handlePrint}
                 className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-2"
               >
-                <Printer size={16} />
+                <Pill size={16} />
                 <span>Print</span>
               </button>
               <button
                 onClick={handleDownload}
                 className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
               >
-                <Download size={16} />
+                <FileText size={16} />
                 <span>Download</span>
               </button>
             </div>
@@ -168,17 +167,17 @@ const ViewPrescription = () => {
           {/* Patient Information */}
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-              <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
+              <User size={20} className="mr-2 text-blue-600" />
               Patient Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-500">Patient Name</label>
-                <p className="text-gray-900 font-medium">{latestRecord.patientId?.name || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{singlePatient?.name || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Patient ID</label>
-                <p className="text-gray-900 font-medium">{latestRecord.patientId?._id || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{singlePatient?._id || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Prescription Date</label>
@@ -195,7 +194,7 @@ const ViewPrescription = () => {
             {latestRecord.diagnosis && (
               <div className="bg-gray-50 rounded-lg p-6">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                  <Eye className="h-5 w-5 mr-2 text-blue-600" />
+                  <Eye size={20} className="mr-2 text-blue-600" />
                   Clinical Diagnosis
                 </h2>
                 <div className="bg-white rounded-lg p-4 border">
@@ -207,7 +206,7 @@ const ViewPrescription = () => {
             {/* Medications */}
             <div className="bg-gray-50 rounded-lg p-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                <FileText className="h-5 w-5 mr-2 text-blue-600" />
+                <FileText size={20} className="mr-2 text-blue-600" />
                 Prescribed Medications
               </h2>
               {latestRecord.medications && latestRecord.medications.length > 0 ? (
@@ -309,14 +308,14 @@ const ViewPrescription = () => {
           <div className="border-t pt-6 mt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div className="flex items-center space-x-2">
-                <Clock className="h-4 w-4 text-gray-400" />
+                <Calendar className="h-4 w-4 text-gray-400" />
                 <span className="text-gray-500">Record Created:</span>
                 <span className="text-gray-900">
                   {latestRecord.createdAt ? new Date(latestRecord.createdAt).toLocaleString() : 'N/A'}
                 </span>
               </div>
               <div className="flex items-center space-x-2">
-                <Clock className="h-4 w-4 text-gray-400" />
+                <Calendar className="h-4 w-4 text-gray-400" />
                 <span className="text-gray-500">Last Updated:</span>
                 <span className="text-gray-900">
                   {latestRecord.updatedAt ? new Date(latestRecord.updatedAt).toLocaleString() : 'N/A'}

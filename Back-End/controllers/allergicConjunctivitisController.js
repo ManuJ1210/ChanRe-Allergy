@@ -2,70 +2,40 @@ import AllergicConjunctivitis from '../models/AllergicConjunctivitis.js';
 
 export const createAllergicConjunctivitis = async (req, res) => {
   try {
-    console.log('Received request body:', req.body);
-    const { patientId, symptoms, type, grading } = req.body;
-    const updatedBy = req.user._id;
-    
-    if (!patientId) {
-      return res.status(400).json({ message: 'patientId is required' });
-    }
-
-    // Validate required fields
-    if (!symptoms || !type || !grading) {
-      return res.status(400).json({ 
-        message: 'Missing required fields: symptoms, type, and grading are required' 
-      });
-    }
-
-    const record = await AllergicConjunctivitis.create({ 
-      patientId, 
-      symptoms, 
-      type, 
-      grading, 
-      updatedBy 
-    });
-    
-    console.log('Created record:', record);
-    res.status(201).json({ message: 'Allergic Conjunctivitis record added', data: record });
+    const record = await AllergicConjunctivitis.create(req.body);
+    res.status(201).json(record);
   } catch (err) {
-    console.error('Error creating allergic conjunctivitis record:', err);
-    res.status(500).json({ message: 'Failed to add record', error: err.message });
+    res.status(500).json({ message: 'Error creating allergic conjunctivitis record', error: err.message });
   }
 };
 
 export const getAllergicConjunctivitisByPatient = async (req, res) => {
   try {
     const { patientId } = req.query;
-    console.log('getAllergicConjunctivitisByPatient called with patientId:', patientId);
     
-    let records;
-    if (patientId && patientId !== 'undefined') {
-      records = await AllergicConjunctivitis.find({ patientId })
-        .populate('patientId', 'name age centerCode phone gender')
-        .sort({ createdAt: -1 });
-      console.log(`Found ${records.length} records for patientId: ${patientId}`);
-    } else {
-      console.log('No valid patientId provided, returning empty array');
-      records = [];
+    if (!patientId) {
+      return res.status(400).json({ message: 'Patient ID is required' });
     }
+
+    const records = await AllergicConjunctivitis.find({ patientId }).sort({ createdAt: -1 });
     
-    res.status(200).json(records);
+    res.json(records);
   } catch (err) {
-    console.error('Error fetching allergic conjunctivitis records:', err);
-    res.status(500).json({ message: 'Failed to fetch records', error: err.message });
+    res.status(500).json({ message: 'Error fetching allergic conjunctivitis records', error: err.message });
   }
 };
 
 export const getAllergicConjunctivitisById = async (req, res) => {
   try {
-    const record = await AllergicConjunctivitis.findById(req.params.id)
-      .populate('patientId', 'name age centerCode phone gender');
+    const { id } = req.params;
+    const record = await AllergicConjunctivitis.findById(id);
+    
     if (!record) {
-      return res.status(404).json({ message: 'Not found' });
+      return res.status(404).json({ message: 'Record not found' });
     }
+    
     res.json(record);
   } catch (err) {
-    console.error('Error fetching allergic conjunctivitis record by ID:', err);
-    res.status(500).json({ message: 'Failed to fetch record', error: err.message });
+    res.status(500).json({ message: 'Error fetching allergic conjunctivitis record by ID', error: err.message });
   }
 }; 

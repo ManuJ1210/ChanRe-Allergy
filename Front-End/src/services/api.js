@@ -40,27 +40,26 @@ API.interceptors.request.use((config) => {
       config.headers.Authorization = `Bearer ${token}`;
     }
   } catch (err) {
-    console.error('Error reading token from localStorage:', err);
+    // Silent error handling
   }
   
   return config;
 });
 
-// Add response interceptor to log errors
+// Add response interceptor to handle errors
 API.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
-    // Handle specific error cases
+    // Handle specific error cases silently
     if (error.response?.status === 401) {
-      console.error('Authentication Error - Token may be expired or invalid');
       // Optionally redirect to login
       // window.location.href = '/login';
     } else if (error.response?.status === 403) {
-      console.error('Authorization Error - User does not have permission');
+      // Authorization error
     } else if (error.code === 'ECONNREFUSED') {
-      console.error('Connection Error - Backend server may not be running');
+      // Connection error
     }
     
     return Promise.reject(error);
