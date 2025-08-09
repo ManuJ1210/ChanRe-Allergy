@@ -1,6 +1,6 @@
 // src/features/doctor/doctorThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import API from '../../services/api';
 
 // ✅ Create a doctor
 export const createDoctor = createAsyncThunk(
@@ -8,8 +8,8 @@ export const createDoctor = createAsyncThunk(
   async (doctorData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(
-        'http://localhost:5000/api/doctors',
+      const response = await API.post(
+        '/doctors',
         doctorData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -30,8 +30,8 @@ export const updateDoctor = createAsyncThunk(
   async ({ id, formData }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put(
-        `http://localhost:5000/api/doctors/${id}`,
+      const response = await API.put(
+        `/doctors/${id}`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -52,8 +52,8 @@ export const deleteDoctor = createAsyncThunk(
   async (doctorId, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(
-        `http://localhost:5000/api/doctors/${doctorId}`,
+      const response = await API.delete(
+        `/doctors/${doctorId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -72,8 +72,8 @@ export const fetchDoctorById = createAsyncThunk(
   async (doctorId, thunkAPI) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `http://localhost:5000/api/doctors/${doctorId}`,
+      const response = await API.get(
+        `/doctors/${doctorId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       return response.data;
@@ -89,7 +89,7 @@ export const fetchAllDoctors = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/doctors', {
+      const response = await API.get('/doctors', {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -105,7 +105,7 @@ export const fetchAssignedPatients = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/doctors/assigned-patients', {
+      const response = await API.get('/doctors/assigned-patients', {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -126,7 +126,7 @@ export const fetchPatientDetails = createAsyncThunk(
         : String(patientId);
       
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/doctors/patient/${id}`, {
+      const response = await API.get(`/doctors/patient/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -150,7 +150,7 @@ export const addTestRequest = createAsyncThunk(
       };
       
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/test-requests', processedData, {
+      const response = await API.post('/test-requests', processedData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -166,7 +166,7 @@ export const fetchTestRequests = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/test-requests/doctor', {
+      const response = await API.get('/test-requests/doctor', {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -182,8 +182,8 @@ export const createTestRequest = createAsyncThunk(
   async (testRequestData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(
-        'http://localhost:5000/api/test-requests',
+      const response = await API.post(
+        '/test-requests',
         testRequestData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -202,8 +202,8 @@ export const fetchTestRequestById = createAsyncThunk(
   async (testRequestId, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `http://localhost:5000/api/test-requests/${testRequestId}`,
+      const response = await API.get(
+        `/test-requests/${testRequestId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -221,8 +221,8 @@ export const downloadTestReport = createAsyncThunk(
   async (testRequestId, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `http://localhost:5000/api/test-requests/${testRequestId}/download-report`,
+      const response = await API.get(
+        `/test-requests/${testRequestId}/download-report`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -245,8 +245,8 @@ export const fetchPatientTestRequests = createAsyncThunk(
         : String(patientId);
       
       const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `http://localhost:5000/api/test-requests/patient/${id}`,
+      const response = await API.get(
+        `/test-requests/patient/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -264,7 +264,7 @@ export const fetchDoctorNotifications = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/notifications/doctor', {
+      const response = await API.get('/notifications/doctor', {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -279,8 +279,8 @@ export const markNotificationAsRead = createAsyncThunk(
   async (notificationId, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.patch(
-        `http://localhost:5000/api/notifications/${notificationId}/read`,
+      const response = await API.patch(
+        `/notifications/${notificationId}/read`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -298,8 +298,8 @@ export const markAllNotificationsAsRead = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.patch(
-        'http://localhost:5000/api/notifications/mark-all-read',
+      const response = await API.patch(
+        '/notifications/mark-all-read',
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -317,8 +317,8 @@ export const fetchTestRequestFeedback = createAsyncThunk(
   async (testRequestId, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `http://localhost:5000/api/notifications/test-request/${testRequestId}/feedback`,
+      const response = await API.get(
+        `/notifications/test-request/${testRequestId}/feedback`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -335,8 +335,8 @@ export const fetchTestRequestsWithFeedback = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(
-        'http://localhost:5000/api/notifications/doctor/test-requests-with-feedback',
+      const response = await API.get(
+        '/notifications/doctor/test-requests-with-feedback',
         {
           headers: { Authorization: `Bearer ${token}` },
         }

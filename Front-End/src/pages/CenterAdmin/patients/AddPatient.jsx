@@ -5,7 +5,7 @@ import { resetPatientState } from "../../../features/patient/patientSlice";
 import { useNavigate } from "react-router-dom";
 import { fetchAllDoctors } from "../../../features/doctor/doctorThunks";
 import { Users, ArrowLeft, User, Mail, Phone, MapPin, Building } from 'lucide-react';
-
+import { toast } from 'react-toastify';
 const AddPatient = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -36,13 +36,14 @@ const AddPatient = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createPatient(formData));
+  
   };
 
   useEffect(() => {
     if (success) {
-      alert("Patient added successfully!");
+      toast("Patient Added successfully");
       dispatch(resetPatientState());
-      navigate("/CenterAdmin/patients/PatientList");
+      navigate("/dashboard/centeradmin/patients/patientlist");
     }
     if (error) {
       alert(error);

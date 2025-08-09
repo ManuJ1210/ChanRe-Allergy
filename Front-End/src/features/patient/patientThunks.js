@@ -1,6 +1,7 @@
 // src/features/patient/patientThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import API from '../../services/api';
 
 // ADD PATIENT
 export const createPatient = createAsyncThunk(
@@ -8,8 +9,7 @@ export const createPatient = createAsyncThunk(
   async (patientData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(
-        'http://localhost:5000/api/patients',
+      const response = await API.post('/patients',
         patientData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -26,8 +26,7 @@ export const submitPatientTests = createAsyncThunk(
   async ({ patientId, testData }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `http://localhost:5000/api/patients/${patientId}/tests`,
+      const response = await API.post(`/patients/${patientId}/tests`,
         testData,
         {
           headers: {
@@ -49,7 +48,7 @@ export const getSinglePatient = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://localhost:5000/api/patients/${id}`, {
+      const response = await API.get(`/patients/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -65,7 +64,7 @@ export const updatePatient = createAsyncThunk(
   async ({ id, updatedData }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put(`http://localhost:5000/api/patients/${id}`, updatedData, {
+      const response = await axios.put(`/patients/${id}`, updatedData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -84,7 +83,7 @@ export const fetchPatients = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/patients', {
+      const response = await API.get('/patients', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -105,7 +104,7 @@ export const deletePatient = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/patients/${id}`, {
+      await API.delete(`/patients/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return id;
@@ -121,7 +120,7 @@ export const fetchPatientAndTests = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/patients/${id}/show-tests`, {
+      const response = await API.get(`/patients/${id}/show-tests`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -148,7 +147,7 @@ export const fetchPatientHistory = createAsyncThunk(
   async (patientId, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/history/${patientId}`, {
+      const response = await API.get(`/history/${patientId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
