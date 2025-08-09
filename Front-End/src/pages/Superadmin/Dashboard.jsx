@@ -69,7 +69,7 @@ export default function SuperadminDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Welcome back, {user?.name}
           </h1>
           <p className="text-slate-600">
@@ -97,8 +97,8 @@ export default function SuperadminDashboard() {
               <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 text-sm font-medium">Total Centers</p>
-                    <p className="text-2xl font-bold text-slate-800">{dashboardStats.totalCenters}</p>
+                    <p className="text-slate-600 text-xs font-medium">Total Centers</p>
+                    <p className="text-xl font-bold text-slate-800">{dashboardStats.totalCenters}</p>
                   </div>
                   <Building className="h-8 w-8 text-blue-500" />
                 </div>
@@ -107,8 +107,8 @@ export default function SuperadminDashboard() {
               <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 text-sm font-medium">Center Admins</p>
-                    <p className="text-2xl font-bold text-slate-800">{dashboardStats.totalAdmins}</p>
+                    <p className="text-slate-600 text-xs font-medium">Center Admins</p>
+                    <p className="text-xl font-bold text-slate-800">{dashboardStats.totalAdmins}</p>
                   </div>
                   <Shield className="h-8 w-8 text-green-500" />
                 </div>
@@ -117,8 +117,8 @@ export default function SuperadminDashboard() {
               <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                    <p className="text-2xl font-bold text-slate-800">{dashboardStats.totalPatients}</p>
+                    <p className="text-slate-600 text-xs font-medium">Total Patients</p>
+                    <p className="text-xl font-bold text-slate-800">{dashboardStats.totalPatients}</p>
                   </div>
                   <Users className="h-8 w-8 text-purple-500" />
                 </div>
@@ -127,8 +127,8 @@ export default function SuperadminDashboard() {
               <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 text-sm font-medium">Total Tests</p>
-                    <p className="text-2xl font-bold text-slate-800">{dashboardStats.totalTests}</p>
+                    <p className="text-slate-600 text-xs font-medium">Total Tests</p>
+                    <p className="text-xl font-bold text-slate-800">{dashboardStats.totalTests}</p>
                   </div>
                   <FileText className="h-8 w-8 text-orange-500" />
                 </div>
@@ -140,7 +140,7 @@ export default function SuperadminDashboard() {
         {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-6">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800">Quick Actions</h2>
+            <h2 className="text-lg font-semibold text-slate-800">Quick Actions</h2>
             <p className="text-slate-600 mt-1">Common administrative tasks</p>
           </div>
           <div className="p-6">
@@ -156,7 +156,7 @@ export default function SuperadminDashboard() {
                     <Plus className="h-4 w-4 opacity-75" />
                   </div>
                   <h3 className="font-semibold text-left">{action.title}</h3>
-                  <p className="text-sm opacity-90 text-left mt-1">{action.description}</p>
+                  <p className="text-xs opacity-90 text-left mt-1">{action.description}</p>
                 </button>
               ))}
             </div>
@@ -168,7 +168,7 @@ export default function SuperadminDashboard() {
           {/* Center Management */}
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <Building className="h-5 w-5 mr-2 text-blue-500" />
                 Center Management
               </h2>
@@ -209,7 +209,7 @@ export default function SuperadminDashboard() {
           {/* Admin Management */}
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <Shield className="h-5 w-5 mr-2 text-green-500" />
                 Admin Management
               </h2>
