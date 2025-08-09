@@ -134,7 +134,7 @@ const EditDoctor = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Doctors
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Edit Doctor
           </h1>
           <p className="text-slate-600">
@@ -159,7 +159,7 @@ const EditDoctor = () => {
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-500" />
               Doctor Information
             </h2>
@@ -171,7 +171,7 @@ const EditDoctor = () => {
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Full Name *
                 </label>
                 <input
@@ -186,7 +186,7 @@ const EditDoctor = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Mobile Number *
                 </label>
                 <input
@@ -201,7 +201,7 @@ const EditDoctor = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Email Address *
                 </label>
                 <input
@@ -216,7 +216,7 @@ const EditDoctor = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Username *
                 </label>
                 <input
@@ -231,7 +231,7 @@ const EditDoctor = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Qualification
                 </label>
                 <input
@@ -245,7 +245,7 @@ const EditDoctor = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Password
                 </label>
                 <div className="relative">
@@ -268,7 +268,7 @@ const EditDoctor = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Designation
                 </label>
                 <input
@@ -282,7 +282,7 @@ const EditDoctor = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   KMC Number
                 </label>
                 <input
@@ -296,21 +296,24 @@ const EditDoctor = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Hospital Name
                 </label>
                 <input
                   type="text"
                   name="hospitalName"
                   value={formData.hospitalName}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter hospital name"
+                  readOnly
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 text-slate-700 cursor-not-allowed"
+                  placeholder="Hospital name (read-only)"
                 />
+                <p className="text-xs text-slate-500 mt-1">
+                  Hospital name cannot be modified
+                </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Experience
                 </label>
                 <input
@@ -324,7 +327,7 @@ const EditDoctor = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Specializations
                 </label>
                 <div className="space-y-4">
@@ -350,7 +353,7 @@ const EditDoctor = () => {
                       {formData.specializations.map((spec, index) => (
                         <span
                           key={index}
-                          className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                          className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs"
                         >
                           {spec}
                           <button
@@ -368,7 +371,7 @@ const EditDoctor = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Bio
                 </label>
                 <textarea

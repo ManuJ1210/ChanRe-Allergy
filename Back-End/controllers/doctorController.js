@@ -69,7 +69,8 @@ export const addDoctor = async (req, res) => {
       role,
       username,
       centerId,
-      status
+      status,
+      ...otherFields
     } = req.body;
 
     if (!name || !email || !password || !username) {
@@ -102,7 +103,8 @@ export const addDoctor = async (req, res) => {
       role: role || 'doctor',
       username,
       centerId: doctorCenterId,
-      status: status || 'active'
+      status: status || 'active',
+      ...otherFields // Include other fields like qualification, designation, etc.
     });
 
     await doctor.save();
@@ -256,7 +258,14 @@ export const updateDoctor = async (req, res) => {
       phone,
       mobile,
       username,
-      status
+      status,
+      qualification,
+      designation,
+      kmcNumber,
+      specializations,
+      experience,
+      bio,
+      hospitalName
     } = req.body;
 
     if (name) doctor.name = name;
@@ -265,6 +274,13 @@ export const updateDoctor = async (req, res) => {
     if (mobile) doctor.mobile = mobile;
     if (username) doctor.username = username;
     if (status) doctor.status = status;
+    if (qualification) doctor.qualification = qualification;
+    if (designation) doctor.designation = designation;
+    if (kmcNumber) doctor.kmcNumber = kmcNumber;
+    if (specializations) doctor.specializations = specializations;
+    if (experience) doctor.experience = experience;
+    if (bio) doctor.bio = bio;
+    if (hospitalName) doctor.hospitalName = hospitalName;
 
     await doctor.save();
     

@@ -396,9 +396,20 @@ export const getSuperAdminDoctorWorkingStats = async (req, res) => {
       updatedAt: { $gte: sevenDaysAgo }
     });
 
+    // Get pending lab reports (for review)
+    const pendingLabReports = await TestRequest.countDocuments({
+      status: { $in: ['Report_Generated', 'Report_Sent'] }
+    });
+
+    // Get feedback sent reports
+    const feedbackSent = await TestRequest.countDocuments({
+      status: 'feedback_sent'
+    });
+
     res.json({
-      totalPatients,
-      totalLabReports,
+      assignedPatients: totalPatients,
+      pendingLabReports,
+      feedbackSent,
       recentReports: recentReports.length,
       success: true
     });

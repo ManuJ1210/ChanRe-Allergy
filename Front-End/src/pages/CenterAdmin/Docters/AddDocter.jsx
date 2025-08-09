@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, UserCheck, ArrowLeft, Save } from 'lucide-react';
+import { Eye, EyeOff, UserCheck, ArrowLeft, Save, Building } from 'lucide-react';
 import { addCenterAdminDoctor, clearError, clearSuccess } from '../../../features/centerAdmin/centerAdminDoctorSlice';
+import API from '../../../services/api';
 
 const AddDocter = () => {
   const navigate = useNavigate();
@@ -10,9 +11,10 @@ const AddDocter = () => {
   const { user } = useSelector((state) => state.auth);
   const { loading, error, success, message } = useSelector((state) => state.centerAdminDoctors);
   
-  // Try Redux first, then fallback to localStorage
-  const storedUser = localStorage.getItem('user');
-  const centerId = user?.centerId || (storedUser ? JSON.parse(storedUser)?.centerId : null);
+  // Helper function to get centerId from user object  
+  const getCenterId = () => {
+    return user?.centerId;
+  };
 
   const [formData, setFormData] = useState({
     name: '',
@@ -31,6 +33,62 @@ const AddDocter = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [newSpecialization, setNewSpecialization] = useState('');
+  const [centerInfo, setCenterInfo] = useState({
+    name: "Loading...",
+    code: "Loading..."
+  });
+
+  // Fetch center information and auto-populate hospital name
+  useEffect(() => {
+    const fetchCenterInfo = async () => {
+      const centerId = getCenterId();
+      
+      if (centerId) {
+        try {
+          const response = await API.get(`/centers/${centerId}`);
+          const center = response.data;
+          
+          setCenterInfo({
+            name: center.name,
+            code: center.code
+          });
+          
+          // Auto-populate hospitalName with center name
+          setFormData(prev => ({
+            ...prev,
+            hospitalName: center.name
+          }));
+          
+        } catch (error) {
+          // Form will use default values if API fails
+          // No need to change anything - defaults are already set
+        }
+      } else if (user && user.id) {
+        // Try alternative approach
+        try {
+          const response = await API.get(`/centers/by-admin/${user.id}`);
+          const center = response.data;
+          
+          setCenterInfo({
+            name: center.name,
+            code: center.code
+          });
+          
+          setFormData(prev => ({
+            ...prev,
+            hospitalName: center.name
+          }));
+          
+        } catch (altError) {
+          // Form will use default values if API fails
+          // No need to change anything - defaults are already set
+        }
+      }
+      // If all else fails, form will use the default values set in state initialization
+    };
+    
+    fetchCenterInfo();
+  }, [user]);
 
   useEffect(() => {
     if (success) {
@@ -40,6 +98,8 @@ const AddDocter = () => {
       }, 1500);
     }
   }, [success, dispatch, navigate]);
+
+
 
   useEffect(() => {
     return () => {
@@ -72,6 +132,27 @@ const AddDocter = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let centerId = getCenterId();
+    
+    // If no centerId, try to get it from the center we created
+    if (!centerId && user && user.id) {
+      try {
+        const response = await API.get(`/centers/by-admin/${user.id}`);
+        centerId = response.data._id;
+        
+        // Update localStorage with the centerId
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const userObj = JSON.parse(storedUser);
+          userObj.centerId = centerId;
+          userObj.centerCode = response.data.code;
+          localStorage.setItem('user', JSON.stringify(userObj));
+        }
+      } catch (error) {
+        // Silent error handling - form will show appropriate error message
+      }
+    }
+    
     if (!centerId) {
       alert('No center ID found. Please log in again as a center admin.');
       return;
@@ -101,7 +182,7 @@ const AddDocter = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Doctors
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Add New Doctor
           </h1>
           <p className="text-slate-600">
@@ -122,11 +203,13 @@ const AddDocter = () => {
             <span className="text-red-700">{error}</span>
           </div>
         )}
+        
+
 
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-500" />
               Doctor Information
             </h2>
@@ -138,7 +221,7 @@ const AddDocter = () => {
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Full Name *
                 </label>
                 <input
@@ -153,7 +236,7 @@ const AddDocter = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Mobile Number *
                 </label>
                 <input
@@ -168,7 +251,7 @@ const AddDocter = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Email Address *
                 </label>
                 <input
@@ -183,7 +266,7 @@ const AddDocter = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Username *
                 </label>
                 <input
@@ -198,7 +281,7 @@ const AddDocter = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Qualification
                 </label>
                 <input
@@ -212,7 +295,7 @@ const AddDocter = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Password *
                 </label>
                 <div className="relative">
@@ -236,7 +319,7 @@ const AddDocter = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Designation
                 </label>
                 <input
@@ -250,7 +333,7 @@ const AddDocter = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   KMC Number
                 </label>
                 <input
@@ -264,21 +347,42 @@ const AddDocter = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Hospital Name
-                </label>
+              
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">
+                      Hospital/Center Name
+                    </label>
+                    <input
+                      type="text"
+                      value={centerInfo.name || 'Loading center...'}
+                      readOnly
+                      className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 text-slate-700 cursor-not-allowed"
+                      placeholder="Hospital name will be auto-filled"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">
+                      Center Code
+                    </label>
+                    <input
+                      type="text"
+                      value={centerInfo.code || 'Loading...'}
+                      readOnly
+                      className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 text-slate-700 cursor-not-allowed"
+                      placeholder="Center code will be auto-filled"
+                    />
+                  </div>
+                </div>
                 <input
-                  type="text"
+                  type="hidden"
                   name="hospitalName"
                   value={formData.hospitalName}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter hospital name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Experience
                 </label>
                 <input
@@ -292,7 +396,7 @@ const AddDocter = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Specializations
                 </label>
                 <div className="space-y-4">
@@ -318,7 +422,7 @@ const AddDocter = () => {
                       {formData.specializations.map((spec, index) => (
                         <span
                           key={index}
-                          className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                          className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs"
                         >
                           {spec}
                           <button
@@ -336,7 +440,7 @@ const AddDocter = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Bio
                 </label>
                 <textarea

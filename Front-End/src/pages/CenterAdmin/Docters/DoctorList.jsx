@@ -121,7 +121,7 @@ const DoctorList = () => {
               Add Doctor
             </button>
           </div>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Center Doctors
           </h1>
           <p className="text-slate-600">
@@ -134,8 +134,8 @@ const DoctorList = () => {
           <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Doctors</p>
-                <p className="text-3xl font-bold text-slate-800">{stats.total}</p>
+                <p className="text-slate-600 text-xs font-medium">Total Doctors</p>
+                <p className="text-xl font-bold text-slate-800">{stats.total}</p>
               </div>
               <div className="bg-blue-100 p-3 rounded-lg">
                 <UserCheck className="h-6 w-6 text-blue-600" />
@@ -145,8 +145,8 @@ const DoctorList = () => {
           <div className="bg-white rounded-xl shadow-sm border border-green-100 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Active Doctors</p>
-                <p className="text-3xl font-bold text-green-600">{stats.active}</p>
+                <p className="text-slate-600 text-xs font-medium">Active Doctors</p>
+                <p className="text-xl font-bold text-green-600">{stats.active}</p>
               </div>
               <div className="bg-green-100 p-3 rounded-lg">
                 <UserCheck className="h-6 w-6 text-green-600" />
@@ -156,8 +156,8 @@ const DoctorList = () => {
           <div className="bg-white rounded-xl shadow-sm border border-red-100 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Inactive Doctors</p>
-                <p className="text-3xl font-bold text-red-600">{stats.inactive}</p>
+                <p className="text-slate-600 text-xs font-medium">Inactive Doctors</p>
+                <p className="text-xl font-bold text-red-600">{stats.inactive}</p>
               </div>
               <div className="bg-red-100 p-3 rounded-lg">
                 <UserX className="h-6 w-6 text-red-600" />
@@ -198,7 +198,7 @@ const DoctorList = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => handleStatusFilter('')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
                   statusFilter === '' 
                     ? 'bg-blue-500 text-white' 
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
@@ -208,7 +208,7 @@ const DoctorList = () => {
               </button>
               <button
                 onClick={() => handleStatusFilter('active')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
                   statusFilter === 'active' 
                     ? 'bg-green-500 text-white' 
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
@@ -218,7 +218,7 @@ const DoctorList = () => {
               </button>
               <button
                 onClick={() => handleStatusFilter('inactive')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
                   statusFilter === 'inactive' 
                     ? 'bg-red-500 text-white' 
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
@@ -283,23 +283,23 @@ const DoctorList = () => {
                             </span>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-slate-900">Dr. {doctor.name || 'Unknown'}</div>
-                            <div className="text-sm text-slate-500">@{doctor.username || 'N/A'}</div>
+                            <div className="text-xs font-medium text-slate-900">Dr. {doctor.name || 'Unknown'}</div>
+                            <div className="text-xs text-slate-500">@{doctor.username || 'N/A'}</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-slate-900">{doctor.email}</div>
-                        <div className="text-sm text-slate-500">{doctor.phone || doctor.mobile || 'N/A'}</div>
+                        <div className="text-xs text-slate-900">{doctor.email}</div>
+                        <div className="text-xs text-slate-500">{doctor.phone || doctor.mobile || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-slate-900">
+                        <div className="text-xs text-slate-900">
                           {doctor.specializations && doctor.specializations.length > 0 
                             ? doctor.specializations.join(', ')
                             : doctor.specialization || 'General'
                           }
                         </div>
-                        <div className="text-sm text-slate-500">{doctor.hospitalName || 'N/A'}</div>
+                        <div className="text-xs text-slate-500">{doctor.hospitalName || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -310,10 +310,10 @@ const DoctorList = () => {
                           {doctor.status || 'active'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500">
                         {formatDate(doctor.createdAt)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-xs font-medium">
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => navigate(`/dashboard/centeradmin/doctors/viewdoctor/${doctor._id}`)}
@@ -363,7 +363,7 @@ const DoctorList = () => {
         {/* Pagination */}
         {pagination.totalPages > 1 && (
           <div className="mt-6 flex items-center justify-between">
-            <div className="text-sm text-slate-700">
+            <div className="text-xs text-slate-700">
               Showing {((pagination.currentPage - 1) * pagination.limit) + 1} to{' '}
               {Math.min(pagination.currentPage * pagination.limit, pagination.total)} of{' '}
               {pagination.total} results
@@ -372,17 +372,17 @@ const DoctorList = () => {
               <button
                 onClick={() => handlePageChange(pagination.currentPage - 1)}
                 disabled={pagination.currentPage === 1}
-                className="px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ArrowLeft className="h-4 w-4" />
               </button>
-              <span className="px-3 py-2 text-sm text-slate-700">
+              <span className="px-3 py-2 text-xs text-slate-700">
                 Page {pagination.currentPage} of {pagination.totalPages}
               </span>
               <button
                 onClick={() => handlePageChange(pagination.currentPage + 1)}
                 disabled={pagination.currentPage === pagination.totalPages}
-                className="px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ArrowRight className="h-4 w-4" />
               </button>
@@ -395,7 +395,7 @@ const DoctorList = () => {
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold text-slate-900 mb-4">Confirm Delete</h3>
+            <h3 className="text-sm font-semibold text-slate-900 mb-4">Confirm Delete</h3>
             <p className="text-slate-600 mb-6">
               Are you sure you want to delete <strong>Dr. {selectedDoctor?.name}</strong>? This action cannot be undone.
             </p>

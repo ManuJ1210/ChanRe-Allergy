@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchPatientDetails, addTestRequest, fetchPatientTestRequests, downloadTestReport } from '../../features/doctor/doctorThunks';
 import { resetPatientDetails } from '../../features/doctor/doctorSlice';
+import { downloadPDFReport, viewPDFReport } from '../../utils/pdfHandler';
 import { 
   User, 
   FileText, 
@@ -77,22 +78,19 @@ const PatientDetails = () => {
 
   const handleDownloadReport = async (testRequestId) => {
     try {
-      const result = await dispatch(downloadTestReport(testRequestId)).unwrap();
-      
-      // Create a blob URL and trigger download
-      const blob = new Blob([result], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `test-report-${testRequestId}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-      
+      await downloadPDFReport(testRequestId);
     } catch (error) {
       console.error('Error downloading report:', error);
       alert('Failed to download report. Please try again.');
+    }
+  };
+
+  const handleViewReport = async (testRequestId) => {
+    try {
+      await viewPDFReport(testRequestId);
+    } catch (error) {
+      console.error('Error viewing report:', error);
+      alert('Failed to view report. Please try again.');
     }
   };
 
@@ -825,17 +823,25 @@ const PatientDetails = () => {
                           </div>
                         )}
                         
-                        {testRequest.status === 'Completed' && testRequest.testResults && (
+                        {(['Completed', 'Report_Generated', 'Report_Sent', 'feedback_sent'].includes(testRequest.status)) && testRequest.testResults && (
                           <div className="mt-3 p-3 bg-white rounded-lg border border-slate-200">
                             <h5 className="font-medium text-slate-800 mb-2">Test Results</h5>
                             <p className="text-sm text-slate-600">{testRequest.testResults}</p>
                             {testRequest.testReport && (
-                              <button
-                                onClick={() => handleDownloadReport(testRequest._id)}
-                                className="mt-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
-                              >
-                                Download Report
-                              </button>
+                              <div className="mt-2 flex space-x-3">
+                                <button
+                                  onClick={() => handleViewReport(testRequest._id)}
+                                  className="text-purple-600 hover:text-purple-700 text-sm font-medium"
+                                >
+                                  View Report
+                                </button>
+                                <button
+                                  onClick={() => handleDownloadReport(testRequest._id)}
+                                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                                >
+                                  Download Report
+                                </button>
+                              </div>
                             )}
                           </div>
                         )}

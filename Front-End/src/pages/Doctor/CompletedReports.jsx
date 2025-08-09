@@ -108,7 +108,7 @@ const CompletedReports = () => {
     switch (status) {
       case 'Completed': return 'bg-green-100 text-green-700';
       case 'Report_Sent': return 'bg-emerald-100 text-emerald-700';
-      case 'feedback_sent': return 'bg-blue-100 text-blue-700';
+      case 'feedback_sent': return 'bg-green-100 text-green-700'; // Show as completed for doctors
       default: return 'bg-gray-100 text-gray-700';
     }
   };
@@ -117,9 +117,16 @@ const CompletedReports = () => {
     switch (status) {
       case 'Completed': return <CheckCircle className="h-4 w-4" />;
       case 'Report_Sent': return <Mail className="h-4 w-4" />;
-      case 'feedback_sent': return <Stethoscope className="h-4 w-4" />;
+      case 'feedback_sent': return <CheckCircle className="h-4 w-4" />; // Show as completed for doctors
       default: return <Clock className="h-4 w-4" />;
     }
+  };
+
+  const getDisplayStatus = (status) => {
+    if (status === 'feedback_sent') {
+      return 'Completed'; // Hide feedback workflow from doctors
+    }
+    return status.replace(/_/g, ' ');
   };
 
   const handleViewReport = (reportId) => {
@@ -319,7 +326,6 @@ const CompletedReports = () => {
                 <option value="">All Status</option>
                 <option value="Completed">Completed</option>
                 <option value="Report_Sent">Report Sent</option>
-                <option value="feedback_sent">Feedback Received</option>
               </select>
               
               <select
@@ -416,7 +422,7 @@ const CompletedReports = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(report.status)}`}>
                           {getStatusIcon(report.status)}
-                          <span className="ml-1">{report.status.replace(/_/g, ' ')}</span>
+                          <span className="ml-1">{getDisplayStatus(report.status)}</span>
                         </span>
                       </td>
                       

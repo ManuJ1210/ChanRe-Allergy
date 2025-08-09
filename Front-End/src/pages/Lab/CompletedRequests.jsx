@@ -224,9 +224,16 @@ export default function CompletedRequests() {
       case 'Report_Generated': return 'bg-cyan-100 text-cyan-800';
       case 'Report_Sent': return 'bg-emerald-100 text-emerald-800';
       case 'Completed': return 'bg-green-100 text-green-800';
-      case 'feedback_sent': return 'bg-blue-100 text-blue-800';
+      case 'feedback_sent': return 'bg-green-100 text-green-800'; // Show as completed for lab staff
       default: return 'bg-gray-100 text-gray-800';
     }
+  };
+
+  const getDisplayStatus = (status) => {
+    if (status === 'feedback_sent') {
+      return 'Completed'; // Hide feedback workflow from lab staff
+    }
+    return status.replace(/_/g, ' ');
   };
 
   const filteredRequests = completedRequests.filter(request => {
@@ -446,7 +453,7 @@ export default function CompletedRequests() {
                       </td>
                       <td className="px-6 py-4">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(request.status)}`}>
-                          {request.status?.replace(/_/g, ' ') || 'Unknown'}
+                          {getDisplayStatus(request.status) || 'Unknown'}
                         </span>
                       </td>
                       <td className="px-6 py-4">

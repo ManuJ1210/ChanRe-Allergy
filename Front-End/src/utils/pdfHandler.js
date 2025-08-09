@@ -151,9 +151,8 @@ export const getReportStatusMessage = (testRequest) => {
       return 'Report is ready for download.';
     case 'Report_Sent':
     case 'Completed':
-      return 'Report has been sent and is available for download.';
     case 'feedback_sent':
-      return 'Report reviewed by superadmin doctor. Feedback available.';
+      return 'Report has been sent and is available for download.';
     case 'Cancelled':
       return 'Test request was cancelled. No report available.';
     default:

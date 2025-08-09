@@ -4,7 +4,8 @@ import {
   getSuperAdminStats,
   getCenterAdminStats,
   getDoctorStats,
-  getReceptionistStats
+  getReceptionistStats,
+  getLabStats
 } from '../controllers/dashboardController.js';
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.get('/superadmin/stats', protect, getSuperAdminStats);
 router.get('/centeradmin/stats', protect, getCenterAdminStats);
 router.get('/doctor/stats', protect, getDoctorStats);
 router.get('/receptionist/stats', protect, getReceptionistStats);
+router.get('/lab/stats', protect, getLabStats);
 
 export default router; 

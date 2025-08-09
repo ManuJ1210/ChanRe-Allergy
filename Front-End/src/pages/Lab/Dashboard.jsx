@@ -47,44 +47,40 @@ export default function LabDashboard() {
     try {
       setLoading(true);
       
-      // Get the correct user ID (either _id or id)
-      const userId = user._id || user.id;
+      // Fetch stats from dedicated endpoint
+      const [statsResponse, requestsResponse] = await Promise.all([
+        API.get('/dashboard/lab/stats'),
+        API.get('/test-requests/lab-staff')
+      ]);
       
-      // Fetch all test requests for lab staff
-      const response = await API.get('/test-requests/lab-staff');
-      const data = response.data;
+      const statsData = statsResponse.data;
+      const requestsData = requestsResponse.data;
       
-      // Calculate stats
-      const total = data.length;
-      const pending = data.filter(req => req.status === 'Pending' || req.status === 'Assigned').length;
-      const completed = data.filter(req => req.status === 'Completed').length;
-      const urgent = data.filter(req => req.urgency === 'Urgent' || req.urgency === 'Emergency').length;
-      
-      // Today's requests
+      // Additional calculations for today and this week
       const today = new Date().toDateString();
-      const todayRequests = data.filter(req => 
+      const todayRequests = requestsData.filter(req => 
         new Date(req.createdAt).toDateString() === today
       ).length;
       
-      // This week's requests
       const weekAgo = new Date();
       weekAgo.setDate(weekAgo.getDate() - 7);
-      const thisWeekRequests = data.filter(req => 
+      const thisWeekRequests = requestsData.filter(req => 
         new Date(req.createdAt) >= weekAgo
       ).length;
 
       setStats({
-        totalRequests: total,
-        pendingRequests: pending,
-        completedRequests: completed,
-        urgentRequests: urgent,
+        totalRequests: statsData.totalRequests,
+        pendingRequests: statsData.pendingRequests,
+        completedRequests: statsData.completedRequests,
+        urgentRequests: statsData.urgentRequests,
         todayRequests: todayRequests,
         thisWeekRequests: thisWeekRequests
       });
 
       // Recent requests (last 5)
-      setRecentRequests(data.slice(0, 5));
+      setRecentRequests(requestsData.slice(0, 5));
     } catch (error) {
+      console.error('Error fetching lab dashboard data:', error);
       // Set default stats on error
       setStats({
         totalRequests: 0,

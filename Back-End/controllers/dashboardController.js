@@ -1,7 +1,7 @@
 import User from '../models/User.js';
 import Patient from '../models/Patient.js';
 import Center from '../models/Center.js';
-import Test from '../models/Test.js';
+import TestRequest from '../models/TestRequest.js';
 
 // Get Super Admin Dashboard Stats
 export const getSuperAdminStats = async (req, res) => {
@@ -10,7 +10,7 @@ export const getSuperAdminStats = async (req, res) => {
       Center.countDocuments(),
       User.countDocuments({ role: 'centeradmin' }),
       Patient.countDocuments(),
-      Test.countDocuments()
+      TestRequest.countDocuments()
     ]);
 
     res.json({
@@ -42,7 +42,7 @@ export const getCenterAdminStats = async (req, res) => {
       Patient.countDocuments({ centerId }),
       User.countDocuments({ centerId, role: 'doctor' }),
       User.countDocuments({ centerId, role: 'receptionist' }),
-      Test.countDocuments({ patient: { $in: patientIdArray } })
+      TestRequest.countDocuments({ patientId: { $in: patientIdArray } })
     ]);
 
     res.json({
@@ -66,16 +66,16 @@ export const getDoctorStats = async (req, res) => {
     const assignedPatients = await Patient.find({ assignedDoctor: doctorId });
     const totalPatients = assignedPatients.length;
     
-    // Count tests for assigned patients
+    // Count test requests for assigned patients
     const patientIds = assignedPatients.map(p => p._id);
     const [pendingTests, completedTests] = await Promise.all([
-      Test.countDocuments({ 
-        patient: { $in: patientIds },
-        status: { $in: ['pending', 'in_progress'] }
+      TestRequest.countDocuments({ 
+        patientId: { $in: patientIds },
+        status: { $in: ['Pending', 'Assigned', 'Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing'] }
       }),
-      Test.countDocuments({ 
-        patient: { $in: patientIds },
-        status: 'completed'
+      TestRequest.countDocuments({ 
+        patientId: { $in: patientIds },
+        status: { $in: ['Completed', 'Report_Generated', 'Report_Sent', 'feedback_sent'] }
       })
     ]);
 
@@ -98,15 +98,17 @@ export const getReceptionistStats = async (req, res) => {
       return res.status(400).json({ message: 'Center ID is required' });
     }
 
+    const patientIds = await Patient.find({ centerId }).distinct('_id');
+    
     const [totalPatients, pendingTests, completedTests] = await Promise.all([
       Patient.countDocuments({ centerId }),
-      Test.countDocuments({
-        patient: { $in: await Patient.find({ centerId }).distinct('_id') },
-        status: { $in: ['pending', 'in_progress'] }
+      TestRequest.countDocuments({
+        patientId: { $in: patientIds },
+        status: { $in: ['Pending', 'Assigned', 'Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing'] }
       }),
-      Test.countDocuments({
-        patient: { $in: await Patient.find({ centerId }).distinct('_id') },
-        status: 'completed'
+      TestRequest.countDocuments({
+        patientId: { $in: patientIds },
+        status: { $in: ['Completed', 'Report_Generated', 'Report_Sent', 'feedback_sent'] }
       })
     ]);
 
@@ -120,6 +122,35 @@ export const getReceptionistStats = async (req, res) => {
     res.json({ totalPatients, todayPatients, pendingTests, completedTests });
   } catch (error) {
     console.error('Error fetching receptionist stats:', error);
+    res.status(500).json({ message: 'Failed to fetch dashboard statistics' });
+  }
+};
+
+// Get Lab Staff Dashboard Stats
+export const getLabStats = async (req, res) => {
+  try {
+    const [totalRequests, pendingRequests, completedRequests, urgentRequests] = await Promise.all([
+      TestRequest.countDocuments(),
+      TestRequest.countDocuments({
+        status: { $in: ['Pending', 'Assigned', 'Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing'] }
+      }),
+      TestRequest.countDocuments({
+        status: { $in: ['Testing_Completed', 'Report_Generated', 'Report_Sent', 'Completed', 'feedback_sent'] }
+      }),
+      TestRequest.countDocuments({
+        priority: 'urgent',
+        status: { $in: ['Pending', 'Assigned', 'Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing'] }
+      })
+    ]);
+
+    res.json({
+      totalRequests,
+      pendingRequests,
+      completedRequests,
+      urgentRequests
+    });
+  } catch (error) {
+    console.error('Error fetching lab stats:', error);
     res.status(500).json({ message: 'Failed to fetch dashboard statistics' });
   }
 }; 

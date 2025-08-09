@@ -52,10 +52,10 @@ export const generateLabReportPDF = async (testRequest, reportData) => {
 
       doc.fontSize(11)
          .font('Helvetica')
-         .text(`Patient Name: ${testRequest.patientName || 'N/A'}`, 50, 210)
+         .text(`Patient Name: ${testRequest.patientName || testRequest.patientId?.name || 'N/A'}`, 50, 210)
          .text(`Patient ID: ${testRequest.patientId && typeof testRequest.patientId === 'object' ? testRequest.patientId._id : testRequest.patientId || 'N/A'}`, 50, 225)
-         .text(`Phone: ${testRequest.patientPhone || 'N/A'}`, 50, 240)
-         .text(`Address: ${testRequest.patientAddress || 'N/A'}`, 50, 255);
+         .text(`Phone: ${testRequest.patientPhone || testRequest.patientId?.phone || 'N/A'}`, 50, 240)
+         .text(`Address: ${testRequest.patientAddress || testRequest.patientId?.address || 'N/A'}`, 50, 255);
 
       // Doctor Information Section
       doc.fontSize(14)
@@ -146,16 +146,28 @@ export const generateLabReportPDF = async (testRequest, reportData) => {
           }
 
           doc.font('Helvetica')
-             .text(param.parameter || 'N/A', 50, yPosition)
-             .text(param.value || 'N/A', 200, yPosition)
-             .text(param.unit || '', 300, yPosition)
-             .text(param.normalRange || 'N/A', 400, yPosition)
+             .text(param.parameter || param.name || '-', 50, yPosition)
+             .text(param.value || '-', 200, yPosition)
+             .text(param.unit || '-', 300, yPosition)
+             .text(param.normalRange || '-', 400, yPosition)
              .text(param.status || 'Normal', 500, yPosition);
 
           yPosition += 15;
         });
 
         yPosition += 10;
+      } else {
+        // Show message when no parameters are available
+        doc.fontSize(11)
+           .font('Helvetica-Bold')
+           .text('Test Parameters:', 50, yPosition);
+        
+        yPosition += 20;
+        
+        doc.font('Helvetica')
+           .text('No specific parameters recorded for this test.', 50, yPosition);
+           
+        yPosition += 30;
       }
 
       // Clinical Interpretation

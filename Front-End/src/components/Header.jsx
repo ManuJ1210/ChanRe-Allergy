@@ -81,7 +81,7 @@ export default function Header({ onHamburgerClick }) {
           <svg className="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
         </button>
         {/* Left: Center name */}
-        <div className="flex items-center min-w-[100px] max-w-[160px] truncate flex-shrink-0 text-sm md:min-w-[180px] md:max-w-[220px] md:text-lg">
+        <div className="flex items-center min-w-[100px] max-w-[160px] truncate flex-shrink-0 text-xs md:min-w-[180px] md:max-w-[220px] md:text-sm">
           {!isSuperadmin && (
             <span className="font-bold text-blue-700 whitespace-nowrap truncate">
               {centerName || 'Center'}
@@ -100,7 +100,7 @@ export default function Header({ onHamburgerClick }) {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-300 text-sm min-w-0 text-slate-700 placeholder-slate-400 transition"
+            className="w-full px-2 py-1 bg-slate-50 border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-300 text-xs min-w-0 text-slate-700 placeholder-slate-400 transition"
           />
         </div>
         {/* Right: Profile section */}
@@ -109,16 +109,16 @@ export default function Header({ onHamburgerClick }) {
             className="flex items-center gap-2 px-2 md:px-3 py-1 hover:bg-blue-50 rounded-xl cursor-pointer transition"
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
-            <FaUserCircle className="text-blue-500 text-xl" />
+            <FaUserCircle className="text-blue-500 text-lg" />
             <div className="text-left hidden sm:block max-w-[100px] md:max-w-none truncate">
-              <p className="text-xs md:text-sm font-semibold text-slate-800 truncate">{user?.name || "Admin"}</p>
+              <p className="text-xs md:text-xs font-semibold text-slate-800 truncate">{user?.name || "Admin"}</p>
               <p className="text-[10px] md:text-xs text-slate-500 capitalize truncate">{user?.role || "superadmin"}</p>
             </div>
           </button>
           {dropdownOpen && (
             <div className="absolute right-0 mt-2 w-40 bg-white border border-slate-200 rounded-xl shadow-lg z-10">
               <button
-                className="flex items-center gap-2 px-4 py-2 w-full text-sm hover:bg-blue-50 text-slate-700"
+                className="flex items-center gap-2 px-4 py-2 w-full text-xs hover:bg-blue-50 text-slate-700"
                 onClick={() => {
                   setShowProfile(true);
                   setDropdownOpen(false);
@@ -127,7 +127,7 @@ export default function Header({ onHamburgerClick }) {
                 <FaUser /> View Profile
               </button>
               <button
-                className="flex items-center gap-2 px-4 py-2 w-full text-sm text-red-600 hover:bg-blue-50"
+                className="flex items-center gap-2 px-4 py-2 w-full text-xs text-red-600 hover:bg-blue-50"
                 onClick={handleLogout}
               >
                 <FaSignOutAlt /> Logout
@@ -142,12 +142,12 @@ export default function Header({ onHamburgerClick }) {
           <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl relative">
             <button
               onClick={() => setShowProfile(false)}
-              className="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-xl"
+              className="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-lg"
             >
               <FaTimes />
             </button>
-            <h2 className="text-xl font-bold mb-4 text-center text-blue-600">User Profile</h2>
-            <div className="space-y-2 text-sm">
+            <h2 className="text-lg font-bold mb-4 text-center text-blue-600">User Profile</h2>
+            <div className="space-y-2 text-xs">
               <p><strong>Name:</strong> {user?.name || '-'}</p>
               <p><strong>Email:</strong> {user?.email || '-'}</p>
               <p><strong>Role:</strong> {user?.role || '-'}</p>

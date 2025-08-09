@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchTestRequests, downloadTestReport } from '../../features/doctor/doctorThunks';
+import { downloadPDFReport, viewPDFReport } from '../../utils/pdfHandler';
 import { 
   FileText, 
   Search, 
@@ -120,42 +121,18 @@ const TestRequests = () => {
     return testRequests.filter(test => test.status === status).length;
   };
 
-  const handleViewReport = (testRequestId) => {
-    // Open PDF in new tab
-    const token = localStorage.getItem('token');
-    const viewUrl = `http://localhost:5000/api/test-requests/${testRequestId}/download-report`;
-    
-    // Add token to URL as query parameter for the new tab
-    const urlWithToken = `${viewUrl}?token=${encodeURIComponent(token)}`;
-    window.open(urlWithToken, '_blank');
+  const handleViewReport = async (testRequestId) => {
+    try {
+      await viewPDFReport(testRequestId);
+    } catch (error) {
+      console.error('Error viewing report:', error);
+      alert('Failed to view report. Please try again.');
+    }
   };
 
   const handleDownloadReport = async (testRequestId) => {
     try {
-      // Download the report file using the new API endpoint
-      const token = localStorage.getItem('token');
-      const downloadUrl = `http://localhost:5000/api/test-requests/${testRequestId}/download-report`;
-      
-      const response = await fetch(downloadUrl, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to download report');
-      }
-      
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `lab-report-${testRequestId}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-      
+      await downloadPDFReport(testRequestId);
     } catch (error) {
       console.error('Error downloading report:', error);
       alert('Failed to download report. Please try again.');

@@ -547,7 +547,17 @@ export const completeLabTesting = async (req, res) => {
     testRequest.testResults = testResults;
     testRequest.testingNotes = labTestingNotes; // Map to correct field name
     testRequest.testingEndDate = labTestingCompletedDate || new Date(); // Map to correct field name
-    testRequest.resultValues = testParameters || []; // Map to correct field name
+    
+    // Transform testParameters to match PDF expectations
+    const resultValues = testParameters ? testParameters.map(param => ({
+      parameter: param.name || param.parameter,
+      value: param.value,
+      unit: param.unit,
+      normalRange: param.normalRange,
+      status: param.status || 'Normal'
+    })) : [];
+    
+    testRequest.resultValues = resultValues;
     testRequest.conclusion = conclusion; // Use the new field
     testRequest.recommendations = recommendations; // Use the new field
     testRequest.labTestingCompletedDate = labTestingCompletedDate || new Date(); // Use the new field

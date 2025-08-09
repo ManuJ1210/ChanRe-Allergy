@@ -256,10 +256,13 @@ export default function EditPatient() {
                     type="text"
                     name="centerCode"
                     value={formData.centerCode}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    placeholder="Enter center code"
+                    readOnly
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 text-slate-700 cursor-not-allowed"
+                    placeholder="Center code (read-only)"
                   />
+                  <p className="text-xs text-slate-500 mt-1">
+                    Center code cannot be modified
+                  </p>
                 </div>
 
                 <div>

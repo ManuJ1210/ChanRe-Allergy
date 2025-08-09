@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { createReceptionistPatient } from "../../features/receptionist/receptionistThunks";
 import { resetReceptionistState } from "../../features/receptionist/receptionistSlice";
 import ReceptionistLayout from './ReceptionistLayout';
-import { User, Save, ArrowLeft, CheckCircle, AlertCircle, Mail, Phone, MapPin, Calendar, UserCheck, Building2 } from "lucide-react";
+import API from "../../services/api";
+import { User, Save, ArrowLeft, CheckCircle, AlertCircle, Mail, Phone, MapPin, Calendar, UserCheck, Building2, Building } from "lucide-react";
 
 export default function AddPatient() {
   const navigate = useNavigate();
@@ -25,10 +26,85 @@ export default function AddPatient() {
   const [doctors, setDoctors] = useState([]);
   const [doctorLoading, setDoctorLoading] = useState(true);
   const [doctorError, setDoctorError] = useState("");
+  const [centerInfo, setCenterInfo] = useState({
+    name: "",
+    code: ""
+  });
+
+  // Get center ID from user
+  const getCenterId = () => {
+    if (!user) return null;
+    
+    if (user.centerId) {
+      if (typeof user.centerId === 'object' && user.centerId._id) {
+        return user.centerId._id;
+      }
+      if (typeof user.centerId === 'string') {
+        return user.centerId;
+      }
+    }
+    
+    if (user.centerID) return user.centerID;
+    if (user.center_id) return user.center_id;
+    if (user.center && user.center._id) return user.center._id;
+    
+    return null;
+  };
 
   useEffect(() => {
     fetchDoctors();
-  }, []);
+    
+    // Fetch center information and auto-populate
+    const fetchCenterInfo = async () => {
+      const centerId = getCenterId();
+      if (centerId) {
+        try {
+          const response = await API.get(`/centers/${centerId}`);
+          const center = response.data;
+          
+          setCenterInfo({
+            name: center.name,
+            code: center.code
+          });
+          
+          // Auto-populate centerCode in form
+          setFormData(prev => ({
+            ...prev,
+            centerCode: center.code
+          }));
+          
+        } catch (error) {
+          console.error('Error fetching center info:', error);
+          // Fallback to user's centerCode if available
+          if (user.centerCode) {
+            setFormData(prev => ({
+              ...prev,
+              centerCode: user.centerCode
+            }));
+            setCenterInfo(prev => ({
+              ...prev,
+              code: user.centerCode,
+              name: user.hospitalName || 'Center'
+            }));
+          }
+        }
+      } else {
+        // Try to use centerCode directly if available
+        if (user.centerCode) {
+          setFormData(prev => ({
+            ...prev,
+            centerCode: user.centerCode
+          }));
+          setCenterInfo({
+            code: user.centerCode,
+            name: user.hospitalName || 'Center'
+          });
+        }
+      }
+    };
+    
+    fetchCenterInfo();
+  }, [user]);
 
   useEffect(() => {
     if (addSuccess) {
@@ -200,16 +276,39 @@ export default function AddPatient() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-blue-500" />
-                    Center Code
+                    <Building className="h-4 w-4 text-blue-500" />
+                    Center Information
                   </label>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-600 mb-1">
+                        Center Name
+                      </label>
+                      <input
+                        type="text"
+                        value={centerInfo.name || 'Loading center...'}
+                        readOnly
+                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 text-slate-700 cursor-not-allowed"
+                        placeholder="Center name will be auto-filled"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-600 mb-1">
+                        Center Code
+                      </label>
+                      <input
+                        type="text"
+                        value={centerInfo.code || 'Loading...'}
+                        readOnly
+                        className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 text-slate-700 cursor-not-allowed"
+                        placeholder="Center code will be auto-filled"
+                      />
+                    </div>
+                  </div>
                   <input
-                    type="text"
+                    type="hidden"
                     name="centerCode"
                     value={formData.centerCode}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    placeholder="Enter center code"
                   />
                 </div>
 

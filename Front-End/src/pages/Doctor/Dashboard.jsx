@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchAssignedPatients, fetchTestRequests, fetchDoctorNotifications } from '../../features/doctor/doctorThunks';
+import API from '../../services/api';
 import { User, Users, FileText, Clock, AlertCircle, CheckCircle, RefreshCw, Bell } from 'lucide-react';
 
 const DoctorDashboard = () => {
@@ -19,11 +20,26 @@ const DoctorDashboard = () => {
   } = useSelector((state) => state.doctor);
 
   const [activeTab, setActiveTab] = useState('patients');
+  const [stats, setStats] = useState({
+    totalPatients: 0,
+    pendingTests: 0,
+    completedTests: 0
+  });
+
+  const fetchStats = async () => {
+    try {
+      const response = await API.get('/dashboard/doctor/stats');
+      setStats(response.data);
+    } catch (error) {
+      console.error('Error fetching doctor stats:', error);
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchAssignedPatients());
     dispatch(fetchTestRequests());
     dispatch(fetchDoctorNotifications());
+    fetchStats();
   }, [dispatch]);
 
   // Refresh data when component becomes visible
@@ -32,6 +48,7 @@ const DoctorDashboard = () => {
       if (!document.hidden) {
         dispatch(fetchAssignedPatients());
         dispatch(fetchTestRequests());
+        fetchStats();
       }
     };
 
@@ -46,6 +63,7 @@ const DoctorDashboard = () => {
     const interval = setInterval(() => {
       dispatch(fetchAssignedPatients());
       dispatch(fetchTestRequests());
+      fetchStats();
     }, 2 * 60 * 1000); // 2 minutes
 
     return () => clearInterval(interval);
@@ -72,6 +90,7 @@ const DoctorDashboard = () => {
     }
   };
 
+  // Keep local filters for backward compatibility and display
   const pendingTests = testRequests.filter(test => test.status === 'Pending');
   const completedTests = testRequests.filter(test => test.status === 'Completed');
 
@@ -107,6 +126,7 @@ const DoctorDashboard = () => {
                   dispatch(fetchAssignedPatients());
                   dispatch(fetchTestRequests());
                   dispatch(fetchDoctorNotifications());
+                  fetchStats();
                 }}
                 disabled={patientsLoading || testRequestsLoading}
                 className="bg-slate-500 text-white px-4 py-2 rounded-lg hover:bg-slate-600 flex items-center disabled:opacity-50"
@@ -124,7 +144,7 @@ const DoctorDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                <p className="text-2xl font-bold text-slate-800">{assignedPatients.length}</p>
+                <p className="text-2xl font-bold text-slate-800">{stats.totalPatients}</p>
               </div>
               <Users className="h-8 w-8 text-blue-500" />
             </div>
@@ -134,7 +154,7 @@ const DoctorDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Pending Tests</p>
-                <p className="text-2xl font-bold text-slate-800">{pendingTests.length}</p>
+                <p className="text-2xl font-bold text-slate-800">{stats.pendingTests}</p>
               </div>
               <Clock className="h-8 w-8 text-yellow-500" />
             </div>
@@ -144,7 +164,7 @@ const DoctorDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Completed Tests</p>
-                <p className="text-2xl font-bold text-slate-800">{completedTests.length}</p>
+                <p className="text-2xl font-bold text-slate-800">{stats.completedTests}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-500" />
             </div>
