@@ -54,6 +54,10 @@ const AddSuperadminDoctor = () => {
     dispatch(clearError());
     dispatch(clearSuccess());
     
+    // Debug logging to see what we're sending
+    console.log('🚀 Submitting doctor data:', formData);
+    console.log('🚀 Specializations being sent:', formData.specializations);
+    
     const result = await dispatch(addSuperAdminDoctor(formData));
     
     if (addSuperAdminDoctor.fulfilled.match(result)) {

@@ -188,7 +188,7 @@ export default function AddHistory() {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Patient
             </button>
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            <h1 className="text-lg font-bold text-slate-800 mb-2">
               Add Medical History
             </h1>
             <p className="text-slate-600">
@@ -227,7 +227,7 @@ export default function AddHistory() {
           ) : (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                 <FileText className="h-5 w-5 mr-2 text-blue-500" />
                 Medical History Information
               </h2>
@@ -239,7 +239,7 @@ export default function AddHistory() {
             <form onSubmit={handleSubmit} className="p-6 space-y-8">
               {/* 1. Medical Conditions */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   1. Have you ever had the following conditions:
                 </h3>
                 
@@ -258,7 +258,7 @@ export default function AddHistory() {
                     { name: 'beeStingHypersensitivity', label: 'Bee Sting or Insect Hypersensitivity (large swelling, hives, shock)' }
                   ].map((condition) => (
                     <div key={condition.name} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
-                      <span className="text-sm text-slate-700 flex-1 pr-4">{condition.label}</span>
+                      <span className="text-xs text-slate-700 flex-1 pr-4">{condition.label}</span>
                       <div className="flex items-center space-x-6">
                         <label className="flex items-center cursor-pointer">
                           <input
@@ -269,7 +269,7 @@ export default function AddHistory() {
                             onChange={handleChange}
                             className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                           />
-                          <span className="text-sm font-medium text-slate-700">Yes</span>
+                          <span className="text-xs font-medium text-slate-700">Yes</span>
                         </label>
                         <label className="flex items-center cursor-pointer">
                           <input
@@ -280,7 +280,7 @@ export default function AddHistory() {
                             onChange={handleChange}
                             className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                           />
-                          <span className="text-sm font-medium text-slate-700">No</span>
+                          <span className="text-xs font-medium text-slate-700">No</span>
                         </label>
                       </div>
                     </div>
@@ -290,13 +290,13 @@ export default function AddHistory() {
 
               {/* 2. Hay Fever Details */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   2. Details of Hay fever:
                 </h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-3">Fever grade:</label>
+                    <label className="block text-xs font-medium text-slate-700 mb-3">Fever grade:</label>
                     <div className="flex space-x-6">
                       {['Mild', 'Moderate', 'Severe'].map((grade) => (
                         <label key={grade} className="flex items-center cursor-pointer">
@@ -308,14 +308,14 @@ export default function AddHistory() {
                             onChange={handleChange}
                             className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                           />
-                          <span className="text-sm font-medium text-slate-700">{grade}</span>
+                          <span className="text-xs font-medium text-slate-700">{grade}</span>
                         </label>
                       ))}
                     </div>
                   </div>
                   
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-3">Itching sore throat and other symptoms if any:</label>
+                    <label className="block text-xs font-medium text-slate-700 mb-3">Itching sore throat and other symptoms if any:</label>
                     <div className="flex space-x-6">
                       {['Yes', 'No'].map((option) => (
                         <label key={option} className="flex items-center cursor-pointer">
@@ -327,7 +327,7 @@ export default function AddHistory() {
                             onChange={handleChange}
                             className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                           />
-                          <span className="text-sm font-medium text-slate-700">{option}</span>
+                          <span className="text-xs font-medium text-slate-700">{option}</span>
                         </label>
                       ))}
                     </div>
@@ -335,7 +335,7 @@ export default function AddHistory() {
                 </div>
                 
                 <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Any specific day exposure/cycles of fever if noted:
                   </label>
                   <input
@@ -351,13 +351,13 @@ export default function AddHistory() {
 
               {/* 3. Asthma */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   3. Asthma:
                 </h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-3">Select:</label>
+                    <label className="block text-xs font-medium text-slate-700 mb-3">Select:</label>
                     <select
                       name="asthmaType"
                       value={formData.asthmaType}
@@ -372,7 +372,7 @@ export default function AddHistory() {
                   </div>
                   
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-3">
+                    <label className="block text-xs font-medium text-slate-700 mb-3">
                       How often have exacerbations occurred in the last year?:
                     </label>
                     <textarea
@@ -389,7 +389,7 @@ export default function AddHistory() {
 
               {/* 4. Medical Events */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   4. Have these required any of the following and if so how frequently?:
                 </h3>
                 
@@ -408,7 +408,7 @@ export default function AddHistory() {
                     { name: 'petsAtHome', label: 'Are there any pets at home' }
                   ].map((event) => (
                     <div key={event.name} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
-                      <span className="text-sm text-slate-700 flex-1 pr-4">{event.label}</span>
+                      <span className="text-xs text-slate-700 flex-1 pr-4">{event.label}</span>
                       <div className="flex items-center space-x-6">
                         <label className="flex items-center cursor-pointer">
                           <input
@@ -419,7 +419,7 @@ export default function AddHistory() {
                             onChange={handleChange}
                             className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                           />
-                          <span className="text-sm font-medium text-slate-700">Yes</span>
+                          <span className="text-xs font-medium text-slate-700">Yes</span>
                         </label>
                         <label className="flex items-center cursor-pointer">
                           <input
@@ -430,7 +430,7 @@ export default function AddHistory() {
                             onChange={handleChange}
                             className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                           />
-                          <span className="text-sm font-medium text-slate-700">No</span>
+                          <span className="text-xs font-medium text-slate-700">No</span>
                         </label>
                       </div>
                     </div>
@@ -440,7 +440,7 @@ export default function AddHistory() {
 
               {/* 5. Triggers */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   5. What triggers exacerbations?:
                 </h3>
                 
@@ -462,13 +462,13 @@ export default function AddHistory() {
                           onChange={handleChange}
                           className="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500"
                         />
-                        <span className="text-sm font-medium text-slate-700">{trigger.label}</span>
+                        <span className="text-xs font-medium text-slate-700">{trigger.label}</span>
                       </label>
                     ))}
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-xs font-medium text-slate-700 mb-2">
                       Others, please specify:
                     </label>
                     <input
@@ -485,12 +485,12 @@ export default function AddHistory() {
 
               {/* 6. Allergic Rhinitis */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   6. Allergic Rhinitis:
                 </h3>
                 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Select:</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">Select:</label>
                   <select
                     name="allergicRhinitisType"
                     value={formData.allergicRhinitisType}
@@ -508,11 +508,11 @@ export default function AddHistory() {
                   <table className="w-full border border-slate-200 rounded-lg">
                     <thead className="bg-slate-50">
                       <tr>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-slate-700 border-r border-slate-200">Symptoms</th>
-                        <th className="px-4 py-2 text-center text-sm font-medium text-slate-700 border-r border-slate-200">Not So Much</th>
-                        <th className="px-4 py-2 text-center text-sm font-medium text-slate-700 border-r border-slate-200">Mild</th>
-                        <th className="px-4 py-2 text-center text-sm font-medium text-slate-700 border-r border-slate-200">Mod</th>
-                        <th className="px-4 py-2 text-center text-sm font-medium text-slate-700">Severe</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-slate-700 border-r border-slate-200">Symptoms</th>
+                        <th className="px-4 py-2 text-center text-xs font-medium text-slate-700 border-r border-slate-200">Not So Much</th>
+                        <th className="px-4 py-2 text-center text-xs font-medium text-slate-700 border-r border-slate-200">Mild</th>
+                        <th className="px-4 py-2 text-center text-xs font-medium text-slate-700 border-r border-slate-200">Mod</th>
+                        <th className="px-4 py-2 text-center text-xs font-medium text-slate-700">Severe</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -521,7 +521,7 @@ export default function AddHistory() {
                         'rhinitisCoughing', 'rhinitisWheezing', 'rhinitisCoughingWheezing', 'rhinitisWithExercise', 'rhinitisHeadaches', 'rhinitisPostNasalDrip'
                       ].map((symptom) => (
                         <tr key={symptom} className="border-t border-slate-200">
-                          <td className="px-4 py-2 text-sm text-slate-700 border-r border-slate-200 capitalize">
+                          <td className="px-4 py-2 text-xs text-slate-700 border-r border-slate-200 capitalize">
                             {symptom.replace(/([A-Z])/g, ' $1').trim()}
                           </td>
                           {['notSoMuch', 'mild', 'mod', 'severe'].map((severity) => (
@@ -545,12 +545,12 @@ export default function AddHistory() {
 
               {/* 7. Skin Allergy */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   7. Skin Allergy:
                 </h3>
                 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Select:</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">Select:</label>
                   <select
                     name="skinAllergyType"
                     value={formData.skinAllergyType}
@@ -576,7 +576,7 @@ export default function AddHistory() {
                     <div key={condition.key} className="p-4 bg-slate-50 rounded-lg border border-slate-200">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
                         <div className="md:col-span-1">
-                          <span className="text-sm font-medium text-slate-700">{condition.label}</span>
+                          <span className="text-xs font-medium text-slate-700">{condition.label}</span>
                         </div>
                         <div className="flex items-center space-x-6">
                           <label className="flex items-center cursor-pointer">
@@ -588,7 +588,7 @@ export default function AddHistory() {
                               onChange={handleChange}
                               className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                             />
-                            <span className="text-sm font-medium text-slate-700">Yes</span>
+                            <span className="text-xs font-medium text-slate-700">Yes</span>
                           </label>
                           <label className="flex items-center cursor-pointer">
                             <input
@@ -599,7 +599,7 @@ export default function AddHistory() {
                               onChange={handleChange}
                               className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                             />
-                            <span className="text-sm font-medium text-slate-700">No</span>
+                            <span className="text-xs font-medium text-slate-700">No</span>
                           </label>
                         </div>
                         <div className="md:col-span-1">
@@ -619,7 +619,7 @@ export default function AddHistory() {
 
               {/* 8. Medical History */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   8. History:
                 </h3>
                 
@@ -631,7 +631,7 @@ export default function AddHistory() {
                     { name: 'ihd', label: 'IHD (Ischemic Heart Disease)' }
                   ].map((condition) => (
                     <div key={condition.name} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
-                      <span className="text-sm text-slate-700 flex-1 pr-4">{condition.label}</span>
+                      <span className="text-xs text-slate-700 flex-1 pr-4">{condition.label}</span>
                       <div className="flex items-center space-x-6">
                         <label className="flex items-center cursor-pointer">
                           <input
@@ -642,7 +642,7 @@ export default function AddHistory() {
                             onChange={handleChange}
                             className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                           />
-                          <span className="text-sm font-medium text-slate-700">Yes</span>
+                          <span className="text-xs font-medium text-slate-700">Yes</span>
                         </label>
                         <label className="flex items-center cursor-pointer">
                           <input
@@ -653,7 +653,7 @@ export default function AddHistory() {
                             onChange={handleChange}
                             className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                           />
-                          <span className="text-sm font-medium text-slate-700">No</span>
+                          <span className="text-xs font-medium text-slate-700">No</span>
                         </label>
                       </div>
                     </div>
@@ -663,13 +663,13 @@ export default function AddHistory() {
 
               {/* 9. New Drugs */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   9. Any New Drugs recently prescribed before the onset:
                 </h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Drug Allergy Known:</label>
+                    <label className="block text-xs font-medium text-slate-700 mb-2">Drug Allergy Known:</label>
                     <input
                       type="text"
                       name="drugAllergyKnown"
@@ -680,7 +680,7 @@ export default function AddHistory() {
                     />
                   </div>
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Probable:</label>
+                    <label className="block text-xs font-medium text-slate-700 mb-2">Probable:</label>
                     <input
                       type="text"
                       name="probable"
@@ -691,7 +691,7 @@ export default function AddHistory() {
                     />
                   </div>
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Definite:</label>
+                    <label className="block text-xs font-medium text-slate-700 mb-2">Definite:</label>
                     <input
                       type="text"
                       name="definite"
@@ -706,13 +706,13 @@ export default function AddHistory() {
 
               {/* 10. Occupation and Exposure */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   10. Occupation and Exposure possibility:
                 </h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Occupation:</label>
+                    <label className="block text-xs font-medium text-slate-700 mb-2">Occupation:</label>
                     <input
                       type="text"
                       name="occupation"
@@ -723,7 +723,7 @@ export default function AddHistory() {
                     />
                   </div>
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Probable Chemical Exposure:</label>
+                    <label className="block text-xs font-medium text-slate-700 mb-2">Probable Chemical Exposure:</label>
                     <input
                       type="text"
                       name="probableChemicalExposure"
@@ -734,7 +734,7 @@ export default function AddHistory() {
                     />
                   </div>
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Location:</label>
+                    <label className="block text-xs font-medium text-slate-700 mb-2">Location:</label>
                     <input
                       type="text"
                       name="location"
@@ -745,7 +745,7 @@ export default function AddHistory() {
                     />
                   </div>
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Family History:</label>
+                    <label className="block text-xs font-medium text-slate-700 mb-2">Family History:</label>
                     <input
                       type="text"
                       name="familyHistory"
@@ -760,7 +760,7 @@ export default function AddHistory() {
 
               {/* 11. Examination */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   11. Examination:
                 </h3>
                 
@@ -776,7 +776,7 @@ export default function AddHistory() {
                     { name: 'abdomen', label: 'Abdomen' }
                   ].map((system) => (
                     <div key={system.name} className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                      <label className="block text-sm font-medium text-slate-700 mb-2">{system.label}:</label>
+                      <label className="block text-xs font-medium text-slate-700 mb-2">{system.label}:</label>
                       <textarea
                         name={system.name}
                         value={formData[system.name]}
@@ -790,7 +790,7 @@ export default function AddHistory() {
                 </div>
                 
                 <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Any Other Findings:</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">Any Other Findings:</label>
                   <textarea
                     name="otherFindings"
                     value={formData.otherFindings}
@@ -804,19 +804,19 @@ export default function AddHistory() {
 
               {/* 12. Report */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   12. Report:
                 </h3>
                 
                 <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Upload Report File:</label>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">Upload Report File:</label>
                   <input
                     type="file"
                     name="reportFile"
                     onChange={handleChange}
                     className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
-                  <p className="text-sm text-slate-500 mt-1">No file chosen</p>
+                  <p className="text-xs text-slate-500 mt-1">No file chosen</p>
                 </div>
               </div>
 

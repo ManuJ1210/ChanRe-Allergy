@@ -40,17 +40,21 @@ export const getAllSuperAdminDoctors = async (req, res) => {
     // Calculate pagination
     const skip = (parseInt(page) - 1) * parseInt(limit);
     
-    // Get total count
-    const total = await SuperAdminDoctor.countDocuments();
+    // Get total count with query filters
+    const total = await SuperAdminDoctor.countDocuments(query);
     
-    // Get doctors with pagination
-    const doctors = await SuperAdminDoctor.find()
+    // Get doctors with pagination and query filters
+    const doctors = await SuperAdminDoctor.find(query)
       .select('-password')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
 
-
+    // Debug logging for first doctor
+    if (doctors.length > 0) {
+      console.log('🔍 Backend - First doctor from DB:', doctors[0]);
+      console.log('🔍 Backend - First doctor specializations:', doctors[0].specializations);
+    }
 
     const totalPages = Math.ceil(total / parseInt(limit));
 
@@ -70,6 +74,10 @@ export const getAllSuperAdminDoctors = async (req, res) => {
 
 export const addSuperAdminDoctor = async (req, res) => {
   try {
+    // Debug logging
+    console.log('🔍 Backend - Received request body:', req.body);
+    console.log('🔍 Backend - Specializations received:', req.body.specializations);
+    
     const { 
       name, 
       email, 
@@ -119,8 +127,14 @@ export const addSuperAdminDoctor = async (req, res) => {
     });
 
     await doctor.save();
+    
+    // Debug logging after save
+    console.log('🔍 Backend - Doctor saved with specializations:', doctor.specializations);
+    
     const doctorResponse = doctor.toObject();
     delete doctorResponse.password;
+    
+    console.log('🔍 Backend - Response specializations:', doctorResponse.specializations);
 
     res.status(201).json(doctorResponse);
   } catch (error) {

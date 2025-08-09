@@ -101,7 +101,7 @@ const DoctorDashboard = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-slate-800 mb-2">
+              <h1 className="text-xl font-bold text-slate-800 mb-2">
                 Welcome back, Dr. {user?.name}
               </h1>
               <p className="text-slate-600">
@@ -144,7 +144,7 @@ const DoctorDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                <p className="text-2xl font-bold text-slate-800">{stats.totalPatients}</p>
+                <p className="text-xl font-bold text-slate-800">{stats.totalPatients}</p>
               </div>
               <Users className="h-8 w-8 text-blue-500" />
             </div>

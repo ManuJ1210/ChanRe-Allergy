@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { loginUser } from '../features/auth/authThunks';
 import { useNavigate } from 'react-router-dom';
 
@@ -62,7 +63,7 @@ export default function Login() {
       }
       else if (role === 'lab staff') {
         // Lab Staff can only be used for sample collection, not dashboard access
-        alert('Lab Staff accounts are for sample collection only. Please contact your administrator for dashboard access.');
+        toast.warning('Lab Staff accounts are for sample collection only. Please contact your administrator for dashboard access.');
         return;
       }
      

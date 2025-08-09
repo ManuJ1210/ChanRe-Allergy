@@ -99,7 +99,7 @@ const AddAllergicBronchitis = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">Add Allergic Bronchitis Record</h1>
+              <h1 className="text-lg font-bold text-gray-800">Add Allergic Bronchitis Record</h1>
             </div>
           </div>
         </div>
@@ -108,14 +108,14 @@ const AddAllergicBronchitis = () => {
         <div className="bg-white rounded-lg shadow-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Main Title */}
-            <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">ALLERGIC BRONCHITIS</h1>
+            <h1 className="text-lg font-bold text-gray-800 text-center mb-8">ALLERGIC BRONCHITIS</h1>
             
             {/* Allergic Bronchitis Section */}
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Allergic Bronchitis</h2>
+              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Allergic Bronchitis</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">Symptoms</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">Symptoms</label>
                   <textarea
                     name="symptoms"
                     value={formData.symptoms}
@@ -126,7 +126,7 @@ const AddAllergicBronchitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">Type</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">Type</label>
                   <div className="flex space-x-6">
                     <label className="flex items-center">
                       <input
@@ -157,7 +157,7 @@ const AddAllergicBronchitis = () => {
 
             {/* GINA Grading Section */}
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
+              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-blue-600" />
                 GINA Grading of Asthma
               </h2>
@@ -166,16 +166,16 @@ const AddAllergicBronchitis = () => {
                   <table className="w-full border-collapse border border-gray-300">
                     <thead>
                       <tr className="bg-gray-100">
-                        <th className="border border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700">Characteristics</th>
-                        <th className="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">Controlled</th>
-                        <th className="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">Partially Controlled</th>
-                        <th className="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">Uncontrolled</th>
+                        <th className="border border-gray-300 px-4 py-3 text-left text-xs font-medium text-gray-700">Characteristics</th>
+                        <th className="border border-gray-300 px-4 py-3 text-center text-xs font-medium text-gray-700">Controlled</th>
+                        <th className="border border-gray-300 px-4 py-3 text-center text-xs font-medium text-gray-700">Partially Controlled</th>
+                        <th className="border border-gray-300 px-4 py-3 text-center text-xs font-medium text-gray-700">Uncontrolled</th>
                       </tr>
                     </thead>
                     <tbody>
                       {GINA_QUESTIONS.map(question => (
                         <tr key={question} className="border-b border-gray-300">
-                          <td className="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">
+                          <td className="border border-gray-300 px-4 py-3 text-xs font-medium text-gray-700">
                             {question}
                           </td>
                           {GINA_OPTIONS.map(option => (
@@ -200,7 +200,7 @@ const AddAllergicBronchitis = () => {
 
             {/* PFT Grading Section */}
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
+              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-blue-600" />
                 Grading based on PFT
               </h2>
@@ -218,7 +218,7 @@ const AddAllergicBronchitis = () => {
                       />
                       <div>
                         <div className="font-medium text-gray-800">{grade.label}</div>
-                        <div className="text-sm text-gray-600">{grade.description}</div>
+                        <div className="text-xs text-gray-600">{grade.description}</div>
                       </div>
                     </label>
                   ))}
@@ -228,7 +228,7 @@ const AddAllergicBronchitis = () => {
 
             {/* Habits Section */}
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Habits</h2>
+              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Habits</h2>
               <div className="bg-gray-50 rounded-lg p-6">
                 <div className="flex space-x-6">
                   {HABITS.map(habit => (

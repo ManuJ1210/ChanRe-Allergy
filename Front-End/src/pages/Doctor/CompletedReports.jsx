@@ -215,7 +215,7 @@ const CompletedReports = () => {
                 <ArrowLeft size={20} />
                 <span>Back to Dashboard</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">Completed Test Reports</h1>
+              <h1 className="text-xl font-bold text-gray-800">Completed Test Reports</h1>
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               <Clock className="h-4 w-4" />
@@ -249,7 +249,7 @@ const CompletedReports = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Total Reports</p>
-                <p className="text-2xl font-bold text-gray-900">{completedReports.length}</p>
+                <p className="text-xl font-bold text-gray-900">{completedReports.length}</p>
               </div>
             </div>
           </div>
@@ -261,7 +261,7 @@ const CompletedReports = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Completed</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-xl font-bold text-gray-900">
                   {completedReports.filter(r => r.status === 'Completed').length}
                 </p>
               </div>
@@ -275,7 +275,7 @@ const CompletedReports = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Sent</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-xl font-bold text-gray-900">
                   {completedReports.filter(r => r.status === 'Report_Sent').length}
                 </p>
               </div>
@@ -289,7 +289,7 @@ const CompletedReports = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">This Month</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-xl font-bold text-gray-900">
                   {completedReports.filter(r => {
                     const monthAgo = new Date();
                     monthAgo.setMonth(monthAgo.getMonth() - 1);

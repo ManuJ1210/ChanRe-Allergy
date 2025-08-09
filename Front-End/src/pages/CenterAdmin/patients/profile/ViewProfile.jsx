@@ -144,7 +144,7 @@ const ViewProfile = () => {
                   <User className="h-10 w-10 text-blue-500" />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
+                  <h1 className="text-xl font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
                                       <div className="flex flex-wrap gap-4 text-slate-600">
                       {patient?.gender && (
                         <span className="flex items-center gap-1">
@@ -216,7 +216,7 @@ const ViewProfile = () => {
               {/* Patient Details Card */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100">
-                  <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                     <User className="h-5 w-5 mr-2 text-blue-500" />
                     Patient Details
             </h2>
@@ -277,7 +277,7 @@ const ViewProfile = () => {
               {/* Investigations */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100">
-                  <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                     <Activity className="h-5 w-5 mr-2 text-blue-500" />
                     Investigations
                   </h2>
@@ -349,7 +349,7 @@ const ViewProfile = () => {
               {/* Medications */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100">
-                  <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                     <Pill className="h-5 w-5 mr-2 text-blue-500" />
                     Medications
                   </h2>
@@ -406,7 +406,7 @@ const ViewProfile = () => {
               {/* History */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100">
-                  <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                     <FileText className="h-5 w-5 mr-2 text-blue-500" />
                     Medical History
                   </h2>
@@ -483,7 +483,7 @@ const ViewProfile = () => {
               {/* Allergic Rhinitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                  <h2 className="text-xl font-semibold text-slate-800">Allergic Rhinitis</h2>
+                  <h2 className="text-lg font-semibold text-slate-800">Allergic Rhinitis</h2>
                   <button
                                                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddAllergicRhinitis/${patient._id}`)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -542,7 +542,7 @@ const ViewProfile = () => {
               {/* Atopic Dermatitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                  <h2 className="text-xl font-semibold text-slate-800">Atopic Dermatitis</h2>
+                  <h2 className="text-lg font-semibold text-slate-800">Atopic Dermatitis</h2>
                                 <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AtopicDermatitis/${patient._id}`)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -603,7 +603,7 @@ const ViewProfile = () => {
               {/* Allergic Conjunctivitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                  <h2 className="text-xl font-semibold text-slate-800">Allergic Conjunctivitis</h2>
+                  <h2 className="text-lg font-semibold text-slate-800">Allergic Conjunctivitis</h2>
                                 <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddAllergicConjunctivitis/${patient._id}`)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -662,7 +662,7 @@ const ViewProfile = () => {
               {/* Allergic Bronchitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                  <h2 className="text-xl font-semibold text-slate-800">Allergic Bronchitis</h2>
+                  <h2 className="text-lg font-semibold text-slate-800">Allergic Bronchitis</h2>
                             <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddAllergicBronchitis/${patient._id}`)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -721,7 +721,7 @@ const ViewProfile = () => {
               {/* GPE */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                  <h2 className="text-xl font-semibold text-slate-800">GPE</h2>
+                  <h2 className="text-lg font-semibold text-slate-800">GPE</h2>
                         <button
               onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddGPE/${patient._id}`)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -781,7 +781,7 @@ const ViewProfile = () => {
           {activeTab === "Prescription" && (
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
               <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-slate-800">Prescription</h2>
+                <h2 className="text-lg font-semibold text-slate-800">Prescription</h2>
                         <button
               onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddPrescription/${patient._id}`)}
               className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"

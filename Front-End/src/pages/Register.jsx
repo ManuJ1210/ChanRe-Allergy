@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import API from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +16,7 @@ export default function Register() {
       localStorage.setItem('token', res.data.token);
       navigateRole(res.data.user.role, res.data.user);
     } catch (err) {
-      alert(err.response?.data?.message || 'Registration failed');
+      toast.error(err.response?.data?.message || 'Registration failed');
     }
   };
 
@@ -34,7 +35,7 @@ export default function Register() {
     else if (role === 'lab technician' || role === 'lab assistant' || role === 'lab manager') navigate('/dashboard/lab/dashboard');
     else if (role === 'lab staff') {
       // Lab Staff can only be used for sample collection, not dashboard access
-      alert('Lab Staff accounts are for sample collection only. Please contact your administrator for dashboard access.');
+      toast.warning('Lab Staff accounts are for sample collection only. Please contact your administrator for dashboard access.');
       return;
     }
   };

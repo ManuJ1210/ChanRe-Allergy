@@ -296,10 +296,37 @@ const SuperAdminDoctorList = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-slate-900">
-                          {doctor.specializations && doctor.specializations.length > 0 
-                            ? doctor.specializations.join(', ') 
-                            : 'N/A'
-                          }
+                          {(() => {
+                            // Check if specializations exist and are valid
+                            const specs = doctor.specializations;
+                            
+                            // Debug logging for first doctor only
+                            if (doctors.indexOf(doctor) === 0) {
+                              console.log('🔍 Debug - First doctor:', doctor);
+                              console.log('🔍 Specializations:', specs);
+                              console.log('🔍 Type:', typeof specs);
+                              console.log('🔍 Is Array:', Array.isArray(specs));
+                            }
+                            
+                            if (Array.isArray(specs) && specs.length > 0) {
+                              return specs.join(', ');
+                            } else if (typeof specs === 'string' && specs.trim()) {
+                              return specs;
+                            } else {
+                              return (
+                                <span className="text-slate-400 italic">
+                                  No specializations
+                                  <button
+                                    onClick={() => navigate(`/dashboard/Superadmin/Docters/EditSuperadminDoctor/${doctor._id}`)}
+                                    className="ml-2 text-blue-600 hover:text-blue-800 text-xs underline"
+                                    title="Click to add specializations"
+                                  >
+                                    Add
+                                  </button>
+                                </span>
+                              );
+                            }
+                          })()}
                         </div>
                         <div className="text-sm text-slate-500">{doctor.designation || 'N/A'}</div>
                       </td>

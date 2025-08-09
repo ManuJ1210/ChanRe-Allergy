@@ -79,7 +79,7 @@ const AddFollowUp = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">Add Follow-up</h1>
+              <h1 className="text-xl font-bold text-gray-800">Add Follow-up</h1>
             </div>
           </div>
         </div>

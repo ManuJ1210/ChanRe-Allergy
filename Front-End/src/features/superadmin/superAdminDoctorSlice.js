@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import API from '../../services/api.js';
 
 // Management thunks (for superadmin to manage superadmin doctors)
@@ -25,9 +26,12 @@ export const addSuperAdminDoctor = createAsyncThunk(
   async (doctorData, { rejectWithValue }) => {
     try {
       const response = await API.post('/superadmin/doctors', doctorData);
+      toast.success('Superadmin doctor added successfully!');
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to add superadmin doctor');
+      const errorMsg = error.response?.data?.message || 'Failed to add superadmin doctor';
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
     }
   }
 );
@@ -37,9 +41,12 @@ export const deleteSuperAdminDoctor = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       await API.delete(`/superadmin/doctors/${id}`);
+      toast.success('Superadmin doctor deleted successfully!');
       return id;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to delete superadmin doctor');
+      const errorMsg = error.response?.data?.message || 'Failed to delete superadmin doctor';
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
     }
   }
 );
@@ -49,9 +56,12 @@ export const updateSuperAdminDoctor = createAsyncThunk(
   async ({ id, doctorData }, { rejectWithValue }) => {
     try {
       const response = await API.put(`/superadmin/doctors/${id}`, doctorData);
+      toast.success('Superadmin doctor updated successfully!');
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to update superadmin doctor');
+      const errorMsg = error.response?.data?.message || 'Failed to update superadmin doctor';
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
     }
   }
 );
@@ -61,9 +71,12 @@ export const toggleSuperAdminDoctorStatus = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await API.patch(`/superadmin/doctors/${id}/toggle-status`);
+      toast.success('Doctor status updated successfully!');
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to toggle superadmin doctor status');
+      const errorMsg = error.response?.data?.message || 'Failed to toggle superadmin doctor status';
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
     }
   }
 );

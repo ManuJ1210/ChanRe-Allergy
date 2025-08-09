@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import API from '../../services/api';
 import { 
   Microscope, 
@@ -365,12 +366,12 @@ export default function TestRequests() {
           setTestRequests(prevRequests => 
             prevRequests.filter(request => request._id !== requestId)
           );
-          alert('Test request deleted successfully');
+          toast.success('Test request deleted successfully');
         }
       } catch (error) {
         console.error('Error deleting test request:', error);
         const errorMessage = error.response?.data?.message || 'Failed to delete test request';
-        alert(errorMessage);
+        toast.error(errorMessage);
       }
     }
   };
@@ -408,7 +409,7 @@ export default function TestRequests() {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-slate-800 mb-2">
+              <h1 className="text-xl font-bold text-slate-800 mb-2">
                 Test Requests
               </h1>
               <p className="text-slate-600">
@@ -522,7 +523,7 @@ export default function TestRequests() {
           {filteredRequests.length === 0 ? (
             <div className="text-center py-12">
               <Microscope className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-slate-900 mb-2">No test requests found</h3>
+              <h3 className="text-sm font-medium text-slate-900 mb-2">No test requests found</h3>
               <p className="text-slate-600">
                 {testRequests.length === 0 
                   ? "No test requests have been created yet." 

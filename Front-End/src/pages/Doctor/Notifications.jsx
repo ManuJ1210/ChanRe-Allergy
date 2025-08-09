@@ -128,7 +128,7 @@ const Notifications = () => {
 
       <div className="bg-white rounded-lg shadow">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-800">All Notifications</h2>
+          <h2 className="text-lg font-semibold text-gray-800">All Notifications</h2>
         </div>
         <div className="p-6">
           {notifications.length === 0 ? (
@@ -226,7 +226,7 @@ const Notifications = () => {
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-800">
+                <h3 className="text-sm font-semibold text-gray-800">
                   Notification Details
                 </h3>
                 <button

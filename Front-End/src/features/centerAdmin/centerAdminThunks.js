@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import API from '../../services/api';
 import {
   setLoading,
@@ -81,9 +82,12 @@ export const createReceptionist = createAsyncThunk(
       const res = await API.post('/receptionists', receptionistData);
       dispatch(addReceptionist(res.data));
       dispatch(setAddSuccess(true));
+      toast.success('Receptionist added successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to add receptionist'));
+      const errorMsg = error.response?.data?.message || 'Failed to add receptionist';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -98,9 +102,12 @@ export const updateReceptionistThunk = createAsyncThunk(
       const res = await API.put(`/receptionists/${id}`, receptionistData);
       dispatch(updateReceptionist(res.data));
       dispatch(setUpdateSuccess(true));
+      toast.success('Receptionist updated successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to update receptionist'));
+      const errorMsg = error.response?.data?.message || 'Failed to update receptionist';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -114,8 +121,11 @@ export const deleteReceptionistThunk = createAsyncThunk(
       await API.delete(`/receptionists/${id}`);
       dispatch(deleteReceptionist(id));
       dispatch(setDeleteSuccess(true));
+      toast.success('Receptionist deleted successfully!');
       return id;
     } catch (error) {
+      const errorMsg = error.response?.data?.message || 'Failed to delete receptionist';
+      toast.error(errorMsg);
       dispatch(setError(error.response?.data?.message || 'Failed to delete receptionist'));
       throw error;
     }
@@ -146,9 +156,12 @@ export const createDoctor = createAsyncThunk(
       const res = await API.post('/doctors', doctorData);
       dispatch(addDoctor(res.data));
       dispatch(setAddSuccess(true));
+      toast.success('Doctor added successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to create doctor'));
+      const errorMsg = error.response?.data?.message || 'Failed to create doctor';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -162,9 +175,12 @@ export const updateDoctor = createAsyncThunk(
       const res = await API.put(`/doctors/${id}`, doctorData);
       dispatch(updateDoctorAction(res.data));
       dispatch(setUpdateSuccess(true));
+      toast.success('Doctor updated successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to update doctor'));
+      const errorMsg = error.response?.data?.message || 'Failed to update doctor';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -178,9 +194,12 @@ export const deleteDoctorThunk = createAsyncThunk(
       await API.delete(`/doctors/${id}`);
       dispatch(deleteDoctor(id));
       dispatch(setDeleteSuccess(true));
+      toast.success('Doctor deleted successfully!');
       return id;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to delete doctor'));
+      const errorMsg = error.response?.data?.message || 'Failed to delete doctor';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -315,9 +334,12 @@ export const createPrescription = createAsyncThunk(
     try {
       const res = await API.post('/prescriptions', prescriptionData);
       dispatch(addPrescription(res.data));
+      toast.success('Prescription added successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to add prescription'));
+      const errorMsg = error.response?.data?.message || 'Failed to add prescription';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -345,9 +367,12 @@ export const createMedication = createAsyncThunk(
     try {
       const res = await API.post('/medications', medicationData);
       dispatch(addMedication(res.data));
+      toast.success('Medication added successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to add medication'));
+      const errorMsg = error.response?.data?.message || 'Failed to add medication';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -444,9 +469,12 @@ export const createHistory = createAsyncThunk(
       const res = await API.post('/history/add', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
+      toast.success('Medical history added successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to add history'));
+      const errorMsg = error.response?.data?.message || 'Failed to add history';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }

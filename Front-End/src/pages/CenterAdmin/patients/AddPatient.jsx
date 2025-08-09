@@ -161,12 +161,8 @@ const AddPatient = () => {
 
   useEffect(() => {
     if (success) {
-      toast("Patient Added successfully");
       dispatch(resetPatientState());
       navigate("/dashboard/centeradmin/patients/patientlist");
-    }
-    if (error) {
-      alert(error);
     }
   }, [success, error, dispatch, navigate]);
 
@@ -176,13 +172,13 @@ const AddPatient = () => {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => navigate('/CenterAdmin/patients/PatientList')}
+            onClick={() => navigate('/dashboard/centeradmin/patients/patientlist')}
             className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Patients List
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Add New Patient
           </h1>
           <p className="text-slate-600">
@@ -193,7 +189,7 @@ const AddPatient = () => {
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <Users className="h-5 w-5 mr-2 text-blue-500" />
               Patient Information
             </h2>
@@ -206,7 +202,7 @@ const AddPatient = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Personal Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-slate-800 mb-4">Personal Information</h3>
+                <h3 className="text-sm font-medium text-slate-800 mb-4">Personal Information</h3>
                 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -275,7 +271,7 @@ const AddPatient = () => {
 
               {/* Contact Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-slate-800 mb-4">Contact Information</h3>
+                <h3 className="text-sm font-medium text-slate-800 mb-4">Contact Information</h3>
                 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">

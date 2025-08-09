@@ -49,7 +49,7 @@ export default function Sidebar(props) {
           <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
         <div className="p-5 border-b border-blue-100">
-          <h2 className="text-xl font-extrabold tracking-wide text-blue-500">
+          <h2 className="text-lg font-extrabold tracking-wide text-blue-500">
             Chanre<span className="text-blue-400">Allergy</span>
           </h2>
           <p className="text-xs text-slate-400 mt-1 capitalize">
@@ -300,7 +300,7 @@ function SidebarLink({ to, label, icon, isActive }) {
           : 'hover:bg-blue-50 border-transparent text-slate-600'}
       `}
     >
-      <span className={`text-sm ${isActive ? 'text-blue-500' : 'text-slate-400'}`}>
+      <span className={`text-xs ${isActive ? 'text-blue-500' : 'text-slate-400'}`}>
         {icon}
       </span>
       {label}

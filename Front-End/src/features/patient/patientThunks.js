@@ -1,6 +1,7 @@
 // src/features/patient/patientThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import API from '../../services/api';
 
 // ADD PATIENT
@@ -13,9 +14,12 @@ export const createPatient = createAsyncThunk(
         patientData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      toast.success('Patient added successfully!');
       return response.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to add patient');
+      const errorMsg = err.response?.data?.message || 'Failed to add patient';
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
     }
   }
 );
@@ -35,9 +39,12 @@ export const submitPatientTests = createAsyncThunk(
           },
         }
       );
+      toast.success('Test results submitted successfully!');
       return response.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Test submission failed');
+      const errorMsg = err.response?.data?.message || 'Test submission failed';
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
     }
   }
 );
@@ -64,12 +71,15 @@ export const updatePatient = createAsyncThunk(
   async ({ id, updatedData }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put(`/patients/${id}`, updatedData, {
+      const response = await API.put(`/patients/${id}`, updatedData, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      toast.success('Patient updated successfully!');
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "Failed to update patient");
+      const errorMsg = error.response?.data?.message || "Failed to update patient";
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
     }
   }
 );
@@ -107,9 +117,12 @@ export const deletePatient = createAsyncThunk(
       await API.delete(`/patients/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      toast.success('Patient deleted successfully!');
       return id;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
+      const errorMsg = error.response?.data?.message || error.message;
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
     }
   }
 );

@@ -82,7 +82,7 @@ const MyPatients = () => {
           </button>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-slate-800 mb-2">My Patients</h1>
+              <h1 className="text-xl font-bold text-slate-800 mb-2">My Patients</h1>
               <p className="text-slate-600">
                 Manage and view your assigned patients ({assignedPatients.length} total)
               </p>
@@ -148,7 +148,7 @@ const MyPatients = () => {
           {filteredPatients.length === 0 ? (
             <div className="text-center py-12">
               <Users className="h-16 w-16 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-600 mb-2">
+              <h3 className="text-sm font-semibold text-slate-600 mb-2">
                 {searchTerm || filterGender ? 'No patients found' : 'No patients assigned'}
               </h3>
               <p className="text-slate-500">

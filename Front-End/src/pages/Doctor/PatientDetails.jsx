@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { fetchPatientDetails, addTestRequest, fetchPatientTestRequests, downloadTestReport } from '../../features/doctor/doctorThunks';
 import { resetPatientDetails } from '../../features/doctor/doctorSlice';
 import { downloadPDFReport, viewPDFReport } from '../../utils/pdfHandler';
@@ -68,7 +69,7 @@ const PatientDetails = () => {
       dispatch(fetchPatientTestRequests(patientId));
     } catch (error) {
       console.error('Error creating test request:', error);
-      alert('Failed to create test request. Please try again.');
+      toast.error('Failed to create test request. Please try again.');
     }
   };
 
@@ -81,7 +82,7 @@ const PatientDetails = () => {
       await downloadPDFReport(testRequestId);
     } catch (error) {
       console.error('Error downloading report:', error);
-      alert('Failed to download report. Please try again.');
+      toast.error('Failed to download report. Please try again.');
     }
   };
 
@@ -90,7 +91,7 @@ const PatientDetails = () => {
       await viewPDFReport(testRequestId);
     } catch (error) {
       console.error('Error viewing report:', error);
-      alert('Failed to view report. Please try again.');
+      toast.error('Failed to view report. Please try again.');
     }
   };
 
@@ -144,7 +145,7 @@ const PatientDetails = () => {
                   <User className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-slate-800">{patient.name}</h1>
+                  <h1 className="text-xl font-bold text-slate-800">{patient.name}</h1>
                   <p className="text-slate-600">
                     {patient.age} years old • {patient.gender} • {patient.centerId?.name}
                   </p>
@@ -219,7 +220,7 @@ const PatientDetails = () => {
                     <FileText className="h-5 w-5 text-blue-500 mr-2" />
                     <h3 className="font-semibold text-slate-800">Total Tests</h3>
                   </div>
-                  <p className="text-2xl font-bold text-slate-800">{tests.length}</p>
+                  <p className="text-xl font-bold text-slate-800">{tests.length}</p>
                 </div>
 
                 <div className="bg-slate-50 rounded-lg p-4">
@@ -227,7 +228,7 @@ const PatientDetails = () => {
                     <Pill className="h-5 w-5 text-green-500 mr-2" />
                     <h3 className="font-semibold text-slate-800">Medications</h3>
                   </div>
-                  <p className="text-2xl font-bold text-slate-800">{medications.length}</p>
+                  <p className="text-xl font-bold text-slate-800">{medications.length}</p>
                 </div>
 
                 <div className="bg-slate-50 rounded-lg p-4">

@@ -64,7 +64,7 @@ export default function PatientList() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Patient List
           </h1>
           <p className="text-slate-600">
@@ -103,7 +103,7 @@ export default function PatientList() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                <p className="text-2xl font-bold text-slate-800">{(patients || []).length}</p>
+                <p className="text-xl font-bold text-slate-800">{(patients || []).length}</p>
               </div>
               <Users className="h-8 w-8 text-blue-500" />
             </div>
@@ -112,7 +112,7 @@ export default function PatientList() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Male Patients</p>
-                <p className="text-2xl font-bold text-slate-800">{genderStats.maleCount}</p>
+                <p className="text-xl font-bold text-slate-800">{genderStats.maleCount}</p>
               </div>
               <User className="h-8 w-8 text-blue-600" />
             </div>
@@ -121,7 +121,7 @@ export default function PatientList() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Female Patients</p>
-                <p className="text-2xl font-bold text-slate-800">{genderStats.femaleCount}</p>
+                <p className="text-xl font-bold text-slate-800">{genderStats.femaleCount}</p>
               </div>
               <User className="h-8 w-8 text-pink-500" />
             </div>
@@ -130,7 +130,7 @@ export default function PatientList() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">With Email</p>
-                <p className="text-2xl font-bold text-slate-800">
+                <p className="text-xl font-bold text-slate-800">
                   {(patients || []).filter(p => p?.email).length}
                 </p>
               </div>
@@ -141,7 +141,7 @@ export default function PatientList() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">With Phone</p>
-                <p className="text-2xl font-bold text-slate-800">
+                <p className="text-xl font-bold text-slate-800">
                   {(patients || []).filter(p => p?.phone || p?.contact).length}
                 </p>
               </div>
@@ -153,7 +153,7 @@ export default function PatientList() {
         {/* Patients Table */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <Users className="h-5 w-5 mr-2 text-blue-500" />
               Patients List
             </h2>

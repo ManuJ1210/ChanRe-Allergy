@@ -1,5 +1,6 @@
 // src/features/doctor/doctorThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import API from '../../services/api';
 
 // ✅ Create a doctor
@@ -15,11 +16,12 @@ export const createDoctor = createAsyncThunk(
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      toast.success('Doctor added successfully!');
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || 'Failed to add doctor'
-      );
+      const errorMsg = error.response?.data?.message || 'Failed to add doctor';
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
     }
   }
 );
@@ -37,11 +39,12 @@ export const updateDoctor = createAsyncThunk(
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      toast.success('Doctor updated successfully!');
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || 'Failed to update doctor'
-      );
+      const errorMsg = error.response?.data?.message || 'Failed to update doctor';
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
     }
   }
 );
@@ -58,11 +61,12 @@ export const deleteDoctor = createAsyncThunk(
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      toast.success('Doctor deleted successfully!');
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || 'Failed to delete doctor'
-      );
+      const errorMsg = error.response?.data?.message || 'Failed to delete doctor';
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
     }
   }
 );

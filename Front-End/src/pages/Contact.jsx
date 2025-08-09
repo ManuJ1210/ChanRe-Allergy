@@ -10,15 +10,15 @@ const Contact = () => {
         <div className="space-y-6">
           <div className="bg-white shadow-xl border border-blue-100 rounded-2xl p-6 flex flex-col gap-4">
             <div className="flex items-center gap-3">
-              <span className="text-green-600 text-2xl">📞</span>
-              <span className="text-blue-700 font-semibold text-lg">+91 9611768775</span>
+              <span className="text-green-600 text-xl">📞</span>
+              <span className="text-blue-700 font-semibold text-sm">+91 9611768775</span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-blue-500 text-2xl">✉️</span>
-              <span className="text-blue-700 font-semibold text-lg">corporaterelation@chanrerier.com</span>
+              <span className="text-blue-500 text-xl">✉️</span>
+              <span className="text-blue-700 font-semibold text-sm">corporaterelation@chanrerier.com</span>
             </div>
             <div className="flex items-start gap-3">
-              <span className="text-blue-500 text-2xl">📍</span>
+              <span className="text-blue-500 text-xl">📍</span>
               <span className="text-blue-700 font-semibold text-base">
                 65, Metro station, 414, 20th Main Rd, near Rajajinagar, West of Chord Road 2nd Stage,<br />Rajajinagar, Bengaluru, Karnataka 560010
               </span>
@@ -68,7 +68,7 @@ const Contact = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white py-3 rounded-xl shadow-lg font-semibold text-lg transition-all duration-200"
+              className="w-full bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white py-3 rounded-xl shadow-lg font-semibold text-sm transition-all duration-200"
             >
               Submit
             </button>

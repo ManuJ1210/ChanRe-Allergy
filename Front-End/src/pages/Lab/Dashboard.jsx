@@ -159,7 +159,7 @@ export default function LabDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Lab Dashboard
           </h1>
           <p className="text-slate-600">
@@ -174,7 +174,7 @@ export default function LabDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Total Requests</p>
-                <p className="text-2xl font-bold text-slate-800">{stats.totalRequests}</p>
+                <p className="text-xl font-bold text-slate-800">{stats.totalRequests}</p>
               </div>
               <div className="p-3 bg-blue-50 rounded-lg">
                 <Microscope className="h-6 w-6 text-blue-500" />
@@ -187,7 +187,7 @@ export default function LabDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Pending</p>
-                <p className="text-2xl font-bold text-slate-800">{stats.pendingRequests}</p>
+                <p className="text-xl font-bold text-slate-800">{stats.pendingRequests}</p>
               </div>
               <div className="p-3 bg-yellow-50 rounded-lg">
                 <Clock className="h-6 w-6 text-yellow-500" />
@@ -200,7 +200,7 @@ export default function LabDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Completed</p>
-                <p className="text-2xl font-bold text-slate-800">{stats.completedRequests}</p>
+                <p className="text-xl font-bold text-slate-800">{stats.completedRequests}</p>
               </div>
               <div className="p-3 bg-green-50 rounded-lg">
                 <CheckCircle className="h-6 w-6 text-green-500" />

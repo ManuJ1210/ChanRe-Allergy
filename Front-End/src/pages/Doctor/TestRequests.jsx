@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { fetchTestRequests, downloadTestReport } from '../../features/doctor/doctorThunks';
 import { downloadPDFReport, viewPDFReport } from '../../utils/pdfHandler';
 import { 
@@ -126,7 +127,7 @@ const TestRequests = () => {
       await viewPDFReport(testRequestId);
     } catch (error) {
       console.error('Error viewing report:', error);
-      alert('Failed to view report. Please try again.');
+      toast.error('Failed to view report. Please try again.');
     }
   };
 
@@ -135,7 +136,7 @@ const TestRequests = () => {
       await downloadPDFReport(testRequestId);
     } catch (error) {
       console.error('Error downloading report:', error);
-      alert('Failed to download report. Please try again.');
+      toast.error('Failed to download report. Please try again.');
     }
   };
 
@@ -164,7 +165,7 @@ const TestRequests = () => {
           </button>
                       <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-slate-800 mb-2">Test Requests</h1>
+                <h1 className="text-xl font-bold text-slate-800 mb-2">Test Requests</h1>
                 <p className="text-slate-600">
                   Manage and track test requests for your patients ({testRequests.length} total)
                 </p>
@@ -208,7 +209,7 @@ const TestRequests = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Pending</p>
-                <p className="text-2xl font-bold text-yellow-600">{getStatusCount('Pending')}</p>
+                <p className="text-xl font-bold text-yellow-600">{getStatusCount('Pending')}</p>
               </div>
               <AlertCircle className="h-8 w-8 text-yellow-500" />
             </div>
@@ -217,7 +218,7 @@ const TestRequests = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Assigned</p>
-                <p className="text-2xl font-bold text-orange-600">{getStatusCount('Assigned')}</p>
+                <p className="text-xl font-bold text-orange-600">{getStatusCount('Assigned')}</p>
               </div>
               <Clock className="h-8 w-8 text-orange-500" />
             </div>
@@ -226,7 +227,7 @@ const TestRequests = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">In Progress</p>
-                <p className="text-2xl font-bold text-blue-600">{getStatusCount('In Progress')}</p>
+                <p className="text-xl font-bold text-blue-600">{getStatusCount('In Progress')}</p>
               </div>
               <Clock className="h-8 w-8 text-blue-500" />
             </div>
@@ -235,7 +236,7 @@ const TestRequests = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Completed</p>
-                <p className="text-2xl font-bold text-green-600">{getStatusCount('Completed')}</p>
+                <p className="text-xl font-bold text-green-600">{getStatusCount('Completed')}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-500" />
             </div>
@@ -244,7 +245,7 @@ const TestRequests = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Cancelled</p>
-                <p className="text-2xl font-bold text-red-600">{getStatusCount('Cancelled')}</p>
+                <p className="text-xl font-bold text-red-600">{getStatusCount('Cancelled')}</p>
               </div>
               <XCircle className="h-8 w-8 text-red-500" />
             </div>

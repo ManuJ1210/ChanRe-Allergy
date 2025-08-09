@@ -118,7 +118,7 @@ const AddAllergicRhinitis = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">ALLERGIC RHINITIS</h1>
+              <h1 className="text-xl font-bold text-gray-800">ALLERGIC RHINITIS</h1>
             </div>
           </div>
         </div>
@@ -128,10 +128,10 @@ const AddAllergicRhinitis = () => {
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Nasal Symptom Severity */}
             <div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Allergic Rhinitis</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Allergic Rhinitis</h3>
               
               <div className="mb-6">
-                <h4 className="text-lg font-medium text-gray-700 mb-4">Nasal Symptom Severity</h4>
+                <h4 className="text-sm font-medium text-gray-700 mb-4">Nasal Symptom Severity</h4>
                 <div className="mb-2">
                   <label className="text-sm font-medium text-gray-600">Score(0-7)</label>
                 </div>

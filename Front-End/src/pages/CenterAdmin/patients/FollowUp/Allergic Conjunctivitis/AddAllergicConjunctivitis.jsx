@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { addAllergicConjunctivitis } from '../../../../../features/centerAdmin/centerAdminThunks';
 import { resetCenterAdminState } from '../../../../../features/centerAdmin/centerAdminSlice';
 
@@ -71,21 +72,21 @@ export default function AddAllergicConjunctivitis() {
     
     // Validate form data
     if (!form.type) {
-      alert("Please select a type for the allergic conjunctivitis.");
+      toast.error("Please select a type for the allergic conjunctivitis.");
       return;
     }
     
     // Check if at least one symptom is selected
     const hasSymptoms = Object.values(form.symptoms).some(value => value === 'yes');
     if (!hasSymptoms) {
-      alert("Please select at least one symptom.");
+      toast.error("Please select at least one symptom.");
       return;
     }
     
     // Check if grading is complete
     const hasGrading = Object.values(form.grading).some(value => value !== '');
     if (!hasGrading) {
-      alert("Please complete the grading section.");
+      toast.error("Please complete the grading section.");
       return;
     }
     
@@ -101,11 +102,11 @@ export default function AddAllergicConjunctivitis() {
       // Use Redux thunk
       await dispatch(addAllergicConjunctivitis(formData));
       
-      alert("Submitted successfully!");
+      toast.success("Submitted successfully!");
       navigate(`/dashboard/CenterAdmin/patients/ViewProfile/${params.patientId}`);
     } catch (err) {
       console.error('Error submitting form:', err);
-      alert(`Failed to submit. Error: ${err.message}`);
+      toast.error(`Failed to submit. Error: ${err.message}`);
     }
   };
 
@@ -114,11 +115,11 @@ export default function AddAllergicConjunctivitis() {
       <div className="max-w-4xl mx-auto p-6">
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8 space-y-8">
           {/* Main Title */}
-          <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">ALLERGIC CONJUNCTIVITIS</h1>
+          <h1 className="text-xl font-bold text-gray-800 text-center mb-8">ALLERGIC CONJUNCTIVITIS</h1>
           
           {/* Symptoms Section */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Symptoms</h2>
+            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Symptoms</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left side - Symptoms */}
               <div className="space-y-4">

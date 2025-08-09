@@ -91,7 +91,7 @@ export default function CenterAdminDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Welcome back, {user?.name}
           </h1>
           <p className="text-slate-600">
@@ -120,7 +120,7 @@ export default function CenterAdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                    <p className="text-2xl font-bold text-slate-800">{stats.totalPatients}</p>
+                    <p className="text-xl font-bold text-slate-800">{stats.totalPatients}</p>
                   </div>
                   <Users className="h-8 w-8 text-blue-500" />
                 </div>
@@ -130,7 +130,7 @@ export default function CenterAdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-600 text-sm font-medium">Doctors</p>
-                    <p className="text-2xl font-bold text-slate-800">{stats.totalDoctors}</p>
+                    <p className="text-xl font-bold text-slate-800">{stats.totalDoctors}</p>
                   </div>
                   <User className="h-8 w-8 text-green-500" />
                 </div>
@@ -140,7 +140,7 @@ export default function CenterAdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-600 text-sm font-medium">Receptionists</p>
-                    <p className="text-2xl font-bold text-slate-800">{stats.totalReceptionists}</p>
+                    <p className="text-xl font-bold text-slate-800">{stats.totalReceptionists}</p>
                   </div>
                   <UserCheck className="h-8 w-8 text-purple-500" />
                 </div>
@@ -150,7 +150,7 @@ export default function CenterAdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-600 text-sm font-medium">Total Tests</p>
-                    <p className="text-2xl font-bold text-slate-800">{stats.totalTests}</p>
+                    <p className="text-xl font-bold text-slate-800">{stats.totalTests}</p>
                   </div>
                   <FileText className="h-8 w-8 text-orange-500" />
                 </div>
@@ -162,7 +162,7 @@ export default function CenterAdminDashboard() {
         {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-6">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800">Quick Actions</h2>
+            <h2 className="text-lg font-semibold text-slate-800">Quick Actions</h2>
             <p className="text-slate-600 mt-1">Common tasks to get you started</p>
           </div>
           <div className="p-6">
@@ -190,7 +190,7 @@ export default function CenterAdminDashboard() {
           {/* Patient Management */}
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <Users className="h-5 w-5 mr-2 text-blue-500" />
                 Patient Management
               </h2>
@@ -231,7 +231,7 @@ export default function CenterAdminDashboard() {
           {/* Staff Management */}
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <User className="h-5 w-5 mr-2 text-green-500" />
                 Staff Management
               </h2>
