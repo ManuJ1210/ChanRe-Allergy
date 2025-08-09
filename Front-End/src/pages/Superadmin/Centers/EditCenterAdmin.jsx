@@ -103,7 +103,7 @@ export default function EditCenterAdmin() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Admins
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             {isNewAdmin ? 'Assign Center Admin' : 'Edit Center Admin'}
           </h1>
           <p className="text-slate-600">
@@ -134,7 +134,7 @@ export default function EditCenterAdmin() {
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <User className="h-5 w-5 mr-2 text-blue-500" />
               Administrator Information
             </h2>
@@ -146,7 +146,7 @@ export default function EditCenterAdmin() {
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <User className="h-4 w-4 text-blue-500" />
                   Full Name *
                 </label>
@@ -162,7 +162,7 @@ export default function EditCenterAdmin() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <GraduationCap className="h-4 w-4 text-blue-500" />
                   Qualification *
                 </label>
@@ -178,7 +178,7 @@ export default function EditCenterAdmin() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <Badge className="h-4 w-4 text-blue-500" />
                   Designation *
                 </label>
@@ -194,7 +194,7 @@ export default function EditCenterAdmin() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <Badge className="h-4 w-4 text-blue-500" />
                   KMC Number *
                 </label>
@@ -210,7 +210,7 @@ export default function EditCenterAdmin() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <Building2 className="h-4 w-4 text-blue-500" />
                   Hospital Name *
                 </label>
@@ -226,7 +226,7 @@ export default function EditCenterAdmin() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <Hash className="h-4 w-4 text-blue-500" />
                   Center Code *
                 </label>
@@ -242,7 +242,7 @@ export default function EditCenterAdmin() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <Phone className="h-4 w-4 text-blue-500" />
                   Phone *
                 </label>
@@ -258,7 +258,7 @@ export default function EditCenterAdmin() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <Mail className="h-4 w-4 text-blue-500" />
                   Email *
                 </label>
@@ -274,7 +274,7 @@ export default function EditCenterAdmin() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <User className="h-4 w-4 text-blue-500" />
                   Username *
                 </label>
@@ -290,7 +290,7 @@ export default function EditCenterAdmin() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <Badge className="h-4 w-4 text-blue-500" />
                   Password {!isNewAdmin && '(Leave blank to keep current)'}
                 </label>

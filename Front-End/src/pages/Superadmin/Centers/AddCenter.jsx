@@ -68,7 +68,7 @@ export default function AddCenterWithAdmin() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Centers
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Add Healthcare Center & Admin
           </h1>
           <p className="text-slate-600">
@@ -95,7 +95,7 @@ export default function AddCenterWithAdmin() {
           <form onSubmit={handleSubmit} className="p-6 space-y-8">
             {/* Center Information Section */}
             <div className="bg-slate-50 border border-slate-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+              <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center">
                 <Building2 className="h-5 w-5 mr-2 text-blue-500" />
                 Center Information
               </h3>
@@ -150,7 +150,7 @@ export default function AddCenterWithAdmin() {
 
             {/* Admin Information Section */}
             <div className="bg-slate-50 border border-slate-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+              <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center">
                 <User className="h-5 w-5 mr-2 text-blue-500" />
                 Administrator Information
               </h3>
@@ -215,7 +215,7 @@ export default function AddCenterWithAdmin() {
 
                 {/* Password */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                     <Badge className="h-4 w-4 text-blue-500" />
                     Password *
                   </label>
@@ -241,7 +241,7 @@ export default function AddCenterWithAdmin() {
 
                 {/* User Type */}
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                     <User className="h-4 w-4 text-blue-500" />
                     User Type *
                   </label>
@@ -290,7 +290,7 @@ export default function AddCenterWithAdmin() {
 
 const Input = ({ label, name, value, onChange, type = "text", icon }) => (
   <div>
-    <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+    <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
       {icon}
       {label} *
     </label>
@@ -308,7 +308,7 @@ const Input = ({ label, name, value, onChange, type = "text", icon }) => (
 
 const TextArea = ({ label, name, value, onChange, icon }) => (
   <div>
-    <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+    <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
       {icon}
       {label} *
     </label>
