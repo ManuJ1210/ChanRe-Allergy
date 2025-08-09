@@ -60,15 +60,28 @@ const PatientDetails = () => {
 
   useEffect(() => {
     if (patientId) {
-      // Check if the patientId is valid (exists in assignedPatients)
-      const isValidPatient = assignedPatients.some(patient => patient._id === patientId);
-      if (!isValidPatient && assignedPatients.length > 0) {
-        // Redirect to the first available patient
-        console.log('⚠️ Invalid patient ID, redirecting to first available patient');
-        navigate(`/dashboard/superadmin/doctor/patient/${assignedPatients[0]._id}/profile`);
-        return;
-      }
-      dispatch(fetchSuperAdminDoctorPatientById(patientId));
+      // Check if the patientId is valid by trying to fetch it
+      const checkAndFetchPatient = async () => {
+        try {
+          const result = await dispatch(fetchSuperAdminDoctorPatientById(patientId));
+          
+          // If patient not found or error occurred, redirect to first available patient
+          if (result.error || !result.payload) {
+            console.log('⚠️ Invalid patient ID, redirecting to first available patient');
+            if (assignedPatients.length > 0) {
+              navigate(`/dashboard/superadmin/doctor/patient/${assignedPatients[0]._id}/profile`);
+            } else {
+              navigate('/dashboard/superadmin/doctor/patients');
+            }
+            return;
+          }
+        } catch (error) {
+          console.log('⚠️ Error fetching patient, redirecting to patient list');
+          navigate('/dashboard/superadmin/doctor/patients');
+        }
+      };
+
+      checkAndFetchPatient();
     }
   }, [dispatch, patientId, assignedPatients, navigate]);
 

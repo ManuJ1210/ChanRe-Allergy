@@ -136,7 +136,7 @@ export const getCompletedTestRequestsForCurrentDoctor = async (req, res) => {
     
     const completedTestRequests = await TestRequest.find({ 
       doctorId, 
-      status: { $in: ['Completed', 'Report_Sent'] },
+      status: { $in: ['Completed', 'Report_Sent', 'feedback_sent'] },
       isActive: true 
     })
       .populate('doctorId', 'name email phone')

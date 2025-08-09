@@ -42,7 +42,7 @@ const testRequestSchema = new mongoose.Schema({
   // Lab workflow fields
   status: {
     type: String,
-    enum: ['Pending', 'Assigned', 'Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing', 'Testing_Completed', 'Report_Generated', 'Report_Sent', 'Completed', 'Cancelled'],
+    enum: ['Pending', 'Assigned', 'Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing', 'Testing_Completed', 'Report_Generated', 'Report_Sent', 'Completed', 'Cancelled', 'feedback_sent'],
     default: 'Pending'
   },
   

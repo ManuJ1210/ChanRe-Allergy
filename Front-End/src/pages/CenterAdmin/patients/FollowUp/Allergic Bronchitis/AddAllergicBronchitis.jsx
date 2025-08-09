@@ -54,7 +54,7 @@ const AddAllergicBronchitis = () => {
   useEffect(() => {
     if (addAllergicBronchitisSuccess) {
       dispatch(resetCenterAdminState());
-      navigate(`/CenterAdmin/patients/ViewProfile/${patientId}`);
+      navigate(`/dashboard/CenterAdmin/patients/ViewProfile/${patientId}`);
     }
   }, [addAllergicBronchitisSuccess, dispatch, navigate, patientId]);
 

@@ -312,7 +312,7 @@ const StartTesting = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Patient Name</label>
-                <p className="text-gray-900 font-medium">{testRequest.patientName || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{testRequest.patientName || testRequest.patientId?.name || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Test Type</label>

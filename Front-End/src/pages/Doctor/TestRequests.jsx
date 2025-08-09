@@ -437,7 +437,7 @@ const TestRequests = () => {
                             <Eye className="h-4 w-4 mr-1" />
                             View Patient
                           </button>
-                          {(test.status === 'Report_Generated' || test.status === 'Report_Sent' || test.status === 'Completed') && (
+                          {(test.status === 'Report_Generated' || test.status === 'Report_Sent' || test.status === 'Completed' || test.status === 'feedback_sent') && (
                             <>
                               <button
                                 onClick={() => handleViewReport(test._id)}

@@ -55,7 +55,7 @@ const AddAllergicRhinitis = () => {
   useEffect(() => {
     if (addAllergicRhinitisSuccess) {
       dispatch(resetCenterAdminState());
-      navigate(`/CenterAdmin/patients/ViewProfile/${patientId}`);
+      navigate(`/dashboard/CenterAdmin/patients/ViewProfile/${patientId}`);
     }
   }, [addAllergicRhinitisSuccess, dispatch, navigate, patientId]);
 

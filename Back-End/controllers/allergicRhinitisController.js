@@ -17,7 +17,9 @@ export const getAllergicRhinitisByPatient = async (req, res) => {
       return res.status(400).json({ message: 'Patient ID is required' });
     }
 
-    const records = await AllergicRhinitis.find({ patientId }).sort({ createdAt: -1 });
+    const records = await AllergicRhinitis.find({ patientId })
+      .populate('patientId', 'name age centerCode phone gender')
+      .sort({ createdAt: -1 });
     
     res.json(records);
   } catch (err) {
@@ -28,7 +30,8 @@ export const getAllergicRhinitisByPatient = async (req, res) => {
 export const getAllergicRhinitisById = async (req, res) => {
   try {
     const { id } = req.params;
-    const record = await AllergicRhinitis.findById(id);
+    const record = await AllergicRhinitis.findById(id)
+      .populate('patientId', 'name age centerCode phone gender');
     
     if (!record) {
       return res.status(404).json({ message: 'Record not found' });

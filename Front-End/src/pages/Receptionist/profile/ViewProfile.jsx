@@ -313,8 +313,7 @@ const ViewProfile = () => {
                     <div>
                       <label className="block text-sm font-medium text-slate-500 mb-1">Assigned Doctor</label>
                       <p className="text-slate-800 break-words">
-                        {patient.doctorId?.name ||
-                          (typeof patient.assignedDoctor === 'string' ? patient.assignedDoctor : 'Not assigned')}
+                        {patient.assignedDoctor?.name || 'Not assigned'}
                       </p>
                     </div>
                     <div>

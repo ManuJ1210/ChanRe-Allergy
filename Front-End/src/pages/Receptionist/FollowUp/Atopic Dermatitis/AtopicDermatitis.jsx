@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import API from "../../../../services/api";
 import { useParams, useNavigate } from "react-router-dom";
 
 const INTENSITY_OPTIONS = ["None", "Mild", "Moderate", "Severe"];
@@ -49,13 +49,12 @@ export default function AtopicDermatitisFollowUp() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post(
-        "http://localhost:5000/api/atopic-dermatitis",
+      await API.post(
+        "/atopic-dermatitis",
         {
           patientId: params.patientId,
           ...form
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
+        }
       );
       alert("Submitted successfully!");
       navigate(`/dashboard/receptionist/profile/${params.patientId}`);

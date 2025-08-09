@@ -537,7 +537,7 @@ const LabReports = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                        {(report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed') && report.reportFilePath && (
+                        {(report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed' || report.status === 'feedback_sent') && report.reportFilePath && (
                             <>
                               <button
                                 onClick={() => handleViewReport(report._id)}

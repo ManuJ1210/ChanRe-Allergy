@@ -30,7 +30,7 @@ const AddFollowUp = () => {
   useEffect(() => {
     if (addFollowUpSuccess) {
       dispatch(resetCenterAdminState());
-      navigate(`/CenterAdmin/patients/FollowUp`);
+      navigate(`/dashboard/CenterAdmin/patients/FollowUp`);
     }
   }, [addFollowUpSuccess, dispatch, navigate]);
 

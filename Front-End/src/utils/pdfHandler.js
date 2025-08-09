@@ -124,7 +124,7 @@ export const viewPDFReport = async (reportId) => {
  * @returns {boolean}
  */
 export const isReportAvailable = (testRequest) => {
-  const validStatuses = ['Report_Generated', 'Report_Sent', 'Completed'];
+  const validStatuses = ['Report_Generated', 'Report_Sent', 'Completed', 'feedback_sent'];
   return validStatuses.includes(testRequest.status) && testRequest.reportFilePath;
 };
 
@@ -152,6 +152,8 @@ export const getReportStatusMessage = (testRequest) => {
     case 'Report_Sent':
     case 'Completed':
       return 'Report has been sent and is available for download.';
+    case 'feedback_sent':
+      return 'Report reviewed by superadmin doctor. Feedback available.';
     case 'Cancelled':
       return 'Test request was cancelled. No report available.';
     default:

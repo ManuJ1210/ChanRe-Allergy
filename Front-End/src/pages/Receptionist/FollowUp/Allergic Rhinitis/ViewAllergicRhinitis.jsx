@@ -25,7 +25,6 @@ const ViewAllergicRhinitis = () => {
     if (patientId) {
       console.log('🔍 ViewAllergicRhinitis: Fetching data for patientId:', patientId);
       dispatch(fetchReceptionistAllergicRhinitis(patientId));
-      dispatch(fetchPatient(patientId));
     }
   }, [dispatch, patientId]);
 
@@ -141,10 +140,10 @@ const ViewAllergicRhinitis = () => {
                 Patient Information
               </h3>
               <div className="space-y-2">
-                <p><span className="font-medium">Name:</span> {singlePatient?.name || 'N/A'}</p>
-                <p><span className="font-medium">Age:</span> {singlePatient?.age || 'N/A'}</p>
-                <p><span className="font-medium">Gender:</span> {singlePatient?.gender || 'N/A'}</p>
-                <p><span className="font-medium">Phone:</span> {singlePatient?.phone || 'N/A'}</p>
+                <p><span className="font-medium">Name:</span> {latestRecord?.patientId?.name || 'N/A'}</p>
+                <p><span className="font-medium">Age:</span> {latestRecord?.patientId?.age || 'N/A'}</p>
+                <p><span className="font-medium">Gender:</span> {latestRecord?.patientId?.gender || 'N/A'}</p>
+                <p><span className="font-medium">Phone:</span> {latestRecord?.patientId?.phone || 'N/A'}</p>
               </div>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg">

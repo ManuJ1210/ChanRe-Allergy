@@ -44,32 +44,44 @@ const ReviewLabReports = () => {
   }, [dispatch]);
 
   const handleReviewReport = (report) => {
+    console.log('Setting selected report:', report);
     setSelectedReport(report);
     setShowFeedbackModal(true);
   };
 
   const handleSendFeedback = async () => {
-    if (!selectedReport) return;
-
-    const feedbackData = {
-      reportId: selectedReport._id,
-      patientId: selectedReport.patient._id,
-      centerDoctorId: selectedReport.requestedBy,
-      additionalTests: feedback.additionalTests,
-      patientInstructions: feedback.patientInstructions,
-      notes: feedback.notes
-    };
-
-    const result = await dispatch(sendFeedbackToCenterDoctor(feedbackData));
+    console.log('handleSendFeedback called, selectedReport:', selectedReport);
     
-    if (sendFeedbackToCenterDoctor.fulfilled.match(result)) {
-      setShowFeedbackModal(false);
-      setSelectedReport(null);
-      setFeedback({
-        additionalTests: '',
-        patientInstructions: '',
-        notes: ''
-      });
+    if (!selectedReport || !selectedReport._id) {
+      console.error('No selected report or missing report ID');
+      return;
+    }
+
+    try {
+      const feedbackData = {
+        reportId: selectedReport._id,
+        patientId: selectedReport.patientId?._id || selectedReport.patientId,
+        centerDoctorId: selectedReport.doctorId?._id || selectedReport.doctorId,
+        additionalTests: feedback.additionalTests,
+        patientInstructions: feedback.patientInstructions,
+        notes: feedback.notes
+      };
+
+      const result = await dispatch(sendFeedbackToCenterDoctor(feedbackData));
+      
+      if (sendFeedbackToCenterDoctor.fulfilled.match(result)) {
+        setShowFeedbackModal(false);
+        setSelectedReport(null);
+        setFeedback({
+          additionalTests: '',
+          patientInstructions: '',
+          notes: ''
+        });
+        // Refresh the lab reports to show updated status
+        dispatch(fetchSuperAdminDoctorLabReports());
+      }
+    } catch (error) {
+      console.error('Error sending feedback:', error);
     }
   };
 
@@ -185,31 +197,33 @@ const ReviewLabReports = () => {
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {report.patient?.name || 'N/A'}
+                              {report.patientId?.name || 'N/A'}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {report.patient?.age} years
+                              {report.patientId?.age || 'N/A'} years
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{report.testType}</div>
-                        <div className="text-sm text-gray-500">{report.description}</div>
+                        <div className="text-sm text-gray-900">{report.testType || 'N/A'}</div>
+                        <div className="text-sm text-gray-500">{report.testDescription || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          Dr. {report.requestedByDoctor?.name || 'N/A'}
+                          Dr. {report.doctorId?.name || 'N/A'}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {report.requestedByDoctor?.center?.name || 'N/A'}
+                          {report.centerName || 'N/A'}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <Calendar className="w-4 h-4 mr-2 text-gray-400" />
                           <span className="text-sm text-gray-900">
-                            {new Date(report.completedAt).toLocaleDateString()}
+                            {report.completedDate || report.reportGeneratedDate || report.updatedAt ? 
+                              new Date(report.completedDate || report.reportGeneratedDate || report.updatedAt).toLocaleDateString() 
+                              : 'N/A'}
                           </span>
                         </div>
                       </td>
@@ -247,7 +261,7 @@ const ReviewLabReports = () => {
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-800">
-                Review Lab Report - {selectedReport.patient?.name}
+                Review Lab Report - {selectedReport.patientId?.name || 'N/A'}
               </h3>
             </div>
             
@@ -258,19 +272,19 @@ const ReviewLabReports = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-600">Patient</p>
-                    <p className="font-medium">{selectedReport.patient?.name}</p>
+                    <p className="font-medium">{selectedReport.patientId?.name || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Test Type</p>
-                    <p className="font-medium">{selectedReport.testType}</p>
+                    <p className="font-medium">{selectedReport.testType || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Requested By</p>
-                    <p className="font-medium">Dr. {selectedReport.requestedByDoctor?.name}</p>
+                    <p className="font-medium">Dr. {selectedReport.doctorId?.name || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Center</p>
-                    <p className="font-medium">{selectedReport.requestedByDoctor?.center?.name}</p>
+                    <p className="font-medium">{selectedReport.centerName || 'N/A'}</p>
                   </div>
                 </div>
               </div>

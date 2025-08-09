@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../../../../services/api";
 import { ArrowLeft, Save, Plus, Pill, CheckCircle, AlertCircle, X } from 'lucide-react';
 
 const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
@@ -40,10 +40,9 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
     setSuccess(false);
     try {
       const token = localStorage.getItem("token");
-      await axios.post(
-        "http://localhost:5000/api/prescriptions",
-        { patientId, visit, medications },
-        { headers: { Authorization: `Bearer ${token}` } }
+      await API.post(
+        "/prescriptions",
+        { patientId, visit, medications }
       );
       setSuccess(true);
       setTimeout(() => {

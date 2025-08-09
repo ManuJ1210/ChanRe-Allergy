@@ -10,7 +10,8 @@ export const getAllLabReports = async (req, res) => {
       $or: [
         { status: 'Report_Generated' },
         { status: 'Report_Sent' },
-        { status: 'Testing_Completed' }
+        { status: 'Testing_Completed' },
+        { status: 'feedback_sent' }
       ],
       isActive: true,
       reportGeneratedDate: { $exists: true, $ne: null } // Only reports that have been generated
@@ -59,7 +60,8 @@ export const getLabReportsByCenter = async (req, res) => {
       $or: [
         { status: 'Report_Generated' },
         { status: 'Report_Sent' },
-        { status: 'Testing_Completed' }
+        { status: 'Testing_Completed' },
+        { status: 'feedback_sent' }
       ],
       isActive: true,
       reportGeneratedDate: { $exists: true, $ne: null }
@@ -184,7 +186,8 @@ export const getLabReportsStats = async (req, res) => {
       $or: [
         { status: 'Report_Generated' },
         { status: 'Report_Sent' },
-        { status: 'Testing_Completed' }
+        { status: 'Testing_Completed' },
+        { status: 'feedback_sent' }
       ],
       isActive: true,
       reportGeneratedDate: { $exists: true, $ne: null }
@@ -215,7 +218,8 @@ export const getLabReportsStats = async (req, res) => {
           $or: [
             { status: 'Report_Generated' },
             { status: 'Report_Sent' },
-            { status: 'Testing_Completed' }
+            { status: 'Testing_Completed' },
+            { status: 'feedback_sent' }
           ],
           isActive: true,
           reportGeneratedDate: { $exists: true, $ne: null }
@@ -257,7 +261,8 @@ export const getLabReportsStats = async (req, res) => {
           $or: [
             { status: 'Report_Generated' },
             { status: 'Report_Sent' },
-            { status: 'Testing_Completed' }
+            { status: 'Testing_Completed' },
+            { status: 'feedback_sent' }
           ],
           isActive: true,
           reportGeneratedDate: { $exists: true, $ne: null }
@@ -281,7 +286,8 @@ export const getLabReportsStats = async (req, res) => {
           $or: [
             { status: 'Report_Generated' },
             { status: 'Report_Sent' },
-            { status: 'Testing_Completed' }
+            { status: 'Testing_Completed' },
+            { status: 'feedback_sent' }
           ],
           isActive: true,
           reportGeneratedDate: { 
@@ -330,7 +336,8 @@ export const getLabReportsForDoctor = async (req, res) => {
       $or: [
         { status: 'Report_Generated' },
         { status: 'Report_Sent' },
-        { status: 'Testing_Completed' }
+        { status: 'Testing_Completed' },
+        { status: 'feedback_sent' }
       ],
       isActive: true,
       reportGeneratedDate: { $exists: true, $ne: null }

@@ -279,28 +279,22 @@ export const getSuperAdminDoctorAssignedPatients = async (req, res) => {
 export const getSuperAdminDoctorPatientById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log('🔍 Fetching patient with ID:', id);
-    
     const patient = await Patient.findById(id)
       .populate('centerId', 'name code')
       .populate('assignedDoctor', 'name email');
 
     if (!patient) {
-      console.log('❌ Patient not found with ID:', id);
       return res.status(404).json({ message: 'Patient not found' });
     }
-
-    console.log('✅ Patient found:', patient.name);
 
     // Get patient history
     const history = await History.findOne({ patientId: id });
 
     // Get patient medications
-    const medications = await Medication.find({ patientId: id })
-      .populate('prescribedBy', 'name');
+    const medications = await Medication.find({ patientId: id });
 
     // Get patient tests
-    const tests = await Test.find({ patientId: id });
+    const tests = await Test.find({ patient: id });
 
     // Get patient followups
     const followups = await FollowUp.find({ patientId: id })
@@ -315,7 +309,7 @@ export const getSuperAdminDoctorPatientById = async (req, res) => {
 
     // Get prescriptions
     const prescriptions = await Prescription.find({ patientId: id })
-      .populate('prescribedBy', 'name');
+      .populate('doctorId', 'name');
 
     res.json({
       patient,
@@ -331,7 +325,6 @@ export const getSuperAdminDoctorPatientById = async (req, res) => {
       prescriptions
     });
   } catch (error) {
-    console.error('❌ Error in getSuperAdminDoctorPatientById:', error.message);
     res.status(500).json({ message: 'Failed to fetch patient details', error: error.message });
   }
 };
@@ -385,7 +378,7 @@ export const getSuperAdminDoctorWorkingStats = async (req, res) => {
 
     // Get total patients with completed lab reports
     const completedTestRequests = await TestRequest.find({
-      status: { $in: ['Report_Generated', 'Report_Sent', 'Completed'] }
+      status: { $in: ['Report_Generated', 'Report_Sent', 'Completed', 'feedback_sent'] }
     });
 
     const patientIds = [...new Set(completedTestRequests.map(req => req.patientId.toString()))];
@@ -399,7 +392,7 @@ export const getSuperAdminDoctorWorkingStats = async (req, res) => {
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     const recentReports = await TestRequest.find({
-      status: { $in: ['Report_Generated', 'Report_Sent', 'Completed'] },
+      status: { $in: ['Report_Generated', 'Report_Sent', 'Completed', 'feedback_sent'] },
       updatedAt: { $gte: sevenDaysAgo }
     });
 
@@ -422,7 +415,7 @@ export const getSuperAdminDoctorLabReports = async (req, res) => {
 
     // Build query
     let query = {
-      status: { $in: ['Report_Generated', 'Report_Sent', 'Completed'] }
+      status: { $in: ['Report_Generated', 'Report_Sent', 'Completed', 'feedback_sent'] }
     };
 
     if (status && status !== 'all') {
@@ -452,33 +445,41 @@ export const getSuperAdminDoctorLabReports = async (req, res) => {
       .limit(parseInt(limit));
 
     // Transform data for frontend
-    const transformedReports = labReports.map(report => ({
-      _id: report._id,
-      testType: report.testType,
-      testDescription: report.testDescription,
-      status: report.status,
-      urgency: report.urgency,
-      createdAt: report.createdAt,
-      updatedAt: report.updatedAt,
-      reportGeneratedDate: report.reportGeneratedDate,
-      reportSentDate: report.reportSentDate,
-      completedDate: report.completedDate,
-      doctorId: report.doctorId,
-      patientId: report.patientId,
-      assignedLabStaffId: report.assignedLabStaffId,
-      sampleCollectorId: report.sampleCollectorId,
-      labTechnicianId: report.labTechnicianId,
-      reportSummary: report.reportSummary,
-      clinicalInterpretation: report.clinicalInterpretation,
-      conclusion: report.conclusion,
-      recommendations: report.recommendations,
-      pdfFile: report.pdfFile,
-      hasPdf: !!report.pdfFile,
-      reportGenerated: report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed',
-      sampleCollected: report.status === 'Sample_Collected' || report.status === 'Testing_In_Progress' || report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed',
-      testingCompleted: report.status === 'Testing_Completed' || report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed',
-      additionalFiles: report.additionalFiles || []
-    }));
+    const transformedReports = labReports.map(report => {
+      // Map backend status to frontend expected status
+      let frontendStatus = report.status;
+      if (report.status === 'Completed') frontendStatus = 'completed';
+      else if (report.status === 'Report_Generated' || report.status === 'Report_Sent') frontendStatus = 'pending_review';
+      else if (report.status === 'feedback_sent') frontendStatus = 'feedback_sent';
+      
+      return {
+        _id: report._id,
+        testType: report.testType,
+        testDescription: report.testDescription,
+        status: frontendStatus,
+        urgency: report.urgency,
+        createdAt: report.createdAt,
+        updatedAt: report.updatedAt,
+        reportGeneratedDate: report.reportGeneratedDate,
+        reportSentDate: report.reportSentDate,
+        completedDate: report.completedDate,
+        doctorId: report.doctorId,
+        patientId: report.patientId,
+        assignedLabStaffId: report.assignedLabStaffId,
+        sampleCollectorId: report.sampleCollectorId,
+        labTechnicianId: report.labTechnicianId,
+        reportSummary: report.reportSummary,
+        clinicalInterpretation: report.clinicalInterpretation,
+        conclusion: report.conclusion,
+        recommendations: report.recommendations,
+        pdfFile: report.pdfFile,
+        hasPdf: !!report.pdfFile,
+        reportGenerated: report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed',
+        sampleCollected: report.status === 'Sample_Collected' || report.status === 'Testing_In_Progress' || report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed',
+        testingCompleted: report.status === 'Testing_Completed' || report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed',
+        additionalFiles: report.additionalFiles || []
+      };
+    });
 
     res.json({
       reports: transformedReports,
@@ -720,10 +721,11 @@ export const sendFeedbackToCenterDoctor = async (req, res) => {
     
     const { reportId, patientId, centerDoctorId, additionalTests, patientInstructions, notes } = req.body;
 
-    // Update the test request with superadmin review
+    // Update the test request with superadmin review and status
     const updatedTestRequest = await TestRequest.findByIdAndUpdate(
       reportId,
       {
+        status: 'feedback_sent',
         superadminReview: {
           reviewedBy: req.user.id,
           reviewedAt: new Date(),
@@ -775,7 +777,7 @@ export const getSuperAdminDoctorPatients = async (req, res) => {
     
     // First, get all test requests with completed status
     const completedTestRequests = await TestRequest.find({
-      status: { $in: ['Report_Generated', 'Report_Sent', 'Completed'] }
+      status: { $in: ['Report_Generated', 'Report_Sent', 'Completed', 'feedback_sent'] }
     }).select('patientId');
     
     // Extract unique patient IDs from completed test requests

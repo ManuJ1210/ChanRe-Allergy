@@ -596,7 +596,7 @@ export default function TestRequests() {
                         <Edit className="h-4 w-4 mr-1" />
                         Update Status
                       </button>
-                      {(request.status === 'Report_Generated' || request.status === 'Report_Sent' || request.status === 'Completed') && request.reportFilePath && (
+                      {(request.status === 'Report_Generated' || request.status === 'Report_Sent' || request.status === 'Completed' || request.status === 'feedback_sent') && request.reportFilePath && (
                         <>
                           <button
                             onClick={() => handleViewReport(request._id)}

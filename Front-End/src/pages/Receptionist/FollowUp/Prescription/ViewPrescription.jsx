@@ -226,7 +226,7 @@ const ViewPrescription = () => {
                             </div>
                             <div>
                               <span className="text-sm font-medium text-gray-500">Frequency:</span>
-                              <span className="text-gray-800 ml-2">{med.frequency}</span>
+                              <span className="text-gray-800 ml-2">{med.frequency || 'Not specified'}</span>
                             </div>
                           </div>
                         </div>
@@ -287,7 +287,7 @@ const ViewPrescription = () => {
                       <User className="h-8 w-8 text-green-600" />
                     </div>
                     <h3 className="font-medium text-gray-800 mb-1">Prescribed By</h3>
-                    <p className="text-sm text-gray-500">{latestRecord.doctorId?.name || 'N/A'}</p>
+                    <p className="text-sm text-gray-500">{latestRecord.doctorId?.name || latestRecord.prescribedBy?.name || 'Not specified'}</p>
                   </div>
                   
                   <div>
@@ -331,7 +331,7 @@ const ViewPrescription = () => {
                 <p>Generated on: {new Date().toLocaleDateString()}</p>
               </div>
               <div className="text-right">
-                <p className="font-medium text-gray-800">{latestRecord.doctorId?.name || 'Doctor'}</p>
+                <p className="font-medium text-gray-800">{latestRecord.doctorId?.name || latestRecord.prescribedBy?.name || 'Doctor'}</p>
                 <p className="text-sm text-gray-600">Medical Professional</p>
                 <p className="text-sm text-gray-600">{latestRecord.centerId?.name || 'Medical Center'}</p>
               </div>

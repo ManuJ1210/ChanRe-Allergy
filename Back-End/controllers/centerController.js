@@ -220,3 +220,23 @@ export const getCenterStats = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch center stats", error: err.message });
   }
 };
+
+// Get center by centerAdminId
+export const getCenterByAdminId = async (req, res) => {
+  try {
+    const adminId = req.params.adminId;
+    console.log('🔍 Backend: Finding center for adminId:', adminId);
+    
+    const center = await Center.findOne({ centerAdminId: adminId });
+    if (!center) {
+      console.log('🔍 Backend: No center found with centerAdminId:', adminId);
+      return res.status(404).json({ message: "Center not found for this admin" });
+    }
+
+    console.log('🔍 Backend: Found center:', center.name, 'ID:', center._id);
+    res.json(center);
+  } catch (err) {
+    console.error('🔍 Backend: Error finding center by admin ID:', err);
+    res.status(500).json({ message: "Failed to fetch center by admin ID", error: err.message });
+  }
+};

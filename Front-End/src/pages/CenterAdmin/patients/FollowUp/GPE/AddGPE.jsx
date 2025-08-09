@@ -39,7 +39,7 @@ const AddGPE = () => {
   useEffect(() => {
     if (addGPESuccess) {
       dispatch(resetCenterAdminState());
-      navigate(`/CenterAdmin/patients/ViewProfile/${patientId}`);
+      navigate(`/dashboard/CenterAdmin/patients/ViewProfile/${patientId}`);
     }
   }, [addGPESuccess, dispatch, navigate, patientId]);
 

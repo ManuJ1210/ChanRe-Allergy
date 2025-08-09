@@ -24,7 +24,6 @@ const ViewAtopicDermatitis = () => {
   useEffect(() => {
     if (patientId) {
       dispatch(fetchReceptionistAtopicDermatitis(patientId));
-      dispatch(fetchPatient(patientId));
     }
   }, [dispatch, patientId]);
 
@@ -170,19 +169,19 @@ const ViewAtopicDermatitis = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-500">Patient Name</label>
-                <p className="text-gray-900 font-medium">{singlePatient?.name || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{latestRecord?.patientId?.name || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Patient ID</label>
-                <p className="text-gray-900 font-medium">{singlePatient?._id || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{latestRecord?.patientId?._id || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Age</label>
-                <p className="text-gray-900 font-medium">{singlePatient?.age || 'N/A'} years</p>
+                <p className="text-gray-900 font-medium">{latestRecord?.patientId?.age || 'N/A'} years</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Gender</label>
-                <p className="text-gray-900 font-medium">{singlePatient?.gender || 'N/A'}</p>
+                <p className="text-gray-900 font-medium">{latestRecord?.patientId?.gender || 'N/A'}</p>
               </div>
             </div>
           </div>

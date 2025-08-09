@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchCenterStats } from '../../features/centerAdmin/centerAdminThunks';
 import { setUserFromLocal } from '../../features/auth/authSlice';
+import API from '../../services/api';
 import { 
   Building, 
   ArrowLeft, 
@@ -23,27 +24,83 @@ const CenterProfile = () => {
   const { center, centerLoading, centerError } = useSelector((state) => state.centerAdmin);
   
   // Fix: Ensure centerId is always a string (ObjectId)
-  const centerId = typeof user?.centerId === 'object' ? user.centerId._id : user?.centerId;
+  const getCenterId = () => {
+    if (!user) return null;
+    
+    // Try multiple ways to get centerId
+    if (user.centerId) {
+      if (typeof user.centerId === 'object' && user.centerId._id) {
+        return user.centerId._id;
+      }
+      if (typeof user.centerId === 'string') {
+        return user.centerId;
+      }
+    }
+    
+    // Alternative field names
+    if (user.centerID) return user.centerID;
+    if (user.center_id) return user.center_id;
+    if (user.center && user.center._id) return user.center._id;
+    
+    return null;
+  };
+  
+  const centerId = getCenterId();
 
   // Debug logging
-
+  console.log('🔍 CenterProfile Debug - User:', user);
+  console.log('🔍 CenterProfile Debug - CenterId:', centerId);
+  console.log('🔍 CenterProfile Debug - Center:', center);
+  console.log('🔍 CenterProfile Debug - CenterError:', centerError);
 
   // On mount, if user is not in Redux, try to load from localStorage
   useEffect(() => {
     if (!user) {
+      console.log('🔍 No user found, loading from localStorage');
       dispatch(setUserFromLocal());
     }
     // eslint-disable-next-line
   }, []);
 
+  // Alternative approach: if no centerId, try to fetch center by centerAdminId
   useEffect(() => {
     if (centerId) {
-
-      dispatch(fetchCenterStats(centerId));
+      console.log('🔍 Fetching center stats for centerId:', centerId);
+      dispatch(fetchCenterStats(centerId)).catch(error => {
+        console.error('🔍 Failed to fetch center stats:', error);
+      });
+    } else if (user && user.role === 'centeradmin') {
+      console.log('🔍 No centerId available, trying alternative approach for center admin');
+      // Try to fetch center where this user is the centerAdminId
+      fetchCenterByAdminId(user.id || user._id);
     } else {
-      
+      console.log('🔍 No centerId available - User:', user);
+      if (user) {
+        console.log('🔍 User exists but no centerId found. User object:', user);
+        console.log('🔍 User centerId field:', user.centerId);
+        console.log('🔍 User centerId type:', typeof user.centerId);
+      }
     }
-  }, [dispatch, centerId]);
+  }, [dispatch, centerId, user]);
+
+  // Helper function to fetch center by admin ID
+  const fetchCenterByAdminId = async (adminId) => {
+    try {
+      console.log('🔍 Trying to fetch center by centerAdminId:', adminId);
+      const response = await API.get(`/centers/by-admin/${adminId}`);
+      
+      console.log('🔍 Found center by admin ID:', response.data);
+      // If we found the center, we can fetch its stats
+      if (response.data._id) {
+        dispatch(fetchCenterStats(response.data._id));
+      }
+    } catch (error) {
+      console.error('🔍 Error fetching center by admin ID:', error);
+      if (error.response?.status === 404) {
+        console.log('🔍 No center found for admin ID:', adminId);
+      }
+    }
+  };
 
   if (centerLoading) {
     return (
@@ -114,18 +171,38 @@ const CenterProfile = () => {
     );
   }
 
-  if (!center) {
+  if (!center && !centerLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-6xl mx-auto">
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
-            <p className="text-yellow-700">No center data available. Please try refreshing the page.</p>
-            <button
-              onClick={() => centerId && dispatch(fetchCenterStats(centerId))}
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Refresh Data
-            </button>
+            <p className="text-yellow-700 mb-4">No center data available.</p>
+            {centerError && (
+              <p className="text-red-600 mb-4 text-sm">Error: {centerError}</p>
+            )}
+            {!centerId && (
+              <p className="text-red-600 mb-4 text-sm">Center ID is missing. Please contact support.</p>
+            )}
+            <div className="space-y-2">
+              <p className="text-gray-600 text-sm">Debug Info:</p>
+              <p className="text-gray-600 text-sm">User Role: {user?.role}</p>
+              <p className="text-gray-600 text-sm">Center ID: {centerId || 'Not found'}</p>
+            </div>
+            <div className="mt-4 space-x-2">
+              <button
+                onClick={() => centerId && dispatch(fetchCenterStats(centerId))}
+                disabled={!centerId}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400"
+              >
+                Retry Loading Data
+              </button>
+              <button
+                onClick={() => dispatch(setUserFromLocal())}
+                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                Reload User Data
+              </button>
+            </div>
           </div>
         </div>
       </div>

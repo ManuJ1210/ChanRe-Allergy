@@ -277,7 +277,7 @@ export default function ScheduleCollection() {
                 <div className="space-y-2">
                   <p><strong>Test Type:</strong> {testRequest.testType}</p>
                   <p><strong>Description:</strong> {testRequest.testDescription}</p>
-                  <p><strong>Patient:</strong> {testRequest.patientName}</p>
+                  <p><strong>Patient:</strong> {testRequest.patientName || testRequest.patientId?.name || 'N/A'}</p>
                   <p><strong>Doctor:</strong> {testRequest.doctorName}</p>
                 </div>
               </div>

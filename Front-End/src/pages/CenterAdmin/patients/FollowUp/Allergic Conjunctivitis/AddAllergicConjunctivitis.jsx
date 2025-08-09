@@ -24,6 +24,7 @@ const SEVERITY_LEVELS = [
 ];
 
 export default function AddAllergicConjunctivitis() {
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     symptoms: {
       Itching: '',
@@ -89,8 +90,6 @@ export default function AddAllergicConjunctivitis() {
     }
     
     try {
-      const token = localStorage.getItem("token");
-      
       // Prepare the data
       const formData = {
         patientId: params.patientId,
@@ -99,21 +98,14 @@ export default function AddAllergicConjunctivitis() {
         grading: form.grading
       };
       
-
-      
-      const response = await axios.post(
-        "http://localhost:5000/api/allergic-conjunctivitis",
-        formData,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
+      // Use Redux thunk
+      await dispatch(addAllergicConjunctivitis(formData));
       
       alert("Submitted successfully!");
-      navigate(`/Receptionist/profile/${params.patientId}`);
+      navigate(`/dashboard/CenterAdmin/patients/ViewProfile/${params.patientId}`);
     } catch (err) {
       console.error('Error submitting form:', err);
-      console.error('Error response:', err.response?.data);
-      alert(`Failed to submit. Error: ${err.response?.data?.message || err.message}`);
+      alert(`Failed to submit. Error: ${err.message}`);
     }
   };
 

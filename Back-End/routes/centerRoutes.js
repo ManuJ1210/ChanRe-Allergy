@@ -6,7 +6,8 @@ import {
   updateCenter,
   getCenterById,
   getCenterWithAdmin,
-  getCenterStats
+  getCenterStats,
+  getCenterByAdminId
 } from '../controllers/centerController.js';
 
 import { protect } from '../middleware/authMiddleware.js';
@@ -15,6 +16,7 @@ const router = express.Router();
 
 // ✅ Specific routes first
 router.get('/withadmin/:id', protect, getCenterWithAdmin);
+router.get('/by-admin/:adminId', protect, getCenterByAdminId);
 router.get('/:id/stats', protect, getCenterStats);
 
 router.post('/create-with-admin', createCenterWithAdmin);

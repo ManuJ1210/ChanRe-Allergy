@@ -29,15 +29,15 @@ const FollowUp = () => {
 
   const handleViewPatient = (patientId) => {
     dispatch(fetchPatientDetails(patientId));
-    navigate(`/CenterAdmin/patients/ViewProfile/${patientId}`);
+    navigate(`/dashboard/CenterAdmin/patients/ViewProfile/${patientId}`);
   };
 
   const handleAddFollowUp = (patientId) => {
-    navigate(`/CenterAdmin/patients/FollowUp/add/${patientId}`);
+    navigate(`/dashboard/CenterAdmin/patients/FollowUp/add/${patientId}`);
   };
 
   const handleViewFollowUp = (patientId, followUpType) => {
-    navigate(`/CenterAdmin/patients/FollowUp/${followUpType}/view/${patientId}`);
+    navigate(`/dashboard/CenterAdmin/patients/FollowUp/${followUpType}/view/${patientId}`);
   };
 
   const filteredFollowUps = followUps?.filter(followUp => {
