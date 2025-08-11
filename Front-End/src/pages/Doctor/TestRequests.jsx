@@ -303,7 +303,7 @@ const TestRequests = () => {
           {filteredTestRequests.length === 0 ? (
             <div className="text-center py-12">
               <FileText className="h-16 w-16 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-600 mb-2">
+              <h3 className="text-lg  text-slate-600 mb-2">
                 {searchTerm || filterStatus || filterPriority ? 'No test requests found' : 'No test requests'}
               </h3>
               <p className="text-slate-500">
@@ -347,7 +347,7 @@ const TestRequests = () => {
                             <User className="h-4 w-4 text-blue-600" />
                           </div>
                           <div>
-                            <div className="font-semibold text-slate-800">
+                            <div className=" text-slate-800">
                               {test.patientName || 'Unknown Patient'}
                             </div>
                             <div className="text-sm text-slate-500">
