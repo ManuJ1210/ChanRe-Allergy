@@ -96,7 +96,7 @@ export default function ViewFollowUpPatients() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Follow-up Patients
           </h1>
           <p className="text-slate-600">
@@ -109,7 +109,7 @@ export default function ViewFollowUpPatients() {
           <div className="p-6 border-b border-blue-100">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                   <Activity className="h-5 w-5 mr-2 text-blue-500" />
                   Follow-up Assessments
                 </h2>
@@ -156,7 +156,7 @@ export default function ViewFollowUpPatients() {
                   <tr>
                     <td colSpan="4" className="px-6 py-12 text-center">
                       <Users className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-slate-600 mb-2">No Follow-up Patients Found</h3>
+                      <h3 className="text-sm font-medium text-slate-600 mb-2">No Follow-up Patients Found</h3>
                       <p className="text-slate-500">
                         {search ? 'No patients match your search.' : 'No patients have follow-up assessments yet.'}
                       </p>
@@ -171,32 +171,32 @@ export default function ViewFollowUpPatients() {
                             <Users className="h-5 w-5 text-blue-500" />
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-slate-900">
+                            <div className="text-xs font-medium text-slate-900">
                               {patient.patient.name || 'Unknown Patient'}
                             </div>
-                            <div className="text-sm text-slate-500">
+                            <div className="text-xs text-slate-500">
                               ID: {patient.patient._id?.slice(-6) || 'No ID'}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center text-sm text-slate-900">
+                        <div className="flex items-center text-xs text-slate-900">
                           <Building2 className="h-3 w-3 mr-2 text-slate-400" />
                           {patient.patient.centerId?.name || 'Unknown Center'}
                         </div>
-                        <div className="flex items-center text-sm text-slate-500">
+                        <div className="flex items-center text-xs text-slate-500">
                           <Hash className="h-3 w-3 mr-2 text-slate-400" />
                           {patient.patient.centerCode || 'No code'}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center text-sm text-slate-900">
+                        <div className="flex items-center text-xs text-slate-900">
                           <Calendar className="h-3 w-3 mr-2 text-slate-400" />
                           {patient.records.length > 0 ? new Date(patient.records[0].createdAt || patient.records[0].date).toLocaleDateString() : 'No date'}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-xs font-medium">
                         <div className="flex flex-wrap gap-2 justify-center">
                           {followupTypes.map((type) => (
                             <button

@@ -82,13 +82,13 @@ export default function PatientHistory() {
   const renderProfile = () => (
     <div className="space-y-6">
       <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
-        <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+        <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center">
           <User className="h-5 w-5 mr-2 text-blue-500" />
           Personal Information
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Full Name</label>
+            <label className="block text-xs font-medium text-slate-700 mb-2">Full Name</label>
             <p className="text-slate-900">{singlePatient.name}</p>
           </div>
           <div>

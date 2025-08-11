@@ -5,6 +5,7 @@ import { createLabStaff } from '../../../features/superadmin/superadminThunks';
 import { resetSuperadminState } from '../../../features/superadmin/superadminSlice';
 import { ArrowLeft, Save, UserCheck, AlertCircle, Microscope } from 'lucide-react';
 import API from '../../../services/api';
+import { toast } from 'react-toastify';
 
 export default function AddLabStaff() {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function AddLabStaff() {
 
   useEffect(() => {
     if (addLabStaffSuccess) {
+      toast.success('Lab staff member created successfully!');
       dispatch(resetSuperadminState());
       navigate('/dashboard/Superadmin/Lab/LabStaffList');
     }
@@ -42,17 +44,17 @@ export default function AddLabStaff() {
 
     // Validation
     if (!formData.staffName || !formData.email || !formData.phone) {
-      alert('Please fill in all required fields');
+      toast.error('Please fill in all required fields');
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+      toast.error('Passwords do not match');
       return;
     }
 
     if (formData.password.length < 6) {
-      alert('Password must be at least 6 characters long');
+      toast.error('Password must be at least 6 characters long');
       return;
     }
 
@@ -67,6 +69,8 @@ export default function AddLabStaff() {
 
       dispatch(createLabStaff(payload));
     } catch (error) {
+      console.error('Error creating lab staff:', error);
+      toast.error('Failed to create lab staff member. Please try again.');
     }
   };
 
@@ -82,7 +86,7 @@ export default function AddLabStaff() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Lab Staff
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Add New Lab Staff
           </h1>
           <p className="text-slate-600">
@@ -109,7 +113,7 @@ export default function AddLabStaff() {
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <Microscope className="h-5 w-5 mr-2 text-blue-500" />
               Lab Staff Information
             </h2>
@@ -121,10 +125,10 @@ export default function AddLabStaff() {
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             {/* Personal Information */}
             <div>
-              <h3 className="text-lg font-medium text-slate-800 mb-4">Personal Information</h3>
+              <h3 className="text-sm font-medium text-slate-800 mb-4">Personal Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Staff Name *
                   </label>
                   <input
@@ -139,7 +143,7 @@ export default function AddLabStaff() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Email *
                   </label>
                   <input
@@ -154,7 +158,7 @@ export default function AddLabStaff() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Phone Number *
                   </label>
                   <input
@@ -169,7 +173,7 @@ export default function AddLabStaff() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Role
                   </label>
                   <select
@@ -191,10 +195,10 @@ export default function AddLabStaff() {
 
             {/* Account Security */}
             <div>
-              <h3 className="text-lg font-medium text-slate-800 mb-4">Account Security</h3>
+              <h3 className="text-sm font-medium text-slate-800 mb-4">Account Security</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Password *
                   </label>
                   <input
@@ -210,7 +214,7 @@ export default function AddLabStaff() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Confirm Password *
                   </label>
                   <input

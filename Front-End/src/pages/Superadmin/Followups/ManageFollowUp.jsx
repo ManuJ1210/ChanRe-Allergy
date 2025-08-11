@@ -16,7 +16,7 @@ export default function ManageFollowUp() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Follow-up Management
           </h1>
           <p className="text-slate-600">
@@ -27,7 +27,7 @@ export default function ManageFollowUp() {
         {/* Main Content */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <Activity className="h-5 w-5 mr-2 text-blue-500" />
               Follow-up Management
             </h2>
@@ -43,7 +43,7 @@ export default function ManageFollowUp() {
                 className="p-6 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors text-left"
               >
                 <Users className="h-8 w-8 text-blue-500 mb-3" />
-                <h3 className="text-lg font-semibold text-slate-800 mb-2">View Follow-up Patients</h3>
+                <h3 className="text-sm font-semibold text-slate-800 mb-2">View Follow-up Patients</h3>
                 <p className="text-slate-600">Browse all patients with follow-up records across centers</p>
               </button>
             </div>

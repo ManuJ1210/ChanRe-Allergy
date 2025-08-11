@@ -85,7 +85,7 @@ const EditReceptionist = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Receptionists
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Edit Receptionist
           </h1>
           <p className="text-slate-600">
@@ -110,7 +110,7 @@ const EditReceptionist = () => {
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-500" />
               Receptionist Information
             </h2>
@@ -122,7 +122,7 @@ const EditReceptionist = () => {
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Full Name *
                 </label>
                 <input
@@ -137,7 +137,7 @@ const EditReceptionist = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Phone Number *
                 </label>
                 <input
@@ -152,7 +152,7 @@ const EditReceptionist = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Email Address *
                 </label>
                 <input
@@ -167,7 +167,7 @@ const EditReceptionist = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Username *
                 </label>
                 <input
@@ -182,7 +182,7 @@ const EditReceptionist = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   New Password (leave blank to keep current)
                 </label>
                 <div className="relative">

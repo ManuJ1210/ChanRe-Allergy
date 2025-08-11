@@ -46,11 +46,11 @@ const PrescriptionList = ({ patientId: propPatientId }) => {
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-slate-800 flex items-center mb-2">
+              <h1 className="text-xl font-bold text-slate-800 flex items-center mb-2">
                 <FileText className="h-8 w-8 mr-3 text-blue-500" />
                 Prescriptions
               </h1>
-              <div className="flex items-center gap-4 text-sm text-slate-600">
+              <div className="flex items-center gap-4 text-xs text-slate-600">
                 <div className="flex items-center gap-1">
                   <User className="h-4 w-4" />
                   <span>Patient ID: {patientId}</span>
@@ -76,7 +76,7 @@ const PrescriptionList = ({ patientId: propPatientId }) => {
         {/* Prescriptions Table */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 overflow-hidden">
           <div className="p-6 border-b border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <FileText className="h-5 w-5 mr-2 text-blue-500" />
               Prescription Records
             </h2>
@@ -103,7 +103,7 @@ const PrescriptionList = ({ patientId: propPatientId }) => {
                       <div className="flex flex-col items-center">
                         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
                         <p className="text-slate-600 font-medium">Loading prescriptions...</p>
-                        <p className="text-slate-500 text-sm">Please wait while we fetch the data</p>
+                        <p className="text-slate-500 text-xs">Please wait while we fetch the data</p>
                       </div>
                     </td>
                   </tr>
@@ -115,7 +115,7 @@ const PrescriptionList = ({ patientId: propPatientId }) => {
                           <FileText className="h-8 w-8 mx-auto" />
                         </div>
                         <p className="text-red-700 font-medium">{error}</p>
-                        <p className="text-red-600 text-sm mt-1">Please try refreshing the page</p>
+                        <p className="text-red-600 text-xs mt-1">Please try refreshing the page</p>
                       </div>
                     </td>
                   </tr>
@@ -124,8 +124,8 @@ const PrescriptionList = ({ patientId: propPatientId }) => {
                     <td colSpan={5} className="px-6 py-12 text-center">
                       <div className="flex flex-col items-center">
                         <FileText className="h-16 w-16 text-slate-300 mb-4" />
-                        <p className="text-slate-600 font-medium text-lg">No prescriptions found</p>
-                        <p className="text-slate-500 text-sm mt-1">Start by adding a new prescription</p>
+                        <p className="text-slate-600 font-medium text-sm">No prescriptions found</p>
+                        <p className="text-slate-500 text-xs mt-1">Start by adding a new prescription</p>
                         <button
                           onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/addprescription/${patientId}`)}
                           className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
@@ -140,7 +140,7 @@ const PrescriptionList = ({ patientId: propPatientId }) => {
                   prescriptions.map(p => (
                     <tr key={p._id} className="hover:bg-slate-50 transition-colors">
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-800 font-medium">
+                        <div className="text-xs text-slate-800 font-medium">
                           {p.date ? new Date(p.date).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'short',
@@ -154,26 +154,26 @@ const PrescriptionList = ({ patientId: propPatientId }) => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-800 font-medium">
+                        <div className="text-xs text-slate-800 font-medium">
                           {p.patientId?.name || '-'}
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-600">
+                        <div className="text-xs text-slate-600">
                           {p.updatedBy?.name || '-'}
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <button
-                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md"
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md"
                             onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/viewprescription/${p._id}`)}
                           >
                             <Eye className="h-4 w-4" />
                             View
                           </button>
                           <button
-                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md"
+                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md"
                             onClick={() => handleDelete(p._id, p.patientId?.name || 'Unknown Patient')}
                           >
                             <Trash2 className="h-4 w-4" />

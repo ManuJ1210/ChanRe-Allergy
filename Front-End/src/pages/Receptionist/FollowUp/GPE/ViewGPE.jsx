@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchReceptionistGPE, fetchPatient, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
+import { fetchReceptionistGPE, fetchPatient, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks.js';
 import { 
   ArrowLeft, 
   Activity,

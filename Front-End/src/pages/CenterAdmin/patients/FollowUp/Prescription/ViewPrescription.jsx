@@ -86,7 +86,7 @@ const ViewPrescription = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Prescription</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">Error Loading Prescription</h2>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
                 onClick={() => navigate(-1)}
@@ -108,7 +108,7 @@ const ViewPrescription = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">No Prescription Found</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">No Prescription Found</h2>
               <p className="text-gray-600 mb-4">No prescription record found for this ID.</p>
               <button
                 onClick={() => navigate(-1)}
@@ -137,7 +137,7 @@ const ViewPrescription = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">Prescription Medical Record</h1>
+              <h1 className="text-xl font-bold text-gray-800">Prescription Medical Record</h1>
             </div>
             <div className="flex space-x-3">
               <button
@@ -162,27 +162,27 @@ const ViewPrescription = () => {
         <div className="bg-white rounded-lg shadow-lg p-8">
           {/* Record Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">MEDICAL PRESCRIPTION</h1>
+            <h1 className="text-xl font-bold text-gray-800 mb-2">MEDICAL PRESCRIPTION</h1>
             <p className="text-gray-600">Prescription ID: {latestRecord._id}</p>
           </div>
           
           {/* Patient Information */}
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
               Patient Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-500">Patient Name</label>
+                <label className="block text-xs font-medium text-gray-500">Patient Name</label>
                 <p className="text-gray-900 font-medium">{latestRecord.patientId?.name || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Patient ID</label>
+                <label className="block text-xs font-medium text-gray-500">Patient ID</label>
                 <p className="text-gray-900 font-medium">{latestRecord.patientId?._id || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Prescription Date</label>
+                <label className="block text-xs font-medium text-gray-500">Prescription Date</label>
                 <p className="text-gray-900 font-medium">
                   {latestRecord.date ? new Date(latestRecord.date).toLocaleDateString() : 'N/A'}
                 </p>
@@ -195,7 +195,7 @@ const ViewPrescription = () => {
             {/* Diagnosis */}
             {latestRecord.diagnosis && (
               <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                   <Eye className="h-5 w-5 mr-2 text-blue-600" />
                   Clinical Diagnosis
                 </h2>
@@ -207,7 +207,7 @@ const ViewPrescription = () => {
 
             {/* Medications */}
             <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <FileText className="h-5 w-5 mr-2 text-blue-600" />
                 Prescribed Medications
               </h2>
@@ -217,17 +217,17 @@ const ViewPrescription = () => {
                     <div key={index} className="bg-white rounded-lg p-4 border border-l-4 border-blue-500">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <h3 className="font-semibold text-gray-800 text-lg">{med.medicationName}</h3>
+                          <h3 className="font-semibold text-gray-800 text-sm">{med.medicationName}</h3>
                           <p className="text-gray-600">{med.dosage}</p>
                         </div>
                         <div>
                           <div className="space-y-2">
                             <div>
-                              <span className="text-sm font-medium text-gray-500">Duration:</span>
+                              <span className="text-xs font-medium text-gray-500">Duration:</span>
                               <span className="text-gray-800 ml-2">{med.duration}</span>
                             </div>
                             <div>
-                              <span className="text-sm font-medium text-gray-500">Frequency:</span>
+                              <span className="text-xs font-medium text-gray-500">Frequency:</span>
                               <span className="text-gray-800 ml-2">{med.frequency || 'Not specified'}</span>
                             </div>
                           </div>
@@ -235,7 +235,7 @@ const ViewPrescription = () => {
                       </div>
                       {med.instructions && (
                         <div className="mt-3 pt-3 border-t border-gray-200">
-                          <span className="text-sm font-medium text-gray-500">Instructions:</span>
+                          <span className="text-xs font-medium text-gray-500">Instructions:</span>
                           <p className="text-gray-800 mt-1">{med.instructions}</p>
                         </div>
                       )}
@@ -252,7 +252,7 @@ const ViewPrescription = () => {
             {/* Instructions */}
             {latestRecord.instructions && (
               <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">Additional Instructions</h2>
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Additional Instructions</h2>
                 <div className="bg-white rounded-lg p-4 border">
                   <p className="text-gray-800">{latestRecord.instructions}</p>
                 </div>
@@ -262,7 +262,7 @@ const ViewPrescription = () => {
             {/* Follow-up */}
             {latestRecord.followUp && (
               <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">Follow-up Instructions</h2>
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Follow-up Instructions</h2>
                 <div className="bg-white rounded-lg p-4 border">
                   <p className="text-gray-800">{latestRecord.followUp}</p>
                 </div>
@@ -271,7 +271,7 @@ const ViewPrescription = () => {
 
             {/* Clinical Summary */}
             <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Prescription Summary</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">Prescription Summary</h2>
               <div className="bg-white rounded-lg p-6 border">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                   <div>
@@ -279,7 +279,7 @@ const ViewPrescription = () => {
                       <FileText className="h-8 w-8 text-blue-600" />
                     </div>
                     <h3 className="font-medium text-gray-800 mb-1">Medications</h3>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs text-gray-500">
                       {latestRecord.medications ? latestRecord.medications.length : 0} prescribed
                     </p>
                   </div>
@@ -289,7 +289,7 @@ const ViewPrescription = () => {
                       <User className="h-8 w-8 text-green-600" />
                     </div>
                     <h3 className="font-medium text-gray-800 mb-1">Prescribed By</h3>
-                    <p className="text-sm text-gray-500">{latestRecord.doctorId?.name || latestRecord.prescribedBy?.name || 'Not specified'}</p>
+                    <p className="text-xs text-gray-500">{latestRecord.doctorId?.name || latestRecord.prescribedBy?.name || 'Not specified'}</p>
                   </div>
                   
                   <div>
@@ -297,7 +297,7 @@ const ViewPrescription = () => {
                       <Calendar className="h-8 w-8 text-purple-600" />
                     </div>
                     <h3 className="font-medium text-gray-800 mb-1">Prescription Date</h3>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs text-gray-500">
                       {latestRecord.date ? new Date(latestRecord.date).toLocaleDateString() : 'N/A'}
                     </p>
                   </div>
@@ -308,7 +308,7 @@ const ViewPrescription = () => {
 
           {/* Record Metadata */}
           <div className="border-t pt-6 mt-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4 text-gray-400" />
                 <span className="text-gray-500">Record Created:</span>
@@ -329,13 +329,13 @@ const ViewPrescription = () => {
           {/* Doctor Signature */}
           <div className="border-t pt-6 mt-8">
             <div className="flex justify-between items-center">
-              <div className="text-sm text-gray-600">
+              <div className="text-xs text-gray-600">
                 <p>Generated on: {new Date().toLocaleDateString()}</p>
               </div>
               <div className="text-right">
                 <p className="font-medium text-gray-800">{latestRecord.doctorId?.name || latestRecord.prescribedBy?.name || 'Doctor'}</p>
-                <p className="text-sm text-gray-600">Medical Professional</p>
-                <p className="text-sm text-gray-600">{latestRecord.centerId?.name || 'Medical Center'}</p>
+                <p className="text-xs text-gray-600">Medical Professional</p>
+                <p className="text-xs text-gray-600">{latestRecord.centerId?.name || 'Medical Center'}</p>
               </div>
             </div>
           </div>

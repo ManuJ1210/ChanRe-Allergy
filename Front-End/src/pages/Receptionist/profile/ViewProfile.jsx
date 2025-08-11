@@ -207,7 +207,7 @@ const ViewProfile = () => {
                 <User className="h-10 w-10 text-blue-500" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
+                <h1 className="text-xl font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
                 <div className="flex flex-wrap gap-4 text-slate-600">
                   {patient?.gender && (
                     <span className="flex items-center gap-1">
@@ -278,7 +278,7 @@ const ViewProfile = () => {
             {/* Patient Details Card */}
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
               <div className="p-6 border-b border-blue-100">
-                <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                   <User className="h-5 w-5 mr-2 text-blue-500" />
                   Patient Details
                 </h2>
@@ -290,7 +290,7 @@ const ViewProfile = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-slate-500 mb-1">Full Name</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Full Name</label>
                       <p className="text-slate-800 font-medium break-words">{patient.name || 'N/A'}</p>
                     </div>
                     <div>
@@ -879,22 +879,35 @@ const ViewProfile = () => {
         {activeTab === "Prescription" && (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-              <h2 className="text-xl font-semibold text-slate-800">Prescription</h2>
-              <button
-                onClick={() => navigate(`/dashboard/receptionist/followup/prescription/add/${patient._id}`)}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-              >
-                Add Prescription
-              </button>
+              <h2 className="text-lg font-semibold text-slate-800">Prescription</h2>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    console.log('🔄 Manually refreshing prescriptions...');
+                    dispatch(fetchReceptionistPrescriptions(patient._id));
+                  }}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg font-medium transition-colors text-xs"
+                >
+                  Refresh
+                </button>
+                <button
+                  onClick={() => navigate(`/dashboard/receptionist/followup/prescription/add/${patient._id}`)}
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Add Prescription
+                </button>
+              </div>
             </div>
             <div className="p-6">
+
+              
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200">
                       <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Visit</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Patient ID</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Medications</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Updated By</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Action</th>
                     </tr>
@@ -903,16 +916,30 @@ const ViewProfile = () => {
                     {prescriptions && prescriptions.length > 0 ? (
                       prescriptions.map((prescription, idx) => (
                         <tr key={prescription._id || idx} className="hover:bg-slate-50 transition-colors">
-                          <td className="px-4 py-3 text-sm text-slate-800">
-                            {prescription.createdAt ? new Date(prescription.createdAt).toLocaleString() : 'N/A'}
+                          <td className="px-4 py-3 text-xs text-slate-800">
+                            {prescription.date ? new Date(prescription.date).toLocaleDateString() : 
+                             prescription.createdAt ? new Date(prescription.createdAt).toLocaleDateString() : 'N/A'}
                           </td>
-                          <td className="px-4 py-3 text-sm text-slate-800">{prescription.visitNumber || idx + 1}</td>
-                          <td className="px-4 py-3 text-sm text-slate-800">{patient._id}</td>
-                          <td className="px-4 py-3 text-sm text-slate-800">
+                          <td className="px-4 py-3 text-xs text-slate-800">{prescription.visit || 'N/A'}</td>
+                          <td className="px-4 py-3 text-xs text-slate-800">
+                            {prescription.medications && prescription.medications.length > 0 ? (
+                              <div className="space-y-1">
+                                {prescription.medications.map((med, medIdx) => (
+                                  <div key={medIdx} className="text-xs">
+                                    <span className="font-medium">{med.medicationName}</span>
+                                    <span className="text-slate-600"> - {med.dosage}mg, {med.duration} days</span>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              'No medications'
+                            )}
+                          </td>
+                          <td className="px-4 py-3 text-xs text-slate-800">
                             {typeof prescription.updatedBy === 'string' ? prescription.updatedBy :
                               typeof prescription.updatedBy === 'object' && prescription.updatedBy?.name ? prescription.updatedBy.name : 'N/A'}
                           </td>
-                          <td className="px-4 py-3 text-sm text-slate-800">
+                          <td className="px-4 py-3 text-xs text-slate-800">
                             <button
                               onClick={() => navigate(`/dashboard/receptionist/followup/prescription/view/${prescription._id}`)}
                               className="text-blue-600 hover:text-blue-900 font-medium"

@@ -56,6 +56,7 @@ export const getCompletedTestRequests = async (req, res) => {
       .populate('patientId', 'name phone address age gender')
       .populate('assignedLabStaffId', 'staffName phone')
       .populate('reportGeneratedBy', 'staffName')
+      .populate('centerId', 'name code')
       .sort({ createdAt: -1 });
 
     res.status(200).json(testRequests);

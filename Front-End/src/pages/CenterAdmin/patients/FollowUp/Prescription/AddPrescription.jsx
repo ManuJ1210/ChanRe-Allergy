@@ -67,7 +67,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Prescriptions
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Add Prescription
           </h1>
           <p className="text-slate-600">
@@ -92,7 +92,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <Pill className="h-5 w-5 mr-2 text-blue-500" />
               Prescription Information
             </h2>
@@ -104,7 +104,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             {/* Visit Information */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs font-medium text-slate-700 mb-2">
                 Visit Type *
               </label>
               <input
@@ -120,7 +120,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
             {/* Medications Section */}
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-slate-800">Medications</h3>
+                <h3 className="text-sm font-semibold text-slate-800">Medications</h3>
                 <button
                   type="button"
                   className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
@@ -135,7 +135,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
                 {medications.map((med, idx) => (
                   <div key={idx} className="bg-slate-50 border border-slate-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-sm font-medium text-slate-700">Medication #{idx + 1}</h4>
+                      <h4 className="text-xs font-medium text-slate-700">Medication #{idx + 1}</h4>
                       {medications.length > 1 && (
                         <button
                           type="button"
@@ -152,7 +152,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
                         <label className="block text-xs font-medium text-slate-600 mb-1">Medication Name *</label>
                         <input
                           type="text"
-                          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                           placeholder="Enter drug name"
                           value={med.medicationName}
                           onChange={e => handleMedicationChange(idx, "medicationName", e.target.value)}
@@ -163,7 +163,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
                         <label className="block text-xs font-medium text-slate-600 mb-1">Dosage *</label>
                         <input
                           type="text"
-                          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                           placeholder="e.g., 500mg"
                           value={med.dosage}
                           onChange={e => handleMedicationChange(idx, "dosage", e.target.value)}
@@ -174,7 +174,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
                         <label className="block text-xs font-medium text-slate-600 mb-1">Duration *</label>
                         <input
                           type="text"
-                          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                           placeholder="e.g., 7 days"
                           value={med.duration}
                           onChange={e => handleMedicationChange(idx, "duration", e.target.value)}
@@ -185,7 +185,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
                         <label className="block text-xs font-medium text-slate-600 mb-1">Instructions</label>
                         <input
                           type="text"
-                          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
+                          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                           placeholder="e.g., Take with food"
                           value={med.instructions}
                           onChange={e => handleMedicationChange(idx, "instructions", e.target.value)}

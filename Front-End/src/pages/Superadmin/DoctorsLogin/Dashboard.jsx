@@ -32,7 +32,7 @@ const Dashboard = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Superadmin Doctor Dashboard</h1>
+      <h1 className="text-xl font-bold text-gray-800 mb-8">Superadmin Doctor Dashboard</h1>
       
       {/* Stats Cards - Focused on Patient Care */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -42,8 +42,8 @@ const Dashboard = () => {
               <User className="w-6 h-6 text-blue-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Assigned Patients</p>
-              <p className="text-2xl font-semibold text-gray-900">
+              <p className="text-xs font-medium text-gray-600">Assigned Patients</p>
+              <p className="text-xl font-semibold text-gray-900">
                 {workingStats?.assignedPatients || 0}
               </p>
             </div>
@@ -56,8 +56,8 @@ const Dashboard = () => {
               <FileText className="w-6 h-6 text-purple-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Pending Lab Reports</p>
-              <p className="text-2xl font-semibold text-gray-900">
+              <p className="text-xs font-medium text-gray-600">Pending Lab Reports</p>
+              <p className="text-xl font-semibold text-gray-900">
                 {workingStats?.pendingLabReports || 0}
               </p>
             </div>
@@ -70,8 +70,8 @@ const Dashboard = () => {
               <MessageSquare className="w-6 h-6 text-green-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Feedback Sent</p>
-              <p className="text-2xl font-semibold text-gray-900">
+              <p className="text-xs font-medium text-gray-600">Feedback Sent</p>
+              <p className="text-xl font-semibold text-gray-900">
                 {workingStats?.feedbackSent || 0}
               </p>
             </div>
@@ -84,8 +84,8 @@ const Dashboard = () => {
               <Clock className="w-6 h-6 text-yellow-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Recent Followups</p>
-              <p className="text-2xl font-semibold text-gray-900">
+              <p className="text-xs font-medium text-gray-600">Recent Followups</p>
+              <p className="text-xl font-semibold text-gray-900">
                 {workingStats?.recentFollowups || 0}
               </p>
             </div>
@@ -98,7 +98,7 @@ const Dashboard = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Patient Details</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Patient Details</h3>
               <p className="text-gray-600 mb-4">
                 View complete patient information, history, and followups
               </p>
@@ -118,7 +118,7 @@ const Dashboard = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Lab Reports</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Lab Reports</h3>
               <p className="text-gray-600 mb-4">
                 Review lab reports and provide feedback to center admin doctors
               </p>
@@ -138,7 +138,7 @@ const Dashboard = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Patient History</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Patient History</h3>
               <p className="text-gray-600 mb-4">
                 Access complete patient medical history and followup records
               </p>
@@ -159,7 +159,7 @@ const Dashboard = () => {
       {/* Recent Patients with Actions */}
       <div className="bg-white rounded-lg shadow">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-800">Recent Patients</h2>
+          <h2 className="text-lg font-semibold text-gray-800">Recent Patients</h2>
         </div>
         <div className="p-6">
           {assignedPatients.length === 0 ? (
@@ -194,14 +194,14 @@ const Dashboard = () => {
                             </span>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">{patient.name}</div>
-                            <div className="text-sm text-gray-500">{patient.age} years</div>
+                            <div className="text-xs font-medium text-gray-900">{patient.name}</div>
+                            <div className="text-xs text-gray-500">{patient.age} years</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{patient.phone}</div>
-                        <div className="text-sm text-gray-500">{patient.email || 'N/A'}</div>
+                        <div className="text-xs text-gray-900">{patient.phone}</div>
+                        <div className="text-xs text-gray-500">{patient.email || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -212,7 +212,7 @@ const Dashboard = () => {
                           {patient.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td className="px-6 py-4 whitespace-nowrap text-xs font-medium">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => window.location.href = `/dashboard/superadmin/doctor/patient/${patient._id}`}

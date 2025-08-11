@@ -243,7 +243,7 @@ Generated on: ${new Date().toLocaleString()}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
                 onClick={() => navigate('/dashboard/lab/test-requests')}
@@ -265,7 +265,7 @@ Generated on: ${new Date().toLocaleString()}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">No Test Request Found</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">No Test Request Found</h2>
               <p className="text-gray-600 mb-4">The requested test request could not be found.</p>
               <button
                 onClick={() => navigate('/dashboard/lab/test-requests')}
@@ -294,7 +294,7 @@ Generated on: ${new Date().toLocaleString()}
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">Generate Test Report</h1>
+              <h1 className="text-xl font-bold text-gray-800">Generate Test Report</h1>
             </div>
           </div>
         </div>
@@ -303,7 +303,7 @@ Generated on: ${new Date().toLocaleString()}
         <div className="bg-white rounded-lg shadow-lg p-8">
           {/* Record Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">GENERATE TEST REPORT</h1>
+            <h1 className="text-xl font-bold text-gray-800 mb-2">GENERATE TEST REPORT</h1>
             <p className="text-gray-600">Create Laboratory Test Report (PDF)</p>
           </div>
 
@@ -331,21 +331,21 @@ Generated on: ${new Date().toLocaleString()}
           
           {/* Test Request Information */}
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
               Test Request Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-500">Request ID</label>
+                <label className="block text-xs font-medium text-gray-500">Request ID</label>
                 <p className="text-gray-900 font-medium">{testRequest._id || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Patient Name</label>
+                <label className="block text-xs font-medium text-gray-500">Patient Name</label>
                 <p className="text-gray-900 font-medium">{testRequest.patientName || testRequest.patientId?.name || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Test Type</label>
+                <label className="block text-xs font-medium text-gray-500">Test Type</label>
                 <p className="text-gray-900 font-medium">{testRequest.testType || 'N/A'}</p>
               </div>
             </div>
@@ -353,20 +353,20 @@ Generated on: ${new Date().toLocaleString()}
 
           {/* Status and Urgency */}
           <div className="bg-gray-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
               <Activity className="h-5 w-5 mr-2 text-blue-600" />
               Current Status & Priority
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-500 mb-2">Current Status</label>
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(testRequest.status)}`}>
+                <label className="block text-xs font-medium text-gray-500 mb-2">Current Status</label>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(testRequest.status)}`}>
                   {testRequest.status.replace(/_/g, ' ')}
                 </span>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500 mb-2">Urgency Level</label>
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${
+                <label className="block text-xs font-medium text-gray-500 mb-2">Urgency Level</label>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
                   testRequest.urgency === 'Emergency' ? 'text-red-600 bg-red-50 border-red-200' :
                   testRequest.urgency === 'Urgent' ? 'text-orange-600 bg-orange-50 border-orange-200' :
                   'text-green-600 bg-green-50 border-green-200'
@@ -380,7 +380,7 @@ Generated on: ${new Date().toLocaleString()}
           {/* Test Results Summary */}
           {testRequest.testResults && (
             <div className="bg-gray-50 rounded-lg p-6 mb-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <TestTube className="h-5 w-5 mr-2 text-blue-600" />
                 Test Results Summary
               </h2>
@@ -393,14 +393,14 @@ Generated on: ${new Date().toLocaleString()}
           {/* Conclusion & Recommendations */}
           {(testRequest.conclusion || testRequest.recommendations) && (
             <div className="bg-gray-50 rounded-lg p-6 mb-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <FileText className="h-5 w-5 mr-2 text-blue-600" />
                 Analysis Summary
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {testRequest.conclusion && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-2">Conclusion</label>
+                    <label className="block text-xs font-medium text-gray-500 mb-2">Conclusion</label>
                     <div className="bg-white rounded-lg p-4 border">
                       <p className="text-gray-800 whitespace-pre-wrap">{testRequest.conclusion}</p>
                     </div>
@@ -408,7 +408,7 @@ Generated on: ${new Date().toLocaleString()}
                 )}
                 {testRequest.recommendations && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-500 mb-2">Recommendations</label>
+                    <label className="block text-xs font-medium text-gray-500 mb-2">Recommendations</label>
                     <div className="bg-white rounded-lg p-4 border">
                       <p className="text-gray-800 whitespace-pre-wrap">{testRequest.recommendations}</p>
                     </div>
@@ -420,7 +420,7 @@ Generated on: ${new Date().toLocaleString()}
 
           {/* Generate Report Form */}
           <div className="bg-gray-50 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-6 flex items-center">
               <FileText className="h-5 w-5 mr-2 text-blue-600" />
               Generate PDF Test Report
             </h2>
@@ -428,7 +428,7 @@ Generated on: ${new Date().toLocaleString()}
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Report Summary */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Report Summary <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -444,7 +444,7 @@ Generated on: ${new Date().toLocaleString()}
 
               {/* Clinical Interpretation */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Clinical Interpretation <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -460,7 +460,7 @@ Generated on: ${new Date().toLocaleString()}
 
               {/* Method Used */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Method Used
                 </label>
                 <input
@@ -475,7 +475,7 @@ Generated on: ${new Date().toLocaleString()}
 
               {/* Equipment Used */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Equipment Used
                 </label>
                 <input
@@ -490,7 +490,7 @@ Generated on: ${new Date().toLocaleString()}
 
               {/* Quality Control */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Quality Control Notes
                 </label>
                 <textarea

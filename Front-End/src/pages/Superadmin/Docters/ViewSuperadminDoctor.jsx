@@ -129,7 +129,7 @@ const ViewSuperadminDoctor = () => {
           
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-slate-800 mb-2">Doctor Details</h1>
+              <h1 className="text-xl font-bold text-slate-800 mb-2">Doctor Details</h1>
               <p className="text-slate-600">View comprehensive information about the doctor</p>
             </div>
             
@@ -168,11 +168,11 @@ const ViewSuperadminDoctor = () => {
                 <User className="w-10 h-10" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold mb-1">{currentDoctor.name}</h2>
+                <h2 className="text-xl font-bold mb-1">{currentDoctor.name}</h2>
                 <p className="text-blue-100">{currentDoctor.designation || 'Doctor'}</p>
                 <div className="flex items-center mt-2">
                   <Shield className="w-4 h-4 mr-2" />
-                  <span className="text-sm bg-white/20 px-2 py-1 rounded-full">
+                  <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
                     {currentDoctor.role}
                   </span>
                 </div>
@@ -185,7 +185,7 @@ const ViewSuperadminDoctor = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Basic Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center">
                   <User className="w-5 h-5 mr-2 text-blue-600" />
                   Basic Information
                 </h3>
@@ -194,7 +194,7 @@ const ViewSuperadminDoctor = () => {
                   <div className="flex items-center">
                     <Mail className="w-4 h-4 mr-3 text-slate-500" />
                     <div>
-                      <p className="text-sm text-slate-500">Email</p>
+                      <p className="text-xs text-slate-500">Email</p>
                       <p className="font-medium">{currentDoctor.email}</p>
                     </div>
                   </div>
@@ -202,7 +202,7 @@ const ViewSuperadminDoctor = () => {
                   <div className="flex items-center">
                     <Phone className="w-4 h-4 mr-3 text-slate-500" />
                     <div>
-                      <p className="text-sm text-slate-500">Mobile</p>
+                      <p className="text-xs text-slate-500">Mobile</p>
                       <p className="font-medium">{currentDoctor.mobile}</p>
                     </div>
                   </div>
@@ -210,7 +210,7 @@ const ViewSuperadminDoctor = () => {
                   <div className="flex items-center">
                     <User className="w-4 h-4 mr-3 text-slate-500" />
                     <div>
-                      <p className="text-sm text-slate-500">Username</p>
+                      <p className="text-xs text-slate-500">Username</p>
                       <p className="font-medium">{currentDoctor.username}</p>
                     </div>
                   </div>
@@ -218,7 +218,7 @@ const ViewSuperadminDoctor = () => {
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-3 text-slate-500" />
                     <div>
-                      <p className="text-sm text-slate-500">Joined</p>
+                      <p className="text-xs text-slate-500">Joined</p>
                       <p className="font-medium">{formatDate(currentDoctor.createdAt)}</p>
                     </div>
                   </div>
@@ -227,7 +227,7 @@ const ViewSuperadminDoctor = () => {
 
               {/* Professional Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center">
                   <GraduationCap className="w-5 h-5 mr-2 text-blue-600" />
                   Professional Information
                 </h3>
@@ -237,7 +237,7 @@ const ViewSuperadminDoctor = () => {
                     <div className="flex items-center">
                       <Award className="w-4 h-4 mr-3 text-slate-500" />
                       <div>
-                        <p className="text-sm text-slate-500">Qualification</p>
+                        <p className="text-xs text-slate-500">Qualification</p>
                         <p className="font-medium">{currentDoctor.qualification}</p>
                       </div>
                     </div>
@@ -247,7 +247,7 @@ const ViewSuperadminDoctor = () => {
                     <div className="flex items-center">
                       <GraduationCap className="w-4 h-4 mr-3 text-slate-500" />
                       <div>
-                        <p className="text-sm text-slate-500">Designation</p>
+                        <p className="text-xs text-slate-500">Designation</p>
                         <p className="font-medium">{currentDoctor.designation}</p>
                       </div>
                     </div>
@@ -257,7 +257,7 @@ const ViewSuperadminDoctor = () => {
                     <div className="flex items-center">
                       <Shield className="w-4 h-4 mr-3 text-slate-500" />
                       <div>
-                        <p className="text-sm text-slate-500">KMC Number</p>
+                        <p className="text-xs text-slate-500">KMC Number</p>
                         <p className="font-medium">{currentDoctor.kmcNumber}</p>
                       </div>
                     </div>
@@ -267,7 +267,7 @@ const ViewSuperadminDoctor = () => {
                     <div className="flex items-center">
                       <Building className="w-4 h-4 mr-3 text-slate-500" />
                       <div>
-                        <p className="text-sm text-slate-500">Hospital</p>
+                        <p className="text-xs text-slate-500">Hospital</p>
                         <p className="font-medium">{currentDoctor.hospitalName}</p>
                       </div>
                     </div>
@@ -277,7 +277,7 @@ const ViewSuperadminDoctor = () => {
                     <div className="flex items-center">
                       <Clock className="w-4 h-4 mr-3 text-slate-500" />
                       <div>
-                        <p className="text-sm text-slate-500">Experience</p>
+                        <p className="text-xs text-slate-500">Experience</p>
                         <p className="font-medium">{currentDoctor.experience}</p>
                       </div>
                     </div>
@@ -289,7 +289,7 @@ const ViewSuperadminDoctor = () => {
             {/* Specializations */}
             {currentDoctor.specializations && currentDoctor.specializations.length > 0 && (
               <div className="mt-6">
-                <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center">
                   <Award className="w-5 h-5 mr-2 text-blue-600" />
                   Specializations
                 </h3>
@@ -297,7 +297,7 @@ const ViewSuperadminDoctor = () => {
                   {currentDoctor.specializations.map((spec, index) => (
                     <span
                       key={index}
-                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
+                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
                     >
                       {spec}
                     </span>
@@ -309,7 +309,7 @@ const ViewSuperadminDoctor = () => {
             {/* Bio */}
             {currentDoctor.bio && (
               <div className="mt-6">
-                <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center">
                   <FileText className="w-5 h-5 mr-2 text-blue-600" />
                   Bio
                 </h3>
@@ -323,8 +323,8 @@ const ViewSuperadminDoctor = () => {
             <div className="mt-6 pt-6 border-t border-slate-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <span className="text-sm text-slate-500 mr-2">Status:</span>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  <span className="text-xs text-slate-500 mr-2">Status:</span>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                     currentDoctor.status === 'active' 
                       ? 'bg-green-100 text-green-800' 
                       : 'bg-red-100 text-red-800'
@@ -334,8 +334,8 @@ const ViewSuperadminDoctor = () => {
                 </div>
                 
                 <div className="flex items-center">
-                  <span className="text-sm text-slate-500 mr-2">Super Admin Staff:</span>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  <span className="text-xs text-slate-500 mr-2">Super Admin Staff:</span>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                     currentDoctor.isSuperAdminStaff 
                       ? 'bg-blue-100 text-blue-800' 
                       : 'bg-slate-100 text-slate-800'
@@ -353,7 +353,7 @@ const ViewSuperadminDoctor = () => {
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-slate-800 mb-4">Confirm Delete</h3>
+            <h3 className="text-sm font-semibold text-slate-800 mb-4">Confirm Delete</h3>
             <p className="text-slate-600 mb-6">
               Are you sure you want to delete Dr. {currentDoctor.name}? This action cannot be undone.
             </p>

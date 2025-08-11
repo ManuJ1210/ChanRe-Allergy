@@ -335,7 +335,7 @@ const LabReports = () => {
             <div className="flex flex-col items-center justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
               <p className="text-slate-600 font-medium">Loading lab reports...</p>
-              <p className="text-slate-500 text-sm">Please wait while we fetch the data</p>
+              <p className="text-slate-500 text-xs">Please wait while we fetch the data</p>
             </div>
           </div>
         </div>
@@ -351,7 +351,7 @@ const LabReports = () => {
             <div className="flex flex-col items-center justify-center py-12">
               <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
               <p className="text-red-700 font-medium">{error}</p>
-              <p className="text-red-600 text-sm mt-1">Please try refreshing the page</p>
+              <p className="text-red-600 text-xs mt-1">Please try refreshing the page</p>
               {error.includes('login') && (
                 <button
                   onClick={() => navigate('/login')}
@@ -374,11 +374,11 @@ const LabReports = () => {
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-slate-800 flex items-center mb-2">
+              <h1 className="text-xl font-bold text-slate-800 flex items-center mb-2">
                 <FileText className="h-8 w-8 mr-3 text-blue-500" />
                 Lab Reports
               </h1>
-              <div className="flex items-center gap-4 text-sm text-slate-600">
+              <div className="flex items-center gap-4 text-xs text-slate-600">
                 <div className="flex items-center gap-1">
                   <Building className="h-4 w-4" />
                   <span>All Centers</span>
@@ -463,7 +463,7 @@ const LabReports = () => {
         {/* Reports Table */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 overflow-hidden">
           <div className="p-6 border-b border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <FileText className="h-5 w-5 mr-2 text-blue-500" />
               Lab Reports ({filteredReports.length})
             </h2>
@@ -490,8 +490,8 @@ const LabReports = () => {
                     <td colSpan={6} className="px-6 py-12 text-center">
                       <div className="flex flex-col items-center">
                         <FileText className="h-16 w-16 text-slate-300 mb-4" />
-                        <p className="text-slate-600 font-medium text-lg">No reports found</p>
-                        <p className="text-slate-500 text-sm mt-1">Try adjusting your search or filters</p>
+                        <p className="text-slate-600 font-medium text-sm">No reports found</p>
+                        <p className="text-slate-500 text-xs mt-1">Try adjusting your search or filters</p>
                       </div>
                     </td>
                   </tr>
@@ -500,19 +500,19 @@ const LabReports = () => {
                     <tr key={report._id} className="hover:bg-slate-50 transition-colors">
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm font-medium text-slate-800">{report.patientName}</div>
-                          <div className="text-sm text-slate-500">ID: {report.patientId}</div>
+                          <div className="text-xs font-medium text-slate-800">{report.patientName}</div>
+                          <div className="text-xs text-slate-500">ID: {report.patientId}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm font-medium text-slate-800">{report.centerName}</div>
-                          <div className="text-sm text-slate-500">Code: {report.centerCode}</div>
+                          <div className="text-xs font-medium text-slate-800">{report.centerName}</div>
+                          <div className="text-xs text-slate-500">Code: {report.centerCode}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm font-medium text-slate-800">{report.testType}</div>
+                          <div className="text-xs font-medium text-slate-800">{report.testType}</div>
                           <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(report.urgency)}`}>
                             {report.urgency}
                           </span>
@@ -524,7 +524,7 @@ const LabReports = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-600">
+                        <div className="text-xs text-slate-600">
                           {report.reportGeneratedDate ? 
                             new Date(report.reportGeneratedDate).toLocaleDateString('en-US', {
                               year: 'numeric',

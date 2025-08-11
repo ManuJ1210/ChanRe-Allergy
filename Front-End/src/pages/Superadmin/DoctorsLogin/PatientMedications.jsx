@@ -60,7 +60,7 @@ const PatientMedications = () => {
                 <ArrowLeft className="w-6 h-6 text-gray-600" />
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Patient Medications</h1>
+                <h1 className="text-xl font-bold text-gray-900">Patient Medications</h1>
                 <p className="text-gray-600 mt-1">Complete medication history and prescriptions</p>
               </div>
             </div>
@@ -88,11 +88,11 @@ const PatientMedications = () => {
           <div className="px-8 py-6 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Medication Records</h2>
+                <h2 className="text-xl font-bold text-gray-900">Medication Records</h2>
                 <p className="text-gray-600 mt-1">All prescribed medications, dosages, and treatment plans</p>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">
                   {patientMedications?.length || 0} Medications
                 </div>
               </div>
@@ -105,7 +105,7 @@ const PatientMedications = () => {
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Pill className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No Medications Available</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No Medications Available</h3>
                 <p className="text-gray-500 max-w-md mx-auto">
                   No medication records found. Medications will appear here once prescribed.
                 </p>
@@ -115,7 +115,7 @@ const PatientMedications = () => {
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Pill className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No Medications Found</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No Medications Found</h3>
                 <p className="text-gray-500 max-w-md mx-auto">
                   No medication records found for this patient.
                 </p>
@@ -125,7 +125,7 @@ const PatientMedications = () => {
                 {/* Active Medications */}
                 {patientMedications.filter(med => !med.adverseEvent).length > 0 && (
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                       <Pill className="w-5 h-5 mr-2 text-green-600" />
                       Active Medications
                     </h3>
@@ -140,8 +140,8 @@ const PatientMedications = () => {
                                   <Pill className="w-6 h-6 text-green-600" />
                                 </div>
                                 <div>
-                                  <h4 className="font-semibold text-gray-800 text-lg">{medication.drugName}</h4>
-                                  <p className="text-sm text-gray-500">Prescribed on {new Date(medication.createdAt).toLocaleDateString()}</p>
+                                  <h4 className="font-semibold text-gray-800 text-sm">{medication.drugName}</h4>
+                                  <p className="text-xs text-gray-500">Prescribed on {new Date(medication.createdAt).toLocaleDateString()}</p>
                                 </div>
                               </div>
                               <div className="flex items-center space-x-2">
@@ -151,7 +151,7 @@ const PatientMedications = () => {
                               </div>
                             </div>
                             
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
                               <div className="bg-white p-3 rounded-lg">
                                 <span className="font-medium text-gray-600">Dose:</span>
                                 <p className="text-gray-800 mt-1">{medication.dose}</p>
@@ -194,7 +194,7 @@ const PatientMedications = () => {
                 {/* Discontinued Medications */}
                 {patientMedications.filter(med => med.adverseEvent).length > 0 && (
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                       <Clock className="w-5 h-5 mr-2 text-red-600" />
                       Discontinued Medications
                     </h3>
@@ -209,8 +209,8 @@ const PatientMedications = () => {
                                   <Pill className="w-6 h-6 text-red-600" />
                                 </div>
                                 <div>
-                                  <h4 className="font-semibold text-gray-800 text-lg">{medication.drugName}</h4>
-                                  <p className="text-sm text-gray-500">Prescribed on {new Date(medication.createdAt).toLocaleDateString()}</p>
+                                  <h4 className="font-semibold text-gray-800 text-sm">{medication.drugName}</h4>
+                                  <p className="text-xs text-gray-500">Prescribed on {new Date(medication.createdAt).toLocaleDateString()}</p>
                                 </div>
                               </div>
                               <div className="flex items-center space-x-2">
@@ -220,7 +220,7 @@ const PatientMedications = () => {
                               </div>
                             </div>
                             
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
                               <div className="bg-white p-3 rounded-lg">
                                 <span className="font-medium text-gray-600">Dose:</span>
                                 <p className="text-gray-800 mt-1">{medication.dose}</p>
@@ -266,22 +266,22 @@ const PatientMedications = () => {
 
                 {/* Medication Summary */}
                 <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
                     <FileText className="w-5 h-5 mr-2 text-blue-600" />
                     Medication Summary
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-white p-4 rounded-lg text-center">
-                      <div className="text-2xl font-bold text-green-600">{patientMedications.filter(med => !med.adverseEvent).length}</div>
-                      <div className="text-sm text-gray-600">Active Medications</div>
+                      <div className="text-xl font-bold text-green-600">{patientMedications.filter(med => !med.adverseEvent).length}</div>
+                      <div className="text-xs text-gray-600">Active Medications</div>
                     </div>
                     <div className="bg-white p-4 rounded-lg text-center">
-                      <div className="text-2xl font-bold text-red-600">{patientMedications.filter(med => med.adverseEvent).length}</div>
-                      <div className="text-sm text-gray-600">Discontinued</div>
+                      <div className="text-xl font-bold text-red-600">{patientMedications.filter(med => med.adverseEvent).length}</div>
+                      <div className="text-xs text-gray-600">Discontinued</div>
                     </div>
                     <div className="bg-white p-4 rounded-lg text-center">
-                      <div className="text-2xl font-bold text-blue-600">{patientMedications.length}</div>
-                      <div className="text-sm text-gray-600">Total Prescriptions</div>
+                      <div className="text-xl font-bold text-blue-600">{patientMedications.length}</div>
+                      <div className="text-xs text-gray-600">Total Prescriptions</div>
                     </div>
                   </div>
                 </div>

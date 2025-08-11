@@ -156,7 +156,7 @@ export default function ManagePatients() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            <h1 className="text-xl font-bold text-slate-800 mb-2">
               Patient Management
             </h1>
             <p className="text-slate-600">
@@ -177,8 +177,8 @@ export default function ManagePatients() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                  <p className="text-2xl font-bold text-slate-800">{managementStats.totalPatients}</p>
+                  <p className="text-slate-600 text-xs font-medium">Total Patients</p>
+                  <p className="text-xl font-bold text-slate-800">{managementStats.totalPatients}</p>
                 </div>
                 <Users className="h-8 w-8 text-blue-500" />
               </div>
@@ -187,8 +187,8 @@ export default function ManagePatients() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-600 text-sm font-medium">No Doctor Assigned</p>
-                  <p className="text-2xl font-bold text-slate-800">{managementStats.noDoctor}</p>
+                  <p className="text-slate-600 text-xs font-medium">No Doctor Assigned</p>
+                  <p className="text-xl font-bold text-slate-800">{managementStats.noDoctor}</p>
                 </div>
                 <AlertTriangle className="h-8 w-8 text-yellow-500" />
               </div>

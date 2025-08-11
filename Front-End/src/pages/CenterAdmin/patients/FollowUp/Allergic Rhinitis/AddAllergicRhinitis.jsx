@@ -118,7 +118,7 @@ const AddAllergicRhinitis = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-xl font-bold text-gray-800">ALLERGIC RHINITIS</h1>
+              <h1 className="text-lg font-bold text-gray-800">ALLERGIC RHINITIS</h1>
             </div>
           </div>
         </div>
@@ -128,21 +128,21 @@ const AddAllergicRhinitis = () => {
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Nasal Symptom Severity */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Allergic Rhinitis</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-4">Allergic Rhinitis</h3>
               
               <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-4">Nasal Symptom Severity</h4>
+                <h4 className="text-xs font-medium text-gray-700 mb-4">Nasal Symptom Severity</h4>
                 <div className="mb-2">
-                  <label className="text-sm font-medium text-gray-600">Score(0-7)</label>
+                  <label className="text-xs font-medium text-gray-600">Score(0-7)</label>
                 </div>
                 
                 {Object.entries(formData.nasalSymptoms).map(([symptom, value]) => (
                   <div key={symptom} className="mb-4">
                     <div className="flex justify-between items-center mb-2">
-                      <label className="text-sm font-medium text-gray-700 capitalize">
+                      <label className="text-xs font-medium text-gray-700 capitalize">
                         {symptom.replace(/([A-Z])/g, ' $1').trim()}
                       </label>
-                      <span className="text-sm text-gray-500">Value: {value}</span>
+                      <span className="text-xs text-gray-500">Value: {value}</span>
                     </div>
                     <input
                       type="range"
@@ -156,7 +156,7 @@ const AddAllergicRhinitis = () => {
                 ))}
                 
                 <div className="mt-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-2">
                     Total Nasal Symptoms
                   </label>
                   <input
@@ -170,18 +170,18 @@ const AddAllergicRhinitis = () => {
 
               {/* Non Nasal Symptom Severity */}
               <div className="mb-6">
-                <h4 className="text-lg font-medium text-gray-700 mb-4">Non Nasal Symptom Severity</h4>
+                <h4 className="text-sm font-medium text-gray-700 mb-4">Non Nasal Symptom Severity</h4>
                 <div className="mb-2">
-                  <label className="text-sm font-medium text-gray-600">Score(0-7)</label>
+                  <label className="text-xs font-medium text-gray-600">Score(0-7)</label>
                 </div>
                 
                 {Object.entries(formData.nonNasalSymptoms).map(([symptom, value]) => (
                   <div key={symptom} className="mb-4">
                     <div className="flex justify-between items-center mb-2">
-                      <label className="text-sm font-medium text-gray-700 capitalize">
+                      <label className="text-xs font-medium text-gray-700 capitalize">
                         {symptom.replace(/([A-Z])/g, ' $1').trim()}
                       </label>
-                      <span className="text-sm text-gray-500">Value: {value}</span>
+                      <span className="text-xs text-gray-500">Value: {value}</span>
                     </div>
                     <input
                       type="range"
@@ -195,7 +195,7 @@ const AddAllergicRhinitis = () => {
                 ))}
                 
                 <div className="mt-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-2">
                     Total
                   </label>
                   <input
@@ -209,10 +209,10 @@ const AddAllergicRhinitis = () => {
 
               {/* Quality of Life Assessment */}
               <div className="mb-6">
-                <h4 className="text-lg font-medium text-gray-700 mb-4">Quality of life assessment of rhinitis Severity</h4>
+                <h4 className="text-sm font-medium text-gray-700 mb-4">Quality of life assessment of rhinitis Severity</h4>
                 <div className="flex justify-between items-center mb-2">
-                  <label className="text-sm font-medium text-gray-700">Severity Score</label>
-                  <span className="text-sm text-gray-500">Value: {formData.qualityOfLife}</span>
+                  <label className="text-xs font-medium text-gray-700">Severity Score</label>
+                  <span className="text-xs text-gray-500">Value: {formData.qualityOfLife}</span>
                 </div>
                 <input
                   type="range"
@@ -227,10 +227,10 @@ const AddAllergicRhinitis = () => {
 
             {/* Medication Section */}
             <div>
-              <h4 className="text-lg font-medium text-gray-700 mb-4">Medication</h4>
+              <h4 className="text-sm font-medium text-gray-700 mb-4">Medication</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-2">
                     Medication for Non-Nasal Symptom
                   </label>
                   <input
@@ -242,7 +242,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-2">
                     Medication for Nasal Symptom
                   </label>
                   <input
@@ -256,7 +256,7 @@ const AddAllergicRhinitis = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-2">
                     No of Antihistamine consumed
                   </label>
                   <input
@@ -268,7 +268,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-2">
                     Other Medication, If any?
                   </label>
                   <input
@@ -284,10 +284,10 @@ const AddAllergicRhinitis = () => {
 
             {/* GPE Section */}
             <div>
-              <h4 className="text-lg font-medium text-gray-700 mb-4">GPE (General Physical Examination)</h4>
+              <h4 className="text-sm font-medium text-gray-700 mb-4">GPE (General Physical Examination)</h4>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Weight</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Weight</label>
                   <input
                     type="text"
                     name="gpe.weight"
@@ -296,7 +296,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Pulse</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Pulse</label>
                   <input
                     type="text"
                     name="gpe.pulse"
@@ -305,7 +305,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Temp</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Temp</label>
                   <input
                     type="text"
                     name="gpe.temp"
@@ -314,7 +314,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">SPO2%</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">SPO2%</label>
                   <input
                     type="text"
                     name="gpe.spo2"
@@ -323,7 +323,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Bp</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Bp</label>
                   <input
                     type="text"
                     name="gpe.bp"
@@ -332,7 +332,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">RR</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">RR</label>
                   <input
                     type="text"
                     name="gpe.rr"
@@ -342,7 +342,7 @@ const AddAllergicRhinitis = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">ENT Examination</label>
+                <label className="block text-xs font-medium text-gray-700 mb-2">ENT Examination</label>
                 <textarea
                   name="entExamination"
                   value={formData.entExamination}
@@ -355,10 +355,10 @@ const AddAllergicRhinitis = () => {
 
             {/* Systematic Examination */}
             <div>
-              <h4 className="text-lg font-medium text-gray-700 mb-4">Systematic Examination</h4>
+              <h4 className="text-sm font-medium text-gray-700 mb-4">Systematic Examination</h4>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">CNS</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">CNS</label>
                   <input
                     type="text"
                     name="systematicExamination.cns"
@@ -368,7 +368,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">CVS</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">CVS</label>
                   <input
                     type="text"
                     name="systematicExamination.cvs"
@@ -378,7 +378,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">RS</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">RS</label>
                   <input
                     type="text"
                     name="systematicExamination.rs"
@@ -388,7 +388,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">P/A</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">P/A</label>
                   <input
                     type="text"
                     name="systematicExamination.pa"
@@ -398,7 +398,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Drug Adverse Notion</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Drug Adverse Notion</label>
                   <input
                     type="text"
                     name="systematicExamination.drugAdverseNotion"
@@ -408,7 +408,7 @@ const AddAllergicRhinitis = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Drug Compliance</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Drug Compliance</label>
                   <input
                     type="text"
                     name="systematicExamination.drugCompliance"
@@ -419,7 +419,7 @@ const AddAllergicRhinitis = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Advise to be followed up till next visit</label>
+                <label className="block text-xs font-medium text-gray-700 mb-2">Advise to be followed up till next visit</label>
                 <textarea
                   name="systematicExamination.followUpAdvice"
                   value={formData.systematicExamination.followUpAdvice}

@@ -5,6 +5,7 @@ import { updateLabStaff, fetchLabStaffById } from '../../../features/superadmin/
 import { resetSuperadminState } from '../../../features/superadmin/superadminSlice';
 import { ArrowLeft, Save, UserCheck, AlertCircle, Microscope } from 'lucide-react';
 import API from '../../../services/api';
+import { toast } from 'react-toastify';
 
 export default function EditLabStaff() {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ export default function EditLabStaff() {
 
   useEffect(() => {
     if (updateSuccess) {
+      toast.success('Lab staff member updated successfully!');
       dispatch(resetSuperadminState());
       navigate('/dashboard/Superadmin/Lab/LabStaffList');
     }
@@ -49,7 +51,8 @@ export default function EditLabStaff() {
         confirmPassword: ''
       });
     } catch (error) {
-
+      console.error('Error fetching lab staff data:', error);
+      toast.error('Failed to load lab staff data. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -98,6 +101,7 @@ export default function EditLabStaff() {
       dispatch(updateLabStaff({ id, staffData: payload }));
     } catch (error) {
       console.error('Error updating lab staff:', error);
+      toast.error('Failed to update lab staff member. Please try again.');
     }
   };
 
@@ -126,7 +130,7 @@ export default function EditLabStaff() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Lab Staff
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Edit Lab Staff
           </h1>
           <p className="text-slate-600">
@@ -153,7 +157,7 @@ export default function EditLabStaff() {
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <Microscope className="h-5 w-5 mr-2 text-blue-500" />
               Lab Staff Information
             </h2>
@@ -165,10 +169,10 @@ export default function EditLabStaff() {
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             {/* Personal Information */}
             <div>
-              <h3 className="text-lg font-medium text-slate-800 mb-4">Personal Information</h3>
+              <h3 className="text-sm font-medium text-slate-800 mb-4">Personal Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Staff Name *
                   </label>
                   <input
@@ -183,7 +187,7 @@ export default function EditLabStaff() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Email *
                   </label>
                   <input
@@ -198,7 +202,7 @@ export default function EditLabStaff() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Phone Number *
                   </label>
                   <input
@@ -213,7 +217,7 @@ export default function EditLabStaff() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Role
                   </label>
                   <select
@@ -233,13 +237,13 @@ export default function EditLabStaff() {
 
             {/* Account Security */}
             <div>
-              <h3 className="text-lg font-medium text-slate-800 mb-4">Account Security (Optional)</h3>
-              <p className="text-slate-600 mb-4 text-sm">
+              <h3 className="text-sm font-medium text-slate-800 mb-4">Account Security (Optional)</h3>
+              <p className="text-slate-600 mb-4 text-xs">
                 Leave password fields empty if you don't want to change the password
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     New Password
                   </label>
                   <input
@@ -254,7 +258,7 @@ export default function EditLabStaff() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Confirm New Password
                   </label>
                   <input

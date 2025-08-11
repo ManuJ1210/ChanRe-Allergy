@@ -32,7 +32,7 @@ const ViewReceptionist = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-red-600 text-xl mb-4">Error</div>
+          <div className="text-red-600 text-lg mb-4">Error</div>
           <p className="text-gray-600">{error}</p>
           <button
             onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
@@ -49,7 +49,7 @@ const ViewReceptionist = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-gray-600 text-xl mb-4">Receptionist not found</div>
+          <div className="text-gray-600 text-lg mb-4">Receptionist not found</div>
           <button
             onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -75,7 +75,7 @@ const ViewReceptionist = () => {
                 <ArrowLeft className="h-5 w-5" />
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Receptionist Details</h1>
+                <h1 className="text-xl font-bold text-gray-900">Receptionist Details</h1>
                 <p className="text-gray-600">View comprehensive information about the receptionist</p>
               </div>
             </div>
@@ -99,7 +99,7 @@ const ViewReceptionist = () => {
                 <User className="h-10 w-10" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold">{currentReceptionist.name}</h2>
+                <h2 className="text-xl font-bold">{currentReceptionist.name}</h2>
                 <p className="text-green-100">Receptionist</p>
               </div>
             </div>
@@ -110,7 +110,7 @@ const ViewReceptionist = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Personal Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
+                <h3 className="text-sm font-semibold text-gray-900 border-b border-gray-200 pb-2">
                   Personal Information
                 </h3>
                 
@@ -118,7 +118,7 @@ const ViewReceptionist = () => {
                   <div className="flex items-center space-x-3">
                     <Mail className="h-5 w-5 text-gray-400" />
                     <div>
-                      <p className="text-sm text-gray-500">Email</p>
+                      <p className="text-xs text-gray-500">Email</p>
                       <p className="text-gray-900">{currentReceptionist.email}</p>
                     </div>
                   </div>
@@ -126,7 +126,7 @@ const ViewReceptionist = () => {
                   <div className="flex items-center space-x-3">
                     <Phone className="h-5 w-5 text-gray-400" />
                     <div>
-                      <p className="text-sm text-gray-500">Phone</p>
+                      <p className="text-xs text-gray-500">Phone</p>
                       <p className="text-gray-900">{currentReceptionist.phone || 'Not provided'}</p>
                     </div>
                   </div>
@@ -134,7 +134,7 @@ const ViewReceptionist = () => {
                   <div className="flex items-center space-x-3">
                     <User className="h-5 w-5 text-gray-400" />
                     <div>
-                      <p className="text-sm text-gray-500">Username</p>
+                      <p className="text-xs text-gray-500">Username</p>
                       <p className="text-gray-900">{currentReceptionist.username}</p>
                     </div>
                   </div>
@@ -143,7 +143,7 @@ const ViewReceptionist = () => {
 
               {/* Account Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
+                <h3 className="text-sm font-semibold text-gray-900 border-b border-gray-200 pb-2">
                   Account Information
                 </h3>
                 
@@ -151,7 +151,7 @@ const ViewReceptionist = () => {
                   <div className="flex items-center space-x-3">
                     <Calendar className="h-5 w-5 text-gray-400" />
                     <div>
-                      <p className="text-sm text-gray-500">Created</p>
+                      <p className="text-xs text-gray-500">Created</p>
                       <p className="text-gray-900">
                         {new Date(currentReceptionist.createdAt).toLocaleDateString()}
                       </p>
@@ -161,7 +161,7 @@ const ViewReceptionist = () => {
                   <div className="flex items-center space-x-3">
                     <Clock className="h-5 w-5 text-gray-400" />
                     <div>
-                      <p className="text-sm text-gray-500">Last Updated</p>
+                      <p className="text-xs text-gray-500">Last Updated</p>
                       <p className="text-gray-900">
                         {new Date(currentReceptionist.updatedAt).toLocaleDateString()}
                       </p>
@@ -171,7 +171,7 @@ const ViewReceptionist = () => {
                   <div className="flex items-center space-x-3">
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                     <div>
-                      <p className="text-sm text-gray-500">Status</p>
+                      <p className="text-xs text-gray-500">Status</p>
                       <p className="text-gray-900">
                         {currentReceptionist.isDeleted ? 'Inactive' : 'Active'}
                       </p>

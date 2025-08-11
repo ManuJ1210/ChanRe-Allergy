@@ -134,7 +134,7 @@ export default function PendingRequests() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">Pending Test Requests</h1>
+          <h1 className="text-xl font-bold text-slate-800 mb-2">Pending Test Requests</h1>
           <p className="text-slate-600">Manage and process pending test requests</p>
         </div>
 
@@ -153,11 +153,11 @@ export default function PendingRequests() {
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600">Total Pending</p>
-                <p className="text-2xl font-bold text-slate-800">{pendingRequests.length}</p>
+                <p className="text-xs font-medium text-slate-600">Total Pending</p>
+                <p className="text-xl font-bold text-slate-800">{pendingRequests.length}</p>
               </div>
               <div className="p-3 bg-blue-50 rounded-lg">
-                <FaClock className="text-blue-500 text-xl" />
+                <FaClock className="text-blue-500 text-lg" />
               </div>
             </div>
           </div>
@@ -165,13 +165,13 @@ export default function PendingRequests() {
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600">High Priority</p>
-                <p className="text-2xl font-bold text-red-600">
+                <p className="text-xs font-medium text-slate-600">High Priority</p>
+                <p className="text-xl font-bold text-red-600">
                   {pendingRequests.filter(req => req.urgency === 'Emergency' || req.urgency === 'Urgent').length}
                 </p>
               </div>
               <div className="p-3 bg-red-50 rounded-lg">
-                <FaExclamationTriangle className="text-red-500 text-xl" />
+                <FaExclamationTriangle className="text-red-500 text-lg" />
               </div>
             </div>
           </div>
@@ -179,13 +179,13 @@ export default function PendingRequests() {
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600">Assigned to Me</p>
-                <p className="text-2xl font-bold text-blue-600">
+                <p className="text-xs font-medium text-slate-600">Assigned to Me</p>
+                <p className="text-xl font-bold text-blue-600">
                   {pendingRequests.filter(req => req.assignedLabStaffId === (user._id || user.id)).length}
                 </p>
               </div>
               <div className="p-3 bg-green-50 rounded-lg">
-                <FaCheckCircle className="text-green-500 text-xl" />
+                <FaCheckCircle className="text-green-500 text-lg" />
               </div>
             </div>
           </div>
@@ -193,8 +193,8 @@ export default function PendingRequests() {
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600">Today's Requests</p>
-                <p className="text-2xl font-bold text-slate-800">
+                <p className="text-xs font-medium text-slate-600">Today's Requests</p>
+                <p className="text-xl font-bold text-slate-800">
                   {pendingRequests.filter(req => {
                     const today = new Date().toDateString();
                     const requestDate = new Date(req.createdAt).toDateString();
@@ -203,7 +203,7 @@ export default function PendingRequests() {
                 </p>
               </div>
               <div className="p-3 bg-purple-50 rounded-lg">
-                <FaClock className="text-purple-500 text-xl" />
+                <FaClock className="text-purple-500 text-lg" />
               </div>
             </div>
           </div>
@@ -246,7 +246,7 @@ export default function PendingRequests() {
         ) : filteredRequests.length === 0 ? (
           <div className="text-center py-12">
             <FaClock className="text-slate-400 text-6xl mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-slate-600 mb-2">No Pending Requests</h3>
+            <h3 className="text-lg font-semibold text-slate-600 mb-2">No Pending Requests</h3>
             <p className="text-slate-500">All test requests have been processed or there are no new requests.</p>
           </div>
         ) : (
@@ -277,25 +277,19 @@ export default function PendingRequests() {
                     <tr key={request._id} className="hover:bg-slate-50">
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm font-medium text-slate-900">{request.patientName || 'N/A'}</div>
-                          <div className="text-sm text-slate-500">{request.patientPhone || 'N/A'}</div>
+                          <div className="text-xs font-medium text-slate-900">{request.patientName || 'N/A'}</div>
+                          <div className="text-xs text-slate-500">{request.patientPhone || 'N/A'}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm font-medium text-slate-900">{request.testType || 'N/A'}</div>
-                          <div className="flex items-center mt-1">
-                            {getUrgencyIcon(request.urgency)}
-                            <span className={`ml-2 text-xs px-2 py-1 rounded-full border ${getUrgencyColor(request.urgency)}`}>
-                              {request.urgency || 'Normal'}
-                            </span>
-                          </div>
+                          <div className="text-xs font-medium text-slate-900">{request.testType || 'N/A'}</div>
+                          <div className="text-xs text-slate-500">{request.doctorName || 'N/A'}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm text-slate-900">{request.doctorName || 'N/A'}</div>
-                          <div className="text-sm text-slate-500">{request.centerName || 'N/A'}</div>
+                          <div className="text-xs text-slate-900">{request.doctorName || 'N/A'}</div>
                           <div className="text-xs text-slate-400">
                             {request.createdAt ? new Date(request.createdAt).toLocaleDateString() : 'N/A'}
                           </div>

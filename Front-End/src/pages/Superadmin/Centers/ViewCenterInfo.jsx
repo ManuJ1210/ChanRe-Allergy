@@ -62,7 +62,7 @@ export default function ViewCenterInfo() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Centers
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Center Information
           </h1>
           <p className="text-slate-600">
@@ -73,7 +73,7 @@ export default function ViewCenterInfo() {
         {/* Center Information Card */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-8">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <Building2 className="h-5 w-5 mr-2 text-blue-500" />
               {center.name || 'Unnamed Center'}
             </h2>
@@ -89,7 +89,7 @@ export default function ViewCenterInfo() {
                   <div className="flex items-start gap-3 text-slate-700">
                     <MapPin className="h-4 w-4 text-blue-500 mt-1" />
                     <div>
-                      <p className="text-sm font-medium text-slate-500">Address</p>
+                      <p className="text-xs font-medium text-slate-500">Address</p>
                       <p>{center.address}</p>
                     </div>
                   </div>
@@ -100,7 +100,7 @@ export default function ViewCenterInfo() {
                   <div className="flex items-center gap-3 text-slate-700">
                     <Mail className="h-4 w-4 text-blue-500" />
                     <div>
-                      <p className="text-sm font-medium text-slate-500">Email</p>
+                      <p className="text-xs font-medium text-slate-500">Email</p>
                       <p>{center.email}</p>
                     </div>
                   </div>
@@ -109,7 +109,7 @@ export default function ViewCenterInfo() {
                   <div className="flex items-center gap-3 text-slate-700">
                     <Phone className="h-4 w-4 text-blue-500" />
                     <div>
-                      <p className="text-sm font-medium text-slate-500">Phone</p>
+                      <p className="text-xs font-medium text-slate-500">Phone</p>
                       <p>{center.phone}</p>
                     </div>
                   </div>
@@ -124,8 +124,8 @@ export default function ViewCenterInfo() {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                <p className="text-2xl font-bold text-slate-800">{center.patientCount || 0}</p>
+                <p className="text-slate-600 text-xs font-medium">Total Patients</p>
+                <p className="text-xl font-bold text-slate-800">{center.patientCount || 0}</p>
               </div>
               <Users className="h-8 w-8 text-blue-500" />
             </div>
@@ -134,8 +134,8 @@ export default function ViewCenterInfo() {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Doctors</p>
-                <p className="text-2xl font-bold text-slate-800">{center.doctorCount || 0}</p>
+                <p className="text-slate-600 text-xs font-medium">Total Doctors</p>
+                <p className="text-xl font-bold text-slate-800">{center.doctorCount || 0}</p>
               </div>
               <User className="h-8 w-8 text-green-500" />
             </div>
@@ -144,8 +144,8 @@ export default function ViewCenterInfo() {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Receptionists</p>
-                <p className="text-2xl font-bold text-slate-800">{center.receptionistCount || 0}</p>
+                <p className="text-slate-600 text-xs font-medium">Receptionists</p>
+                <p className="text-xl font-bold text-slate-800">{center.receptionistCount || 0}</p>
               </div>
               <UserCheck className="h-8 w-8 text-purple-500" />
             </div>
@@ -154,8 +154,8 @@ export default function ViewCenterInfo() {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Lab Staff</p>
-                <p className="text-2xl font-bold text-slate-800">{center.labCount || 0}</p>
+                <p className="text-slate-600 text-xs font-medium">Lab Staff</p>
+                <p className="text-xl font-bold text-slate-800">{center.labCount || 0}</p>
               </div>
               <FlaskConical className="h-8 w-8 text-orange-500" />
             </div>
@@ -166,7 +166,7 @@ export default function ViewCenterInfo() {
         {center.admin && (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-8">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <UserCheck className="h-5 w-5 mr-2 text-green-500" />
                 Center Administrator
               </h2>
@@ -177,7 +177,7 @@ export default function ViewCenterInfo() {
                   <div className="flex items-center gap-3 text-slate-700">
                     <User className="h-4 w-4 text-blue-500" />
                     <div>
-                      <p className="text-sm font-medium text-slate-500">Name</p>
+                      <p className="text-xs font-medium text-slate-500">Name</p>
                       <p>{center.admin.name || 'N/A'}</p>
                     </div>
                   </div>
@@ -187,7 +187,7 @@ export default function ViewCenterInfo() {
                     <div className="flex items-center gap-3 text-slate-700">
                       <Mail className="h-4 w-4 text-blue-500" />
                       <div>
-                        <p className="text-sm font-medium text-slate-500">Email</p>
+                        <p className="text-xs font-medium text-slate-500">Email</p>
                         <p>{center.admin.email}</p>
                       </div>
                     </div>
@@ -196,7 +196,7 @@ export default function ViewCenterInfo() {
                     <div className="flex items-center gap-3 text-slate-700">
                       <Phone className="h-4 w-4 text-blue-500" />
                       <div>
-                        <p className="text-sm font-medium text-slate-500">Phone</p>
+                        <p className="text-xs font-medium text-slate-500">Phone</p>
                         <p>{center.admin.phone}</p>
                       </div>
                     </div>
@@ -210,7 +210,7 @@ export default function ViewCenterInfo() {
         {/* Actions */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <Building2 className="h-5 w-5 mr-2 text-blue-500" />
               Center Actions
             </h2>

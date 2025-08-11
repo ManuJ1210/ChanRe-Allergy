@@ -89,7 +89,7 @@ const Notifications = () => {
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Notifications</h1>
+            <h1 className="text-xl font-bold text-gray-800 mb-2">Notifications</h1>
             <p className="text-gray-600">
               {unreadNotificationsCount > 0 
                 ? `${unreadNotificationsCount} unread notification${unreadNotificationsCount > 1 ? 's' : ''}`
@@ -128,7 +128,7 @@ const Notifications = () => {
 
       <div className="bg-white rounded-lg shadow">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-800">All Notifications</h2>
+          <h2 className="text-sm font-semibold text-gray-800">All Notifications</h2>
         </div>
         <div className="p-6">
           {notifications.length === 0 ? (
@@ -157,14 +157,14 @@ const Notifications = () => {
                             {!notification.read && (
                               <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
                             )}
-                            <span className="text-sm text-gray-500">
+                            <span className="text-xs text-gray-500">
                               {formatDate(notification.createdAt)}
                             </span>
                           </div>
                         </div>
                                                  <p className="text-gray-600 mt-1">{notification.message}</p>
                          {notification.data && (
-                           <div className="mt-2 text-sm text-gray-500">
+                           <div className="mt-2 text-xs text-gray-500">
                              <p><strong>From:</strong> {notification.sender?.name || 'System'}</p>
                              {notification.data.patientId && (
                                <div className="mt-2 p-2 bg-blue-50 rounded border-l-2 border-blue-300">
@@ -226,7 +226,7 @@ const Notifications = () => {
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-gray-800">
+                <h3 className="text-xs font-semibold text-gray-800">
                   Notification Details
                 </h3>
                 <button
@@ -267,28 +267,28 @@ const Notifications = () => {
                        {selectedNotification.data.patientId && (
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                            <div>
-                             <p className="text-sm font-medium text-blue-700">Patient Name</p>
+                             <p className="text-xs font-medium text-blue-700">Patient Name</p>
                              <p className="text-blue-600 font-semibold">{selectedNotification.data.patientId.name || 'Unknown'}</p>
                            </div>
                            <div>
-                             <p className="text-sm font-medium text-blue-700">Age & Gender</p>
+                             <p className="text-xs font-medium text-blue-700">Age & Gender</p>
                              <p className="text-blue-600">{selectedNotification.data.patientId.age || 'N/A'} | {selectedNotification.data.patientId.gender || 'N/A'}</p>
                            </div>
                            {selectedNotification.data.patientId.phoneNumber && (
                              <div>
-                               <p className="text-sm font-medium text-blue-700">Phone Number</p>
+                               <p className="text-xs font-medium text-blue-700">Phone Number</p>
                                <p className="text-blue-600">{selectedNotification.data.patientId.phoneNumber}</p>
                              </div>
                            )}
                            {selectedNotification.data.patientId.email && (
                              <div>
-                               <p className="text-sm font-medium text-blue-700">Email</p>
+                               <p className="text-xs font-medium text-blue-700">Email</p>
                                <p className="text-blue-600">{selectedNotification.data.patientId.email}</p>
                              </div>
                            )}
                            {selectedNotification.data.patientId.address && (
                              <div className="md:col-span-2">
-                               <p className="text-sm font-medium text-blue-700">Address</p>
+                               <p className="text-xs font-medium text-blue-700">Address</p>
                                <p className="text-blue-600">{selectedNotification.data.patientId.address}</p>
                              </div>
                            )}
@@ -296,7 +296,7 @@ const Notifications = () => {
                        )}
                        {selectedNotification.data.testId && (
                          <div className="mt-3 pt-3 border-t border-blue-200">
-                           <p className="text-sm font-medium text-blue-700">Test ID</p>
+                           <p className="text-xs font-medium text-blue-700">Test ID</p>
                            <p className="text-blue-600 font-mono text-xs">{selectedNotification.data.testId}</p>
                          </div>
                        )}
@@ -306,19 +306,19 @@ const Notifications = () => {
                      <div className="bg-gray-50 p-4 rounded-lg space-y-3">
                        {selectedNotification.data.additionalTests && (
                          <div>
-                           <p className="text-sm font-medium text-gray-700">Additional Tests Recommended</p>
+                           <p className="text-xs font-medium text-gray-700">Additional Tests Recommended</p>
                            <p className="text-gray-600">{selectedNotification.data.additionalTests}</p>
                          </div>
                        )}
                        {selectedNotification.data.patientInstructions && (
                          <div>
-                           <p className="text-sm font-medium text-gray-700">Patient Instructions</p>
+                           <p className="text-xs font-medium text-gray-700">Patient Instructions</p>
                            <p className="text-gray-600">{selectedNotification.data.patientInstructions}</p>
                          </div>
                        )}
                        {selectedNotification.data.notes && (
                          <div>
-                           <p className="text-sm font-medium text-gray-700">Additional Notes</p>
+                           <p className="text-xs font-medium text-gray-700">Additional Notes</p>
                            <p className="text-gray-600">{selectedNotification.data.notes}</p>
                          </div>
                        )}

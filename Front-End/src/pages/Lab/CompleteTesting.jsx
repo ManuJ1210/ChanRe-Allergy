@@ -192,7 +192,7 @@ const CompleteTesting = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
                 onClick={() => navigate('/dashboard/lab/test-requests')}
@@ -214,7 +214,7 @@ const CompleteTesting = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">No Test Request Found</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">No Test Request Found</h2>
               <p className="text-gray-600 mb-4">The requested test request could not be found.</p>
               <button
                 onClick={() => navigate('/dashboard/lab/test-requests')}
@@ -243,7 +243,7 @@ const CompleteTesting = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">Complete Lab Testing</h1>
+              <h1 className="text-xl font-bold text-gray-800">Complete Lab Testing</h1>
             </div>
           </div>
         </div>
@@ -252,7 +252,7 @@ const CompleteTesting = () => {
         <div className="bg-white rounded-lg shadow-lg p-8">
           {/* Record Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">COMPLETE LABORATORY TESTING</h1>
+            <h1 className="text-xl font-bold text-gray-800 mb-2">COMPLETE LABORATORY TESTING</h1>
             <p className="text-gray-600">Enter Test Results and Complete Testing Process</p>
           </div>
 
@@ -280,21 +280,21 @@ const CompleteTesting = () => {
           
           {/* Test Request Information */}
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
               Test Request Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-500">Request ID</label>
+                <label className="block text-xs font-medium text-gray-500">Request ID</label>
                 <p className="text-gray-900 font-medium">{testRequest._id || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Patient Name</label>
+                <label className="block text-xs font-medium text-gray-500">Patient Name</label>
                 <p className="text-gray-900 font-medium">{testRequest.patientName || testRequest.patientId?.name || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Test Type</label>
+                <label className="block text-xs font-medium text-gray-500">Test Type</label>
                 <p className="text-gray-900 font-medium">{testRequest.testType || 'N/A'}</p>
               </div>
             </div>
@@ -302,20 +302,20 @@ const CompleteTesting = () => {
 
           {/* Status and Urgency */}
           <div className="bg-gray-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
               <Activity className="h-5 w-5 mr-2 text-blue-600" />
               Current Status & Priority
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-500 mb-2">Current Status</label>
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(testRequest.status)}`}>
+                <label className="block text-xs font-medium text-gray-500 mb-2">Current Status</label>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(testRequest.status)}`}>
                   {testRequest.status.replace(/_/g, ' ')}
                 </span>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500 mb-2">Urgency Level</label>
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${
+                <label className="block text-xs font-medium text-gray-500 mb-2">Urgency Level</label>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
                   testRequest.urgency === 'Emergency' ? 'text-red-600 bg-red-50 border-red-200' :
                   testRequest.urgency === 'Urgent' ? 'text-orange-600 bg-orange-50 border-orange-200' :
                   'text-green-600 bg-green-50 border-green-200'
@@ -328,7 +328,7 @@ const CompleteTesting = () => {
 
           {/* Complete Testing Form */}
           <div className="bg-gray-50 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-6 flex items-center">
               <TestTube className="h-5 w-5 mr-2 text-blue-600" />
               Complete Testing & Enter Results
             </h2>
@@ -336,7 +336,7 @@ const CompleteTesting = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Test Results */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Test Results <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -352,7 +352,7 @@ const CompleteTesting = () => {
 
               {/* Test Parameters */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Test Parameters
                 </label>
                 <div className="space-y-3">
@@ -407,7 +407,7 @@ const CompleteTesting = () => {
 
               {/* Conclusion */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Conclusion
                 </label>
                 <textarea
@@ -422,7 +422,7 @@ const CompleteTesting = () => {
 
               {/* Recommendations */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Recommendations
                 </label>
                 <textarea
@@ -437,7 +437,7 @@ const CompleteTesting = () => {
 
               {/* Testing Notes */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Testing Notes
                 </label>
                 <textarea

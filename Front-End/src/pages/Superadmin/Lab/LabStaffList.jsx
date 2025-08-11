@@ -32,7 +32,7 @@ export default function LabStaffList() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Lab Staff Management
           </h1>
           <p className="text-slate-600">
@@ -53,7 +53,7 @@ export default function LabStaffList() {
           <div className="p-6 border-b border-blue-100">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                   <Microscope className="h-5 w-5 mr-2 text-blue-500" />
                   Laboratory Staff
                 </h2>
@@ -114,7 +114,7 @@ export default function LabStaffList() {
                     <td colSpan="6" className="px-6 py-8">
                       <div className="text-center">
                         <Microscope className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-slate-600 mb-2">No Lab Staff Found</h3>
+                        <h3 className="text-sm font-medium text-slate-600 mb-2">No Lab Staff Found</h3>
                         <p className="text-slate-500 mb-4">Get started by adding your first laboratory staff member.</p>
                         <button
                           onClick={() => navigate('/dashboard/Superadmin/Lab/AddLabStaff')}
@@ -130,20 +130,20 @@ export default function LabStaffList() {
                   labStaff.map((staff) => (
                     <tr key={staff._id} className="hover:bg-slate-50 transition-colors">
                       <td className="px-6 py-4">
-                        <div className="text-sm font-medium text-slate-800">{staff.staffName}</div>
+                        <div className="text-xs font-medium text-slate-800">{staff.staffName}</div>
                       </td>
 
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-600">{staff.email}</div>
+                        <div className="text-xs text-slate-600">{staff.email}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-600">{staff.phone}</div>
+                        <div className="text-xs text-slate-600">{staff.phone}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-600">{staff.role || 'Lab Staff'}</div>
+                        <div className="text-xs text-slate-600">{staff.role || 'Lab Staff'}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-600">
+                        <div className="text-xs text-slate-600">
                           {new Date(staff.createdAt).toLocaleDateString()}
                         </div>
                       </td>
@@ -151,7 +151,7 @@ export default function LabStaffList() {
                         <div className="flex justify-center items-center gap-2">
                           <button
                             onClick={() => navigate(`/dashboard/Superadmin/Lab/EditLabStaff/${staff._id}`)}
-                            className="flex items-center gap-2 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm font-medium transition-colors"
+                            className="flex items-center gap-2 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-medium transition-colors"
                           >
                             <Edit className="h-4 w-4" />
                             Edit
@@ -159,7 +159,7 @@ export default function LabStaffList() {
                           <button
                             onClick={() => handleDelete(staff._id)}
                             disabled={loading}
-                            className="flex items-center gap-2 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+                            className="flex items-center gap-2 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
                           >
                             <Trash2 className="h-4 w-4" />
                             {loading ? 'Deleting...' : 'Delete'}

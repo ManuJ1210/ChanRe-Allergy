@@ -109,7 +109,7 @@ const PatientLabReports = () => {
           <div className="bg-red-50 border border-red-200 rounded-lg p-6">
             <div className="flex items-center mb-4">
               <AlertCircle className="h-6 w-6 text-red-500 mr-2" />
-              <h3 className="text-lg font-semibold text-red-800">Error Loading Patient Data</h3>
+              <h3 className="text-sm font-semibold text-red-800">Error Loading Patient Data</h3>
             </div>
             <p className="text-red-700 mb-4">{dataError}</p>
             <button
@@ -131,7 +131,7 @@ const PatientLabReports = () => {
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
             <div className="flex items-center mb-4">
               <AlertCircle className="h-6 w-6 text-yellow-500 mr-2" />
-              <h3 className="text-lg font-semibold text-yellow-800">Patient Not Found</h3>
+              <h3 className="text-sm font-semibold text-yellow-800">Patient Not Found</h3>
             </div>
             <p className="text-yellow-700 mb-4">
               The patient with ID "{patientId}" was not found. Please check the URL and try again.
@@ -162,7 +162,7 @@ const PatientLabReports = () => {
                 <ArrowLeft className="w-6 h-6 text-gray-600" />
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Lab Reports</h1>
+                <h1 className="text-xl font-bold text-gray-900">Lab Reports</h1>
                 <p className="text-gray-600 mt-1">Review and provide feedback on laboratory reports</p>
               </div>
             </div>
@@ -197,7 +197,7 @@ const PatientLabReports = () => {
                   <User className="h-8 w-8 text-orange-600" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">{patient.name}</h2>
+                  <h2 className="text-xl font-bold text-gray-900">{patient.name}</h2>
                   <div className="flex items-center space-x-4 text-gray-600 mt-1">
                     <span className="flex items-center">
                       <Calendar className="w-4 h-4 mr-1" />
@@ -215,8 +215,8 @@ const PatientLabReports = () => {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-sm text-gray-500">Total Reports</div>
-                <div className="text-2xl font-bold text-orange-600">{labReports?.length || 0}</div>
+                <div className="text-xs text-gray-500">Total Reports</div>
+                <div className="text-xl font-bold text-orange-600">{labReports?.length || 0}</div>
               </div>
             </div>
           </div>
@@ -227,11 +227,11 @@ const PatientLabReports = () => {
           <div className="px-8 py-6 bg-gradient-to-r from-orange-50 to-red-50 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Laboratory Reports</h2>
+                <h2 className="text-xl font-bold text-gray-900">Laboratory Reports</h2>
                 <p className="text-gray-600 mt-1">All test results, reports, and analysis</p>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">
+                <div className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-medium">
                   {labReports?.length || 0} Reports
                 </div>
               </div>
@@ -244,7 +244,7 @@ const PatientLabReports = () => {
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Activity className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No Lab Reports Found</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No Lab Reports Found</h3>
                 <p className="text-gray-500 max-w-md mx-auto">
                   No laboratory reports found for this patient. Reports will appear here once tests are completed.
                 </p>
@@ -259,8 +259,8 @@ const PatientLabReports = () => {
                           <Activity className="w-6 h-6 text-orange-600" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-800 text-lg">{report.testType}</h4>
-                          <p className="text-sm text-gray-500">Created on {new Date(report.createdAt).toLocaleDateString()}</p>
+                          <h4 className="font-semibold text-gray-800 text-sm">{report.testType}</h4>
+                          <p className="text-xs text-gray-500">Created on {new Date(report.createdAt).toLocaleDateString()}</p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -274,7 +274,7 @@ const PatientLabReports = () => {
                         </span>
                         <button
                           onClick={() => handleSendFeedback(report)}
-                          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center text-sm"
+                          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center text-xs"
                         >
                           <MessageSquare className="w-4 h-4 mr-1" />
                           Send Feedback
@@ -282,7 +282,7 @@ const PatientLabReports = () => {
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
                       <div className="bg-white p-3 rounded-lg">
                         <span className="font-medium text-gray-600">Test Description:</span>
                         <p className="text-gray-800 mt-1">{report.testDescription || 'N/A'}</p>
@@ -404,7 +404,7 @@ const PatientLabReports = () => {
                             </div>
                             <button
                               onClick={() => window.open(`/api/files/${report.pdfFile}`, '_blank')}
-                              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center text-sm"
+                              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center text-xs"
                             >
                               <Eye className="w-4 h-4 mr-1" />
                               View PDF
@@ -424,9 +424,9 @@ const PatientLabReports = () => {
         {feedbackModal && selectedReport && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg max-w-md w-full p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Send Feedback</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-4">Send Feedback</h3>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Feedback Message</label>
+                <label className="block text-xs font-medium text-gray-700 mb-2">Feedback Message</label>
                 <textarea
                   value={feedbackMessage}
                   onChange={(e) => setFeedbackMessage(e.target.value)}

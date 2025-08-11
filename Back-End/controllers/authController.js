@@ -67,7 +67,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     // Check in User model first
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email }).populate('centerId', 'name code');
     let userType = 'User';
 
     if (!user) {
@@ -114,11 +114,40 @@ export const login = async (req, res) => {
     // Add specific fields based on user type
     if (userType === 'User') {
       userData.centerId = user.centerId;
+      userData.phone = user.phone;
+      userData.mobile = user.mobile;
+      userData.hospitalName = user.hospitalName;
+      userData.centerCode = user.centerCode;
+      userData.qualification = user.qualification;
+      userData.designation = user.designation;
+      userData.kmcNumber = user.kmcNumber;
+      // Add centerName from populated centerId
+      if (user.centerId && user.centerId.name) {
+        userData.centerName = user.centerId.name;
+      }
+    } else if (userType === 'LabStaff') {
+      userData.phone = user.phone;
+      userData.staffName = user.staffName;
+      userData.labId = user.labId;
     } else if (userType === 'SuperAdminDoctor') {
       userData.isSuperAdminStaff = user.isSuperAdminStaff;
+      userData.mobile = user.mobile;
+      userData.hospitalName = user.hospitalName;
+      userData.qualification = user.qualification;
+      userData.designation = user.designation;
+      userData.kmcNumber = user.kmcNumber;
+    } else if (userType === 'SuperAdminReceptionist') {
+      userData.isSuperAdminStaff = user.isSuperAdminStaff;
+      userData.mobile = user.mobile;
+      userData.address = user.address;
+      userData.emergencyContact = user.emergencyContact;
+      userData.emergencyContactName = user.emergencyContactName;
     }
 
-    res.json(userData);
+    res.json({
+      user: userData,
+      token: token
+    });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
@@ -126,7 +155,7 @@ export const login = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    const user = await User.findById(req.user.id).populate('centerId', 'name code').select('-password');
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -208,7 +237,7 @@ export const forgotPassword = async (req, res) => {
 export const getCurrentUser = async (req, res) => {
   try {
     // Try to find user in different models
-    let user = await User.findById(req.user.id).select('-password');
+    let user = await User.findById(req.user.id).populate('centerId', 'name code').select('-password');
     let userType = 'User';
 
     if (!user) {
@@ -242,8 +271,41 @@ export const getCurrentUser = async (req, res) => {
     // Add specific fields based on user type
     if (userType === 'User') {
       userData.centerId = user.centerId;
+      userData.phone = user.phone;
+      userData.mobile = user.mobile;
+      userData.hospitalName = user.hospitalName;
+      userData.centerCode = user.centerCode;
+      userData.qualification = user.qualification;
+      userData.designation = user.designation;
+      userData.kmcNumber = user.kmcNumber;
+      userData.specializations = user.specializations;
+      userData.experience = user.experience;
+      userData.bio = user.bio;
+      userData.status = user.status;
+      // Add centerName from populated centerId
+      if (user.centerId && user.centerId.name) {
+        userData.centerName = user.centerId.name;
+      }
+    } else if (userType === 'LabStaff') {
+      userData.phone = user.phone;
+      userData.staffName = user.staffName;
+      userData.labId = user.labId;
     } else if (userType === 'SuperAdminDoctor') {
       userData.isSuperAdminStaff = user.isSuperAdminStaff;
+      userData.mobile = user.mobile;
+      userData.hospitalName = user.hospitalName;
+      userData.qualification = user.qualification;
+      userData.designation = user.designation;
+      userData.kmcNumber = user.kmcNumber;
+      userData.specializations = user.specializations;
+      userData.experience = user.experience;
+      userData.bio = user.bio;
+    } else if (userType === 'SuperAdminReceptionist') {
+      userData.isSuperAdminStaff = user.isSuperAdminStaff;
+      userData.mobile = user.mobile;
+      userData.address = user.address;
+      userData.emergencyContact = user.emergencyContact;
+      userData.emergencyContactName = user.emergencyContactName;
     }
 
     res.json(userData);

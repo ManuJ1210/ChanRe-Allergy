@@ -294,7 +294,7 @@ export default function LabDashboard() {
                           <strong>Test:</strong> {request.testType}
                         </p>
                         <p className="text-sm text-slate-600 mb-1">
-                          <strong>Doctor:</strong> {request.doctorName} ({request.centerName})
+                          <strong>Doctor:</strong> {request.doctorName}
                         </p>
                         <p className="text-xs text-slate-500">
                           Requested: {new Date(request.createdAt).toLocaleDateString()}
@@ -303,9 +303,6 @@ export default function LabDashboard() {
                       <div className="text-right">
                         <p className="text-sm font-medium text-slate-800">
                           {request.testType}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          {request.centerCode}
                         </p>
                       </div>
                     </div>

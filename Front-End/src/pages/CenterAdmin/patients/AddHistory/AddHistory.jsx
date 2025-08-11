@@ -188,7 +188,7 @@ export default function AddHistory() {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Patient
             </button>
-            <h1 className="text-lg font-bold text-slate-800 mb-2">
+            <h1 className="text-sm font-bold text-slate-800 mb-2">
               Add Medical History
             </h1>
             <p className="text-slate-600">
@@ -227,7 +227,7 @@ export default function AddHistory() {
           ) : (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-sm font-semibold text-slate-800 flex items-center">
+              <h2 className="text-xs font-semibold text-slate-800 flex items-center">
                 <FileText className="h-5 w-5 mr-2 text-blue-500" />
                 Medical History Information
               </h2>
@@ -239,7 +239,7 @@ export default function AddHistory() {
             <form onSubmit={handleSubmit} className="p-6 space-y-8">
               {/* 1. Medical Conditions */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   1. Have you ever had the following conditions:
                 </h3>
                 
@@ -290,7 +290,7 @@ export default function AddHistory() {
 
               {/* 2. Hay Fever Details */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   2. Details of Hay fever:
                 </h3>
                 
@@ -351,7 +351,7 @@ export default function AddHistory() {
 
               {/* 3. Asthma */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   3. Asthma:
                 </h3>
                 
@@ -389,7 +389,7 @@ export default function AddHistory() {
 
               {/* 4. Medical Events */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   4. Have these required any of the following and if so how frequently?:
                 </h3>
                 
@@ -440,7 +440,7 @@ export default function AddHistory() {
 
               {/* 5. Triggers */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   5. What triggers exacerbations?:
                 </h3>
                 
@@ -485,7 +485,7 @@ export default function AddHistory() {
 
               {/* 6. Allergic Rhinitis */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   6. Allergic Rhinitis:
                 </h3>
                 
@@ -545,7 +545,7 @@ export default function AddHistory() {
 
               {/* 7. Skin Allergy */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   7. Skin Allergy:
                 </h3>
                 
@@ -619,7 +619,7 @@ export default function AddHistory() {
 
               {/* 8. Medical History */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   8. History:
                 </h3>
                 
@@ -663,7 +663,7 @@ export default function AddHistory() {
 
               {/* 9. New Drugs */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   9. Any New Drugs recently prescribed before the onset:
                 </h3>
                 
@@ -706,7 +706,7 @@ export default function AddHistory() {
 
               {/* 10. Occupation and Exposure */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   10. Occupation and Exposure possibility:
                 </h3>
                 
@@ -760,7 +760,7 @@ export default function AddHistory() {
 
               {/* 11. Examination */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   11. Examination:
                 </h3>
                 
@@ -804,7 +804,7 @@ export default function AddHistory() {
 
               {/* 12. Report */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   12. Report:
                 </h3>
                 

@@ -296,11 +296,19 @@ export const fetchReceptionistPrescriptions = createAsyncThunk(
       }
       
       console.log('🔍 Fetching prescriptions for patient ID:', patientId);
+      console.log('🔍 API URL:', `/prescriptions?patientId=${patientId}`);
+      
       const res = await API.get(`/prescriptions?patientId=${patientId}`);
-      console.log('✅ Prescriptions response:', res.data);
+      console.log('✅ Prescriptions response status:', res.status);
+      console.log('✅ Prescriptions response data:', res.data);
+      console.log('✅ Prescriptions response data type:', typeof res.data);
+      console.log('✅ Prescriptions response data length:', Array.isArray(res.data) ? res.data.length : 'Not an array');
+      
       return res.data;
     } catch (error) {
-      console.error('❌ Prescriptions fetch error:', error.response?.data || error.message);
+      console.error('❌ Prescriptions fetch error:', error);
+      console.error('❌ Error response:', error.response);
+      console.error('❌ Error message:', error.message);
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch prescriptions');
     }
   }

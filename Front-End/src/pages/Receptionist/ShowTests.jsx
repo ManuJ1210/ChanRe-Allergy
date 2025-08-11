@@ -58,7 +58,7 @@ const ShowTests = () => {
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Patients
                 </button>
-                <h1 className="text-3xl font-bold text-slate-800 mb-2">
+                <h1 className="text-xl font-bold text-slate-800 mb-2">
                   Patient Test Reports
                 </h1>
                 <p className="text-slate-600">

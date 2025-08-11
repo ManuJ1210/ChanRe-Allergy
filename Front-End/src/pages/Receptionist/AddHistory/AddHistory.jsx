@@ -221,7 +221,7 @@ export default function AddHistory() {
           ) : (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <FileText className="h-5 w-5 mr-2 text-blue-500" />
                 Medical History Information
               </h2>
@@ -233,7 +233,7 @@ export default function AddHistory() {
             <form onSubmit={handleSubmit} className="p-6 space-y-8">
               {/* 1. Medical Conditions */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   1. Have you ever had the following conditions:
                 </h3>
                 
@@ -284,7 +284,7 @@ export default function AddHistory() {
 
               {/* 2. Hay Fever Details */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   2. Details of Hay fever:
                 </h3>
                 

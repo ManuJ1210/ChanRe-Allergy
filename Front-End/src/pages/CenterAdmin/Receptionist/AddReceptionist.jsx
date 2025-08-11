@@ -79,7 +79,7 @@ const AddReceptionist = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Receptionists
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Add New Receptionist
           </h1>
           <p className="text-slate-600">
@@ -104,7 +104,7 @@ const AddReceptionist = () => {
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-500" />
               Receptionist Information
             </h2>
@@ -116,10 +116,10 @@ const AddReceptionist = () => {
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             {/* Basic Information */}
             <div>
-              <h3 className="text-lg font-medium text-slate-800 mb-4">Basic Information</h3>
+              <h3 className="text-sm font-medium text-slate-800 mb-4">Basic Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Full Name *
                   </label>
                   <input
@@ -134,7 +134,7 @@ const AddReceptionist = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Mobile Number *
                   </label>
                   <input
@@ -149,7 +149,7 @@ const AddReceptionist = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Email Address *
                   </label>
                   <input
@@ -164,7 +164,7 @@ const AddReceptionist = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Username *
                   </label>
                   <input
@@ -179,7 +179,7 @@ const AddReceptionist = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Password *
                   </label>
                   <div className="relative">
@@ -206,10 +206,10 @@ const AddReceptionist = () => {
 
             {/* Contact Information */}
             <div>
-              <h3 className="text-lg font-medium text-slate-800 mb-4">Contact Information</h3>
+              <h3 className="text-sm font-medium text-slate-800 mb-4">Contact Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Address
                   </label>
                   <textarea
@@ -223,7 +223,7 @@ const AddReceptionist = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Emergency Contact Number
                   </label>
                   <input
@@ -237,7 +237,7 @@ const AddReceptionist = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Emergency Contact Name
                   </label>
                   <input

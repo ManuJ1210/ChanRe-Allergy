@@ -32,18 +32,18 @@ const MyPatients = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">My Assigned Patients</h1>
+      <h1 className="text-xl font-bold text-gray-800 mb-8">My Assigned Patients</h1>
       
       {assignedPatients.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">No patients assigned to you yet.</p>
+          <p className="text-gray-500 text-sm">No patients assigned to you yet.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {assignedPatients.map((patient) => (
             <div key={patient._id} className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-gray-800">{patient.name}</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{patient.name}</h3>
                 <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                   patient.status === 'active' 
                     ? 'bg-green-100 text-green-800' 

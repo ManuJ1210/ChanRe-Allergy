@@ -13,40 +13,93 @@ export default function Header({ onHamburgerClick }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [centerName, setCenterName] = useState(() => {
-    return localStorage.getItem('centerName') || '';
-  });
+  const [centerName, setCenterName] = useState('');
+  const [isLoadingCenter, setIsLoadingCenter] = useState(false);
 
   useEffect(() => {
     async function fetchCenterName() {
-      if (user && user.role === 'receptionist' && user.centerId) {
-        // Only fetch if not already in localStorage
-        if (!localStorage.getItem('centerName')) {
+      if (!user) return;
+      
+      // For superadmin, no center needed
+      if (user.role === 'superadmin') {
+        return;
+      }
+
+      setIsLoadingCenter(true);
+      
+      try {
+        let centerData = null;
+        
+        // Try to get center data based on user role
+        if (user.role === 'receptionist' && user.centerId) {
+          // Receptionist with centerId
+          const centerId = typeof user.centerId === 'object' ? user.centerId._id || user.centerId.id : user.centerId;
+          const res = await API.get(`/centers/${centerId}`);
+          centerData = res.data;
+        } else if (user.role === 'centeradmin' || user.role === 'centerAdmin') {
+          // Center admin - try to find center by admin ID
           try {
-            // Ensure centerId is a string
-            const centerId = typeof user.centerId === 'object' ? user.centerId._id || user.centerId.id : user.centerId;
-            
-            const res = await API.get(`/centers/${centerId}`);
-            if (res.data && res.data.name) {
-              setCenterName(res.data.name);
-              localStorage.setItem('centerName', res.data.name);
-            } else if (res.data && res.data.code) {
-              setCenterName(res.data.code);
-              localStorage.setItem('centerName', res.data.code);
-            }
+            const res = await API.get(`/centers/admin/${user._id}`);
+            centerData = res.data;
           } catch (err) {
-            setCenterName('Center');
+            // Fallback: search centers by admin ID
+            const searchRes = await API.get(`/centers?adminId=${user._id}`);
+            if (searchRes.data && searchRes.data.length > 0) {
+              centerData = searchRes.data[0];
+            }
           }
         }
+
+        // Set center name
+        if (centerData) {
+          // Based on backend Center model: name is the primary field
+          const name = centerData.name || centerData.centername || 'Center';
+          setCenterName(name);
+          localStorage.setItem('centerName', name);
+        } else {
+          // Try to get center name from user object if available
+          if (user.centerId && typeof user.centerId === 'object') {
+            // user.centerId.name comes from populated Center model
+            const userCenterName = user.centerId.name;
+            if (userCenterName) {
+              setCenterName(userCenterName);
+              localStorage.setItem('centerName', userCenterName);
+            } else {
+              setCenterName('Center');
+              localStorage.setItem('centerName', 'Center');
+            }
+          } else {
+            // Check if user has center info in other fields
+            const centerName = user.hospitalName || user.centerName;
+            if (centerName) {
+              setCenterName(centerName);
+              localStorage.setItem('centerName', centerName);
+            } else {
+              setCenterName('Center');
+              localStorage.setItem('centerName', 'Center');
+            }
+          }
+        }
+        
+      } catch (err) {
+        // Silent error handling for center fetching
+        setCenterName('Center');
+        localStorage.setItem('centerName', 'Center');
+      } finally {
+        setIsLoadingCenter(false);
       }
     }
+
     fetchCenterName();
-    const handleStorage = () => {
-      setCenterName(localStorage.getItem('centerName') || '');
-    };
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
   }, [user]);
+
+  // Load center name from localStorage on component mount
+  useEffect(() => {
+    const storedCenterName = localStorage.getItem('centerName');
+    if (storedCenterName) {
+      setCenterName(storedCenterName);
+    }
+  }, []);
 
   const isSuperadmin = user?.role?.toLowerCase() === 'superadmin';
 
@@ -54,8 +107,17 @@ export default function Header({ onHamburgerClick }) {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('centerName');
+    setCenterName('');
     dispatch(logout());
-    navigate('/');
+    navigate('/login');
+  };
+
+  const refreshCenterName = async () => {
+    if (user && user.role !== 'superadmin') {
+      // Trigger the center fetching logic again
+      const event = new Event('storage');
+      window.dispatchEvent(event);
+    }
   };
 
   const handleSearch = () => {
@@ -67,6 +129,73 @@ export default function Header({ onHamburgerClick }) {
     if (e.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  // Helper function to get user display name
+  const getUserDisplayName = () => {
+    const name = user?.name || user?.fullName || user?.firstName || user?.lastName;
+    if (name) return name;
+    
+    // If no name found, try to construct from first and last name
+    if (user?.firstName && user?.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+    
+    return 'Admin';
+  };
+
+  // Helper function to get user phone
+  const getUserPhone = () => {
+    // Based on backend User model: phone is the primary field, mobile is secondary
+    return user?.phone || user?.mobile || 'N/A';
+  };
+
+  // Helper function to get hospital name
+  const getHospitalName = () => {
+    // Based on backend structure:
+    // 1. First try user.hospitalName (direct field in User model)
+    if (user?.hospitalName) {
+      return user.hospitalName;
+    }
+    
+    // 2. Try to get from the fetched center name (from API)
+    if (centerName && centerName !== 'Center') {
+      return centerName;
+    }
+    
+    // 3. Try to get from user.centerId object (populated from Center model)
+    if (user?.centerId && typeof user.centerId === 'object') {
+      return user.centerId.name || 'N/A';
+    }
+    
+    // 4. Check other possible fields
+    if (user?.centerName) {
+      return user.centerName;
+    }
+    
+    return 'N/A';
+  };
+
+  // Helper function to get user email
+  const getUserEmail = () => {
+    return user?.email || user?.emailAddress || 'N/A';
+  };
+  const getCenterName = () => {
+    return user?.centerName || 'N/A';
+  };
+
+  // Helper function to get center ID
+  const getCenterId = () => {
+    if (!user?.centerId) {
+      return 'N/A';
+    }
+    
+    if (typeof user.centerId === 'object') {
+      const centerId = user.centerId._id || user.centerId.id || user.centerId.code;
+      return centerId || 'N/A';
+    }
+    
+    return user.centerId;
   };
 
   return (
@@ -84,7 +213,11 @@ export default function Header({ onHamburgerClick }) {
         <div className="flex items-center min-w-[100px] max-w-[160px] truncate flex-shrink-0 text-xs md:min-w-[180px] md:max-w-[220px] md:text-sm">
           {!isSuperadmin && (
             <span className="font-bold text-blue-700 whitespace-nowrap truncate">
-              {centerName || 'Center'}
+              {isLoadingCenter ? (
+                <span className="animate-pulse">Loading...</span>
+              ) : (
+                getHospitalName() || 'Hospital'
+              )}
             </span>
           )}
         </div>
@@ -111,7 +244,7 @@ export default function Header({ onHamburgerClick }) {
           >
             <FaUserCircle className="text-blue-500 text-lg" />
             <div className="text-left hidden sm:block max-w-[100px] md:max-w-none truncate">
-              <p className="text-xs md:text-xs font-semibold text-slate-800 truncate">{user?.name || "Admin"}</p>
+              <p className="text-xs md:text-xs font-semibold text-slate-800 truncate">{getUserDisplayName()}</p>
               <p className="text-[10px] md:text-xs text-slate-500 capitalize truncate">{user?.role || "superadmin"}</p>
             </div>
           </button>
@@ -148,11 +281,12 @@ export default function Header({ onHamburgerClick }) {
             </button>
             <h2 className="text-lg font-bold mb-4 text-center text-blue-600">User Profile</h2>
             <div className="space-y-2 text-xs">
-              <p><strong>Name:</strong> {user?.name || '-'}</p>
-              <p><strong>Email:</strong> {user?.email || '-'}</p>
+              <p><strong>Name:</strong> {getUserDisplayName()}</p>
+              <p><strong>Email:</strong> {getUserEmail()}</p>
               <p><strong>Role:</strong> {user?.role || '-'}</p>
-              <p><strong>Phone:</strong> {user?.phone || 'N/A'}</p>
-              <p><strong>Center ID:</strong> {user?.centerId || 'N/A'}</p>
+              <p><strong>Phone:</strong> {getUserPhone()}</p>
+              <p><strong>Hospital Name:</strong> {getHospitalName()}</p>
+             
             </div>
           </div>
         </div>

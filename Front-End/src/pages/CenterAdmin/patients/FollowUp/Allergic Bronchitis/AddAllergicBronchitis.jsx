@@ -99,7 +99,7 @@ const AddAllergicBronchitis = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-lg font-bold text-gray-800">Add Allergic Bronchitis Record</h1>
+              <h1 className="text-sm font-bold text-gray-800">Add Allergic Bronchitis Record</h1>
             </div>
           </div>
         </div>
@@ -108,11 +108,11 @@ const AddAllergicBronchitis = () => {
         <div className="bg-white rounded-lg shadow-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Main Title */}
-            <h1 className="text-lg font-bold text-gray-800 text-center mb-8">ALLERGIC BRONCHITIS</h1>
+            <h1 className="text-sm font-bold text-gray-800 text-center mb-8">ALLERGIC BRONCHITIS</h1>
             
             {/* Allergic Bronchitis Section */}
             <div className="space-y-6">
-              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Allergic Bronchitis</h2>
+              <h2 className="text-xs font-semibold text-gray-800 border-b border-gray-200 pb-2">Allergic Bronchitis</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-3">Symptoms</label>
@@ -157,7 +157,7 @@ const AddAllergicBronchitis = () => {
 
             {/* GINA Grading Section */}
             <div className="space-y-6">
-              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
+              <h2 className="text-xs font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-blue-600" />
                 GINA Grading of Asthma
               </h2>
@@ -200,7 +200,7 @@ const AddAllergicBronchitis = () => {
 
             {/* PFT Grading Section */}
             <div className="space-y-6">
-              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
+              <h2 className="text-xs font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-blue-600" />
                 Grading based on PFT
               </h2>
@@ -228,7 +228,7 @@ const AddAllergicBronchitis = () => {
 
             {/* Habits Section */}
             <div className="space-y-6">
-              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Habits</h2>
+              <h2 className="text-xs font-semibold text-gray-800 border-b border-gray-200 pb-2">Habits</h2>
               <div className="bg-gray-50 rounded-lg p-6">
                 <div className="flex space-x-6">
                   {HABITS.map(habit => (

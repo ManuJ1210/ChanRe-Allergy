@@ -20,7 +20,7 @@ export default function ManagePatients() {
   return (
     <div className="mt-6 flex flex-col items-center justify-center p-4 sm:p-8">
       <div className="w-full max-w-6xl mx-auto">
-        <h1 className="text-4xl font-extrabold mb-8 text-blue-500 tracking-tight">Manage Patients</h1>
+        <h1 className="text-xl font-extrabold mb-8 text-blue-500 tracking-tight">Manage Patients</h1>
         <div className="overflow-x-auto bg-white rounded-2xl shadow-xl p-2">
           <table className="min-w-full divide-y divide-blue-100 text-base">
             <thead className="bg-blue-50">

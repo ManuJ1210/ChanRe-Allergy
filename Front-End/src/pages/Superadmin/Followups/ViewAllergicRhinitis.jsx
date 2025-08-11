@@ -54,7 +54,7 @@ const ViewAllergicRhinitis = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Error Loading Record</h3>
+              <h3 className="text-xs font-semibold text-gray-800 mb-2">Error Loading Record</h3>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
                 onClick={() => navigate(-1)}
@@ -76,7 +76,7 @@ const ViewAllergicRhinitis = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">No Allergic Rhinitis Record Found</h3>
+              <h3 className="text-xs font-semibold text-gray-800 mb-2">No Allergic Rhinitis Record Found</h3>
               <p className="text-gray-600 mb-4">This patient doesn't have any allergic rhinitis records yet.</p>
               <button
                 onClick={() => navigate(`/dashboard/Superadmin/Followups/ViewFollowUpPatients`)}
@@ -113,7 +113,7 @@ const ViewAllergicRhinitis = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">ALLERGIC RHINITIS RECORD</h1>
+              <h1 className="text-sm font-bold text-gray-800">ALLERGIC RHINITIS RECORD</h1>
             </div>
             <div className="flex items-center space-x-3">
               <button
@@ -131,7 +131,7 @@ const ViewAllergicRhinitis = () => {
           {/* Patient Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+              <h3 className="text-xs font-semibold text-gray-800 mb-3 flex items-center">
                 <User className="h-5 w-5 mr-2 text-blue-600" />
                 Patient Information
               </h3>
@@ -143,7 +143,7 @@ const ViewAllergicRhinitis = () => {
               </div>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+              <h3 className="text-xs font-semibold text-gray-800 mb-3 flex items-center">
                 <Calendar className="h-5 w-5 mr-2 text-blue-600" />
                 Record Details
               </h3>
@@ -158,7 +158,7 @@ const ViewAllergicRhinitis = () => {
           {/* Nasal Symptoms */}
           {record.nasalSymptoms && (
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <h3 className="text-xs font-semibold text-gray-800 mb-4 flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-blue-600" />
                 Nasal Symptom Severity
               </h3>
@@ -169,7 +169,7 @@ const ViewAllergicRhinitis = () => {
                       <span className="font-medium text-gray-700 capitalize">
                         {symptom.replace(/([A-Z])/g, ' $1').trim()}:
                       </span>
-                      <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                      <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
                         Score: {value}
                       </span>
                     </div>
@@ -187,7 +187,7 @@ const ViewAllergicRhinitis = () => {
           {/* Non-Nasal Symptoms */}
           {record.nonNasalSymptoms && (
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <h3 className="text-xs font-semibold text-gray-800 mb-4 flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-blue-600" />
                 Non-Nasal Symptom Severity
               </h3>
@@ -198,7 +198,7 @@ const ViewAllergicRhinitis = () => {
                       <span className="font-medium text-gray-700 capitalize">
                         {symptom.replace(/([A-Z])/g, ' $1').trim()}:
                       </span>
-                      <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                      <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
                         Score: {value}
                       </span>
                     </div>
@@ -216,10 +216,10 @@ const ViewAllergicRhinitis = () => {
           {/* Quality of Life */}
           {record.qualityOfLife !== undefined && (
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Quality of Life Assessment</h3>
+              <h3 className="text-xs font-semibold text-gray-800 mb-4">Quality of Life Assessment</h3>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="font-medium text-gray-700">
-                  Severity Score: <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">{record.qualityOfLife}</span>
+                  Severity Score: <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">{record.qualityOfLife}</span>
                 </p>
               </div>
             </div>
@@ -228,7 +228,7 @@ const ViewAllergicRhinitis = () => {
           {/* Medications */}
           {record.medications && (
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <h3 className="text-xs font-semibold text-gray-800 mb-4 flex items-center">
                 <Pill className="h-5 w-5 mr-2 text-blue-600" />
                 Medications
               </h3>
@@ -236,7 +236,7 @@ const ViewAllergicRhinitis = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {Object.entries(record.medications).map(([type, medication]) => (
                     <div key={type}>
-                      <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
+                      <label className="block text-xs font-medium text-gray-700 mb-1 capitalize">
                         {type.replace(/([A-Z])/g, ' $1').trim()}:
                       </label>
                       <p className="text-gray-800">{medication || 'Not specified'}</p>
@@ -250,7 +250,7 @@ const ViewAllergicRhinitis = () => {
           {/* ENT Examination */}
           {record.entExamination && (
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <h3 className="text-xs font-semibold text-gray-800 mb-4 flex items-center">
                 <Stethoscope className="h-5 w-5 mr-2 text-blue-600" />
                 ENT Examination
               </h3>
@@ -263,12 +263,12 @@ const ViewAllergicRhinitis = () => {
           {/* GPE */}
           {record.gpe && (
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">General Physical Examination (GPE)</h3>
+              <h3 className="text-xs font-semibold text-gray-800 mb-4">General Physical Examination (GPE)</h3>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {Object.entries(record.gpe).map(([vital, value]) => (
                     <div key={vital}>
-                      <label className="block text-sm font-medium text-gray-700 mb-1 uppercase">
+                      <label className="block text-xs font-medium text-gray-700 mb-1 uppercase">
                         {vital}:
                       </label>
                       <p className="text-gray-800">{value || 'Not recorded'}</p>
@@ -282,14 +282,14 @@ const ViewAllergicRhinitis = () => {
           {/* Systematic Examination */}
           {record.systematicExamination && (
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Systematic Examination</h3>
+              <h3 className="text-xs font-semibold text-gray-800 mb-4">Systematic Examination</h3>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                   {Object.entries(record.systematicExamination).map(([system, value]) => {
                     if (system === 'followUpAdvice') return null;
                     return (
                       <div key={system}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1 uppercase">
+                        <label className="block text-xs font-medium text-gray-700 mb-1 uppercase">
                           {system}:
                         </label>
                         <p className="text-gray-800">{value || 'Not recorded'}</p>
@@ -299,7 +299,7 @@ const ViewAllergicRhinitis = () => {
                 </div>
                 {record.systematicExamination.followUpAdvice && (
                   <div className="mt-4 pt-4 border-t border-gray-200">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Follow-up Advice:</label>
+                    <label className="block text-xs font-medium text-gray-700 mb-2">Follow-up Advice:</label>
                     <p className="text-gray-800">{record.systematicExamination.followUpAdvice}</p>
                   </div>
                 )}

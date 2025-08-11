@@ -178,7 +178,7 @@ const UpdateStatus = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
                 onClick={() => navigate('/dashboard/lab/test-requests')}
@@ -200,7 +200,7 @@ const UpdateStatus = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">No Test Request Found</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">No Test Request Found</h2>
               <p className="text-gray-600 mb-4">The requested test request could not be found.</p>
               <button
                 onClick={() => navigate('/dashboard/lab/test-requests')}
@@ -229,7 +229,7 @@ const UpdateStatus = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">Update Sample Collection Status</h1>
+              <h1 className="text-xl font-bold text-gray-800">Update Sample Collection Status</h1>
             </div>
           </div>
         </div>
@@ -238,7 +238,7 @@ const UpdateStatus = () => {
         <div className="bg-white rounded-lg shadow-lg p-8">
           {/* Record Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">SAMPLE COLLECTION STATUS</h1>
+            <h1 className="text-xl font-bold text-gray-800 mb-2">SAMPLE COLLECTION STATUS</h1>
             <p className="text-gray-600">Update Sample Collection Progress</p>
           </div>
 
@@ -266,21 +266,21 @@ const UpdateStatus = () => {
           
           {/* Test Request Information */}
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
               Test Request Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-500">Request ID</label>
+                <label className="block text-xs font-medium text-gray-500">Request ID</label>
                 <p className="text-gray-900 font-medium">{testRequest._id || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Patient Name</label>
+                <label className="block text-xs font-medium text-gray-500">Patient Name</label>
                 <p className="text-gray-900 font-medium">{testRequest.patientName || testRequest.patientId?.name || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Test Type</label>
+                <label className="block text-xs font-medium text-gray-500">Test Type</label>
                 <p className="text-gray-900 font-medium">{testRequest.testType || 'N/A'}</p>
               </div>
             </div>
@@ -288,20 +288,20 @@ const UpdateStatus = () => {
 
           {/* Status and Urgency */}
           <div className="bg-gray-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
               <Activity className="h-5 w-5 mr-2 text-blue-600" />
               Current Status & Priority
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-500 mb-2">Current Status</label>
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(testRequest.status)}`}>
+                <label className="block text-xs font-medium text-gray-500 mb-2">Current Status</label>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(testRequest.status)}`}>
                   {testRequest.status.replace(/_/g, ' ')}
                 </span>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500 mb-2">Urgency Level</label>
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getUrgencyColor(testRequest.urgency)}`}>
+                <label className="block text-xs font-medium text-gray-500 mb-2">Urgency Level</label>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getUrgencyColor(testRequest.urgency)}`}>
                   {testRequest.urgency}
                 </span>
               </div>
@@ -310,7 +310,7 @@ const UpdateStatus = () => {
 
           {/* Patient Information */}
           <div className="bg-gray-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
               <User className="h-5 w-5 mr-2 text-blue-600" />
               Patient Information
             </h2>
@@ -318,11 +318,11 @@ const UpdateStatus = () => {
               <div>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-500">Patient Name</label>
+                    <label className="block text-xs font-medium text-gray-500">Patient Name</label>
                     <p className="text-gray-900 font-medium">{testRequest.patientName || testRequest.patientId?.name || 'N/A'}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-500">Patient Phone</label>
+                    <label className="block text-xs font-medium text-gray-500">Patient Phone</label>
                     <p className="text-gray-900 font-medium flex items-center">
                       <Phone className="h-4 w-4 mr-2 text-gray-400" />
                       {testRequest.patientPhone || testRequest.patientId?.phone || 'N/A'}
@@ -333,14 +333,14 @@ const UpdateStatus = () => {
               <div>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-500">Patient Address</label>
+                    <label className="block text-xs font-medium text-gray-500">Patient Address</label>
                     <p className="text-gray-900 font-medium flex items-start">
                       <MapPin className="h-4 w-4 mr-2 text-gray-400 mt-0.5" />
                       {testRequest.patientAddress || 'N/A'}
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-500">Scheduled Collection</label>
+                    <label className="block text-xs font-medium text-gray-500">Scheduled Collection</label>
                     <p className="text-gray-900 font-medium">
                       {testRequest.sampleCollectionScheduledDate ? 
                         new Date(testRequest.sampleCollectionScheduledDate).toLocaleDateString() : 'N/A'}
@@ -353,7 +353,7 @@ const UpdateStatus = () => {
 
           {/* Collection Status Form */}
           <div className="bg-gray-50 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-6 flex items-center">
               <Play className="h-5 w-5 mr-2 text-blue-600" />
               Update Collection Status
             </h2>
@@ -361,7 +361,7 @@ const UpdateStatus = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Collection Status */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Collection Status <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -380,7 +380,7 @@ const UpdateStatus = () => {
 
               {/* Actual Collection Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Actual Collection Date
                 </label>
                 <input
@@ -395,7 +395,7 @@ const UpdateStatus = () => {
 
               {/* Collection Notes */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Collection Notes
                 </label>
                 <textarea

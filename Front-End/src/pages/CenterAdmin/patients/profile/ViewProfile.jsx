@@ -144,7 +144,7 @@ const ViewProfile = () => {
                   <User className="h-10 w-10 text-blue-500" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
+                  <h1 className="text-lg font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
                                       <div className="flex flex-wrap gap-4 text-slate-600">
                       {patient?.gender && (
                         <span className="flex items-center gap-1">
@@ -216,7 +216,7 @@ const ViewProfile = () => {
               {/* Patient Details Card */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100">
-                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                     <User className="h-5 w-5 mr-2 text-blue-500" />
                     Patient Details
             </h2>
@@ -228,42 +228,42 @@ const ViewProfile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-slate-500 mb-1">Full Name</label>
+                        <label className="block text-xs font-medium text-slate-500 mb-1">Full Name</label>
                         <p className="text-slate-800 font-medium">{patient.name || 'N/A'}</p>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-slate-500 mb-1">Mobile</label>
+                        <label className="block text-xs font-medium text-slate-500 mb-1">Mobile</label>
                         <p className="text-slate-800">
                           {typeof patient.phone === 'string' ? patient.phone :
                            typeof patient.contact === 'string' ? patient.contact : 'N/A'}
                         </p>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-slate-500 mb-1">Email</label>
+                        <label className="block text-xs font-medium text-slate-500 mb-1">Email</label>
                         <p className="text-slate-800">{typeof patient.email === 'string' ? patient.email : 'N/A'}</p>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-slate-500 mb-1">Location</label>
+                        <label className="block text-xs font-medium text-slate-500 mb-1">Location</label>
                         <p className="text-slate-800">{typeof patient.address === 'string' ? patient.address : 'N/A'}</p>
                       </div>
                     </div>
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-slate-500 mb-1">Assigned Doctor</label>
+                        <label className="block text-xs font-medium text-slate-500 mb-1">Assigned Doctor</label>
                         <p className="text-slate-800">
                           {patient.assignedDoctor?.name || 'Not assigned'}
                         </p>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-slate-500 mb-1">Gender</label>
+                        <label className="block text-xs font-medium text-slate-500 mb-1">Gender</label>
                         <p className="text-slate-800 capitalize">{patient.gender || 'N/A'}</p>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-slate-500 mb-1">Age</label>
+                        <label className="block text-xs font-medium text-slate-500 mb-1">Age</label>
                         <p className="text-slate-800">{patient.age ? `${patient.age} years` : 'N/A'}</p>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-slate-500 mb-1">Center</label>
+                        <label className="block text-xs font-medium text-slate-500 mb-1">Center</label>
                         <p className="text-slate-800">
                           {patient.centerId?.name ||
                            (typeof patient.centerCode === 'string' ? patient.centerCode : 'N/A')}
@@ -277,7 +277,7 @@ const ViewProfile = () => {
               {/* Investigations */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100">
-                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                     <Activity className="h-5 w-5 mr-2 text-blue-500" />
                     Investigations
                   </h2>
@@ -313,23 +313,23 @@ const ViewProfile = () => {
                         {tests && tests.length > 0 ? (
                           tests.map((test, idx) => (
                             <tr key={test._id || idx} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-4 py-3 text-sm text-slate-600">{test.createdAt ? new Date(test.createdAt).toLocaleDateString() : ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.CBC || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.Hb || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.TC || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.DC || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.Neutrophils || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.Eosinophil || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.Lymphocytes || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.Monocytes || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.Platelets || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.ESR || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.SerumCreatinine || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.SerumIgELevels || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.C3C4Levels || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.ANA_IF || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.UrineRoutine || ''}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{test.AllergyPanel || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-600">{test.createdAt ? new Date(test.createdAt).toLocaleDateString() : ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.CBC || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.Hb || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.TC || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.DC || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.Neutrophils || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.Eosinophil || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.Lymphocytes || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.Monocytes || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.Platelets || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.ESR || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.SerumCreatinine || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.SerumIgELevels || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.C3C4Levels || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.ANA_IF || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.UrineRoutine || ''}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{test.AllergyPanel || ''}</td>
                             </tr>
                           ))
                         ) : (
@@ -349,7 +349,7 @@ const ViewProfile = () => {
               {/* Medications */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100">
-                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                     <Pill className="h-5 w-5 mr-2 text-blue-500" />
                     Medications
                   </h2>
@@ -388,12 +388,12 @@ const ViewProfile = () => {
                         <tbody className="divide-y divide-slate-200">
                           {medications.map((med, idx) => (
                             <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-4 py-3 text-sm font-medium text-slate-800">{med.drugName}</td>
-                              <td className="px-4 py-3 text-sm text-slate-600">{med.dose}</td>
-                              <td className="px-4 py-3 text-sm text-slate-600">{med.duration}</td>
-                              <td className="px-4 py-3 text-sm text-slate-600">{med.frequency || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-600">{med.prescribedBy || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-600">{med.adverseEvent || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs font-medium text-slate-800">{med.drugName}</td>
+                              <td className="px-4 py-3 text-xs text-slate-600">{med.dose}</td>
+                              <td className="px-4 py-3 text-xs text-slate-600">{med.duration}</td>
+                              <td className="px-4 py-3 text-xs text-slate-600">{med.frequency || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-600">{med.prescribedBy || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-600">{med.adverseEvent || 'N/A'}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -406,7 +406,7 @@ const ViewProfile = () => {
               {/* History */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100">
-                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                     <FileText className="h-5 w-5 mr-2 text-blue-500" />
                     Medical History
                   </h2>
@@ -449,18 +449,18 @@ const ViewProfile = () => {
                         <tbody className="divide-y divide-slate-200">
                       {history.map((h, idx) => (
                             <tr key={h._id || idx} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-4 py-3 text-sm text-slate-600">
+                              <td className="px-4 py-3 text-xs text-slate-600">
                                 {h.createdAt ? new Date(h.createdAt).toLocaleDateString() : 'N/A'}
                               </td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{h.hayFever || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{h.asthma || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{h.breathingProblems || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{h.hivesSwelling || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{h.sinusTrouble || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{h.eczemaRashes || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{h.foodAllergies || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{h.drugAllergy || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">
+                              <td className="px-4 py-3 text-xs text-slate-800">{h.hayFever || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{h.asthma || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{h.breathingProblems || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{h.hivesSwelling || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{h.sinusTrouble || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{h.eczemaRashes || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{h.foodAllergies || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{h.drugAllergy || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">
                                 <button
                                   onClick={() => navigate(`/dashboard/CenterAdmin/patients/ViewHistory/${h._id}`)}
                                   className="text-blue-600 hover:text-blue-900 font-medium"
@@ -483,7 +483,7 @@ const ViewProfile = () => {
               {/* Allergic Rhinitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                  <h2 className="text-lg font-semibold text-slate-800">Allergic Rhinitis</h2>
+                  <h2 className="text-sm font-semibold text-slate-800">Allergic Rhinitis</h2>
                   <button
                                                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddAllergicRhinitis/${patient._id}`)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -508,14 +508,14 @@ const ViewProfile = () => {
                         {allergicRhinitis && allergicRhinitis.length > 0 ? (
                           allergicRhinitis.map((rhinitis, idx) => (
                             <tr key={rhinitis._id || idx} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.name}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.age}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.centerCode || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.phone || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.name}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.age}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.centerCode || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.phone || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">
                                 {rhinitis.updatedAt ? new Date(rhinitis.updatedAt).toLocaleDateString() : 'N/A'}
                               </td>
-                              <td className="px-4 py-3 text-sm text-slate-800">
+                              <td className="px-4 py-3 text-xs text-slate-800">
                                 <button
                                   onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/ViewAllergicRhinitis/${rhinitis._id}`)}
                                   className="text-blue-600 hover:text-blue-900 font-medium"
@@ -542,7 +542,7 @@ const ViewProfile = () => {
               {/* Atopic Dermatitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                  <h2 className="text-lg font-semibold text-slate-800">Atopic Dermatitis</h2>
+                  <h2 className="text-sm font-semibold text-slate-800">Atopic Dermatitis</h2>
                                 <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AtopicDermatitis/${patient._id}`)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -568,15 +568,15 @@ const ViewProfile = () => {
                         {atopicDermatitis && atopicDermatitis.length > 0 ? (
                           atopicDermatitis.map((dermatitis, idx) => (
                             <tr key={dermatitis._id || idx} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-4 py-3 text-sm text-slate-800">
+                              <td className="px-4 py-3 text-xs text-slate-800">
                                 {dermatitis.createdAt ? new Date(dermatitis.createdAt).toLocaleDateString() : 'N/A'}
                               </td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{dermatitis.symptoms || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.centerCode || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.centerName || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient._id}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{dermatitis.updatedBy || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">
+                              <td className="px-4 py-3 text-xs text-slate-800">{dermatitis.symptoms || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.centerCode || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.centerName || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient._id}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{dermatitis.updatedBy || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">
                                 <button
                                   onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/ViewAtopicDermatitis/${dermatitis._id}`)}
                                   className="text-blue-600 hover:text-blue-900 font-medium"
@@ -603,7 +603,7 @@ const ViewProfile = () => {
               {/* Allergic Conjunctivitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                  <h2 className="text-lg font-semibold text-slate-800">Allergic Conjunctivitis</h2>
+                  <h2 className="text-sm font-semibold text-slate-800">Allergic Conjunctivitis</h2>
                                 <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddAllergicConjunctivitis/${patient._id}`)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -628,14 +628,14 @@ const ViewProfile = () => {
                         {allergicConjunctivitis && allergicConjunctivitis.length > 0 ? (
                           allergicConjunctivitis.map((conjunctivitis, idx) => (
                             <tr key={conjunctivitis._id || idx} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.name}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.age}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.centerCode || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.phone || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.name}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.age}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.centerCode || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.phone || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">
                                 {conjunctivitis.updatedAt ? new Date(conjunctivitis.updatedAt).toLocaleDateString() : 'N/A'}
                               </td>
-                              <td className="px-4 py-3 text-sm text-slate-800">
+                              <td className="px-4 py-3 text-xs text-slate-800">
                                 <button
                                   onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/ViewAllergicConjunctivitis/${conjunctivitis._id}`)}
                                   className="text-blue-600 hover:text-blue-900 font-medium"
@@ -662,7 +662,7 @@ const ViewProfile = () => {
               {/* Allergic Bronchitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                  <h2 className="text-lg font-semibold text-slate-800">Allergic Bronchitis</h2>
+                  <h2 className="text-sm font-semibold text-slate-800">Allergic Bronchitis</h2>
                             <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddAllergicBronchitis/${patient._id}`)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -687,14 +687,14 @@ const ViewProfile = () => {
                         {allergicBronchitis && allergicBronchitis.length > 0 ? (
                           allergicBronchitis.map((bronchitis, idx) => (
                             <tr key={bronchitis._id || idx} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.name}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.age}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.centerCode || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.phone || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.name}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.age}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.centerCode || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.phone || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">
                                 {bronchitis.updatedAt ? new Date(bronchitis.updatedAt).toLocaleDateString() : 'N/A'}
                               </td>
-                              <td className="px-4 py-3 text-sm text-slate-800">
+                              <td className="px-4 py-3 text-xs text-slate-800">
                             <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/ViewAllergicBronchitis/${bronchitis._id}`)}
                 className="text-blue-600 hover:text-blue-900 font-medium"
@@ -721,7 +721,7 @@ const ViewProfile = () => {
               {/* GPE */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                  <h2 className="text-lg font-semibold text-slate-800">GPE</h2>
+                  <h2 className="text-sm font-semibold text-slate-800">GPE</h2>
                         <button
               onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddGPE/${patient._id}`)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -746,14 +746,14 @@ const ViewProfile = () => {
                         {gpe && gpe.length > 0 ? (
                           gpe.map((gpe, idx) => (
                             <tr key={gpe._id || idx} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.name}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.age}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.centerCode || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">{patient.phone || 'N/A'}</td>
-                              <td className="px-4 py-3 text-sm text-slate-800">
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.name}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.age}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.centerCode || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">{patient.phone || 'N/A'}</td>
+                              <td className="px-4 py-3 text-xs text-slate-800">
                                 {gpe.updatedAt ? new Date(gpe.updatedAt).toLocaleDateString() : 'N/A'}
                               </td>
-                              <td className="px-4 py-3 text-sm text-slate-800">
+                              <td className="px-4 py-3 text-xs text-slate-800">
                                         <button
                       onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/ViewGPE/${gpe._id}`)}
                       className="text-blue-600 hover:text-blue-900 font-medium"
@@ -781,7 +781,7 @@ const ViewProfile = () => {
           {activeTab === "Prescription" && (
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
               <div className="p-6 border-b border-blue-100 flex justify-between items-center">
-                <h2 className="text-lg font-semibold text-slate-800">Prescription</h2>
+                <h2 className="text-sm font-semibold text-slate-800">Prescription</h2>
                         <button
               onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddPrescription/${patient._id}`)}
               className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -805,16 +805,16 @@ const ViewProfile = () => {
                       {prescriptions && prescriptions.length > 0 ? (
                         prescriptions.map((prescription, idx) => (
                           <tr key={prescription._id || idx} className="hover:bg-slate-50 transition-colors">
-                            <td className="px-4 py-3 text-sm text-slate-800">
+                            <td className="px-4 py-3 text-xs text-slate-800">
                               {prescription.createdAt ? new Date(prescription.createdAt).toLocaleString() : 'N/A'}
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-800">{prescription.visitNumber || idx + 1}</td>
-                            <td className="px-4 py-3 text-sm text-slate-800">{patient._id}</td>
-                            <td className="px-4 py-3 text-sm text-slate-800">
+                            <td className="px-4 py-3 text-xs text-slate-800">{prescription.visitNumber || idx + 1}</td>
+                            <td className="px-4 py-3 text-xs text-slate-800">{patient._id}</td>
+                            <td className="px-4 py-3 text-xs text-slate-800">
                               {typeof prescription.updatedBy === 'string' ? prescription.updatedBy : 
                                typeof prescription.updatedBy === 'object' && prescription.updatedBy?.name ? prescription.updatedBy.name : 'N/A'}
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-800">
+                            <td className="px-4 py-3 text-xs text-slate-800">
                                         <button
                       onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/ViewPrescription/${prescription._id}`)}
                       className="text-blue-600 hover:text-blue-900 font-medium"

@@ -264,7 +264,7 @@ export default function CompletedRequests() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">Completed Test Requests</h1>
+          <h1 className="text-xl font-bold text-slate-800 mb-2">Completed Test Requests</h1>
           <p className="text-slate-600">View and manage completed test results</p>
         </div>
 
@@ -277,7 +277,7 @@ export default function CompletedRequests() {
               {error.includes('login') && (
                 <button
                   onClick={() => navigate('/login')}
-                  className="ml-4 px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
+                  className="ml-4 px-3 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700"
                 >
                   Login
                 </button>
@@ -291,11 +291,11 @@ export default function CompletedRequests() {
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600">Total Completed</p>
-                <p className="text-2xl font-bold text-slate-800">{completedRequests.length}</p>
+                <p className="text-xs font-medium text-slate-600">Total Completed</p>
+                <p className="text-xl font-bold text-slate-800">{completedRequests.length}</p>
               </div>
               <div className="p-3 bg-green-50 rounded-lg">
-                <FaCheckCircle className="text-green-500 text-xl" />
+                <FaCheckCircle className="text-green-500 text-lg" />
               </div>
             </div>
           </div>
@@ -303,8 +303,8 @@ export default function CompletedRequests() {
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600">This Week</p>
-                <p className="text-2xl font-bold text-blue-600">
+                <p className="text-xs font-medium text-slate-600">This Week</p>
+                <p className="text-xl font-bold text-blue-600">
                   {completedRequests.filter(req => {
                     const weekAgo = new Date();
                     weekAgo.setDate(weekAgo.getDate() - 7);
@@ -313,7 +313,7 @@ export default function CompletedRequests() {
                 </p>
               </div>
               <div className="p-3 bg-blue-50 rounded-lg">
-                <FaCalendarAlt className="text-blue-500 text-xl" />
+                <FaCalendarAlt className="text-blue-500 text-lg" />
               </div>
             </div>
           </div>
@@ -321,8 +321,8 @@ export default function CompletedRequests() {
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600">Normal Results</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-xs font-medium text-slate-600">Normal Results</p>
+                <p className="text-xl font-bold text-green-600">
                   {completedRequests.filter(req => 
                     req.testResults && (
                       req.testResults.toLowerCase().includes('normal') || 
@@ -332,7 +332,7 @@ export default function CompletedRequests() {
                 </p>
               </div>
               <div className="p-3 bg-green-50 rounded-lg">
-                <FaCheckCircle className="text-green-500 text-xl" />
+                <FaCheckCircle className="text-green-500 text-lg" />
               </div>
             </div>
           </div>
@@ -340,8 +340,8 @@ export default function CompletedRequests() {
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600">Abnormal Results</p>
-                <p className="text-2xl font-bold text-red-600">
+                <p className="text-xs font-medium text-slate-600">Abnormal Results</p>
+                <p className="text-xl font-bold text-red-600">
                   {completedRequests.filter(req => 
                     req.testResults && (
                       req.testResults.toLowerCase().includes('positive') || 
@@ -351,7 +351,7 @@ export default function CompletedRequests() {
                 </p>
               </div>
               <div className="p-3 bg-red-50 rounded-lg">
-                <FaFileAlt className="text-red-500 text-xl" />
+                <FaFileAlt className="text-red-500 text-lg" />
               </div>
             </div>
           </div>
@@ -394,7 +394,7 @@ export default function CompletedRequests() {
         ) : filteredRequests.length === 0 ? (
           <div className="text-center py-12">
             <FaCheckCircle className="text-slate-400 text-6xl mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-slate-600 mb-2">No Completed Requests</h3>
+            <h3 className="text-lg font-semibold text-slate-600 mb-2">No Completed Requests</h3>
             <p className="text-slate-500">No test requests have been completed yet.</p>
           </div>
         ) : (
@@ -425,8 +425,8 @@ export default function CompletedRequests() {
                     <tr key={request._id} className="hover:bg-slate-50">
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm font-medium text-slate-900">{request.patientName || 'N/A'}</div>
-                          <div className="text-sm text-slate-500">{request.patientPhone || 'N/A'}</div>
+                          <div className="text-xs font-medium text-slate-900">{request.patientName || 'N/A'}</div>
+                          <div className="text-xs text-slate-500">{request.patientPhone || 'N/A'}</div>
                           <div className="text-xs text-slate-400">
                             {request.createdAt ? new Date(request.createdAt).toLocaleDateString() : 'N/A'}
                           </div>
@@ -434,9 +434,8 @@ export default function CompletedRequests() {
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm font-medium text-slate-900">{request.testType || 'N/A'}</div>
-                          <div className="text-sm text-slate-500">{request.doctorName || 'N/A'}</div>
-                          <div className="text-xs text-slate-400">{request.centerName || 'N/A'}</div>
+                          <div className="text-xs font-medium text-slate-900">{request.testType || 'N/A'}</div>
+                          <div className="text-xs text-slate-500">{request.doctorName || 'N/A'}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">

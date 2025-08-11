@@ -303,7 +303,7 @@ Lab Team`,
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
                 onClick={() => navigate('/dashboard/lab/test-requests')}
@@ -325,7 +325,7 @@ Lab Team`,
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">No Test Request Found</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">No Test Request Found</h2>
               <p className="text-gray-600 mb-4">The requested test request could not be found.</p>
               <button
                 onClick={() => navigate('/dashboard/lab/test-requests')}
@@ -358,7 +358,7 @@ Lab Team`,
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">Send Test Report</h1>
+              <h1 className="text-xl font-bold text-gray-800">Send Test Report</h1>
             </div>
           </div>
         </div>
@@ -367,7 +367,7 @@ Lab Team`,
         <div className="bg-white rounded-lg shadow-lg p-8">
           {/* Record Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">SEND TEST REPORT</h1>
+            <h1 className="text-xl font-bold text-gray-800 mb-2">SEND TEST REPORT</h1>
             <p className="text-gray-600">Send Report to Requesting Doctor</p>
           </div>
 
@@ -395,21 +395,21 @@ Lab Team`,
           
           {/* Test Request Information */}
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
               Test Request Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-500">Request ID</label>
+                <label className="block text-xs font-medium text-gray-500">Request ID</label>
                 <p className="text-gray-900 font-medium">{testRequest._id || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Patient Name</label>
+                <label className="block text-xs font-medium text-gray-500">Patient Name</label>
                 <p className="text-gray-900 font-medium">{testRequest.patientName || testRequest.patientId?.name || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Test Type</label>
+                <label className="block text-xs font-medium text-gray-500">Test Type</label>
                 <p className="text-gray-900 font-medium">{testRequest.testType || 'N/A'}</p>
               </div>
             </div>
@@ -417,17 +417,17 @@ Lab Team`,
 
           {/* Doctor Information */}
           <div className="bg-gray-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
               <Stethoscope className="h-5 w-5 mr-2 text-blue-600" />
               Requesting Doctor
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-500">Doctor Name</label>
+                <label className="block text-xs font-medium text-gray-500">Doctor Name</label>
                 <p className="text-gray-900 font-medium">{doctorName}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Doctor Email</label>
+                <label className="block text-xs font-medium text-gray-500">Doctor Email</label>
                 <p className="text-gray-900 font-medium flex items-center">
                   <Mail className="h-4 w-4 mr-2 text-gray-500" />
                   {doctorEmail}
@@ -439,19 +439,19 @@ Lab Team`,
           {/* Report Information */}
           {testRequest.reportGeneratedDate && (
             <div className="bg-gray-50 rounded-lg p-6 mb-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <FileText className="h-5 w-5 mr-2 text-blue-600" />
                 Report Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-500">Report Generated</label>
+                  <label className="block text-xs font-medium text-gray-500">Report Generated</label>
                   <p className="text-gray-900 font-medium">
                     {new Date(testRequest.reportGeneratedDate).toLocaleDateString()}
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-500">Report File</label>
+                  <label className="block text-xs font-medium text-gray-500">Report File</label>
                   <div className="flex space-x-3">
                     <button
                       onClick={viewReport}
@@ -475,7 +475,7 @@ Lab Team`,
 
           {/* Simplified Send Report Form */}
           <div className="bg-gray-50 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-6 flex items-center">
               <Send className="h-5 w-5 mr-2 text-blue-600" />
               Send Report to Doctor
             </h2>
@@ -483,7 +483,7 @@ Lab Team`,
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Send Method */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-700 mb-2">
                   Send Method
                 </label>
                 <div className="space-y-2">
@@ -526,7 +526,7 @@ Lab Team`,
               {/* Email Subject */}
               {formData.sendMethod !== 'system' && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-2">
                     Email Subject
                   </label>
                   <input
@@ -542,7 +542,7 @@ Lab Team`,
               {/* Email Message */}
               {formData.sendMethod !== 'system' && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-2">
                     Email Message
                   </label>
                   <textarea
@@ -558,7 +558,7 @@ Lab Team`,
               {/* System Notification Message */}
               {formData.sendMethod !== 'email' && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-medium text-gray-700 mb-2">
                     System Notification Message
                   </label>
                   <textarea

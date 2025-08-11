@@ -79,7 +79,7 @@ const AddFollowUp = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-xl font-bold text-gray-800">Add Follow-up</h1>
+              <h1 className="text-lg font-bold text-gray-800">Add Follow-up</h1>
             </div>
           </div>
         </div>
@@ -89,7 +89,7 @@ const AddFollowUp = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Follow-up Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-xs font-medium text-gray-700 mb-3">
                 Follow-up Type <span className="text-red-500">*</span>
               </label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -112,7 +112,7 @@ const AddFollowUp = () => {
                       required
                     />
                     <div className="flex items-center space-x-3">
-                      <span className="text-2xl">{type.icon}</span>
+                      <span className="text-xl">{type.icon}</span>
                       <span className="font-medium text-gray-900">{type.label}</span>
                     </div>
                     {formData.followUpType === type.value && (
@@ -125,7 +125,7 @@ const AddFollowUp = () => {
 
             {/* Scheduled Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs font-medium text-gray-700 mb-2">
                 Scheduled Date <span className="text-red-500">*</span>
               </label>
               <div className="relative">
@@ -143,7 +143,7 @@ const AddFollowUp = () => {
 
             {/* Status */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs font-medium text-gray-700 mb-2">
                 Status <span className="text-red-500">*</span>
               </label>
               <div className="relative">
@@ -166,7 +166,7 @@ const AddFollowUp = () => {
 
             {/* Notes */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs font-medium text-gray-700 mb-2">
                 Notes
               </label>
               <textarea

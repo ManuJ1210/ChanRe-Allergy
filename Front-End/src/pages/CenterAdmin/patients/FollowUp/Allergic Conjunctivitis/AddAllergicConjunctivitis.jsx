@@ -115,11 +115,11 @@ export default function AddAllergicConjunctivitis() {
       <div className="max-w-4xl mx-auto p-6">
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8 space-y-8">
           {/* Main Title */}
-          <h1 className="text-xl font-bold text-gray-800 text-center mb-8">ALLERGIC CONJUNCTIVITIS</h1>
+          <h1 className="text-lg font-bold text-gray-800 text-center mb-8">ALLERGIC CONJUNCTIVITIS</h1>
           
           {/* Symptoms Section */}
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Symptoms</h2>
+            <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Symptoms</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left side - Symptoms */}
               <div className="space-y-4">
@@ -134,7 +134,7 @@ export default function AddAllergicConjunctivitis() {
                         onChange={() => handleSymptomChange(symptom, 'yes')}
                         className="text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="text-sm text-gray-700">{symptom}</span>
+                      <span className="text-xs text-gray-700">{symptom}</span>
                     </div>
                   ))}
                 </div>
@@ -149,7 +149,7 @@ export default function AddAllergicConjunctivitis() {
                         onChange={() => handleSymptomChange(symptom, 'yes')}
                         className="text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="text-sm text-gray-700">{symptom}</span>
+                      <span className="text-xs text-gray-700">{symptom}</span>
                     </div>
                   ))}
                 </div>
@@ -157,7 +157,7 @@ export default function AddAllergicConjunctivitis() {
               
               {/* Right side - Type */}
               <div className="space-y-4">
-                <label className="block text-sm font-medium text-gray-700 mb-3">Type</label>
+                <label className="block text-xs font-medium text-gray-700 mb-3">Type</label>
                 <div className="space-y-3">
                   {TYPE_OPTIONS.map(type => (
                     <div key={type} className="flex items-center space-x-3">
@@ -169,7 +169,7 @@ export default function AddAllergicConjunctivitis() {
                         onChange={(e) => setForm(prev => ({ ...prev, type: e.target.value }))}
                         className="text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="text-sm text-gray-700">{type}</span>
+                      <span className="text-xs text-gray-700">{type}</span>
                     </div>
                   ))}
                 </div>
@@ -179,14 +179,14 @@ export default function AddAllergicConjunctivitis() {
 
           {/* Grading Section */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Grading</h2>
+            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Grading</h2>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border border-gray-300">
                 <thead>
                   <tr className="bg-gray-50">
-                    <th className="border border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700">Grading</th>
+                    <th className="border border-gray-300 px-4 py-3 text-left text-xs font-medium text-gray-700">Grading</th>
                     {SEVERITY_LEVELS.map(level => (
-                      <th key={level.value} className="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">
+                      <th key={level.value} className="border border-gray-300 px-4 py-3 text-center text-xs font-medium text-gray-700">
                         {level.label}
                       </th>
                     ))}
@@ -195,7 +195,7 @@ export default function AddAllergicConjunctivitis() {
                 <tbody>
                   {GRADING_CRITERIA.map(criterion => (
                     <tr key={criterion} className="border-b border-gray-300">
-                      <td className="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">
+                      <td className="border border-gray-300 px-4 py-3 text-xs font-medium text-gray-700">
                         {criterion}
                       </td>
                       {SEVERITY_LEVELS.map(level => (

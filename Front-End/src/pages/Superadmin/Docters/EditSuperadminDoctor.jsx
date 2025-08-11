@@ -175,13 +175,13 @@ const EditSuperadminDoctor = () => {
           
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-slate-800 mb-2">Edit Doctor</h1>
+              <h1 className="text-xl font-bold text-slate-800 mb-2">Edit Doctor</h1>
               <p className="text-slate-600">Update doctor information and credentials</p>
             </div>
             
             <div className="flex items-center mt-4 sm:mt-0">
               <UserCheck className="w-6 h-6 text-blue-600 mr-2" />
-              <span className="text-sm text-slate-500">Editing: {currentDoctor.name}</span>
+              <span className="text-xs text-slate-500">Editing: {currentDoctor.name}</span>
             </div>
           </div>
         </div>
@@ -204,10 +204,10 @@ const EditSuperadminDoctor = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Basic Information */}
             <div>
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">Basic Information</h3>
+              <h3 className="text-sm font-semibold text-slate-800 mb-4">Basic Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Full Name *
                   </label>
                   <input
@@ -222,7 +222,7 @@ const EditSuperadminDoctor = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Mobile Number *
                   </label>
                   <input
@@ -237,7 +237,7 @@ const EditSuperadminDoctor = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Email Address *
                   </label>
                   <input
@@ -252,7 +252,7 @@ const EditSuperadminDoctor = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Username *
                   </label>
                   <input
@@ -267,7 +267,7 @@ const EditSuperadminDoctor = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     New Password
                   </label>
                   <div className="relative">
@@ -294,10 +294,10 @@ const EditSuperadminDoctor = () => {
 
             {/* Professional Information */}
             <div>
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">Professional Information</h3>
+              <h3 className="text-sm font-semibold text-slate-800 mb-4">Professional Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Qualification
                   </label>
                   <input
@@ -311,7 +311,7 @@ const EditSuperadminDoctor = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Designation
                   </label>
                   <input
@@ -325,7 +325,7 @@ const EditSuperadminDoctor = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     KMC Number
                   </label>
                   <input
@@ -339,7 +339,7 @@ const EditSuperadminDoctor = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Hospital Name
                   </label>
                   <input
@@ -353,7 +353,7 @@ const EditSuperadminDoctor = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     Experience
                   </label>
                   <input
@@ -370,7 +370,7 @@ const EditSuperadminDoctor = () => {
 
             {/* Specializations */}
             <div>
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">Specializations</h3>
+              <h3 className="text-sm font-semibold text-slate-800 mb-4">Specializations</h3>
               <div className="space-y-4">
                 <div className="flex gap-2">
                   <input
@@ -395,7 +395,7 @@ const EditSuperadminDoctor = () => {
                     {formData.specializations.map((spec, index) => (
                       <span
                         key={index}
-                        className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
+                        className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
                       >
                         {spec}
                         <button
@@ -414,7 +414,7 @@ const EditSuperadminDoctor = () => {
 
             {/* Bio */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs font-medium text-slate-700 mb-2">
                 Bio
               </label>
               <textarea

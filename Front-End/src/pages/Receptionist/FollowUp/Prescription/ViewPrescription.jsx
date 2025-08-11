@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchReceptionistPrescription, fetchPatient, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
+import { fetchReceptionistPrescriptions, fetchPatient, resetReceptionistState } from '../../../../features/receptionist/receptionistThunks';
 import { 
   ArrowLeft, 
   Activity,
@@ -19,13 +19,26 @@ const ViewPrescription = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { prescription, singlePatient, loading, error } = useSelector(state => state.receptionist);
+  const { prescriptions, singlePatient, loading, error } = useSelector(state => state.receptionist);
+
+  // Debug logging
+  console.log('🔍 ViewPrescription - patientId:', patientId);
+  console.log('🔍 ViewPrescription - Redux state:', { prescriptions, singlePatient, loading, error });
+  console.log('🔍 ViewPrescription - prescriptions type:', typeof prescriptions);
+  console.log('🔍 ViewPrescription - prescriptions value:', prescriptions);
 
   useEffect(() => {
     if (patientId) {
-      dispatch(fetchReceptionistPrescription(patientId));
+      console.log('🔍 ViewPrescription: Fetching prescriptions for patientId:', patientId);
+      dispatch(fetchReceptionistPrescriptions(patientId));
       dispatch(fetchPatient(patientId));
     }
+
+    // Cleanup function to reset state when component unmounts
+    return () => {
+      console.log('🧹 ViewPrescription: Cleaning up state');
+      dispatch(resetReceptionistState());
+    };
   }, [dispatch, patientId]);
 
   const handlePrint = () => {
@@ -44,18 +57,22 @@ const ViewPrescription = () => {
 
   // Handle array response from backend - get the most recent record
   const getLatestRecord = () => {
-    if (!prescription) return null;
+    if (!prescriptions) return null;
     
     // If it's an array, get the most recent one
-    if (Array.isArray(prescription)) {
-      return prescription.length > 0 ? prescription[0] : null; // Already sorted by createdAt desc
+    if (Array.isArray(prescriptions)) {
+      return prescriptions.length > 0 ? prescriptions[0] : null; // Already sorted by createdAt desc
     }
     
     // If it's a single object, return it
-    return prescription;
+    return prescriptions;
   };
 
   const latestRecord = getLatestRecord();
+
+  // Additional debugging
+  console.log('🔍 ViewPrescription - latestRecord:', latestRecord);
+  console.log('🔍 ViewPrescription - latestRecord type:', typeof latestRecord);
 
   if (loading) {
     return (
@@ -99,18 +116,24 @@ const ViewPrescription = () => {
     );
   }
 
-  if (!latestRecord) {
+  if (!prescriptions || prescriptions.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">No Prescription Found</h2>
-              <p className="text-gray-600 mb-4">No prescription record found for this ID.</p>
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">No Prescriptions Found</h2>
+              <p className="text-gray-600 mb-4">This patient doesn't have any prescriptions yet.</p>
+              <button
+                onClick={() => navigate(`/dashboard/receptionist/followup/prescription/add/${patientId}`)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mr-2"
+              >
+                Add Prescription
+              </button>
               <button
                 onClick={() => navigate(-1)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
               >
                 Go Back
               </button>

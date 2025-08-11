@@ -74,7 +74,7 @@ const AddGPE = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">Add GPE Record</h1>
+              <h1 className="text-xl font-bold text-gray-800">Add GPE Record</h1>
             </div>
           </div>
         </div>
@@ -83,15 +83,15 @@ const AddGPE = () => {
         <div className="bg-white rounded-lg shadow-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Main Title */}
-            <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">GPE</h1>
+            <h1 className="text-xl font-bold text-gray-800 text-center mb-8">GPE</h1>
             
             {/* GPE Section */}
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">GPE</h2>
+              <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">GPE</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* First Row */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">Weight</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">Weight</label>
                   <input
                     type="text"
                     name="weight"
@@ -102,7 +102,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">Pulse</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">Pulse</label>
                   <input
                     type="text"
                     name="pulse"
@@ -113,7 +113,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">Bp</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">Bp</label>
                   <input
                     type="text"
                     name="bp"
@@ -124,7 +124,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">RR</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">RR</label>
                   <input
                     type="text"
                     name="rr"
@@ -135,7 +135,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">Temp</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">Temp</label>
                   <input
                     type="text"
                     name="temp"
@@ -146,7 +146,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">SPO2%</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">SPO2%</label>
                   <input
                     type="text"
                     name="spo2"
@@ -157,7 +157,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-3">ENT Examination</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">ENT Examination</label>
                   <input
                     type="text"
                     name="entExamination"
@@ -172,14 +172,14 @@ const AddGPE = () => {
 
             {/* Systematic Examination Section */}
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
+              <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-blue-600" />
                 Systematic Examination
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* First Row */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">CNS</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">CNS</label>
                   <input
                     type="text"
                     name="cns"
@@ -190,7 +190,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">CVS</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">CVS</label>
                   <input
                     type="text"
                     name="cvs"
@@ -201,7 +201,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">RS</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">RS</label>
                   <input
                     type="text"
                     name="rs"
@@ -212,7 +212,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">P/A</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">P/A</label>
                   <input
                     type="text"
                     name="pa"
@@ -223,7 +223,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">Drug Adverse Notion</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">Drug Adverse Notion</label>
                   <input
                     type="text"
                     name="drugAdverseNotion"
@@ -234,7 +234,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">Drug Compliance</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">Drug Compliance</label>
                   <input
                     type="text"
                     name="drugCompliance"
@@ -245,7 +245,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">Advise to be followed up till next visit</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">Advise to be followed up till next visit</label>
                   <input
                     type="text"
                     name="adviseFollowUp"
@@ -256,7 +256,7 @@ const AddGPE = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">Eye Medication</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">Eye Medication</label>
                   <input
                     type="text"
                     name="eyeMedication"

@@ -9,7 +9,9 @@ import {
   Send,
   CheckCircle,
   AlertCircle,
-  Clock
+  Clock,
+  Download,
+  ExternalLink
 } from 'lucide-react';
 import { 
   fetchSuperAdminDoctorLabReports,
@@ -85,6 +87,164 @@ const ReviewLabReports = () => {
     }
   };
 
+  // PDF handling functions
+  const handleViewPDF = async (report) => {
+    try {
+      console.log('🔍 Attempting to view PDF for report:', report);
+      console.log('🔍 Report ID:', report._id);
+      console.log('🔍 Report File:', report.reportFile);
+      
+      let pdfUrl;
+      
+      // Use the correct endpoint for lab reports
+      pdfUrl = `http://localhost:5000/api/test-requests/${report._id}/download-report`;
+      console.log('🔍 Using correct PDF endpoint:', pdfUrl);
+      
+      console.log('🔍 Fetching PDF from:', pdfUrl);
+      
+      // Get the auth token from localStorage
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error('No authentication token found. Please login again.');
+      }
+      
+      // Fetch the PDF data with authentication headers
+      const response = await fetch(pdfUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('🔍 Response status:', response.status);
+      console.log('🔍 Response headers:', response.headers);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      let pdfBlob;
+      
+      // Check if response is already a PDF blob
+      const contentType = response.headers.get('content-type');
+      console.log('🔍 Response content-type:', contentType);
+      
+      if (contentType && contentType.includes('application/pdf')) {
+        // Response is already a PDF blob
+        pdfBlob = await response.blob();
+        console.log('🔍 Using response as PDF blob');
+      } else {
+        // Handle text/JSON response that needs conversion
+        console.log('🔍 Converting text response to PDF blob');
+        const responseData = await response.text();
+        console.log('🔍 Response data type:', typeof responseData);
+        console.log('🔍 Response data length:', responseData.length);
+        
+        let pdfContent = responseData;
+        
+        // If it's a JSON response with PDF content
+        if (typeof pdfContent === 'string' && pdfContent.startsWith('{')) {
+          try {
+            const jsonData = JSON.parse(pdfContent);
+            if (jsonData.pdfContent) {
+              pdfContent = jsonData.pdfContent;
+            }
+          } catch (e) {
+            // Not JSON, use as-is
+          }
+        }
+        
+        // Clean up the PDF string (remove escape characters)
+        const cleanedPdfContent = pdfContent
+          .replace(/\\n/g, '\n')
+          .replace(/\\r/g, '\r')
+          .replace(/\\t/g, '\t')
+          .replace(/\\\\/g, '\\')
+          .replace(/\\"/g, '"');
+        
+        // Convert string to binary
+        const byteCharacters = cleanedPdfContent;
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        
+        // Create PDF blob
+        pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
+      }
+      
+      console.log('🔍 Final PDF blob size:', pdfBlob.size, 'bytes');
+      console.log('🔍 Final PDF blob type:', pdfBlob.type);
+      
+      // Create a blob URL for the PDF
+      const blobUrl = window.URL.createObjectURL(pdfBlob);
+      console.log('🔍 Created blob URL:', blobUrl);
+      
+      // Open PDF in new tab
+      const newWindow = window.open(blobUrl, '_blank');
+      
+      if (newWindow) {
+        console.log('🔍 PDF opened in new window successfully');
+      } else {
+        console.log('🔍 Failed to open new window (might be blocked by popup blocker)');
+        // Fallback: try to open in same window
+        window.open(blobUrl, '_self');
+      }
+      
+      // Clean up the blob URL after a delay to ensure the PDF loads
+      setTimeout(() => {
+        window.URL.revokeObjectURL(blobUrl);
+        console.log('🔍 Cleaned up blob URL');
+      }, 1000);
+      
+    } catch (error) {
+      console.error('❌ Error viewing PDF:', error);
+      alert('Failed to load PDF report. Please try again or contact support.');
+    }
+  };
+
+  const handleDownloadPDF = async (report) => {
+    try {
+      // Get the auth token from localStorage
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error('No authentication token found. Please login again.');
+      }
+      
+      // Use the correct endpoint for lab reports
+      downloadUrl = `http://localhost:5000/api/test-requests/${report._id}/download-report`;
+      
+      const response = await fetch(downloadUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `lab-report-${report.patientId?.name || 'patient'}-${report.testType || 'test'}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+      alert('Failed to download PDF. Please try again.');
+    }
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'completed':
@@ -130,7 +290,7 @@ const ReviewLabReports = () => {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Review Lab Reports</h1>
+        <h1 className="text-xl font-bold text-gray-800 mb-2">Review Lab Reports</h1>
         <p className="text-gray-600">
           Review completed lab reports and provide feedback to center admin doctors
         </p>
@@ -154,7 +314,7 @@ const ReviewLabReports = () => {
       {/* Reports List */}
       <div className="bg-white rounded-lg shadow">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-800">Lab Reports</h2>
+          <h2 className="text-lg font-semibold text-gray-800">Lab Reports</h2>
         </div>
         <div className="p-6">
           {labReports.length === 0 ? (
@@ -183,6 +343,9 @@ const ReviewLabReports = () => {
                       Status
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      PDF
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -196,31 +359,31 @@ const ReviewLabReports = () => {
                             <User className="h-5 w-5 text-blue-600" />
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-xs font-medium text-gray-900">
                               {report.patientId?.name || 'N/A'}
                             </div>
-                            <div className="text-sm text-gray-500">
+                            <div className="text-xs text-gray-500">
                               {report.patientId?.age || 'N/A'} years
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{report.testType || 'N/A'}</div>
-                        <div className="text-sm text-gray-500">{report.testDescription || 'N/A'}</div>
+                        <div className="text-xs text-gray-900">{report.testType || 'N/A'}</div>
+                        <div className="text-xs text-gray-500">{report.testDescription || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
+                        <div className="text-xs text-gray-900">
                           Dr. {report.doctorId?.name || 'N/A'}
                         </div>
-                        <div className="text-sm text-gray-500">
-                          {report.centerName || 'N/A'}
+                        <div className="text-xs text-gray-500">
+                          {report.centerId?.name || report.centerName || 'N/A'}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <Calendar className="w-4 h-4 mr-2 text-gray-400" />
-                          <span className="text-sm text-gray-900">
+                          <span className="text-xs text-gray-900">
                             {report.completedDate || report.reportGeneratedDate || report.updatedAt ? 
                               new Date(report.completedDate || report.reportGeneratedDate || report.updatedAt).toLocaleDateString() 
                               : 'N/A'}
@@ -237,14 +400,43 @@ const ReviewLabReports = () => {
                           </span>
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button
-                          onClick={() => handleReviewReport(report)}
-                          className="text-blue-600 hover:text-blue-900 flex items-center"
-                        >
-                          <Eye className="w-4 h-4 mr-1" />
-                          Review
-                        </button>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center space-x-2">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <FileText className="w-3 h-3 mr-1" />
+                            Viewable
+                          </span>
+                          <button
+                            onClick={() => handleViewPDF(report)}
+                            className="text-green-600 hover:text-green-900 flex items-center text-xs"
+                            title="View PDF Report"
+                          >
+                            <ExternalLink className="w-3 h-3 mr-1" />
+                            View
+                          </button>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-xs font-medium">
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => handleReviewReport(report)}
+                            className="text-blue-600 hover:text-blue-900 flex items-center"
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            Review
+                          </button>
+                          
+                          {report.reportFile && (
+                            <button
+                              onClick={() => handleDownloadPDF(report)}
+                              className="text-purple-600 hover:text-purple-900 flex items-center"
+                              title="Download PDF Report"
+                            >
+                              <Download className="w-4 h-4 mr-1" />
+                              Download
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -260,7 +452,7 @@ const ReviewLabReports = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-800">
+              <h3 className="text-sm font-semibold text-gray-800">
                 Review Lab Report - {selectedReport.patientId?.name || 'N/A'}
               </h3>
             </div>
@@ -271,20 +463,20 @@ const ReviewLabReports = () => {
                 <h4 className="text-md font-semibold text-gray-800 mb-3">Report Details</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-600">Patient</p>
+                    <p className="text-xs text-gray-600">Patient</p>
                     <p className="font-medium">{selectedReport.patientId?.name || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Test Type</p>
+                    <p className="text-xs text-gray-600">Test Type</p>
                     <p className="font-medium">{selectedReport.testType || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Requested By</p>
+                    <p className="text-xs text-gray-600">Requested By</p>
                     <p className="font-medium">Dr. {selectedReport.doctorId?.name || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Center</p>
-                    <p className="font-medium">{selectedReport.centerName || 'N/A'}</p>
+                    <p className="text-xs text-gray-600">Center</p>
+                    <p className="font-medium">{selectedReport.centerId?.name || selectedReport.centerName || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -295,31 +487,31 @@ const ReviewLabReports = () => {
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="space-y-3">
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Results Summary:</p>
-                      <p className="text-sm text-gray-800">{selectedReport.results || 'No results available'}</p>
+                      <p className="text-xs font-medium text-gray-700">Results Summary:</p>
+                      <p className="text-xs text-gray-800">{selectedReport.results || 'No results available'}</p>
                     </div>
                     {selectedReport.reportSummary && (
                       <div>
-                        <p className="text-sm font-medium text-gray-700">Report Summary:</p>
-                        <p className="text-sm text-gray-800">{selectedReport.reportSummary}</p>
+                        <p className="text-xs font-medium text-gray-700">Report Summary:</p>
+                        <p className="text-xs text-gray-800">{selectedReport.reportSummary}</p>
                       </div>
                     )}
                     {selectedReport.clinicalInterpretation && (
                       <div>
-                        <p className="text-sm font-medium text-gray-700">Clinical Interpretation:</p>
-                        <p className="text-sm text-gray-800">{selectedReport.clinicalInterpretation}</p>
+                        <p className="text-xs font-medium text-gray-700">Clinical Interpretation:</p>
+                        <p className="text-xs text-gray-800">{selectedReport.clinicalInterpretation}</p>
                       </div>
                     )}
                     {selectedReport.conclusion && (
                       <div>
-                        <p className="text-sm font-medium text-gray-700">Conclusion:</p>
-                        <p className="text-sm text-gray-800">{selectedReport.conclusion}</p>
+                        <p className="text-xs font-medium text-gray-700">Conclusion:</p>
+                        <p className="text-xs text-gray-800">{selectedReport.conclusion}</p>
                       </div>
                     )}
                     {selectedReport.recommendations && (
                       <div>
-                        <p className="text-sm font-medium text-gray-700">Recommendations:</p>
-                        <pre className="text-sm text-gray-800 whitespace-pre-wrap">{selectedReport.recommendations}</pre>
+                        <p className="text-xs font-medium text-gray-700">Recommendations:</p>
+                        <pre className="text-xs text-gray-800 whitespace-pre-wrap">{selectedReport.recommendations}</pre>
                       </div>
                     )}
                   </div>
@@ -331,7 +523,7 @@ const ReviewLabReports = () => {
                 <h4 className="text-md font-semibold text-gray-800 mb-3">Provide Feedback</h4>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-2">
                       Additional Tests Recommended
                     </label>
                     <textarea
@@ -344,7 +536,7 @@ const ReviewLabReports = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-2">
                       Patient Instructions
                     </label>
                     <textarea
@@ -357,7 +549,7 @@ const ReviewLabReports = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-2">
                       Additional Notes
                     </label>
                     <textarea

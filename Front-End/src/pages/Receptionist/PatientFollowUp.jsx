@@ -65,7 +65,7 @@ export default function PatientFollowUp() {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Patients
             </button>
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            <h1 className="text-xl font-bold text-slate-800 mb-2">
               Patient Follow-up Records
             </h1>
             <p className="text-slate-600">
@@ -84,7 +84,7 @@ export default function PatientFollowUp() {
           {/* Follow-up Records */}
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-blue-500" />
                 Follow-up Records
               </h2>

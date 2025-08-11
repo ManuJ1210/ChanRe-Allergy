@@ -84,7 +84,7 @@ const ViewHistory = () => {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Patient Profile
             </button>
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            <h1 className="text-xl font-bold text-slate-800 mb-2">
               Medical History Details
             </h1>
           </div>
@@ -160,7 +160,7 @@ const ViewHistory = () => {
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
             <div>
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <FileText className="h-5 w-5 mr-2 text-blue-500" />
                 History Information
               </h2>
@@ -174,7 +174,7 @@ const ViewHistory = () => {
           <div className="p-6 space-y-8">
             {/* Medical Conditions */}
             <div>
-              <h3 className="text-lg font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+              <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                 Medical Conditions
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -77,7 +77,11 @@ const AllTestReports = () => {
   }, []);
 
   // Get unique centers and doctors for filtering
-  const uniqueCenters = [...new Set(allReports.map(report => report.centerName).filter(Boolean))];
+  const uniqueCenters = [...new Set(
+    allReports
+      .map(report => report.centerId?.name || report.centerName)
+      .filter(Boolean)
+  )];
   const uniqueDoctors = [...new Set(allReports.map(report => report.doctorName).filter(Boolean))];
 
   // Filter and sort reports
@@ -87,9 +91,12 @@ const AllTestReports = () => {
                            report.testType?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            report.testDescription?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            report.doctorName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           report.centerId?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            report.centerName?.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = !filterStatus || report.status === filterStatus;
-      const matchesCenter = !filterCenter || report.centerName === filterCenter;
+      const matchesCenter = !filterCenter || 
+                           report.centerId?.name === filterCenter || 
+                           report.centerName === filterCenter;
       const matchesDoctor = !filterDoctor || report.doctorName === filterDoctor;
       
       let matchesDate = true;
@@ -185,9 +192,9 @@ const AllTestReports = () => {
                 <ArrowLeft size={20} />
                 <span>Back to Dashboard</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">All Completed Test Reports</h1>
+              <h1 className="text-xl font-bold text-gray-800">All Completed Test Reports</h1>
             </div>
-            <div className="flex items-center space-x-2 text-sm text-gray-500">
+            <div className="flex items-center space-x-2 text-xs text-gray-500">
               <Clock className="h-4 w-4" />
               <span>Last updated: {lastRefreshTime.toLocaleTimeString()}</span>
             </div>
@@ -212,8 +219,8 @@ const AllTestReports = () => {
                 <FileText className="h-6 w-6 text-blue-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Reports</p>
-                <p className="text-2xl font-bold text-gray-900">{allReports.length}</p>
+                <p className="text-xs font-medium text-gray-500">Total Reports</p>
+                <p className="text-xl font-bold text-gray-900">{allReports.length}</p>
               </div>
             </div>
           </div>
@@ -224,8 +231,8 @@ const AllTestReports = () => {
                 <CheckCircle className="h-6 w-6 text-green-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Completed</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-xs font-medium text-gray-500">Completed</p>
+                <p className="text-xl font-bold text-gray-900">
                   {allReports.filter(r => r.status === 'Completed').length}
                 </p>
               </div>
@@ -238,8 +245,8 @@ const AllTestReports = () => {
                 <Mail className="h-6 w-6 text-emerald-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Sent</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-xs font-medium text-gray-500">Sent</p>
+                <p className="text-xl font-bold text-gray-900">
                   {allReports.filter(r => r.status === 'Report_Sent').length}
                 </p>
               </div>
@@ -252,8 +259,8 @@ const AllTestReports = () => {
                 <Building className="h-6 w-6 text-purple-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Centers</p>
-                <p className="text-2xl font-bold text-gray-900">{uniqueCenters.length}</p>
+                <p className="text-xs font-medium text-gray-500">Centers</p>
+                <p className="text-xl font-bold text-gray-900">{uniqueCenters.length}</p>
               </div>
             </div>
           </div>
@@ -333,13 +340,13 @@ const AllTestReports = () => {
         {/* Reports Table */}
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-800">All Completed Test Reports</h2>
+            <h2 className="text-sm font-semibold text-gray-800">All Completed Test Reports</h2>
           </div>
           
           {filteredReports.length === 0 ? (
             <div className="p-8 text-center">
               <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No completed reports found</h3>
+              <h3 className="text-sm font-medium text-gray-900 mb-2">No completed reports found</h3>
               <p className="text-gray-500">
                 {searchTerm || filterStatus || filterDate || filterCenter || filterDoctor
                   ? 'Try adjusting your search criteria.' 
@@ -358,7 +365,7 @@ const AllTestReports = () => {
                       Test Details
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Doctor
+                      Doctor Info
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Center
@@ -382,10 +389,10 @@ const AllTestReports = () => {
                     <tr key={report._id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-xs font-medium text-gray-900">
                             {report.patientName || 'N/A'}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-xs text-gray-500">
                             {report.patientId?.phone || report.patientPhone || 'No phone'}
                           </div>
                         </div>
@@ -393,10 +400,10 @@ const AllTestReports = () => {
                       
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-xs font-medium text-gray-900">
                             {report.testType || 'N/A'}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-xs text-gray-500">
                             {report.testDescription || 'No description'}
                           </div>
                           <div className="text-xs text-gray-400">
@@ -406,20 +413,20 @@ const AllTestReports = () => {
                       </td>
                       
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-xs font-medium text-gray-900">
                           {report.doctorName || 'N/A'}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-xs text-gray-500">
                           {report.doctorId?.email || 'No email'}
                         </div>
                       </td>
                       
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">
-                          {report.centerName || 'N/A'}
+                        <div className="text-xs font-medium text-gray-900">
+                          {report.centerId?.name || report.centerName || 'N/A'}
                         </div>
-                        <div className="text-sm text-gray-500">
-                          {report.centerCode || 'No code'}
+                        <div className="text-xs text-gray-500">
+                          {report.centerId?.code || report.centerCode || 'No code'}
                         </div>
                       </td>
                       
@@ -430,18 +437,18 @@ const AllTestReports = () => {
                         </span>
                       </td>
                       
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
                         {report.reportSentDate 
                           ? new Date(report.reportSentDate).toLocaleDateString()
                           : 'N/A'
                         }
                       </td>
                       
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
                         {report.reportSentByName || report.reportSentBy?.staffName || 'N/A'}
                       </td>
                       
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td className="px-6 py-4 whitespace-nowrap text-xs font-medium">
                         <div className="flex space-x-2">
                           <button
                             onClick={() => handleViewReport(report._id)}

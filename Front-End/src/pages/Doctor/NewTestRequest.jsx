@@ -151,7 +151,7 @@ const NewTestRequest = () => {
             Back to Test Requests
           </button>
           <div>
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">New Test Request</h1>
+            <h1 className="text-xl font-bold text-slate-800 mb-2">New Test Request</h1>
             <p className="text-slate-600">Send a test request to the central lab</p>
           </div>
         </div>
@@ -171,7 +171,7 @@ const NewTestRequest = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Patient Selection */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs font-medium text-slate-700 mb-2">
                 Patient *
               </label>
               {selectedPatient ? (
@@ -182,7 +182,7 @@ const NewTestRequest = () => {
                     </div>
                     <div>
                       <div className="font-semibold text-slate-800">{selectedPatient.name}</div>
-                      <div className="text-sm text-slate-600">
+                      <div className="text-xs text-slate-600">
                         {selectedPatient.phone} • {selectedPatient.age} years • {selectedPatient.gender}
                       </div>
                     </div>
@@ -219,7 +219,7 @@ const NewTestRequest = () => {
             {/* Test Details */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Test Type *
                 </label>
                 <input
@@ -234,7 +234,7 @@ const NewTestRequest = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Urgency Level
                 </label>
                 <select
@@ -251,7 +251,7 @@ const NewTestRequest = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs font-medium text-slate-700 mb-2">
                 Test Description
               </label>
               <textarea
@@ -265,7 +265,7 @@ const NewTestRequest = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs font-medium text-slate-700 mb-2">
                 Additional Notes
               </label>
               <textarea
@@ -282,7 +282,7 @@ const NewTestRequest = () => {
             {selectedPatient && formData.testType && (
               <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
                 <h3 className="font-medium text-slate-800 mb-3">Request Summary</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   <div>
                     <span className="text-slate-600">Patient:</span>
                     <span className="ml-2 font-medium">{formData.patientName}</span>
@@ -343,7 +343,7 @@ const NewTestRequest = () => {
             <div className="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
               <div className="p-6 border-b border-slate-200">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-slate-800">Select Patient</h3>
+                  <h3 className="text-sm font-semibold text-slate-800">Select Patient</h3>
                   <button
                     onClick={() => setShowPatientModal(false)}
                     className="text-slate-400 hover:text-slate-600"
@@ -384,7 +384,7 @@ const NewTestRequest = () => {
                             </div>
                             <div>
                               <div className="font-semibold text-slate-800">{patient.name}</div>
-                              <div className="text-sm text-slate-600">
+                              <div className="text-xs text-slate-600">
                                 {patient.phone} • {patient.age} years • {patient.gender}
                               </div>
                             </div>

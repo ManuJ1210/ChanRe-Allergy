@@ -103,7 +103,7 @@ const FollowUp = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Error Loading Follow-ups</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Error Loading Follow-ups</h3>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
                 onClick={() => dispatch(fetchReceptionistFollowUps())}
@@ -125,7 +125,7 @@ const FollowUp = () => {
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-800 flex items-center">
+              <h1 className="text-lg font-bold text-gray-800 flex items-center">
                 <Activity className="h-6 w-6 mr-2 text-blue-600" />
                 Patient Follow-ups
               </h1>
@@ -161,7 +161,7 @@ const FollowUp = () => {
           {filteredFollowUps.length === 0 ? (
             <div className="p-8 text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">No Follow-ups Found</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">No Follow-ups Found</h3>
               <p className="text-gray-600">
                 {searchTerm || filterStatus !== 'all' 
                   ? 'Try adjusting your search or filter criteria'

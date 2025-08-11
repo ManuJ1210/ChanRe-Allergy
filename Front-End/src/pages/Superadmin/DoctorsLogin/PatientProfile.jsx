@@ -102,7 +102,7 @@ const PatientProfile = () => {
           <div className="bg-red-50 border border-red-200 rounded-lg p-6">
             <div className="flex items-center mb-4">
               <AlertCircle className="h-6 w-6 text-red-500 mr-2" />
-              <h3 className="text-lg font-semibold text-red-800">Error Loading Patient Data</h3>
+              <h3 className="text-sm font-semibold text-red-800">Error Loading Patient Data</h3>
             </div>
             <p className="text-red-700 mb-4">{dataError}</p>
             <button
@@ -124,7 +124,7 @@ const PatientProfile = () => {
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
             <div className="flex items-center mb-4">
               <AlertCircle className="h-6 w-6 text-yellow-500 mr-2" />
-              <h3 className="text-lg font-semibold text-yellow-800">Patient Not Found</h3>
+              <h3 className="text-sm font-semibold text-yellow-800">Patient Not Found</h3>
             </div>
             <p className="text-yellow-700 mb-4">
               The patient with ID "{patientId}" was not found. Please check the URL and try again.
@@ -163,7 +163,7 @@ const PatientProfile = () => {
                 <User className="h-10 w-10 text-blue-500" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
+                <h1 className="text-xl font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
                 <div className="flex flex-wrap gap-4 text-slate-600">
                   {patient?.gender && (
                     <span className="flex items-center gap-1">
@@ -199,7 +199,7 @@ const PatientProfile = () => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
                 Read Only
               </span>
             </div>
@@ -231,7 +231,7 @@ const PatientProfile = () => {
             {/* Patient Details Card */}
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
               <div className="p-6 border-b border-blue-100">
-                <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                   <User className="h-5 w-5 mr-2 text-blue-500" />
                   Patient Details
                 </h2>
@@ -243,43 +243,43 @@ const PatientProfile = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-slate-500 mb-1">Full Name</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Full Name</label>
                       <p className="text-slate-800 font-medium break-words">{patient.name || 'N/A'}</p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-500 mb-1">Mobile</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Mobile</label>
                       <p className="text-slate-800 break-words">
                         {typeof patient.phone === 'string' ? patient.phone :
                          typeof patient.contact === 'string' ? patient.contact : 'N/A'}
                       </p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-500 mb-1">Email</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Email</label>
                       <p className="text-slate-800 break-words">{typeof patient.email === 'string' ? patient.email : 'N/A'}</p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-500 mb-1">Location</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Location</label>
                       <p className="text-slate-800 break-words">{typeof patient.address === 'string' ? patient.address : 'N/A'}</p>
                     </div>
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-slate-500 mb-1">Assigned Doctor</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Assigned Doctor</label>
                       <p className="text-slate-800 break-words flex items-center">
                         <Stethoscope className="h-4 w-4 mr-2 text-blue-500" />
                         {patient.assignedDoctor?.name || 'Not assigned'}
                       </p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-500 mb-1">Gender</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Gender</label>
                       <p className="text-slate-800 capitalize break-words">{patient.gender || 'N/A'}</p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-500 mb-1">Age</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Age</label>
                       <p className="text-slate-800 break-words">{patient.age ? `${patient.age} years` : 'N/A'}</p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-500 mb-1">Center</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Center</label>
                       <p className="text-slate-800 break-words flex items-center">
                         <Building className="h-4 w-4 mr-2 text-blue-500" />
                         {patient.centerId?.name || 'N/A'}
@@ -295,8 +295,8 @@ const PatientProfile = () => {
               <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-slate-500">Lab Reports</p>
-                    <p className="text-2xl font-bold text-blue-600">{labReports?.length || 0}</p>
+                    <p className="text-xs font-medium text-slate-500">Lab Reports</p>
+                    <p className="text-xl font-bold text-blue-600">{labReports?.length || 0}</p>
                   </div>
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                     <Activity className="h-6 w-6 text-blue-600" />
@@ -306,8 +306,8 @@ const PatientProfile = () => {
               <div className="bg-white rounded-xl shadow-sm border border-green-100 p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-slate-500">Medications</p>
-                    <p className="text-2xl font-bold text-green-600">{medications?.length || 0}</p>
+                    <p className="text-xs font-medium text-slate-500">Medications</p>
+                    <p className="text-xl font-bold text-green-600">{medications?.length || 0}</p>
                   </div>
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                     <Pill className="h-6 w-6 text-green-600" />
@@ -317,8 +317,8 @@ const PatientProfile = () => {
               <div className="bg-white rounded-xl shadow-sm border border-purple-100 p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-slate-500">History Records</p>
-                    <p className="text-2xl font-bold text-purple-600">{history?.historyData?.length || 0}</p>
+                    <p className="text-xs font-medium text-slate-500">History Records</p>
+                    <p className="text-xl font-bold text-purple-600">{history?.historyData?.length || 0}</p>
                   </div>
                   <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                     <FileText className="h-6 w-6 text-purple-600" />
@@ -328,8 +328,8 @@ const PatientProfile = () => {
               <div className="bg-white rounded-xl shadow-sm border border-orange-100 p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-slate-500">Registration Date</p>
-                    <p className="text-sm font-bold text-orange-600">
+                    <p className="text-xs font-medium text-slate-500">Registration Date</p>
+                    <p className="text-xs font-bold text-orange-600">
                       {patient.createdAt ? new Date(patient.createdAt).toLocaleDateString() : 'N/A'}
                     </p>
                   </div>
@@ -345,7 +345,7 @@ const PatientProfile = () => {
         {activeTab === "Medical History" && (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <FileText className="h-5 w-5 mr-2 text-blue-500" />
                 Medical History
               </h2>
@@ -364,12 +364,12 @@ const PatientProfile = () => {
                   {history.historyData.map((record, index) => (
                     <div key={index} className="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
                       <div className="flex items-center justify-between mb-3">
-                        <h6 className="font-semibold text-gray-800 text-lg">{record.type}</h6>
+                        <h6 className="font-semibold text-gray-800 text-sm">{record.type}</h6>
                         <span className="text-xs text-gray-500 bg-white px-2 py-1 rounded">
                           {new Date(record.date).toLocaleDateString()}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-700 mb-3">{record.description}</p>
+                      <p className="text-xs text-gray-700 mb-3">{record.description}</p>
                       
                       {/* File attachments if any */}
                       {record.attachments && record.attachments.length > 0 && (
@@ -412,7 +412,7 @@ const PatientProfile = () => {
         {activeTab === "Medications" && (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <Pill className="h-5 w-5 mr-2 text-blue-500" />
                 Medications
               </h2>
@@ -442,12 +442,12 @@ const PatientProfile = () => {
                     <tbody className="divide-y divide-slate-200">
                       {medications.map((med, idx) => (
                         <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                          <td className="px-4 py-3 text-sm font-medium text-slate-800">{med.drugName}</td>
-                          <td className="px-4 py-3 text-sm text-slate-600">{med.dose}</td>
-                          <td className="px-4 py-3 text-sm text-slate-600">{med.duration}</td>
-                          <td className="px-4 py-3 text-sm text-slate-600">{med.frequency || 'N/A'}</td>
-                          <td className="px-4 py-3 text-sm text-slate-600">{med.prescribedBy || 'N/A'}</td>
-                          <td className="px-4 py-3 text-sm text-slate-600">
+                          <td className="px-4 py-3 text-xs font-medium text-slate-800">{med.drugName}</td>
+                          <td className="px-4 py-3 text-xs text-slate-600">{med.dose}</td>
+                          <td className="px-4 py-3 text-xs text-slate-600">{med.duration}</td>
+                          <td className="px-4 py-3 text-xs text-slate-600">{med.frequency || 'N/A'}</td>
+                          <td className="px-4 py-3 text-xs text-slate-600">{med.prescribedBy || 'N/A'}</td>
+                          <td className="px-4 py-3 text-xs text-slate-600">
                             {med.prescriptionFile && (
                               <div className="flex gap-2">
                                 <button
@@ -480,7 +480,7 @@ const PatientProfile = () => {
         {activeTab === "Lab Reports" && (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-blue-500" />
                 Lab Reports
               </h2>
@@ -500,8 +500,8 @@ const PatientProfile = () => {
                     <div key={index} className="bg-gray-50 p-6 rounded-lg border-l-4 border-orange-500">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h6 className="font-semibold text-gray-800 text-lg">{report.testType}</h6>
-                          <p className="text-sm text-gray-500">Created on {new Date(report.createdAt).toLocaleDateString()}</p>
+                          <h6 className="font-semibold text-gray-800 text-sm">{report.testType}</h6>
+                          <p className="text-xs text-gray-500">Created on {new Date(report.createdAt).toLocaleDateString()}</p>
                         </div>
                         <div className="flex items-center space-x-2">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -515,7 +515,7 @@ const PatientProfile = () => {
                         </div>
                       </div>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs mb-4">
                         <div><span className="font-medium">Test Description:</span> {report.testDescription || 'N/A'}</div>
                         <div><span className="font-medium">Urgency:</span> {report.urgency || 'Normal'}</div>
                         {report.doctorId && <div><span className="font-medium">Requested By:</span> {report.doctorId.name}</div>}
@@ -526,7 +526,7 @@ const PatientProfile = () => {
                       {(report.reportSummary || report.clinicalInterpretation || report.conclusion || report.recommendations) && (
                         <div className="bg-white p-4 rounded-lg mb-4">
                           <h6 className="font-semibold text-gray-800 mb-3">Report Details</h6>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                             {report.reportSummary && (
                               <div>
                                 <span className="font-medium text-gray-600">Summary:</span>
@@ -571,14 +571,14 @@ const PatientProfile = () => {
                             <div className="flex gap-2">
                               <button
                                 onClick={() => handleViewFile(report.pdfFile, `${report.testType}_report.pdf`)}
-                                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center text-sm"
+                                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center text-xs"
                               >
                                 <Eye className="w-4 h-4 mr-1" />
                                 View PDF
                               </button>
                               <button
                                 onClick={() => handleDownloadFile(report.pdfFile, `${report.testType}_report.pdf`)}
-                                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center text-sm"
+                                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center text-xs"
                               >
                                 <Download className="w-4 h-4 mr-1" />
                                 Download
@@ -596,7 +596,7 @@ const PatientProfile = () => {
                             {report.additionalFiles.map((file, fileIndex) => (
                               <div key={fileIndex} className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border">
                                 {getFileIcon(file.type)}
-                                <span className="text-sm text-gray-700 truncate max-w-32">{file.name}</span>
+                                <span className="text-xs text-gray-700 truncate max-w-32">{file.name}</span>
                                 <div className="flex gap-1">
                                   <button
                                     onClick={() => handleViewFile(file.url, file.name)}

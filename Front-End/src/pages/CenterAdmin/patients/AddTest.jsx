@@ -57,7 +57,7 @@ const AddTest = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-red-800 mb-2">Error: No Patient ID</h1>
+          <h1 className="text-xl font-bold text-red-800 mb-2">Error: No Patient ID</h1>
           <p className="text-red-600">Patient ID is missing from URL parameters.</p>
           <button
             onClick={() => navigate('/CenterAdmin/patients/PatientList')}
@@ -82,7 +82,7 @@ const AddTest = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Patients List
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Add Test Reports
           </h1>
           <p className="text-slate-600">
@@ -107,7 +107,7 @@ const AddTest = () => {
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <FlaskConical className="h-5 w-5 mr-2 text-blue-500" />
               Test Results
             </h2>
@@ -120,7 +120,7 @@ const AddTest = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {testFields.map((testName) => (
                 <div key={testName}>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
                     {testName}
                   </label>
                   <input

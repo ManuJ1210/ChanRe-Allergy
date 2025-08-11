@@ -103,7 +103,7 @@ const FollowUp = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Error Loading Follow-ups</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">Error Loading Follow-ups</h3>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
                 onClick={() => dispatch(fetchAllFollowUps())}
@@ -125,7 +125,7 @@ const FollowUp = () => {
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-800 flex items-center">
+              <h1 className="text-xl font-bold text-gray-800 flex items-center">
                 <Activity className="h-6 w-6 mr-2 text-blue-600" />
                 Patient Follow-ups
               </h1>
@@ -161,7 +161,7 @@ const FollowUp = () => {
           {filteredFollowUps.length === 0 ? (
             <div className="p-8 text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">No Follow-ups Found</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-2">No Follow-ups Found</h3>
               <p className="text-gray-600">
                 {searchTerm || filterStatus !== 'all' 
                   ? 'Try adjusting your search or filter criteria'
@@ -205,10 +205,10 @@ const FollowUp = () => {
                             </div>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-xs font-medium text-gray-900">
                               {followUp.patientId?.name || 'Unknown Patient'}
                             </div>
-                            <div className="text-sm text-gray-500">
+                            <div className="text-xs text-gray-500">
                               {followUp.patientId?.phone || 'No phone'}
                             </div>
                           </div>
@@ -216,10 +216,10 @@ const FollowUp = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <span className="text-lg mr-2">
+                          <span className="text-sm mr-2">
                             {getFollowUpTypeIcon(followUp.followUpType)}
                           </span>
-                          <span className="text-sm text-gray-900 capitalize">
+                          <span className="text-xs text-gray-900 capitalize">
                             {followUp.followUpType?.replace('-', ' ') || 'General'}
                           </span>
                         </div>
@@ -227,7 +227,7 @@ const FollowUp = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <Calendar className="h-4 w-4 text-gray-400 mr-2" />
-                          <span className="text-sm text-gray-900">
+                          <span className="text-xs text-gray-900">
                             {followUp.scheduledDate ? new Date(followUp.scheduledDate).toLocaleDateString() : 'Not scheduled'}
                           </span>
                         </div>
@@ -240,12 +240,12 @@ const FollowUp = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <Clock className="h-4 w-4 text-gray-400 mr-2" />
-                          <span className="text-sm text-gray-500">
+                          <span className="text-xs text-gray-500">
                             {followUp.updatedAt ? new Date(followUp.updatedAt).toLocaleDateString() : 'Never'}
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-xs font-medium">
                         <div className="flex items-center justify-end space-x-2">
                           <button
                             onClick={() => handleViewPatient(followUp.patientId?._id)}
@@ -289,8 +289,8 @@ const FollowUp = () => {
                   <Activity className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Follow-ups</p>
-                  <p className="text-2xl font-bold text-gray-900">{filteredFollowUps.length}</p>
+                  <p className="text-xs font-medium text-gray-600">Total Follow-ups</p>
+                  <p className="text-xl font-bold text-gray-900">{filteredFollowUps.length}</p>
                 </div>
               </div>
             </div>
@@ -300,8 +300,8 @@ const FollowUp = () => {
                   <Clock className="h-6 w-6 text-yellow-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Pending</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-xs font-medium text-gray-600">Pending</p>
+                  <p className="text-xl font-bold text-gray-900">
                     {filteredFollowUps.filter(f => f.status === 'pending').length}
                   </p>
                 </div>
@@ -313,8 +313,8 @@ const FollowUp = () => {
                   <Activity className="h-6 w-6 text-green-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Completed</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-xs font-medium text-gray-600">Completed</p>
+                  <p className="text-xl font-bold text-gray-900">
                     {filteredFollowUps.filter(f => f.status === 'completed').length}
                   </p>
                 </div>
@@ -326,8 +326,8 @@ const FollowUp = () => {
                   <AlertCircle className="h-6 w-6 text-red-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Overdue</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-xs font-medium text-gray-600">Overdue</p>
+                  <p className="text-xl font-bold text-gray-900">
                     {filteredFollowUps.filter(f => f.status === 'overdue').length}
                   </p>
                 </div>

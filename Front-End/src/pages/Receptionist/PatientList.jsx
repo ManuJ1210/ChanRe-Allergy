@@ -102,7 +102,7 @@ export default function PatientList() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            <h1 className="text-xl font-bold text-slate-800 mb-2">
               Patient List
             </h1>
             <p className="text-slate-600">
@@ -148,8 +148,8 @@ export default function PatientList() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                  <p className="text-2xl font-bold text-slate-800">{patients.length}</p>
+                  <p className="text-slate-600 text-xs font-medium">Total Patients</p>
+                  <p className="text-xl font-bold text-slate-800">{patients.length}</p>
                 </div>
                 <Users className="h-8 w-8 text-blue-500" />
               </div>
@@ -158,8 +158,8 @@ export default function PatientList() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-600 text-sm font-medium">Male Patients</p>
-                  <p className="text-2xl font-bold text-slate-800">{genderStats.maleCount}</p>
+                  <p className="text-slate-600 text-xs font-medium">Male Patients</p>
+                  <p className="text-xl font-bold text-slate-800">{genderStats.maleCount}</p>
                 </div>
                 <User className="h-8 w-8 text-blue-500" />
               </div>
@@ -168,8 +168,8 @@ export default function PatientList() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-600 text-sm font-medium">Female Patients</p>
-                  <p className="text-2xl font-bold text-slate-800">{genderStats.femaleCount}</p>
+                  <p className="text-slate-600 text-xs font-medium">Female Patients</p>
+                  <p className="text-xl font-bold text-slate-800">{genderStats.femaleCount}</p>
                 </div>
                 <User className="h-8 w-8 text-pink-500" />
               </div>
@@ -178,8 +178,8 @@ export default function PatientList() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-600 text-sm font-medium">Other</p>
-                  <p className="text-2xl font-bold text-slate-800">{genderStats.otherCount}</p>
+                  <p className="text-slate-600 text-xs font-medium">Other</p>
+                  <p className="text-xl font-bold text-slate-800">{genderStats.otherCount}</p>
                 </div>
                 <User className="h-8 w-8 text-purple-500" />
               </div>
@@ -214,7 +214,7 @@ export default function PatientList() {
                     <tr>
                       <td colSpan="5" className="px-6 py-12 text-center">
                         <Users className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-slate-600 mb-2">No Patients Found</h3>
+                        <h3 className="text-sm font-medium text-slate-600 mb-2">No Patients Found</h3>
                         <p className="text-slate-500 mb-4">
                           {searchTerm ? 'No patients match your search.' : 'Get started by adding your first patient.'}
                         </p>
@@ -238,10 +238,10 @@ export default function PatientList() {
                               <User className="h-5 w-5 text-blue-500" />
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-slate-900">
+                              <div className="text-xs font-medium text-slate-900">
                                 {patient.name}
                               </div>
-                              <div className="text-sm text-slate-500">
+                              <div className="text-xs text-slate-500">
                                 ID: {patient._id?.slice(-6)}
                               </div>
                             </div>
@@ -249,29 +249,29 @@ export default function PatientList() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="space-y-1">
-                            <div className="flex items-center text-sm text-slate-900">
+                            <div className="flex items-center text-xs text-slate-900">
                               <Mail className="h-3 w-3 mr-2 text-slate-400" />
                               {patient.email || 'No email'}
                             </div>
-                            <div className="flex items-center text-sm text-slate-500">
+                            <div className="flex items-center text-xs text-slate-500">
                               <Phone className="h-3 w-3 mr-2 text-slate-400" />
                               {patient.phone || patient.contact || 'No phone'}
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center text-sm text-slate-900">
+                          <div className="flex items-center text-xs text-slate-900">
                             <Calendar className="h-3 w-3 mr-2 text-slate-400" />
                             {patient.age} years, {patient.gender}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center text-sm text-slate-900">
+                          <div className="flex items-center text-xs text-slate-900">
                             <MapPin className="h-3 w-3 mr-2 text-slate-400" />
                             {patient.address || 'No address'}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                        <td className="px-6 py-4 whitespace-nowrap text-center text-xs font-medium">
                           <div className="flex items-center justify-center gap-2">
                             {patient._id ? (
                               <button

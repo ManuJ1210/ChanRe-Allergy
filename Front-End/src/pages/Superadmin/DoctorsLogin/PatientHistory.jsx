@@ -59,7 +59,7 @@ const PatientHistory = () => {
                 <ArrowLeft className="w-6 h-6 text-gray-600" />
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Patient History</h1>
+                <h1 className="text-xl font-bold text-gray-900">Patient History</h1>
                 <p className="text-gray-600 mt-1">Comprehensive medical history and records</p>
               </div>
             </div>
@@ -87,11 +87,11 @@ const PatientHistory = () => {
           <div className="px-8 py-6 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Comprehensive Patient History</h2>
+                <h2 className="text-xl font-bold text-gray-900">Comprehensive Patient History</h2>
                 <p className="text-gray-600 mt-1">All medical records, conditions, and examination findings</p>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
                   {patientHistory?.historyData?.length || 0} Records
                 </div>
               </div>
@@ -104,7 +104,7 @@ const PatientHistory = () => {
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <FileText className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No History Available</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No History Available</h3>
                 <p className="text-gray-500 max-w-md mx-auto">
                   No patient history records found. History will appear here once records are added.
                 </p>
@@ -114,7 +114,7 @@ const PatientHistory = () => {
                 {/* Patient History Section */}
                 {patientHistory.historyData && patientHistory.historyData.length > 0 && (
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                       <FileText className="w-5 h-5 mr-2 text-blue-600" />
                       Medical History Records
                     </h3>
@@ -125,7 +125,7 @@ const PatientHistory = () => {
                             <h6 className="font-semibold text-gray-800">{history.type}</h6>
                             <span className="text-xs text-gray-500">{new Date(history.date).toLocaleDateString()}</span>
                           </div>
-                          <p className="text-sm text-gray-700">{history.description}</p>
+                          <p className="text-xs text-gray-700">{history.description}</p>
                         </div>
                       ))}
                     </div>
@@ -135,7 +135,7 @@ const PatientHistory = () => {
                 {/* Medications Section */}
                 {patientHistory.medications && patientHistory.medications.length > 0 && (
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                       <Activity className="w-5 h-5 mr-2 text-green-600" />
                       Medications
                     </h3>
@@ -143,10 +143,10 @@ const PatientHistory = () => {
                       {patientHistory.medications.map((medication, index) => (
                         <div key={index} className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500 hover:shadow-md transition-shadow">
                           <div className="flex items-center justify-between mb-3">
-                            <h6 className="font-semibold text-gray-800 text-lg">{medication.drugName}</h6>
+                            <h6 className="font-semibold text-gray-800 text-sm">{medication.drugName}</h6>
                             <span className="text-xs text-gray-500">{new Date(medication.createdAt).toLocaleDateString()}</span>
                           </div>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                             <div><span className="font-medium">Dose:</span> {medication.dose}</div>
                             <div><span className="font-medium">Duration:</span> {medication.duration}</div>
                             {medication.frequency && <div><span className="font-medium">Frequency:</span> {medication.frequency}</div>}
@@ -164,7 +164,7 @@ const PatientHistory = () => {
                 {/* Followups Section */}
                 {patientHistory.followups && patientHistory.followups.length > 0 && (
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                       <Calendar className="w-5 h-5 mr-2 text-purple-600" />
                       Followups
                     </h3>
@@ -172,10 +172,10 @@ const PatientHistory = () => {
                       {patientHistory.followups.map((followup, index) => (
                         <div key={index} className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500 hover:shadow-md transition-shadow">
                           <div className="flex items-center justify-between mb-3">
-                            <h6 className="font-semibold text-gray-800 text-lg">{followup.type}</h6>
+                            <h6 className="font-semibold text-gray-800 text-sm">{followup.type}</h6>
                             <span className="text-xs text-gray-500">{new Date(followup.createdAt).toLocaleDateString()}</span>
                           </div>
-                          <div className="space-y-2 text-sm">
+                          <div className="space-y-2 text-xs">
                             {followup.notes && <div><span className="font-medium">Notes:</span> {followup.notes}</div>}
                             {followup.updatedBy && <div><span className="font-medium">Updated By:</span> {followup.updatedBy.name}</div>}
                             {followup.allergicRhinitisId && <div><span className="font-medium">Related Condition:</span> Allergic Rhinitis</div>}
@@ -193,7 +193,7 @@ const PatientHistory = () => {
                   patientHistory.atopicDermatitis?.length > 0 || 
                   patientHistory.gpe?.length > 0) && (
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                       <User className="w-5 h-5 mr-2 text-orange-600" />
                       Allergic Conditions
                     </h3>
@@ -201,31 +201,31 @@ const PatientHistory = () => {
                       {patientHistory.allergicRhinitis?.map((condition, index) => (
                         <div key={index} className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500 hover:shadow-md transition-shadow">
                           <h6 className="font-semibold text-gray-800 mb-2">Allergic Rhinitis</h6>
-                          <p className="text-sm text-gray-700">{new Date(condition.createdAt).toLocaleDateString()}</p>
+                          <p className="text-xs text-gray-700">{new Date(condition.createdAt).toLocaleDateString()}</p>
                         </div>
                       ))}
                       {patientHistory.allergicConjunctivitis?.map((condition, index) => (
                         <div key={index} className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500 hover:shadow-md transition-shadow">
                           <h6 className="font-semibold text-gray-800 mb-2">Allergic Conjunctivitis</h6>
-                          <p className="text-sm text-gray-700">{new Date(condition.createdAt).toLocaleDateString()}</p>
+                          <p className="text-xs text-gray-700">{new Date(condition.createdAt).toLocaleDateString()}</p>
                         </div>
                       ))}
                       {patientHistory.allergicBronchitis?.map((condition, index) => (
                         <div key={index} className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500 hover:shadow-md transition-shadow">
                           <h6 className="font-semibold text-gray-800 mb-2">Allergic Bronchitis</h6>
-                          <p className="text-sm text-gray-700">{new Date(condition.createdAt).toLocaleDateString()}</p>
+                          <p className="text-xs text-gray-700">{new Date(condition.createdAt).toLocaleDateString()}</p>
                         </div>
                       ))}
                       {patientHistory.atopicDermatitis?.map((condition, index) => (
                         <div key={index} className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500 hover:shadow-md transition-shadow">
                           <h6 className="font-semibold text-gray-800 mb-2">Atopic Dermatitis</h6>
-                          <p className="text-sm text-gray-700">{new Date(condition.createdAt).toLocaleDateString()}</p>
+                          <p className="text-xs text-gray-700">{new Date(condition.createdAt).toLocaleDateString()}</p>
                         </div>
                       ))}
                       {patientHistory.gpe?.map((condition, index) => (
                         <div key={index} className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500 hover:shadow-md transition-shadow">
                           <h6 className="font-semibold text-gray-800 mb-2">GPE</h6>
-                          <p className="text-sm text-gray-700">{new Date(condition.createdAt).toLocaleDateString()}</p>
+                          <p className="text-xs text-gray-700">{new Date(condition.createdAt).toLocaleDateString()}</p>
                         </div>
                       ))}
                     </div>
@@ -235,7 +235,7 @@ const PatientHistory = () => {
                 {/* Prescriptions Section */}
                 {patientHistory.prescriptions && patientHistory.prescriptions.length > 0 && (
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                       <FileText className="w-5 h-5 mr-2 text-indigo-600" />
                       Prescriptions
                     </h3>
@@ -246,7 +246,7 @@ const PatientHistory = () => {
                             <h6 className="font-semibold text-gray-800">Prescription {index + 1}</h6>
                             <span className="text-xs text-gray-500">{new Date(prescription.createdAt).toLocaleDateString()}</span>
                           </div>
-                          <p className="text-sm text-gray-700">{prescription.notes || 'No details available'}</p>
+                          <p className="text-xs text-gray-700">{prescription.notes || 'No details available'}</p>
                         </div>
                       ))}
                     </div>

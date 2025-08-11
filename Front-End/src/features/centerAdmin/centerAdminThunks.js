@@ -574,14 +574,39 @@ export const fetchAllergicRhinitis = createAsyncThunk(
   'centerAdmin/fetchAllergicRhinitis',
   async (patientId, { dispatch }) => {
     try {
+      console.log('fetchAllergicRhinitis called with patientId:', patientId);
+      
       if (!patientId) {
+        console.log('No patientId provided, returning empty array');
         return [];
       }
       
+      console.log('Making API call to:', `/allergic-rhinitis?patientId=${patientId}`);
       const res = await API.get(`/allergic-rhinitis?patientId=${patientId}`);
+      console.log('API response:', res.data);
       return res.data;
     } catch (error) {
+      console.error('fetchAllergicRhinitis error:', error);
+      console.error('Error response:', error.response);
       dispatch(setError(error.response?.data?.message || 'Failed to fetch allergic rhinitis'));
+      throw error;
+    }
+  }
+);
+
+// Fetch single allergic rhinitis by ID
+export const fetchSingleAllergicRhinitis = createAsyncThunk(
+  'centerAdmin/fetchSingleAllergicRhinitis',
+  async (id, { dispatch }) => {
+    try {
+      if (!id) {
+        return null;
+      }
+      
+      const res = await API.get(`/allergic-rhinitis/${id}`);
+      return res.data;
+    } catch (error) {
+      dispatch(setError(error.response?.data?.message || 'Failed to fetch allergic rhinitis record'));
       throw error;
     }
   }

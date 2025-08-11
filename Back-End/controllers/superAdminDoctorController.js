@@ -283,7 +283,9 @@ export const getSuperAdminDoctorStats = async (req, res) => {
 // Working functions for superadmin doctors to perform their duties
 export const getSuperAdminDoctorAssignedPatients = async (req, res) => {
   try {
-    const patients = await Patient.find({ assignedDoctor: req.user.id });
+    const patients = await Patient.find({ assignedDoctor: req.user.id })
+      .populate('centerId', 'name code')
+      .populate('assignedDoctor', 'name email');
     res.json(patients);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching assigned patients', error: error.message });
@@ -465,6 +467,7 @@ export const getSuperAdminDoctorLabReports = async (req, res) => {
       .populate('assignedLabStaffId', 'name')
       .populate('sampleCollectorId', 'name')
       .populate('labTechnicianId', 'name')
+      .populate('centerId', 'name code')
       .sort({ updatedAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
@@ -502,7 +505,8 @@ export const getSuperAdminDoctorLabReports = async (req, res) => {
         reportGenerated: report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed',
         sampleCollected: report.status === 'Sample_Collected' || report.status === 'Testing_In_Progress' || report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed',
         testingCompleted: report.status === 'Testing_Completed' || report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed',
-        additionalFiles: report.additionalFiles || []
+        additionalFiles: report.additionalFiles || [],
+        centerId: report.centerId
       };
     });
 
@@ -810,7 +814,7 @@ export const getSuperAdminDoctorPatients = async (req, res) => {
     
     // Get patients who have completed lab reports
     const patients = await Patient.find({ _id: { $in: patientIds } })
-      .populate('centerId', 'name')
+      .populate('centerId', 'name code')
       .populate('assignedDoctor', 'name')
       .sort({ createdAt: -1 });
 

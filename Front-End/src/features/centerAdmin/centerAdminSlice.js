@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAtopicDermatitis, fetchAllFollowUps, fetchCenterFollowUps, fetchPatientDetails, fetchPatientPrescriptions, fetchPatientHistory, fetchPatientMedications, addPatientHistory, addPatientMedication, createDoctor, updateDoctor, fetchAllergicRhinitis, fetchAllergicConjunctivitis, addAtopicDermatitis, addAllergicBronchitis, fetchAllergicBronchitis, addGPE, fetchGPE, addPatientPrescription, fetchPrescription, fetchSinglePrescription, deletePrescription, addFollowUp } from './centerAdminThunks';
+import { fetchAtopicDermatitis, fetchAllFollowUps, fetchCenterFollowUps, fetchPatientDetails, fetchPatientPrescriptions, fetchPatientHistory, fetchPatientMedications, addPatientHistory, addPatientMedication, createDoctor, updateDoctor, fetchAllergicRhinitis, fetchSingleAllergicRhinitis, fetchAllergicConjunctivitis, addAtopicDermatitis, addAllergicBronchitis, fetchAllergicBronchitis, addGPE, fetchGPE, addPatientPrescription, fetchPrescription, fetchSinglePrescription, deletePrescription, addFollowUp } from './centerAdminThunks';
 
 const initialState = {
   center: null,
@@ -359,6 +359,20 @@ const centerAdminSlice = createSlice({
         state.allergicRhinitis = action.payload;
       })
       .addCase(fetchAllergicRhinitis.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch single allergic rhinitis by ID
+      .addCase(fetchSingleAllergicRhinitis.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSingleAllergicRhinitis.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allergicRhinitis = action.payload;
+      })
+      .addCase(fetchSingleAllergicRhinitis.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

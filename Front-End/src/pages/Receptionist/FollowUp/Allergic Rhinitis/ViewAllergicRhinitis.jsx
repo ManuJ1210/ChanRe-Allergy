@@ -140,10 +140,10 @@ const ViewAllergicRhinitis = () => {
                 Patient Information
               </h3>
               <div className="space-y-2">
-                <p><span className="font-medium">Name:</span> {latestRecord?.patientId?.name || 'N/A'}</p>
-                <p><span className="font-medium">Age:</span> {latestRecord?.patientId?.age || 'N/A'}</p>
-                <p><span className="font-medium">Gender:</span> {latestRecord?.patientId?.gender || 'N/A'}</p>
-                <p><span className="font-medium">Phone:</span> {latestRecord?.patientId?.phone || 'N/A'}</p>
+                <p><span className="font-medium">Name:</span> {record?.patientId?.name || 'N/A'}</p>
+                <p><span className="font-medium">Age:</span> {record?.patientId?.age || 'N/A'}</p>
+                <p><span className="font-medium">Gender:</span> {record?.patientId?.gender || 'N/A'}</p>
+                <p><span className="font-medium">Phone:</span> {record?.patientId?.phone || 'N/A'}</p>
               </div>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg">

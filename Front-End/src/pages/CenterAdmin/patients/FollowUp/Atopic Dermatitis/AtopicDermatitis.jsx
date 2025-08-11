@@ -68,14 +68,14 @@ export default function AtopicDermatitisFollowUp() {
       <div className="max-w-4xl mx-auto p-6">
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8 space-y-8">
           {/* Main Title */}
-          <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">ATOPIC DERMATITIS</h1>
+          <h1 className="text-xl font-bold text-gray-800 text-center mb-8">ATOPIC DERMATITIS</h1>
           
           {/* Symptoms Section */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Atopic Dermatitis</h2>
+            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Atopic Dermatitis</h2>
             <div className="grid grid-cols-1 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Symptoms</label>
+                <label className="block text-xs font-medium text-gray-700 mb-2">Symptoms</label>
                 <textarea
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   rows="3"
@@ -85,7 +85,7 @@ export default function AtopicDermatitisFollowUp() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Affected Areas/Surface of the body</label>
+                <label className="block text-xs font-medium text-gray-700 mb-2">Affected Areas/Surface of the body</label>
                 <textarea
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   rows="3"
@@ -99,11 +99,11 @@ export default function AtopicDermatitisFollowUp() {
 
           {/* Intensity Section */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Intensity</h2>
+            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Intensity</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {Object.keys(form.intensity).map((key) => (
                 <div key={key} className="flex flex-col">
-                  <label className="text-sm font-medium text-gray-700 mb-1">{key}</label>
+                  <label className="text-xs font-medium text-gray-700 mb-1">{key}</label>
                   <select
                     className="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value={form.intensity[key]}
@@ -121,10 +121,10 @@ export default function AtopicDermatitisFollowUp() {
 
           {/* On skin without eczema Section */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">On skin without eczema</h2>
+            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">On skin without eczema</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">Dryness</label>
+                <label className="block text-xs font-medium text-gray-700 mb-3">Dryness</label>
                 <div className="flex space-x-6">
                   {DRYNESS_OPTIONS.map(option => (
                     <label key={option} className="flex items-center space-x-2">
@@ -136,7 +136,7 @@ export default function AtopicDermatitisFollowUp() {
                         onChange={e => handleChange("drynessWithoutEczema", e.target.value)}
                         className="text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="text-sm text-gray-700">{option}</span>
+                      <span className="text-xs text-gray-700">{option}</span>
                     </label>
                   ))}
                 </div>
@@ -146,7 +146,7 @@ export default function AtopicDermatitisFollowUp() {
 
           {/* On skin with eczema Section */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">On skin with eczema</h2>
+            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">On skin with eczema</h2>
             <div className="space-y-4">
               {[
                 { key: "redness", label: "Redness" },
@@ -156,7 +156,7 @@ export default function AtopicDermatitisFollowUp() {
                 { key: "thickenedSkin", label: "Thickened Skin" }
               ].map(({ key, label }) => (
                 <div key={key}>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">{label}</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-3">{label}</label>
                   <div className="flex space-x-6">
                     {ECZEMA_OPTIONS.map(option => (
                       <label key={option} className="flex items-center space-x-2">
@@ -168,7 +168,7 @@ export default function AtopicDermatitisFollowUp() {
                           onChange={e => handleChange(key, e.target.value)}
                           className="text-blue-600 focus:ring-blue-500"
                         />
-                        <span className="text-sm text-gray-700">{option}</span>
+                        <span className="text-xs text-gray-700">{option}</span>
                       </label>
                     ))}
                   </div>
@@ -179,10 +179,10 @@ export default function AtopicDermatitisFollowUp() {
 
           {/* Severity Sliders Section */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Severity Assessment</h2>
+            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Severity Assessment</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">Severity of Itching</label>
+                <label className="block text-xs font-medium text-gray-700 mb-3">Severity of Itching</label>
                 <input
                   type="range"
                   min={0}
@@ -191,10 +191,10 @@ export default function AtopicDermatitisFollowUp() {
                   onChange={e => handleChange("itching", Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                 />
-                <div className="text-sm text-blue-600 mt-1">Value: {form.itching}</div>
+                <div className="text-xs text-blue-600 mt-1">Value: {form.itching}</div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">Severity of Sleep Disturbance</label>
+                <label className="block text-xs font-medium text-gray-700 mb-3">Severity of Sleep Disturbance</label>
                 <input
                   type="range"
                   min={0}
@@ -203,17 +203,17 @@ export default function AtopicDermatitisFollowUp() {
                   onChange={e => handleChange("sleepDisturbance", Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                 />
-                <div className="text-sm text-blue-600 mt-1">Value: {form.sleepDisturbance}</div>
+                <div className="text-xs text-blue-600 mt-1">Value: {form.sleepDisturbance}</div>
               </div>
             </div>
           </div>
 
           {/* Medications Section */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Medications/Applications</h2>
+            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Medications/Applications</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Present Medications</label>
+                <label className="block text-xs font-medium text-gray-700 mb-2">Present Medications</label>
                 <textarea
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   rows="4"
@@ -223,7 +223,7 @@ export default function AtopicDermatitisFollowUp() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Local Applications</label>
+                <label className="block text-xs font-medium text-gray-700 mb-2">Local Applications</label>
                 <textarea
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   rows="4"
@@ -234,7 +234,7 @@ export default function AtopicDermatitisFollowUp() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Other Medications</label>
+              <label className="block text-xs font-medium text-gray-700 mb-2">Other Medications</label>
               <textarea
                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 rows="4"

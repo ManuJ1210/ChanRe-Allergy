@@ -201,7 +201,7 @@ export default function ScheduleCollection() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center py-12">
             <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-slate-900 mb-2">Error Loading Test Request</h3>
+            <h3 className="text-sm font-medium text-slate-900 mb-2">Error Loading Test Request</h3>
             <p className="text-slate-600">{error}</p>
             <button
               onClick={() => navigate('/dashboard/lab/test-requests')}
@@ -228,7 +228,7 @@ export default function ScheduleCollection() {
             Back to Test Request Details
           </button>
           
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Schedule Sample Collection
           </h1>
           <p className="text-slate-600">
@@ -261,7 +261,7 @@ export default function ScheduleCollection() {
         {/* Test Request Information */}
         {testRequest && (
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
-            <h2 className="text-xl font-semibold text-slate-800 mb-4">Test Request Information</h2>
+            <h2 className="text-lg font-semibold text-slate-800 mb-4">Test Request Information</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -301,12 +301,12 @@ export default function ScheduleCollection() {
 
         {/* Schedule Form */}
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
-          <h2 className="text-xl font-semibold text-slate-800 mb-6">Schedule Collection Appointment</h2>
+          <h2 className="text-lg font-semibold text-slate-800 mb-6">Schedule Collection Appointment</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Sample Collector */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs font-medium text-slate-700 mb-2">
                 Sample Collector <span className="text-red-500">*</span>
               </label>
               <select
@@ -324,7 +324,7 @@ export default function ScheduleCollection() {
                 ))}
               </select>
               {formData.sampleCollectorName && (
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="text-xs text-slate-500 mt-1">
                   Selected: {formData.sampleCollectorName}
                 </p>
               )}
@@ -333,7 +333,7 @@ export default function ScheduleCollection() {
             {/* Date and Time */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Collection Date <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -348,7 +348,7 @@ export default function ScheduleCollection() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Collection Time <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -364,7 +364,7 @@ export default function ScheduleCollection() {
 
             {/* Notes */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs font-medium text-slate-700 mb-2">
                 Collection Notes
               </label>
               <textarea
@@ -381,7 +381,7 @@ export default function ScheduleCollection() {
             {formData.sampleCollectionScheduledDate && formData.sampleCollectionScheduledTime && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <h3 className="font-medium text-blue-900 mb-2">Appointment Summary</h3>
-                <div className="space-y-1 text-sm text-blue-800">
+                <div className="space-y-1 text-xs text-blue-800">
                   <p><strong>Date:</strong> {new Date(formData.sampleCollectionScheduledDate).toLocaleDateString()}</p>
                   <p><strong>Time:</strong> {formData.sampleCollectionScheduledTime}</p>
                   <p><strong>Collector:</strong> {formData.sampleCollectorName || 'Not selected'}</p>

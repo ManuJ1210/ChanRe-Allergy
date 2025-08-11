@@ -96,7 +96,7 @@ export default function ReceptionistDashboard() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            <h1 className="text-xl font-bold text-slate-800 mb-2">
               Welcome back, {user?.name}
             </h1>
             <p className="text-slate-600">
@@ -109,8 +109,8 @@ export default function ReceptionistDashboard() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                  <p className="text-2xl font-bold text-slate-800">{stats.totalPatients}</p>
+                  <p className="text-slate-600 text-xs font-medium">Total Patients</p>
+                  <p className="text-xl font-bold text-slate-800">{stats.totalPatients}</p>
                 </div>
                 <Users className="h-8 w-8 text-blue-500" />
               </div>
@@ -119,8 +119,8 @@ export default function ReceptionistDashboard() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-600 text-sm font-medium">Today's Patients</p>
-                  <p className="text-2xl font-bold text-slate-800">{stats.todayPatients}</p>
+                  <p className="text-slate-600 text-xs font-medium">Today's Patients</p>
+                  <p className="text-xl font-bold text-slate-800">{stats.todayPatients}</p>
                 </div>
                 <Calendar className="h-8 w-8 text-green-500" />
               </div>
@@ -129,8 +129,8 @@ export default function ReceptionistDashboard() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-600 text-sm font-medium">Pending Tests</p>
-                  <p className="text-2xl font-bold text-slate-800">{stats.pendingTests}</p>
+                  <p className="text-slate-600 text-xs font-medium">Pending Tests</p>
+                  <p className="text-xl font-bold text-slate-800">{stats.pendingTests}</p>
                 </div>
                 <FileText className="h-8 w-8 text-yellow-500" />
               </div>
@@ -139,8 +139,8 @@ export default function ReceptionistDashboard() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-600 text-sm font-medium">Completed Tests</p>
-                  <p className="text-2xl font-bold text-slate-800">{stats.completedTests}</p>
+                  <p className="text-slate-600 text-xs font-medium">Completed Tests</p>
+                  <p className="text-xl font-bold text-slate-800">{stats.completedTests}</p>
                 </div>
                 <FileText className="h-8 w-8 text-purple-500" />
               </div>
@@ -150,7 +150,7 @@ export default function ReceptionistDashboard() {
           {/* Quick Actions */}
           <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-8">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                 <Plus className="h-5 w-5 mr-2 text-blue-500" />
                 Quick Actions
               </h2>
@@ -169,7 +169,7 @@ export default function ReceptionistDashboard() {
                     {action.icon}
                     <div className="text-center">
                       <h3 className="font-semibold">{action.title}</h3>
-                      <p className="text-sm opacity-90">{action.description}</p>
+                      <p className="text-xs opacity-90">{action.description}</p>
                     </div>
                   </button>
                 ))}
@@ -182,7 +182,7 @@ export default function ReceptionistDashboard() {
             <div className="p-6 border-b border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
                     <Users className="h-5 w-5 mr-2 text-blue-500" />
                     Recent Patients
                   </h2>
@@ -202,7 +202,7 @@ export default function ReceptionistDashboard() {
               {recentPatients.length === 0 ? (
                 <div className="text-center py-8">
                   <Users className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-slate-600 mb-2">No Patients Yet</h3>
+                  <h3 className="text-sm font-medium text-slate-600 mb-2">No Patients Yet</h3>
                   <p className="text-slate-500 mb-4">Start by adding your first patient.</p>
                   <button
                     onClick={() => navigate('/dashboard/receptionist/add-patient')}
@@ -225,7 +225,7 @@ export default function ReceptionistDashboard() {
                         </div>
                         <div>
                           <h3 className="font-medium text-slate-800">{patient.name}</h3>
-                          <div className="flex items-center gap-4 text-sm text-slate-600">
+                          <div className="flex items-center gap-4 text-xs text-slate-600">
                             <span className="flex items-center gap-1">
                               <Mail className="h-3 w-3" />
                               {patient.email || 'No email'}

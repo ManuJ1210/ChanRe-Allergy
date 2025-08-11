@@ -167,7 +167,7 @@ const PatientDetails = () => {
                 <ArrowLeft className="w-6 h-6 text-gray-600" />
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Patient Details</h1>
+                <h1 className="text-xl font-bold text-gray-900">Patient Details</h1>
                 <p className="text-gray-600 mt-1">Review patient information and lab reports</p>
               </div>
             </div>
@@ -209,11 +209,11 @@ const PatientDetails = () => {
           <div className="px-8 py-6 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Patients with Completed Lab Reports</h2>
+                <h2 className="text-xl font-bold text-gray-900">Patients with Completed Lab Reports</h2>
                 <p className="text-gray-600 mt-1">Patients who have completed lab tests and reports</p>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
                   {filteredPatients.length} Patients
                 </div>
               </div>
@@ -226,7 +226,7 @@ const PatientDetails = () => {
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <User className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No Patients Found</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No Patients Found</h3>
                 <p className="text-gray-500 max-w-md mx-auto">
                   {searchTerm ? 'No patients found matching your search.' : 'No patients with completed lab reports found.'}
                 </p>
@@ -264,34 +264,34 @@ const PatientDetails = () => {
                               </span>
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{patient.name}</div>
-                              <div className="text-sm text-gray-500">{patient.age} years, {patient.gender}</div>
+                              <div className="text-xs font-medium text-gray-900">{patient.name}</div>
+                              <div className="text-xs text-gray-500">{patient.age} years, {patient.gender}</div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{patient.phone}</div>
-                          <div className="text-sm text-gray-500">{patient.email || 'N/A'}</div>
+                          <div className="text-xs text-gray-900">{patient.phone}</div>
+                          <div className="text-xs text-gray-500">{patient.email || 'N/A'}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{patient.centerId?.name || 'N/A'}</div>
-                          <div className="text-sm text-gray-500">{patient.centerId?.code || 'N/A'}</div>
+                          <div className="text-xs text-gray-900">{patient.centerId?.name || 'N/A'}</div>
+                          <div className="text-xs text-gray-500">{patient.centerId?.code || 'N/A'}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{patient.assignedDoctor?.name || 'Not assigned'}</div>
+                          <div className="text-xs text-gray-900">{patient.assignedDoctor?.name || 'Not assigned'}</div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <td className="px-6 py-4 whitespace-nowrap text-xs font-medium">
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => handleViewProfile(patient._id)}
-                              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center text-sm"
+                              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center text-xs"
                             >
                               <User className="w-4 h-4 mr-1" />
                               Profile
                             </button>
                             <button
                               onClick={() => handleViewLabReports(patient._id)}
-                              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center text-sm"
+                              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center text-xs"
                             >
                               <Activity className="w-4 h-4 mr-1" />
                               Lab Reports
@@ -311,9 +311,9 @@ const PatientDetails = () => {
         {feedbackModal && selectedReport && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg max-w-md w-full p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Send Feedback</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-4">Send Feedback</h3>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Feedback Message</label>
+                <label className="block text-xs font-medium text-gray-700 mb-2">Feedback Message</label>
                 <textarea
                   value={feedbackMessage}
                   onChange={(e) => setFeedbackMessage(e.target.value)}

@@ -178,15 +178,15 @@ const CenterProfile = () => {
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
             <p className="text-yellow-700 mb-4">No center data available.</p>
             {centerError && (
-              <p className="text-red-600 mb-4 text-sm">Error: {centerError}</p>
+              <p className="text-red-600 mb-4 text-xs">Error: {centerError}</p>
             )}
             {!centerId && (
-              <p className="text-red-600 mb-4 text-sm">Center ID is missing. Please contact support.</p>
+              <p className="text-red-600 mb-4 text-xs">Center ID is missing. Please contact support.</p>
             )}
             <div className="space-y-2">
-              <p className="text-gray-600 text-sm">Debug Info:</p>
-              <p className="text-gray-600 text-sm">User Role: {user?.role}</p>
-              <p className="text-gray-600 text-sm">Center ID: {centerId || 'Not found'}</p>
+              <p className="text-gray-600 text-xs">Debug Info:</p>
+              <p className="text-gray-600 text-xs">User Role: {user?.role}</p>
+              <p className="text-gray-600 text-xs">Center ID: {centerId || 'Not found'}</p>
             </div>
             <div className="mt-4 space-x-2">
               <button
@@ -221,7 +221,7 @@ const CenterProfile = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Center Profile
           </h1>
           <p className="text-slate-600">
@@ -232,7 +232,7 @@ const CenterProfile = () => {
         {/* Center Information */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-8">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <Building className="h-5 w-5 mr-2 text-blue-500" />
               {center.name || 'Unnamed Center'}
             </h2>
@@ -247,7 +247,7 @@ const CenterProfile = () => {
                   <div className="flex items-center gap-3 text-slate-700">
                     <MapPin className="h-4 w-4 text-blue-500" />
                     <div>
-                      <p className="text-sm font-medium text-slate-500">Location</p>
+                      <p className="text-xs font-medium text-slate-500">Location</p>
                       <p>{center.location}</p>
                     </div>
                   </div>
@@ -256,7 +256,7 @@ const CenterProfile = () => {
                   <div className="flex items-start gap-3 text-slate-700">
                     <MapPin className="h-4 w-4 text-blue-500 mt-1" />
                     <div>
-                      <p className="text-sm font-medium text-slate-500">Address</p>
+                      <p className="text-xs font-medium text-slate-500">Address</p>
                       <p>{center.address}</p>
                     </div>
                   </div>
@@ -267,7 +267,7 @@ const CenterProfile = () => {
                   <div className="flex items-center gap-3 text-slate-700">
                     <Mail className="h-4 w-4 text-blue-500" />
                     <div>
-                      <p className="text-sm font-medium text-slate-500">Email</p>
+                      <p className="text-xs font-medium text-slate-500">Email</p>
                       <p>{center.email}</p>
                     </div>
                   </div>
@@ -276,7 +276,7 @@ const CenterProfile = () => {
                   <div className="flex items-center gap-3 text-slate-700">
                     <Phone className="h-4 w-4 text-blue-500" />
                     <div>
-                      <p className="text-sm font-medium text-slate-500">Phone</p>
+                      <p className="text-xs font-medium text-slate-500">Phone</p>
                       <p>{center.phone}</p>
                     </div>
                   </div>
@@ -291,8 +291,8 @@ const CenterProfile = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                <p className="text-2xl font-bold text-slate-800">{center.patientCount || 0}</p>
+                <p className="text-slate-600 text-xs font-medium">Total Patients</p>
+                <p className="text-xl font-bold text-slate-800">{center.patientCount || 0}</p>
               </div>
               <Users className="h-8 w-8 text-blue-500" />
             </div>
@@ -301,8 +301,8 @@ const CenterProfile = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Doctors</p>
-                <p className="text-2xl font-bold text-slate-800">{center.doctorCount || 0}</p>
+                <p className="text-slate-600 text-xs font-medium">Total Doctors</p>
+                <p className="text-xl font-bold text-slate-800">{center.doctorCount || 0}</p>
               </div>
               <User className="h-8 w-8 text-green-500" />
             </div>
@@ -311,8 +311,8 @@ const CenterProfile = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Receptionists</p>
-                <p className="text-2xl font-bold text-slate-800">{center.receptionistCount || 0}</p>
+                <p className="text-slate-600 text-xs font-medium">Receptionists</p>
+                <p className="text-xl font-bold text-slate-800">{center.receptionistCount || 0}</p>
               </div>
               <UserCheck className="h-8 w-8 text-purple-500" />
             </div>
@@ -321,8 +321,8 @@ const CenterProfile = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Lab Staff</p>
-                <p className="text-2xl font-bold text-slate-800">{center.labCount || 0}</p>
+                <p className="text-slate-600 text-xs font-medium">Lab Staff</p>
+                <p className="text-xl font-bold text-slate-800">{center.labCount || 0}</p>
               </div>
               <FlaskConical className="h-8 w-8 text-orange-500" />
             </div>
@@ -332,7 +332,7 @@ const CenterProfile = () => {
         {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <Shield className="h-5 w-5 mr-2 text-blue-500" />
               Quick Actions
             </h2>
@@ -349,7 +349,7 @@ const CenterProfile = () => {
                 <User className="h-6 w-6" />
                 <div className="text-center">
                   <h3 className="font-semibold">Manage Doctors</h3>
-                  <p className="text-sm opacity-90">View and manage doctors</p>
+                  <p className="text-xs opacity-90">View and manage doctors</p>
                 </div>
               </button>
 
@@ -360,7 +360,7 @@ const CenterProfile = () => {
                 <Users className="h-6 w-6" />
                 <div className="text-center">
                   <h3 className="font-semibold">Manage Patients</h3>
-                  <p className="text-sm opacity-90">View and manage patients</p>
+                  <p className="text-xs opacity-90">View and manage patients</p>
                 </div>
               </button>
 
@@ -371,7 +371,7 @@ const CenterProfile = () => {
                 <UserCheck className="h-6 w-6" />
                 <div className="text-center">
                   <h3 className="font-semibold">Manage Receptionists</h3>
-                  <p className="text-sm opacity-90">View and manage receptionists</p>
+                  <p className="text-xs opacity-90">View and manage receptionists</p>
                 </div>
               </button>
 
@@ -382,7 +382,7 @@ const CenterProfile = () => {
                 <Shield className="h-6 w-6" />
                 <div className="text-center">
                   <h3 className="font-semibold">Dashboard</h3>
-                  <p className="text-sm opacity-90">View center dashboard</p>
+                  <p className="text-xs opacity-90">View center dashboard</p>
                 </div>
               </button>
             </div>

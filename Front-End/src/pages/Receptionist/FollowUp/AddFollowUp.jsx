@@ -78,7 +78,7 @@ const AddFollowUp = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">Add Follow-up</h1>
+              <h1 className="text-lg font-bold text-gray-800">Add Follow-up</h1>
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@ const AddFollowUp = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Follow-up Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-xs font-medium text-gray-700 mb-3">
                 Follow-up Type <span className="text-red-500">*</span>
               </label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

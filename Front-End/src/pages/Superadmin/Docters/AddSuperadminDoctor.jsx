@@ -87,7 +87,7 @@ const AddSuperadminDoctor = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Doctors
           </button>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-xl font-bold text-slate-800 mb-2">
             Add New Superadmin Doctor
           </h1>
           <p className="text-slate-600">
@@ -112,7 +112,7 @@ const AddSuperadminDoctor = () => {
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-500" />
               Doctor Information
             </h2>
@@ -125,7 +125,7 @@ const AddSuperadminDoctor = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Full Name */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Full Name *
                 </label>
                 <input
@@ -141,7 +141,7 @@ const AddSuperadminDoctor = () => {
 
               {/* Mobile Number */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Mobile Number *
                 </label>
                 <input
@@ -157,7 +157,7 @@ const AddSuperadminDoctor = () => {
 
               {/* Email Address */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Email Address *
                 </label>
                 <input
@@ -173,7 +173,7 @@ const AddSuperadminDoctor = () => {
 
               {/* Username */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Username *
                 </label>
                 <input
@@ -189,7 +189,7 @@ const AddSuperadminDoctor = () => {
 
               {/* Password */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Password *
                 </label>
                 <div className="relative">
@@ -214,7 +214,7 @@ const AddSuperadminDoctor = () => {
 
               {/* Qualification */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Qualification
                 </label>
                 <input
@@ -229,7 +229,7 @@ const AddSuperadminDoctor = () => {
 
               {/* Designation */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Designation
                 </label>
                 <input
@@ -244,7 +244,7 @@ const AddSuperadminDoctor = () => {
 
               {/* KMC Number */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   KMC Number
                 </label>
                 <input
@@ -259,7 +259,7 @@ const AddSuperadminDoctor = () => {
 
               {/* Hospital Name */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Hospital Name
                 </label>
                 <input
@@ -274,7 +274,7 @@ const AddSuperadminDoctor = () => {
 
               {/* Experience */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Experience
                 </label>
                 <input
@@ -290,7 +290,7 @@ const AddSuperadminDoctor = () => {
 
             {/* Specializations */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs font-medium text-slate-700 mb-2">
                 Specializations
               </label>
               <div className="space-y-3">
@@ -325,7 +325,7 @@ const AddSuperadminDoctor = () => {
                         key={index}
                         className="flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full"
                       >
-                        <span className="text-sm">{spec}</span>
+                        <span className="text-xs">{spec}</span>
                         <button
                           type="button"
                           onClick={() => handleRemoveSpecialization(index)}
@@ -342,7 +342,7 @@ const AddSuperadminDoctor = () => {
 
             {/* Bio */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs font-medium text-slate-700 mb-2">
                 Bio
               </label>
               <textarea

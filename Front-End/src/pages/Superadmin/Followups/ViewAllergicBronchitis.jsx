@@ -86,7 +86,7 @@ const ViewAllergicBronchitis = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">Error Loading Record</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">Error Loading Record</h2>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
                 onClick={() => navigate(-1)}
@@ -108,7 +108,7 @@ const ViewAllergicBronchitis = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">No Record Found</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">No Record Found</h2>
               <p className="text-gray-600 mb-4">No allergic bronchitis record found for this patient.</p>
               <button
                 onClick={() => navigate(-1)}
@@ -137,7 +137,7 @@ const ViewAllergicBronchitis = () => {
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-800">Allergic Bronchitis Medical Record</h1>
+              <h1 className="text-xl font-bold text-gray-800">Allergic Bronchitis Medical Record</h1>
             </div>
             <div className="flex space-x-3">
               <button
@@ -162,27 +162,27 @@ const ViewAllergicBronchitis = () => {
         <div className="bg-white rounded-lg shadow-lg p-8">
           {/* Record Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">ALLERGIC BRONCHITIS</h1>
+            <h1 className="text-xl font-bold text-gray-800 mb-2">ALLERGIC BRONCHITIS</h1>
             <p className="text-gray-600">Medical Assessment Record</p>
           </div>
           
           {/* Patient Information */}
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
               Patient Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-500">Patient Name</label>
+                <label className="block text-xs font-medium text-gray-500">Patient Name</label>
                 <p className="text-gray-900 font-medium">{latestRecord.patientId?.name || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Patient ID</label>
+                <label className="block text-xs font-medium text-gray-500">Patient ID</label>
                 <p className="text-gray-900 font-medium">{latestRecord.patientId?._id || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Assessment Date</label>
+                <label className="block text-xs font-medium text-gray-500">Assessment Date</label>
                 <p className="text-gray-900 font-medium">
                   {latestRecord.createdAt ? new Date(latestRecord.createdAt).toLocaleDateString() : 'N/A'}
                 </p>
@@ -194,12 +194,12 @@ const ViewAllergicBronchitis = () => {
           <div className="space-y-8">
             {/* Diagnosis */}
             <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <Eye className="h-5 w-5 mr-2 text-blue-600" />
                 Clinical Diagnosis
               </h2>
               <div className="bg-white rounded-lg p-4 border">
-                <span className="text-lg font-semibold text-blue-600 capitalize">
+                <span className="text-sm font-semibold text-blue-600 capitalize">
                   {latestRecord.type || 'Not specified'}
                 </span>
               </div>
@@ -207,7 +207,7 @@ const ViewAllergicBronchitis = () => {
 
             {/* Symptoms */}
             <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Presenting Symptoms</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">Presenting Symptoms</h2>
               <div className="bg-white rounded-lg p-4 border">
                 {latestRecord.symptoms ? (
                   <p className="text-gray-800 whitespace-pre-wrap">{latestRecord.symptoms}</p>
@@ -220,7 +220,7 @@ const ViewAllergicBronchitis = () => {
             {/* GINA Grading */}
             {latestRecord.ginaGrading && Object.keys(latestRecord.ginaGrading).length > 0 && (
               <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                   <Activity className="h-5 w-5 mr-2 text-blue-600" />
                   GINA Grading of Asthma
                 </h2>
@@ -229,7 +229,7 @@ const ViewAllergicBronchitis = () => {
                     {Object.entries(latestRecord.ginaGrading).map(([question, value]) => (
                       <div key={question} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <span className="text-gray-700 font-medium">{question}</span>
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                           value === 'Controlled' ? 'bg-green-100 text-green-800' :
                           value === 'Partially Controlled' ? 'bg-yellow-100 text-yellow-800' :
                           'bg-red-100 text-red-800'
@@ -246,12 +246,12 @@ const ViewAllergicBronchitis = () => {
             {/* PFT Grading */}
             {latestRecord.pftGrading && (
               <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                   <Activity className="h-5 w-5 mr-2 text-blue-600" />
                   PFT Grading
                 </h2>
                 <div className="bg-white rounded-lg p-4 border">
-                  <span className={`px-3 py-2 rounded-full text-sm font-medium ${
+                  <span className={`px-3 py-2 rounded-full text-xs font-medium ${
                     latestRecord.pftGrading === 'Mild' ? 'bg-green-100 text-green-800' :
                     latestRecord.pftGrading === 'Moderate' ? 'bg-yellow-100 text-yellow-800' :
                     latestRecord.pftGrading === 'Severe' ? 'bg-orange-100 text-orange-800' :
@@ -266,9 +266,9 @@ const ViewAllergicBronchitis = () => {
             {/* Habits */}
             {latestRecord.habits && (
               <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">Patient Habits</h2>
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Patient Habits</h2>
                 <div className="bg-white rounded-lg p-4 border">
-                  <span className={`px-3 py-2 rounded-full text-sm font-medium ${
+                  <span className={`px-3 py-2 rounded-full text-xs font-medium ${
                     latestRecord.habits === 'Smoker' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
                   }`}>
                     {latestRecord.habits}
@@ -279,7 +279,7 @@ const ViewAllergicBronchitis = () => {
 
             {/* Clinical Summary */}
             <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Clinical Summary</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">Clinical Summary</h2>
               <div className="bg-white rounded-lg p-6 border">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                   <div>
@@ -287,7 +287,7 @@ const ViewAllergicBronchitis = () => {
                       <Eye className="h-8 w-8 text-blue-600" />
                     </div>
                     <h3 className="font-medium text-gray-800 mb-1">Type</h3>
-                    <p className="text-sm text-gray-500 capitalize">{latestRecord.type || 'N/A'}</p>
+                    <p className="text-xs text-gray-500 capitalize">{latestRecord.type || 'N/A'}</p>
                   </div>
                   
                   <div>
@@ -295,7 +295,7 @@ const ViewAllergicBronchitis = () => {
                       <Activity className="h-8 w-8 text-green-600" />
                     </div>
                     <h3 className="font-medium text-gray-800 mb-1">GINA Criteria</h3>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs text-gray-500">
                       {latestRecord.ginaGrading ? Object.keys(latestRecord.ginaGrading).length : 0} assessed
                     </p>
                   </div>
@@ -305,7 +305,7 @@ const ViewAllergicBronchitis = () => {
                       <Activity className="h-8 w-8 text-purple-600" />
                     </div>
                     <h3 className="font-medium text-gray-800 mb-1">PFT Grade</h3>
-                    <p className="text-sm text-gray-500 capitalize">{latestRecord.pftGrading || 'N/A'}</p>
+                    <p className="text-xs text-gray-500 capitalize">{latestRecord.pftGrading || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -314,7 +314,7 @@ const ViewAllergicBronchitis = () => {
 
           {/* Record Metadata */}
           <div className="border-t pt-6 mt-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4 text-gray-400" />
                 <span className="text-gray-500">Record Created:</span>
