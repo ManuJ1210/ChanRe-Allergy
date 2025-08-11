@@ -103,7 +103,7 @@ const Dashboard = () => {
                 View complete patient information, history, and followups
               </p>
               <button
-                onClick={() => window.location.href = '/dashboard/superadmin/doctor/my-patients'}
+                onClick={() => window.location.href = '/dashboard/superadmin/doctor/patients'}
                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
               >
                 View Patients
@@ -123,7 +123,7 @@ const Dashboard = () => {
                 Review lab reports and provide feedback to center admin doctors
               </p>
               <button
-                onClick={() => window.location.href = '/dashboard/superadmin/doctor/review-reports'}
+                onClick={() => window.location.href = '/dashboard/superadmin/doctor/lab-reports'}
                 className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors"
               >
                 Review Reports
@@ -143,7 +143,7 @@ const Dashboard = () => {
                 Access complete patient medical history and followup records
               </p>
               <button
-                onClick={() => window.location.href = '/dashboard/superadmin/doctor/patient-history'}
+                onClick={() => window.location.href = '/dashboard/superadmin/doctor/patient/profile'}
                 className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
               >
                 View History

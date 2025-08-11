@@ -286,6 +286,7 @@ export default function Header({ onHamburgerClick }) {
               <p><strong>Role:</strong> {user?.role || '-'}</p>
               <p><strong>Phone:</strong> {getUserPhone()}</p>
               <p><strong>Hospital Name:</strong> {getHospitalName()}</p>
+              <p><strong>Center ID:</strong> {getCenterId()}</p>
              
             </div>
           </div>

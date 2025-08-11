@@ -208,7 +208,9 @@ export default function AppRoutes() {
         {/* Superadmin Doctor Working Routes */}
         <Route path="superadmin/doctor/dashboard" element={<SuperadminDoctorDashboard />} />
         <Route path="superadmin/doctor/patients" element={<PatientDetails />} />
+        <Route path="superadmin/doctor/my-patients" element={<SuperadminDoctorMyPatients />} />
         <Route path="superadmin/doctor/lab-reports" element={<SuperadminDoctorReviewLabReports />} />
+        <Route path="superadmin/doctor/patient/:patientId" element={<PatientDetails />} />
         <Route path="superadmin/doctor/patient/:patientId/profile" element={<PatientProfile />} />
         <Route path="superadmin/doctor/patient/:patientId/lab-reports" element={<PatientLabReports />} />
         
