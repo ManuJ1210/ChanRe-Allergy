@@ -18,7 +18,9 @@ import {
   XCircle,
   Plus,
   RefreshCw,
-  Download
+  Download,
+  TestTube,
+  Mail
 } from 'lucide-react';
 
 const TestRequests = () => {
@@ -87,11 +89,15 @@ const TestRequests = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Completed': return 'bg-green-100 text-green-700';
-      case 'In Progress': return 'bg-blue-100 text-blue-700';
-      case 'Sample Collected': return 'bg-purple-100 text-purple-700';
-      case 'Assigned': return 'bg-orange-100 text-orange-700';
       case 'Pending': return 'bg-yellow-100 text-yellow-700';
+      case 'Assigned': return 'bg-orange-100 text-orange-700';
+      case 'Sample_Collection_Scheduled': return 'bg-purple-100 text-purple-700';
+      case 'Sample_Collected': return 'bg-indigo-100 text-indigo-700';
+      case 'In_Lab_Testing': return 'bg-blue-100 text-blue-700';
+      case 'Testing_Completed': return 'bg-teal-100 text-teal-700';
+      case 'Report_Generated': return 'bg-cyan-100 text-cyan-700';
+      case 'Report_Sent': return 'bg-emerald-100 text-emerald-700';
+      case 'Completed': return 'bg-green-100 text-green-700';
       case 'Cancelled': return 'bg-red-100 text-red-700';
       default: return 'bg-gray-100 text-gray-700';
     }
@@ -108,18 +114,39 @@ const TestRequests = () => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'Completed': return <CheckCircle className="h-4 w-4" />;
-      case 'In Progress': return <Clock className="h-4 w-4" />;
-      case 'Sample Collected': return <Clock className="h-4 w-4" />;
-      case 'Assigned': return <Clock className="h-4 w-4" />;
       case 'Pending': return <AlertCircle className="h-4 w-4" />;
+      case 'Assigned': return <Clock className="h-4 w-4" />;
+      case 'Sample_Collection_Scheduled': return <Calendar className="h-4 w-4" />;
+      case 'Sample_Collected': return <CheckCircle className="h-4 w-4" />;
+      case 'In_Lab_Testing': return <TestTube className="h-4 w-4" />;
+      case 'Testing_Completed': return <CheckCircle className="h-4 w-4" />;
+      case 'Report_Generated': return <FileText className="h-4 w-4" />;
+      case 'Report_Sent': return <Mail className="h-4 w-4" />;
+      case 'Completed': return <CheckCircle className="h-4 w-4" />;
       case 'Cancelled': return <XCircle className="h-4 w-4" />;
       default: return <Clock className="h-4 w-4" />;
     }
   };
 
   const getStatusCount = (status) => {
-    return testRequests.filter(test => test.status === status).length;
+    switch (status) {
+      case 'Pending':
+        return testRequests.filter(test => test.status === 'Pending').length;
+      case 'Assigned':
+        return testRequests.filter(test => test.status === 'Assigned').length;
+      case 'In Progress':
+        return testRequests.filter(test => 
+          ['Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing'].includes(test.status)
+        ).length;
+      case 'Completed':
+        return testRequests.filter(test => 
+          ['Testing_Completed', 'Report_Generated', 'Report_Sent', 'Completed', 'feedback_sent'].includes(test.status)
+        ).length;
+      case 'Cancelled':
+        return testRequests.filter(test => test.status === 'Cancelled').length;
+      default:
+        return 0;
+    }
   };
 
   const handleViewReport = async (testRequestId) => {
@@ -204,53 +231,7 @@ const TestRequests = () => {
         )}
 
         {/* Status Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-          <div className="bg-white rounded-xl p-4 shadow-sm border border-blue-100">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-600">Pending</p>
-                <p className="text-xl font-bold text-yellow-600">{getStatusCount('Pending')}</p>
-              </div>
-              <AlertCircle className="h-8 w-8 text-yellow-500" />
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-4 shadow-sm border border-blue-100">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-600">Assigned</p>
-                <p className="text-xl font-bold text-orange-600">{getStatusCount('Assigned')}</p>
-              </div>
-              <Clock className="h-8 w-8 text-orange-500" />
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-4 shadow-sm border border-blue-100">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-600">In Progress</p>
-                <p className="text-xl font-bold text-blue-600">{getStatusCount('In Progress')}</p>
-              </div>
-              <Clock className="h-8 w-8 text-blue-500" />
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-4 shadow-sm border border-blue-100">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-600">Completed</p>
-                <p className="text-xl font-bold text-green-600">{getStatusCount('Completed')}</p>
-              </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-4 shadow-sm border border-blue-100">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-600">Cancelled</p>
-                <p className="text-xl font-bold text-red-600">{getStatusCount('Cancelled')}</p>
-              </div>
-              <XCircle className="h-8 w-8 text-red-500" />
-            </div>
-          </div>
-        </div>
+
 
         {/* Search and Filter Bar */}
         <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100 mb-6">
@@ -274,10 +255,16 @@ const TestRequests = () => {
               className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="in_progress">In Progress</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="Pending">Pending</option>
+              <option value="Assigned">Assigned</option>
+              <option value="Sample_Collection_Scheduled">Sample Collection Scheduled</option>
+              <option value="Sample_Collected">Sample Collected</option>
+              <option value="In_Lab_Testing">In Lab Testing</option>
+              <option value="Testing_Completed">Testing Completed</option>
+              <option value="Report_Generated">Report Generated</option>
+              <option value="Report_Sent">Report Sent</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
             </select>
 
             {/* Priority Filter */}

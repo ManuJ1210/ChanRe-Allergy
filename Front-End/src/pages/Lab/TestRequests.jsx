@@ -70,12 +70,48 @@ export default function TestRequests() {
     filterRequests();
   }, [testRequests, searchTerm, statusFilter, urgencyFilter]);
 
+  // Debug effect to log state changes
+  useEffect(() => {
+    console.log('State updated:', {
+      testRequestsCount: testRequests.length,
+      filteredRequestsCount: filteredRequests.length
+    });
+    
+    // Log all unique statuses to help debug
+    if (testRequests.length > 0) {
+      const uniqueStatuses = [...new Set(testRequests.map(req => req.status))];
+      console.log('All unique statuses in data:', uniqueStatuses);
+      
+      // Log count for each status
+      uniqueStatuses.forEach(status => {
+        const count = testRequests.filter(req => req.status === status).length;
+        console.log(`Status "${status}": ${count} requests`);
+      });
+      
+      // Log counts for each category
+      const pendingCount = testRequests.filter(req => ['Pending', 'pending', 'PENDING'].includes(req.status)).length;
+      const assignedCount = testRequests.filter(req => ['Assigned', 'assigned', 'ASSIGNED'].includes(req.status)).length;
+      const inProgressCount = testRequests.filter(req => ['Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing', 'Testing_Completed', 'sample_collection_scheduled', 'sample_collected', 'in_lab_testing', 'testing_completed', 'In_Progress', 'in_progress'].includes(req.status)).length;
+      const completedCount = testRequests.filter(req => ['Report_Generated', 'Report_Sent', 'Completed', 'feedback_sent', 'report_generated', 'report_sent', 'completed', 'FEEDBACK_SENT', 'Feedback_Sent'].includes(req.status)).length;
+      const cancelledCount = testRequests.filter(req => ['Cancelled', 'cancelled', 'CANCELLED'].includes(req.status)).length;
+      
+      console.log('Category counts:', {
+        pending: pendingCount,
+        assigned: assignedCount,
+        inProgress: inProgressCount,
+        completed: completedCount,
+        cancelled: cancelledCount
+      });
+    }
+  }, [testRequests.length, filteredRequests.length, testRequests]);
+
   const fetchTestRequests = async () => {
     try {
       setLoading(true);
       setError(null);
       const response = await API.get('/test-requests/lab-staff');
       const data = response.data;
+      console.log('Fetched test requests:', data.length);
       setTestRequests(data);
       setLastRefreshTime(new Date());
     } catch (error) {
@@ -92,7 +128,7 @@ export default function TestRequests() {
   };
 
   const filterRequests = () => {
-    let filtered = testRequests;
+    let filtered = [...testRequests]; // Create a copy to avoid mutating original array
 
     // Search filter
     if (searchTerm) {
@@ -113,6 +149,14 @@ export default function TestRequests() {
     if (urgencyFilter !== 'All') {
       filtered = filtered.filter(request => request.urgency === urgencyFilter);
     }
+
+    console.log('Filtering requests:', {
+      total: testRequests.length,
+      filtered: filtered.length,
+      searchTerm,
+      statusFilter,
+      urgencyFilter
+    });
 
     setFilteredRequests(filtered);
   };
@@ -363,9 +407,11 @@ export default function TestRequests() {
         const response = await API.delete(`/test-requests/${requestId}`);
         if (response.status === 200) {
           // Remove the deleted request from the state
-          setTestRequests(prevRequests => 
-            prevRequests.filter(request => request._id !== requestId)
-          );
+          setTestRequests(prevRequests => {
+            const updatedRequests = prevRequests.filter(request => request._id !== requestId);
+            console.log('After delete - Total requests:', updatedRequests.length);
+            return updatedRequests;
+          });
           toast.success('Test request deleted successfully');
         }
       } catch (error) {
@@ -450,6 +496,53 @@ export default function TestRequests() {
             </div>
           </div>
         )}
+
+        {/* Status Counts */}
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
+          <h3 className="text-lg font-semibold text-slate-800 mb-4">Status Overview</h3>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="text-center p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="text-2xl font-bold text-yellow-600">
+                {testRequests.filter(req => 
+                  ['Pending', 'pending', 'PENDING', 'pending'].includes(req.status)
+                ).length}
+              </div>
+              <div className="text-sm text-yellow-700">Pending</div>
+            </div>
+            <div className="text-center p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="text-2xl font-bold text-blue-600">
+                {testRequests.filter(req => 
+                  ['Assigned', 'assigned', 'ASSIGNED'].includes(req.status)
+                ).length}
+              </div>
+              <div className="text-sm text-blue-700">Assigned</div>
+            </div>
+            <div className="text-center p-4 bg-orange-50 border border-orange-200 rounded-lg">
+              <div className="text-2xl font-bold text-orange-600">
+                {testRequests.filter(req => 
+                  ['Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing', 'Testing_Completed', 'sample_collection_scheduled', 'sample_collected', 'in_lab_testing', 'testing_completed', 'In_Progress', 'in_progress'].includes(req.status)
+                ).length}
+              </div>
+              <div className="text-sm text-orange-700">In Progress</div>
+            </div>
+            <div className="text-center p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="text-2xl font-bold text-green-600">
+                {testRequests.filter(req => 
+                  ['Report_Generated', 'Report_Sent', 'Completed', 'feedback_sent', 'report_generated', 'report_sent', 'completed', 'FEEDBACK_SENT', 'Feedback_Sent', 'feedback_sent'].includes(req.status)
+                ).length}
+              </div>
+              <div className="text-sm text-green-700">Completed</div>
+            </div>
+            <div className="text-center p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="text-2xl font-bold text-red-600">
+                {testRequests.filter(req => 
+                  ['Cancelled', 'cancelled', 'CANCELLED'].includes(req.status)
+                ).length}
+              </div>
+              <div className="text-sm text-red-700">Cancelled</div>
+            </div>
+          </div>
+        </div>
 
         {/* Filters */}
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
