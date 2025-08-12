@@ -70,10 +70,24 @@ export const deleteCenterAdminDoctor = createAsyncThunk(
 
 export const toggleCenterAdminDoctorStatus = createAsyncThunk(
   'centerAdminDoctors/toggleCenterAdminDoctorStatus',
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, getState }) => {
     try {
-      const response = await API.patch(`/doctors/${id}/toggle-status`);
-      return response.data;
+      // Get current doctor from state to check current status
+      const state = getState();
+      const currentDoctor = state.centerAdminDoctors.doctors.find(d => d._id === id);
+      
+      if (!currentDoctor) {
+        return rejectWithValue('Doctor not found');
+      }
+
+      // Toggle the isDeleted status
+      const newIsDeletedStatus = !currentDoctor.isDeleted;
+      
+      const response = await API.put(`/doctors/${id}`, {
+        isDeleted: newIsDeletedStatus
+      });
+      
+      return { ...response.data, isDeleted: newIsDeletedStatus };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to toggle doctor status');
     }
@@ -244,7 +258,9 @@ const centerAdminDoctorSlice = createSlice({
       .addCase(toggleCenterAdminDoctorStatus.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.message = 'Doctor status updated successfully';
+        // Check if the doctor was activated or deactivated
+        const wasDeleted = action.payload.isDeleted;
+        state.message = wasDeleted ? 'Doctor deactivated successfully' : 'Doctor activated successfully';
         const index = state.doctors.findIndex(d => d._id === action.payload._id);
         if (index !== -1) {
           state.doctors[index] = action.payload;

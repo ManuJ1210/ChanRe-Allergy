@@ -97,10 +97,10 @@ const PatientDetails = () => {
 
   if (patientDetailsLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-2 sm:p-3 md:p-6">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading patient details...</p>
+          <p className="text-slate-600 text-sm sm:text-base">Loading patient details...</p>
         </div>
       </div>
     );
@@ -108,12 +108,12 @@ const PatientDetails = () => {
 
   if (patientDetailsError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-2 sm:p-3 md:p-6">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{patientDetailsError}</p>
+          <p className="text-red-600 mb-4 text-sm sm:text-base">{patientDetailsError}</p>
           <button
             onClick={() => navigate('/dashboard/doctor/dashboard')}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            className="bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-600 text-sm sm:text-base"
           >
             Back to Dashboard
           </button>
@@ -127,26 +127,26 @@ const PatientDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-2 sm:p-3 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <button
             onClick={() => navigate('/dashboard/doctor/dashboard')}
-            className="flex items-center text-blue-600 hover:text-blue-700 mb-4"
+            className="flex items-center text-blue-600 hover:text-blue-700 mb-4 text-sm sm:text-base"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
           </button>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <div className="bg-blue-100 p-3 rounded-full mr-4">
-                  <User className="h-6 w-6 text-blue-600" />
+          <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-blue-100">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
+                <div className="bg-blue-100 p-2 sm:p-3 rounded-full mr-2 sm:mr-4">
+                  <User className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                 </div>
-                <div>
-                  <h1 className="text-xl font-bold text-slate-800">{patient.name}</h1>
-                  <p className="text-slate-600">
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-lg sm:text-xl font-bold text-slate-800">{patient.name}</h1>
+                  <p className="text-slate-600 text-sm sm:text-base">
                     {patient.age} years old • {patient.gender} • {patient.centerId?.name}
                   </p>
                 </div>
@@ -156,7 +156,7 @@ const PatientDetails = () => {
                     dispatch(fetchPatientTestRequests(patientId));
                   }}
                   disabled={patientDetailsLoading}
-                  className="bg-slate-500 text-white px-3 py-1 rounded-lg hover:bg-slate-600 flex items-center disabled:opacity-50 text-sm"
+                  className="bg-slate-500 text-white px-2 sm:px-3 py-1 rounded-lg hover:bg-slate-600 flex items-center disabled:opacity-50 text-xs sm:text-sm"
                 >
                   <RefreshCw className={`h-3 w-3 mr-1 ${patientDetailsLoading ? 'animate-spin' : ''}`} />
                   Refresh
@@ -164,26 +164,26 @@ const PatientDetails = () => {
               </div>
               <button
                   onClick={() => navigate('/dashboard/doctor/new-test-request')}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center"
+                className="bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center text-sm sm:text-base w-full sm:w-auto justify-center"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Test Request
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-center text-slate-600">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+              <div className="flex items-center text-slate-600 text-sm sm:text-base">
                 <Phone className="h-4 w-4 mr-2" />
                 <span>{patient.phone}</span>
               </div>
               {patient.email && (
-                <div className="flex items-center text-slate-600">
+                <div className="flex items-center text-slate-600 text-sm sm:text-base">
                   <Mail className="h-4 w-4 mr-2" />
                   <span>{patient.email}</span>
                 </div>
               )}
               {patient.address && (
-                <div className="flex items-center text-slate-600">
+                <div className="flex items-center text-slate-600 text-sm sm:text-base sm:col-span-2 lg:col-span-1">
                   <MapPin className="h-4 w-4 mr-2" />
                   <span>{patient.address}</span>
                 </div>
@@ -193,14 +193,14 @@ const PatientDetails = () => {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-4 sm:mb-6">
           <div className="border-b border-blue-100">
-            <nav className="flex space-x-8 px-6">
+            <nav className="flex flex-col sm:flex-row space-y-0 space-x-0 sm:space-x-8 px-4 sm:px-6">
               {['overview', 'history', 'medications',  'test-requests'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm capitalize ${
+                  className={`py-3 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm capitalize ${
                     activeTab === tab
                       ? 'border-blue-500 text-blue-600'
                       : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
@@ -212,41 +212,41 @@ const PatientDetails = () => {
             </nav>
           </div>
 
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {activeTab === 'overview' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-slate-50 rounded-lg p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <div className="bg-slate-50 rounded-lg p-3 sm:p-4">
                   <div className="flex items-center mb-2">
-                    <FileText className="h-5 w-5 text-blue-500 mr-2" />
-                    <h3 className="font-semibold text-slate-800">Total Tests</h3>
+                    <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 mr-2" />
+                    <h3 className="font-semibold text-slate-800 text-sm sm:text-base">Total Tests</h3>
                   </div>
-                  <p className="text-xl font-bold text-slate-800">{tests.length}</p>
+                  <p className="text-lg sm:text-xl font-bold text-slate-800">{tests.length}</p>
                 </div>
 
-                <div className="bg-slate-50 rounded-lg p-4">
+                <div className="bg-slate-50 rounded-lg p-3 sm:p-4">
                   <div className="flex items-center mb-2">
-                    <Pill className="h-5 w-5 text-green-500 mr-2" />
-                    <h3 className="font-semibold text-slate-800">Medications</h3>
+                    <Pill className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 mr-2" />
+                    <h3 className="font-semibold text-slate-800 text-sm sm:text-base">Medications</h3>
                   </div>
-                  <p className="text-xl font-bold text-slate-800">{medications.length}</p>
+                  <p className="text-lg sm:text-xl font-bold text-slate-800">{medications.length}</p>
                 </div>
 
-                <div className="bg-slate-50 rounded-lg p-4">
+                <div className="bg-slate-50 rounded-lg p-3 sm:p-4">
                   <div className="flex items-center mb-2">
-                    <Clock className="h-5 w-5 text-yellow-500 mr-2" />
-                    <h3 className="font-semibold text-slate-800">Pending Tests</h3>
+                    <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 mr-2" />
+                    <h3 className="font-semibold text-slate-800 text-sm sm:text-base">Pending Tests</h3>
                   </div>
-                  <p className="text-2xl font-bold text-slate-800">
+                  <p className="text-xl sm:text-2xl font-bold text-slate-800">
                     {tests.filter(test => test.status === 'pending').length}
                   </p>
                 </div>
 
-                <div className="bg-slate-50 rounded-lg p-4">
+                <div className="bg-slate-50 rounded-lg p-3 sm:p-4">
                   <div className="flex items-center mb-2">
-                    <User className="h-5 w-5 text-purple-500 mr-2" />
-                    <h3 className="font-semibold text-slate-800">History</h3>
+                    <User className="h-4 w-4 sm:h-5 sm:w-5 text-purple-500 mr-2" />
+                    <h3 className="font-semibold text-slate-800 text-sm sm:text-base">History</h3>
                   </div>
-                  <p className="text-2xl font-bold text-slate-800">
+                  <p className="text-xl sm:text-2xl font-bold text-slate-800">
                     {history ? 'Available' : 'Not Available'}
                   </p>
                 </div>
@@ -255,17 +255,17 @@ const PatientDetails = () => {
 
             {activeTab === 'history' && (
               <div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-4">Patient History</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-4">Patient History</h3>
                 {history ? (
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                                          {/* Medical Conditions */}
-                     <div className="bg-slate-50 rounded-lg p-6">
-                       <h4 className="font-semibold text-slate-800 mb-4 text-lg">Medical Conditions</h4>
-                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div className="bg-slate-50 rounded-lg p-4 sm:p-6">
+                       <h4 className="font-semibold text-slate-800 mb-4 text-base sm:text-lg">Medical Conditions</h4>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                          {history.hayFever && (
-                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                             <span className="text-slate-700 font-medium">Hay Fever:</span>
-                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           <div className="flex justify-between items-center p-2 sm:p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium text-xs sm:text-sm">Hay Fever:</span>
+                             <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                history.hayFever === 'yes' ? 'bg-green-100 text-green-700' : 
                                history.hayFever === 'no' ? 'bg-red-100 text-red-700' : 
                                'bg-blue-100 text-blue-700'
@@ -275,9 +275,9 @@ const PatientDetails = () => {
                            </div>
                          )}
                          {history.asthma && (
-                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                             <span className="text-slate-700 font-medium">Asthma:</span>
-                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           <div className="flex justify-between items-center p-2 sm:p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium text-xs sm:text-sm">Asthma:</span>
+                             <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                history.asthma === 'yes' ? 'bg-green-100 text-green-700' : 
                                history.asthma === 'no' ? 'bg-red-100 text-red-700' : 
                                'bg-blue-100 text-blue-700'
@@ -287,9 +287,9 @@ const PatientDetails = () => {
                            </div>
                          )}
                          {history.breathingProblems && (
-                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                             <span className="text-slate-700 font-medium">Breathing Problems:</span>
-                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           <div className="flex justify-between items-center p-2 sm:p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium text-xs sm:text-sm">Breathing Problems:</span>
+                             <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                history.breathingProblems === 'yes' ? 'bg-green-100 text-green-700' : 
                                history.breathingProblems === 'no' ? 'bg-red-100 text-red-700' : 
                                'bg-blue-100 text-blue-700'
@@ -299,9 +299,9 @@ const PatientDetails = () => {
                            </div>
                          )}
                          {history.hivesSwelling && (
-                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                             <span className="text-slate-700 font-medium">Hives/Swelling:</span>
-                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           <div className="flex justify-between items-center p-2 sm:p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium text-xs sm:text-sm">Hives/Swelling:</span>
+                             <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                history.hivesSwelling === 'yes' ? 'bg-green-100 text-green-700' : 
                                history.hivesSwelling === 'no' ? 'bg-red-100 text-red-700' : 
                                'bg-blue-100 text-blue-700'
@@ -311,9 +311,9 @@ const PatientDetails = () => {
                            </div>
                          )}
                          {history.sinusTrouble && (
-                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                             <span className="text-slate-700 font-medium">Sinus Trouble:</span>
-                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           <div className="flex justify-between items-center p-2 sm:p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium text-xs sm:text-sm">Sinus Trouble:</span>
+                             <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                history.sinusTrouble === 'yes' ? 'bg-green-100 text-green-700' : 
                                history.sinusTrouble === 'no' ? 'bg-red-100 text-red-700' : 
                                'bg-blue-100 text-blue-700'
@@ -323,9 +323,9 @@ const PatientDetails = () => {
                            </div>
                          )}
                          {history.eczemaRashes && (
-                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                             <span className="text-slate-700 font-medium">Eczema/Rashes:</span>
-                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           <div className="flex justify-between items-center p-2 sm:p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium text-xs sm:text-sm">Eczema/Rashes:</span>
+                             <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                history.eczemaRashes === 'yes' ? 'bg-green-100 text-green-700' : 
                                history.eczemaRashes === 'no' ? 'bg-red-100 text-red-700' : 
                                'bg-blue-100 text-blue-700'
@@ -335,9 +335,9 @@ const PatientDetails = () => {
                            </div>
                          )}
                          {history.foodAllergies && (
-                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                             <span className="text-slate-700 font-medium">Food Allergies:</span>
-                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           <div className="flex justify-between items-center p-2 sm:p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium text-xs sm:text-sm">Food Allergies:</span>
+                             <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                history.foodAllergies === 'yes' ? 'bg-green-100 text-green-700' : 
                                history.foodAllergies === 'no' ? 'bg-red-100 text-red-700' : 
                                'bg-blue-100 text-blue-700'
@@ -347,9 +347,9 @@ const PatientDetails = () => {
                            </div>
                          )}
                          {history.arthriticDiseases && (
-                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                             <span className="text-slate-700 font-medium">Arthritic Diseases:</span>
-                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           <div className="flex justify-between items-center p-2 sm:p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium text-xs sm:text-sm">Arthritic Diseases:</span>
+                             <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                history.arthriticDiseases === 'yes' ? 'bg-green-100 text-green-700' : 
                                history.arthriticDiseases === 'no' ? 'bg-red-100 text-red-700' : 
                                'bg-blue-100 text-blue-700'
@@ -359,9 +359,9 @@ const PatientDetails = () => {
                            </div>
                          )}
                          {history.immuneDefect && (
-                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                             <span className="text-slate-700 font-medium">Immune Defect:</span>
-                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           <div className="flex justify-between items-center p-2 sm:p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium text-xs sm:text-sm">Immune Defect:</span>
+                             <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                history.immuneDefect === 'yes' ? 'bg-green-100 text-green-700' : 
                                history.immuneDefect === 'no' ? 'bg-red-100 text-red-700' : 
                                'bg-blue-100 text-blue-700'
@@ -371,9 +371,9 @@ const PatientDetails = () => {
                            </div>
                          )}
                          {history.drugAllergy && (
-                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                             <span className="text-slate-700 font-medium">Drug Allergy:</span>
-                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           <div className="flex justify-between items-center p-2 sm:p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium text-xs sm:text-sm">Drug Allergy:</span>
+                             <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                history.drugAllergy === 'yes' ? 'bg-green-100 text-green-700' : 
                                history.drugAllergy === 'no' ? 'bg-red-100 text-red-700' : 
                                'bg-blue-100 text-blue-700'
@@ -383,9 +383,9 @@ const PatientDetails = () => {
                            </div>
                          )}
                          {history.beeStingHypersensitivity && (
-                           <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                             <span className="text-slate-700 font-medium">Bee Sting Hypersensitivity:</span>
-                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           <div className="flex justify-between items-center p-2 sm:p-3 bg-white rounded-lg">
+                             <span className="text-slate-700 font-medium text-xs sm:text-sm">Bee Sting Hypersensitivity:</span>
+                             <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                                history.beeStingHypersensitivity === 'yes' ? 'bg-green-100 text-green-700' : 
                                history.beeStingHypersensitivity === 'no' ? 'bg-red-100 text-red-700' : 
                                'bg-blue-100 text-blue-700'
@@ -686,21 +686,21 @@ const PatientDetails = () => {
 
             {activeTab === 'medications' && (
               <div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-4">Medications</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-4">Medications</h3>
                 {medications.length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {medications.map((med, index) => (
-                      <div key={index} className="bg-slate-50 rounded-lg p-4">
+                      <div key={index} className="bg-slate-50 rounded-lg p-3 sm:p-4">
                         <div className="flex justify-between items-start mb-2">
-                          <h4 className="font-medium text-slate-800">{med.drugName}</h4>
-                          <span className="text-sm text-slate-500">
+                          <h4 className="font-medium text-slate-800 text-sm sm:text-base">{med.drugName}</h4>
+                          <span className="text-xs sm:text-sm text-slate-500">
                             {new Date(med.createdAt).toLocaleDateString()}
                           </span>
                         </div>
-                        <p className="text-slate-600 mb-1">Dose: {med.dose}</p>
-                        <p className="text-slate-600 mb-1">Duration: {med.duration}</p>
+                        <p className="text-slate-600 mb-1 text-xs sm:text-sm">Dose: {med.dose}</p>
+                        <p className="text-slate-600 mb-1 text-xs sm:text-sm">Duration: {med.duration}</p>
                         {med.adverseEvent && (
-                          <p className="text-slate-600">Adverse Event: {med.adverseEvent}</p>
+                          <p className="text-slate-600 text-xs sm:text-sm">Adverse Event: {med.adverseEvent}</p>
                         )}
                       </div>
                     ))}
@@ -708,7 +708,7 @@ const PatientDetails = () => {
                 ) : (
                   <div className="text-center py-8">
                     <Pill className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                    <p className="text-slate-500">No medications found</p>
+                    <p className="text-slate-500 text-sm sm:text-base">No medications found</p>
                   </div>
                 )}
               </div>
@@ -755,11 +755,11 @@ const PatientDetails = () => {
 
             {activeTab === 'test-requests' && (
               <div>
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold text-slate-800">Test Requests</h3>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-800">Test Requests</h3>
                   <button
                     onClick={() => navigate('/dashboard/doctor/new-test-request')}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center"
+                    className="bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center text-sm sm:text-base w-full sm:w-auto justify-center"
                   >
                     <Plus className="h-4 w-4 mr-2" />
                     New Test Request
@@ -767,20 +767,20 @@ const PatientDetails = () => {
                 </div>
                 
                 {patientTestRequests.length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {patientTestRequests.map((testRequest) => (
-                      <div key={testRequest._id} className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                        <div className="flex justify-between items-start mb-3">
-                          <div>
-                            <h4 className="font-medium text-slate-800 mb-1">
+                      <div key={testRequest._id} className="bg-slate-50 rounded-lg p-3 sm:p-4 border border-slate-200">
+                        <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-slate-800 mb-1 text-sm sm:text-base">
                               {testRequest.testType}
                             </h4>
                             {testRequest.testDescription && (
-                              <p className="text-sm text-slate-600 mb-2">
+                              <p className="text-xs sm:text-sm text-slate-600 mb-2">
                                 {testRequest.testDescription}
                               </p>
                             )}
-                            <div className="flex items-center space-x-4 text-sm">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm">
                               <span className="text-slate-500">
                                 Created: {new Date(testRequest.createdAt).toLocaleDateString()}
                               </span>
@@ -790,6 +790,31 @@ const PatientDetails = () => {
                                 </span>
                               )}
                             </div>
+                            
+                            {/* ✅ NEW: Workflow Stage Display */}
+                            {testRequest.workflowStage && (
+                              <div className="mt-2">
+                                <span className="text-xs text-slate-500">Workflow: </span>
+                                <span className="text-xs font-medium text-blue-600 capitalize">
+                                  {testRequest.workflowStage.replace(/_/g, ' ')}
+                                </span>
+                              </div>
+                            )}
+                            
+                            {/* ✅ NEW: Superadmin Review Status */}
+                            {testRequest.superadminReview && (
+                              <div className="mt-2">
+                                <span className="text-xs text-slate-500">Superadmin Review: </span>
+                                <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                                  testRequest.superadminReview.status === 'approved' ? 'text-green-600 bg-green-100' :
+                                  testRequest.superadminReview.status === 'rejected' ? 'text-red-600 bg-red-100' :
+                                  testRequest.superadminReview.status === 'requires_changes' ? 'text-orange-600 bg-orange-100' :
+                                  'text-yellow-600 bg-yellow-100'
+                                }`}>
+                                  {testRequest.superadminReview.status?.replace(/_/g, ' ') || 'Pending'}
+                                </span>
+                              </div>
+                            )}
                           </div>
                           <div className="flex flex-col items-end space-y-2">
                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -798,6 +823,9 @@ const PatientDetails = () => {
                               testRequest.status === 'Assigned' ? 'bg-orange-100 text-orange-700' :
                               testRequest.status === 'Sample Collected' ? 'bg-purple-100 text-purple-700' :
                               testRequest.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' :
+                              testRequest.status === 'Superadmin_Review' ? 'bg-purple-100 text-purple-700' :
+                              testRequest.status === 'Superadmin_Approved' ? 'bg-green-100 text-green-700' :
+                              testRequest.status === 'Superadmin_Rejected' ? 'bg-red-100 text-red-700' :
                               'bg-red-100 text-red-700'
                             }`}>
                               {testRequest.status}
@@ -813,32 +841,32 @@ const PatientDetails = () => {
                         </div>
                         
                         {testRequest.assignedLabStaffName && (
-                          <div className="text-sm text-slate-600 mb-2">
+                          <div className="text-xs sm:text-sm text-slate-600 mb-2">
                             Assigned to: {testRequest.assignedLabStaffName}
                           </div>
                         )}
                         
                         {testRequest.notes && (
-                          <div className="text-sm text-slate-600 mb-2">
+                          <div className="text-xs sm:text-sm text-slate-600 mb-2">
                             Notes: {testRequest.notes}
                           </div>
                         )}
                         
                         {(['Completed', 'Report_Generated', 'Report_Sent', 'feedback_sent'].includes(testRequest.status)) && testRequest.testResults && (
                           <div className="mt-3 p-3 bg-white rounded-lg border border-slate-200">
-                            <h5 className="font-medium text-slate-800 mb-2">Test Results</h5>
-                            <p className="text-sm text-slate-600">{testRequest.testResults}</p>
+                            <h5 className="font-medium text-slate-800 mb-2 text-sm sm:text-base">Test Results</h5>
+                            <p className="text-xs sm:text-sm text-slate-600">{testRequest.testResults}</p>
                             {testRequest.testReport && (
-                              <div className="mt-2 flex space-x-3">
+                              <div className="mt-2 flex flex-col sm:flex-row gap-2 sm:gap-3">
                                 <button
                                   onClick={() => handleViewReport(testRequest._id)}
-                                  className="text-purple-600 hover:text-purple-700 text-sm font-medium"
+                                  className="text-purple-600 hover:text-purple-700 text-xs sm:text-sm font-medium"
                                 >
                                   View Report
                                 </button>
                                 <button
                                   onClick={() => handleDownloadReport(testRequest._id)}
-                                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                                  className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-medium"
                                 >
                                   Download Report
                                 </button>
@@ -852,10 +880,10 @@ const PatientDetails = () => {
                 ) : (
                   <div className="text-center py-8">
                     <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                    <p className="text-slate-500">No test requests found</p>
+                    <p className="text-slate-500 text-sm sm:text-base">No test requests found</p>
                     <button
                       onClick={() => navigate('/dashboard/doctor/new-test-request')}
-                      className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                      className="mt-4 bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-600 text-sm sm:text-base w-full sm:w-auto"
                     >
                       Create First Test Request
                     </button>
@@ -868,12 +896,12 @@ const PatientDetails = () => {
 
         {/* Test Request Modal */}
         {showTestForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl p-6 w-full max-w-md">
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">Add Test Request</h3>
-              <form onSubmit={handleTestSubmit} className="space-y-4">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
+            <div className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-md">
+              <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-4">Add Test Request</h3>
+              <form onSubmit={handleTestSubmit} className="space-y-3 sm:space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                  <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">
                     Test Type
                   </label>
                   <input
@@ -881,33 +909,33 @@ const PatientDetails = () => {
                     name="testType"
                     value={testForm.testType}
                     onChange={handleChange}
-                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                     placeholder="e.g., CBC, Allergy Panel"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                  <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">
                     Notes
                   </label>
                   <textarea
                     name="notes"
                     value={testForm.notes}
                     onChange={handleChange}
-                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                     placeholder="Additional notes..."
                     rows="3"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                  <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">
                     Priority
                   </label>
                   <select
                     name="priority"
                     value={testForm.priority}
                     onChange={handleChange}
-                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                   >
                     <option value="low">Low</option>
                     <option value="normal">Normal</option>
@@ -915,18 +943,18 @@ const PatientDetails = () => {
                     <option value="urgent">Urgent</option>
                   </select>
                 </div>
-                <div className="flex space-x-3 pt-4">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-4">
                   <button
                     type="button"
                     onClick={() => setShowTestForm(false)}
-                    className="flex-1 bg-slate-200 text-slate-700 py-2 px-4 rounded-lg hover:bg-slate-300"
+                    className="flex-1 bg-slate-200 text-slate-700 py-2 px-3 sm:px-4 rounded-lg hover:bg-slate-300 text-sm sm:text-base"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                    className="flex-1 bg-blue-500 text-white py-2 px-3 sm:px-4 rounded-lg hover:bg-blue-600 disabled:opacity-50 text-sm sm:text-base"
                   >
                     {loading ? 'Adding...' : 'Add Test Request'}
                   </button>

@@ -39,7 +39,7 @@ export default function Header({ onHamburgerClick }) {
         } else if (user.role === 'centeradmin' || user.role === 'centerAdmin') {
           // Center admin - try to find center by admin ID
           try {
-            const res = await API.get(`/centers/admin/${user._id}`);
+            const res = await API.get(`/centers/by-admin/${user._id}`);
             centerData = res.data;
           } catch (err) {
             // Fallback: search centers by admin ID

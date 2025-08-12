@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import API from '../../services/api';
+import API from '../../../services/api';
 import { 
   ArrowLeft, 
   Activity,
@@ -19,7 +19,8 @@ import {
   Clock,
   Calendar,
   Mail,
-  Building
+  Building,
+  AlertTriangle
 } from 'lucide-react';
 
 const TestRequestDetails = () => {
@@ -47,27 +48,6 @@ const TestRequestDetails = () => {
       setError('Failed to load test request details');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const downloadReport = async () => {
-    try {
-      const response = await API.get(`/test-requests/${id}/download-report`);
-      
-      // Create a text file with the report data
-      const reportData = response.data;
-      const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `test-report-${testRequest._id}.json`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Error downloading report:', error);
-      setError('Failed to download report');
     }
   };
 
@@ -117,6 +97,19 @@ const TestRequestDetails = () => {
     }
   };
 
+  const getUrgencyIcon = (urgency) => {
+    switch (urgency) {
+      case 'Emergency':
+        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case 'Urgent':
+        return <Clock className="h-4 w-4 text-orange-500" />;
+      case 'Normal':
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      default:
+        return <Clock className="h-4 w-4 text-gray-500" />;
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 p-2 sm:p-3 md:p-6">
@@ -144,13 +137,13 @@ const TestRequestDetails = () => {
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
-              <p className="text-gray-600 mb-4 text-sm sm:text-base">{error}</p>
+              <h2 className="text-sm sm:text-lg font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
+              <p className="text-gray-600 mb-4 text-xs sm:text-base">{error}</p>
               <button
-                onClick={() => navigate('/dashboard/doctor/completed-reports')}
-                className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
+                onClick={() => navigate('/dashboard/superadmin/test-requests')}
+                className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-base"
               >
-                Back to Completed Reports
+                Back to Test Requests
               </button>
             </div>
           </div>
@@ -166,13 +159,13 @@ const TestRequestDetails = () => {
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">No Test Request Found</h2>
-              <p className="text-gray-600 mb-4 text-sm sm:text-base">The requested test request could not be found.</p>
+              <h2 className="text-sm sm:text-lg font-semibold text-gray-800 mb-2">No Test Request Found</h2>
+              <p className="text-gray-600 mb-4 text-xs sm:text-base">The requested test request could not be found.</p>
               <button
-                onClick={() => navigate('/dashboard/doctor/completed-reports')}
-                className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
+                onClick={() => navigate('/dashboard/superadmin/test-requests')}
+                className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-base"
               >
-                Back to Completed Reports
+                Back to Test Requests
               </button>
             </div>
           </div>
@@ -189,13 +182,13 @@ const TestRequestDetails = () => {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
               <button
-                onClick={() => navigate('/dashboard/doctor/completed-reports')}
-                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors text-sm sm:text-base"
+                onClick={() => navigate('/dashboard/superadmin/test-requests')}
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors text-xs sm:text-base"
               >
                 <ArrowLeft size={20} />
-                <span>Back to Completed Reports</span>
+                <span>Back to Test Requests</span>
               </button>
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Test Request Details</h1>
+              <h1 className="text-lg sm:text-xl font-bold text-gray-800">Test Request Details</h1>
             </div>
           </div>
         </div>
@@ -204,8 +197,8 @@ const TestRequestDetails = () => {
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
           {/* Record Header */}
           <div className="text-center mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">TEST REQUEST DETAILS</h1>
-            <p className="text-gray-600 text-sm sm:text-base">Complete Information About This Test Request</p>
+            <h1 className="text-xl sm:text-xl font-bold text-gray-800 mb-2">TEST REQUEST DETAILS</h1>
+            <p className="text-gray-600 text-xs sm:text-base">Complete Information About This Test Request</p>
           </div>
 
           {/* Error Message */}
@@ -213,43 +206,46 @@ const TestRequestDetails = () => {
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
               <div className="flex items-center">
                 <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-                <p className="text-red-800 text-sm sm:text-base">{error}</p>
+                <p className="text-red-800 text-xs sm:text-base">{error}</p>
               </div>
             </div>
           )}
           
           {/* Test Request Information */}
           <div className="bg-blue-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
               <UserCheck className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
               Test Request Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-500">Request ID</label>
-                <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest._id || 'N/A'}</p>
+                <label className="block text-xs font-medium text-gray-500">Request ID</label>
+                <p className="text-gray-900 font-medium text-xs">{testRequest._id || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-500">Status</label>
+                <label className="block text-xs font-medium text-gray-500">Status</label>
                 <span className={`inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(testRequest.status)}`}>
                   {testRequest.status?.replace(/_/g, ' ') || 'N/A'}
                 </span>
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-500">Urgency</label>
-                <span className={`inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium border ${getUrgencyColor(testRequest.urgency)}`}>
-                  {testRequest.urgency || 'N/A'}
-                </span>
+                <label className="block text-xs font-medium text-gray-500">Urgency</label>
+                <div className="flex items-center">
+                  {getUrgencyIcon(testRequest.urgency)}
+                  <span className={`ml-2 inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium border ${getUrgencyColor(testRequest.urgency)}`}>
+                    {testRequest.urgency || 'N/A'}
+                  </span>
+                </div>
               </div>
             </div>
             
-            {/* ✅ NEW: Workflow Stage Information */}
+            {/* Workflow Stage Information */}
             {testRequest.workflowStage && (
               <div className="mt-4 pt-4 border-t border-blue-200">
-                <label className="block text-xs sm:text-sm font-medium text-gray-500 mb-2">Workflow Stage</label>
+                <label className="block text-xs font-medium text-gray-500 mb-2">Workflow Stage</label>
                 <div className="flex items-center space-x-2">
                   <div className="flex-1 bg-white rounded-lg p-3">
-                    <span className="text-xs sm:text-sm font-medium text-blue-600 capitalize">
+                    <span className="text-xs font-medium text-blue-600 capitalize">
                       {testRequest.workflowStage.replace(/_/g, ' ')}
                     </span>
                   </div>
@@ -258,16 +254,16 @@ const TestRequestDetails = () => {
             )}
           </div>
 
-          {/* ✅ NEW: Superadmin Review Information */}
+          {/* Superadmin Review Information */}
           {testRequest.superadminReview && (
             <div className="bg-yellow-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
                 <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-yellow-600" />
                 Superadmin Review Status
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-500">Review Status</label>
+                  <label className="block text-xs font-medium text-gray-500">Review Status</label>
                   <span className={`inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium border ${
                     testRequest.superadminReview.status === 'approved' ? 'text-green-600 bg-green-50 border-green-200' :
                     testRequest.superadminReview.status === 'rejected' ? 'text-red-600 bg-red-50 border-red-200' :
@@ -279,8 +275,8 @@ const TestRequestDetails = () => {
                 </div>
                 {testRequest.superadminReview.reviewedAt && (
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-500">Reviewed At</label>
-                    <p className="text-gray-900 font-medium text-sm sm:text-base flex items-center">
+                    <label className="block text-xs font-medium text-gray-500">Reviewed At</label>
+                    <p className="text-gray-900 font-medium text-xs flex items-center">
                       <Calendar className="h-4 w-4 mr-2 text-gray-500" />
                       {new Date(testRequest.superadminReview.reviewedAt).toLocaleDateString()}
                     </p>
@@ -288,26 +284,26 @@ const TestRequestDetails = () => {
                 )}
                 {testRequest.superadminReview.reviewNotes && (
                   <div className="md:col-span-2">
-                    <label className="block text-xs sm:text-sm font-medium text-gray-500">Review Notes</label>
-                    <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.superadminReview.reviewNotes}</p>
+                    <label className="block text-xs font-medium text-gray-500">Review Notes</label>
+                    <p className="text-gray-900 font-medium text-xs">{testRequest.superadminReview.reviewNotes}</p>
                   </div>
                 )}
                 {testRequest.superadminReview.additionalTests && (
                   <div className="md:col-span-2">
-                    <label className="block text-xs sm:text-sm font-medium text-gray-500">Additional Tests Recommended</label>
-                    <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.superadminReview.additionalTests}</p>
+                    <label className="block text-xs font-medium text-gray-500">Additional Tests Recommended</label>
+                    <p className="text-gray-900 font-medium text-xs">{testRequest.superadminReview.additionalTests}</p>
                   </div>
                 )}
                 {testRequest.superadminReview.patientInstructions && (
                   <div className="md:col-span-2">
-                    <label className="block text-xs sm:text-sm font-medium text-gray-500">Patient Instructions</label>
-                    <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.superadminReview.patientInstructions}</p>
+                    <label className="block text-xs font-medium text-gray-500">Patient Instructions</label>
+                    <p className="text-gray-900 font-medium text-xs">{testRequest.superadminReview.patientInstructions}</p>
                   </div>
                 )}
                 {testRequest.superadminReview.changesRequired && (
                   <div className="md:col-span-2">
-                    <label className="block text-xs sm:text-sm font-medium text-gray-500">Changes Required</label>
-                    <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.superadminReview.changesRequired}</p>
+                    <label className="block text-xs font-medium text-gray-500">Changes Required</label>
+                    <p className="text-gray-900 font-medium text-xs">{testRequest.superadminReview.changesRequired}</p>
                   </div>
                 )}
               </div>
@@ -316,25 +312,25 @@ const TestRequestDetails = () => {
 
           {/* Patient Information */}
           <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
               <User className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
               Patient Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-500">Patient Name</label>
-                <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.patientName || 'N/A'}</p>
+                <label className="block text-xs font-medium text-gray-500">Patient Name</label>
+                <p className="text-gray-900 font-medium text-xs">{testRequest.patientName || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-500">Patient Phone</label>
-                <p className="text-gray-900 font-medium flex items-center text-sm sm:text-base">
+                <label className="block text-xs font-medium text-gray-500">Patient Phone</label>
+                <p className="text-gray-900 font-medium flex items-center text-xs">
                   <Phone className="h-4 w-4 mr-2 text-gray-500" />
                   {testRequest.patientPhone || testRequest.patientId?.phone || 'N/A'}
                 </p>
               </div>
               <div className="md:col-span-2">
-                <label className="block text-xs sm:text-sm font-medium text-gray-500">Patient Address</label>
-                <p className="text-gray-900 font-medium flex items-center text-sm sm:text-base">
+                <label className="block text-xs font-medium text-gray-500">Patient Address</label>
+                <p className="text-gray-900 font-medium flex items-center text-xs">
                   <MapPin className="h-4 w-4 mr-2 text-gray-500" />
                   {testRequest.patientAddress || testRequest.patientId?.address || 'N/A'}
                 </p>
@@ -342,31 +338,70 @@ const TestRequestDetails = () => {
             </div>
           </div>
 
+          {/* Doctor Information */}
+          <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
+            <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
+              <Stethoscope className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
+              Doctor Information
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              <div>
+                <label className="block text-xs font-medium text-gray-500">Doctor Name</label>
+                <p className="text-gray-900 font-medium text-xs">{testRequest.doctorName || 'N/A'}</p>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500">Doctor Phone</label>
+                <p className="text-gray-900 font-medium flex items-center text-xs">
+                  <Phone className="h-4 w-4 mr-2 text-gray-500" />
+                  {testRequest.doctorPhone || 'N/A'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Center Information */}
+          <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
+            <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
+              <Building className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
+              Center Information
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              <div>
+                <label className="block text-xs font-medium text-gray-500">Center Name</label>
+                <p className="text-gray-900 font-medium text-xs">{testRequest.centerName || 'N/A'}</p>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500">Center Code</label>
+                <p className="text-gray-900 font-medium text-xs">{testRequest.centerCode || 'N/A'}</p>
+              </div>
+            </div>
+          </div>
+
           {/* Test Information */}
           <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
               <TestTube className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
               Test Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-500">Test Type</label>
-                <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.testType || 'N/A'}</p>
+                <label className="block text-xs font-medium text-gray-500">Test Type</label>
+                <p className="text-gray-900 font-medium text-xs">{testRequest.testType || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-500">Test Description</label>
-                <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.testDescription || 'N/A'}</p>
+                <label className="block text-xs font-medium text-gray-500">Test Description</label>
+                <p className="text-gray-900 font-medium text-xs">{testRequest.testDescription || 'N/A'}</p>
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-500">Requested Date</label>
-                <p className="text-gray-900 font-medium flex items-center text-sm sm:text-base">
+                <label className="block text-xs font-medium text-gray-500">Requested Date</label>
+                <p className="text-gray-900 font-medium flex items-center text-xs">
                   <Calendar className="h-4 w-4 mr-2 text-gray-500" />
                   {testRequest.createdAt ? new Date(testRequest.createdAt).toLocaleDateString() : 'N/A'}
                 </p>
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-500">Notes</label>
-                <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.notes || 'No notes'}</p>
+                <label className="block text-xs font-medium text-gray-500">Notes</label>
+                <p className="text-gray-900 font-medium text-xs">{testRequest.notes || 'No notes'}</p>
               </div>
             </div>
           </div>
@@ -374,18 +409,18 @@ const TestRequestDetails = () => {
           {/* Lab Information */}
           {testRequest.assignedLabStaffName && (
             <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
                 <Stethoscope className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
                 Lab Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-500">Assigned Lab Staff</label>
-                  <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.assignedLabStaffName || 'N/A'}</p>
+                  <label className="block text-xs font-medium text-gray-500">Assigned Lab Staff</label>
+                  <p className="text-gray-900 font-medium text-xs">{testRequest.assignedLabStaffName || 'N/A'}</p>
                 </div>
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-500">Lab Staff Phone</label>
-                  <p className="text-gray-900 font-medium flex items-center text-sm sm:text-base">
+                  <label className="block text-xs font-medium text-gray-500">Lab Staff Phone</label>
+                  <p className="text-gray-900 font-medium flex items-center text-xs">
                     <Phone className="h-4 w-4 mr-2 text-gray-500" />
                     {testRequest.assignedLabStaffId?.phone || 'N/A'}
                   </p>
@@ -397,26 +432,26 @@ const TestRequestDetails = () => {
           {/* Report Information */}
           {testRequest.reportGeneratedDate && (
             <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
                 <FileText className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
                 Report Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-500">Report Generated</label>
-                  <p className="text-gray-900 font-medium flex items-center text-sm sm:text-base">
+                  <label className="block text-xs font-medium text-gray-500">Report Generated</label>
+                  <p className="text-gray-900 font-medium flex items-center text-xs">
                     <Calendar className="h-4 w-4 mr-2 text-gray-500" />
                     {new Date(testRequest.reportGeneratedDate).toLocaleDateString()}
                   </p>
                 </div>
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-500">Generated By</label>
-                  <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.reportGeneratedByName || 'N/A'}</p>
+                  <label className="block text-xs font-medium text-gray-500">Generated By</label>
+                  <p className="text-gray-900 font-medium text-xs">{testRequest.reportGeneratedByName || 'N/A'}</p>
                 </div>
                 {testRequest.reportSentDate && (
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-500">Report Sent</label>
-                    <p className="text-gray-900 font-medium flex items-center text-sm sm:text-base">
+                    <label className="block text-xs font-medium text-gray-500">Report Sent</label>
+                    <p className="text-gray-900 font-medium flex items-center text-xs">
                       <Mail className="h-4 w-4 mr-2 text-gray-500" />
                       {new Date(testRequest.reportSentDate).toLocaleDateString()}
                     </p>
@@ -424,8 +459,8 @@ const TestRequestDetails = () => {
                 )}
                 {testRequest.reportSentByName && (
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-500">Sent By</label>
-                    <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.reportSentByName || 'N/A'}</p>
+                    <label className="block text-xs font-medium text-gray-500">Sent By</label>
+                    <p className="text-gray-900 font-medium text-xs">{testRequest.reportSentByName || 'N/A'}</p>
                   </div>
                 )}
               </div>
@@ -435,25 +470,25 @@ const TestRequestDetails = () => {
           {/* Test Results */}
           {testRequest.testResults && testRequest.testResults !== 'Pending' && (
             <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
                 <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
                 Test Results
               </h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-500">Results</label>
-                  <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.testResults || 'N/A'}</p>
+                  <label className="block text-xs font-medium text-gray-500">Results</label>
+                  <p className="text-gray-900 font-medium text-xs">{testRequest.testResults || 'N/A'}</p>
                 </div>
                 {testRequest.conclusion && (
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-500">Conclusion</label>
-                    <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.conclusion}</p>
+                    <label className="block text-xs font-medium text-gray-500">Conclusion</label>
+                    <p className="text-gray-900 font-medium text-xs">{testRequest.conclusion}</p>
                   </div>
                 )}
                 {testRequest.recommendations && (
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-500">Recommendations</label>
-                    <p className="text-gray-900 font-medium text-sm sm:text-base">{testRequest.recommendations}</p>
+                    <label className="block text-xs font-medium text-gray-500">Recommendations</label>
+                    <p className="text-gray-900 font-medium text-xs">{testRequest.recommendations}</p>
                   </div>
                 )}
               </div>
@@ -462,21 +497,12 @@ const TestRequestDetails = () => {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-            {testRequest.reportGeneratedDate && (
-              <button
-                onClick={downloadReport}
-                className="flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm sm:text-base w-full sm:w-auto"
-              >
-                <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-                Download Report
-              </button>
-            )}
             <button
-              onClick={() => navigate('/dashboard/doctor/completed-reports')}
-              className="flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base w-full sm:w-auto"
+              onClick={() => navigate('/dashboard/superadmin/test-requests')}
+              className="flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-xs sm:text-base w-full sm:w-auto"
             >
               <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-              Back to Reports
+              Back to Test Requests
             </button>
           </div>
         </div>
@@ -485,4 +511,4 @@ const TestRequestDetails = () => {
   );
 };
 
-export default TestRequestDetails; 
+export default TestRequestDetails;

@@ -42,8 +42,51 @@ const testRequestSchema = new mongoose.Schema({
   // Lab workflow fields
   status: {
     type: String,
-    enum: ['Pending', 'Assigned', 'Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing', 'Testing_Completed', 'Report_Generated', 'Report_Sent', 'Completed', 'Cancelled', 'feedback_sent'],
+    enum: ['Pending', 'Superadmin_Review', 'Superadmin_Approved', 'Superadmin_Rejected', 'Assigned', 'Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing', 'Testing_Completed', 'Report_Generated', 'Report_Sent', 'Completed', 'Cancelled', 'feedback_sent'],
     default: 'Pending'
+  },
+  
+  // ✅ NEW: Superadmin review workflow fields
+  superadminReview: {
+    reviewedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'SuperAdminDoctor'
+    },
+    reviewedAt: Date,
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected', 'requires_changes'],
+      default: 'pending'
+    },
+    reviewNotes: String,
+    additionalTests: String,
+    patientInstructions: String,
+    changesRequired: String,
+    approvedForLab: {
+      type: Boolean,
+      default: false
+    }
+  },
+  
+  // ✅ NEW: Workflow tracking
+  workflowStage: {
+    type: String,
+    enum: ['doctor_request', 'superadmin_review', 'lab_assignment', 'sample_collection', 'lab_testing', 'report_generation', 'completed'],
+    default: 'doctor_request'
+  },
+  
+  // ✅ NEW: Approval tracking
+  approvals: {
+    superadmin: {
+      approved: { type: Boolean, default: false },
+      approvedAt: Date,
+      approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'SuperAdminDoctor' }
+    },
+    lab: {
+      approved: { type: Boolean, default: false },
+      approvedAt: Date,
+      approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'LabStaff' }
+    }
   },
   
   // Lab staff assignment

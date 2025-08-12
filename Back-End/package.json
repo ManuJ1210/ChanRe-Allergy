@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "create-test-data": "node scripts/createTestData.js",
+    "clear-test-data": "node scripts/clearTestData.js"
   },
   "keywords": [],
   "author": "",

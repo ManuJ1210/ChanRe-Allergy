@@ -906,3 +906,248 @@ export const getSuperAdminDoctorPatientLabReports = async (req, res) => {
     res.status(500).json({ message: 'Error fetching patient lab reports', error: error.message });
   }
 }; 
+
+// ✅ NEW: Get test requests pending superadmin review
+export const getTestRequestsForReview = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, status = '', urgency = '', centerId = '' } = req.query;
+    
+    // Build query for test requests that need superadmin review
+    const query = {
+      status: { $in: ['Superadmin_Review', 'Superadmin_Rejected'] },
+      'superadminReview.status': { $in: ['pending', 'requires_changes'] }
+    };
+
+    // Add filters
+    if (status && status !== 'all') {
+      query.status = status;
+    }
+    
+    if (urgency && urgency !== 'all') {
+      query.urgency = urgency;
+    }
+    
+    if (centerId && centerId !== 'all') {
+      query.centerId = centerId;
+    }
+
+    // Calculate pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    
+    // Get total count
+    const total = await TestRequest.countDocuments(query);
+    
+    // Get test requests with pagination
+    const testRequests = await TestRequest.find(query)
+      .populate('doctorId', 'name email phone')
+      .populate('patientId', 'name age gender phone address')
+      .populate('centerId', 'name code')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const totalPages = Math.ceil(total / parseInt(limit));
+
+    res.json({
+      testRequests,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages,
+        total,
+        limit: parseInt(limit)
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching test requests for review:', error);
+    res.status(500).json({ message: 'Error fetching test requests for review', error: error.message });
+  }
+};
+
+// ✅ NEW: Review and approve/reject test request
+export const reviewTestRequest = async (req, res) => {
+  try {
+    const { testRequestId } = req.params;
+    const { 
+      action, // 'approve', 'reject', 'require_changes'
+      reviewNotes, 
+      additionalTests, 
+      patientInstructions, 
+      changesRequired 
+    } = req.body;
+
+    const testRequest = await TestRequest.findById(testRequestId);
+    if (!testRequest) {
+      return res.status(404).json({ message: 'Test request not found' });
+    }
+
+    // Check if test request is in correct status for review
+    if (!['Superadmin_Review', 'Superadmin_Rejected'].includes(testRequest.status)) {
+      return res.status(400).json({ message: 'Test request is not in correct status for review' });
+    }
+
+    // Update test request based on action
+    let newStatus = '';
+    let newWorkflowStage = '';
+    let superadminReviewData = {
+      reviewedBy: req.user.id,
+      reviewedAt: new Date(),
+      reviewNotes,
+      additionalTests,
+      patientInstructions
+    };
+
+    switch (action) {
+      case 'approve':
+        newStatus = 'Superadmin_Approved';
+        newWorkflowStage = 'lab_assignment';
+        superadminReviewData.status = 'approved';
+        superadminReviewData.approvedForLab = true;
+        break;
+        
+      case 'reject':
+        newStatus = 'Superadmin_Rejected';
+        newWorkflowStage = 'doctor_request';
+        superadminReviewData.status = 'rejected';
+        superadminReviewData.approvedForLab = false;
+        break;
+        
+      case 'require_changes':
+        newStatus = 'Superadmin_Review';
+        newWorkflowStage = 'superadmin_review';
+        superadminReviewData.status = 'requires_changes';
+        superadminReviewData.changesRequired = changesRequired;
+        superadminReviewData.approvedForLab = false;
+        break;
+        
+      default:
+        return res.status(400).json({ message: 'Invalid action. Must be approve, reject, or require_changes' });
+    }
+
+    // Update test request
+    const updatedTestRequest = await TestRequest.findByIdAndUpdate(
+      testRequestId,
+      {
+        status: newStatus,
+        workflowStage: newWorkflowStage,
+        superadminReview: superadminReviewData,
+        'approvals.superadmin': {
+          approved: action === 'approve',
+          approvedAt: action === 'approve' ? new Date() : null,
+          approvedBy: action === 'approve' ? req.user.id : null
+        }
+      },
+      { new: true }
+    ).populate('doctorId', 'name email phone')
+     .populate('patientId', 'name age gender phone address')
+     .populate('centerId', 'name code');
+
+    // ✅ Send notification to center doctor about the review result
+    try {
+      const notification = new Notification({
+        recipient: testRequest.doctorId,
+        sender: req.user.id,
+        type: 'test_request',
+        title: `Test Request ${action === 'approve' ? 'Approved' : action === 'reject' ? 'Rejected' : 'Changes Required'}`,
+        message: action === 'approve' 
+          ? `Your test request for ${testRequest.patientName} has been approved and sent to lab.`
+          : action === 'reject'
+          ? `Your test request for ${testRequest.patientName} has been rejected. Reason: ${reviewNotes}`
+          : `Your test request for ${testRequest.patientName} requires changes. Please review and resubmit.`,
+        data: {
+          testRequestId: testRequest._id,
+          patientId: testRequest.patientId,
+          action,
+          reviewNotes,
+          additionalTests,
+          patientInstructions,
+          changesRequired
+        },
+        read: false
+      });
+      await notification.save();
+      console.log(`✅ Notification sent to center doctor about ${action} result`);
+    } catch (notificationError) {
+      console.error('⚠️ Error sending notification to center doctor:', notificationError);
+    }
+
+    // ✅ If approved, send notification to lab staff
+    if (action === 'approve') {
+      try {
+        const LabStaff = (await import('../models/LabStaff.js')).default;
+        const labStaff = await LabStaff.find({ isDeleted: { $ne: true } });
+        
+        for (const labMember of labStaff) {
+          const notification = new Notification({
+            recipient: labMember._id,
+            sender: req.user.id,
+            type: 'test_request',
+            title: 'Test Request Approved for Lab',
+            message: `Test request for ${testRequest.patientName} has been approved by superadmin doctor and is ready for lab assignment.`,
+            data: {
+              testRequestId: testRequest._id,
+              patientId: testRequest.patientId,
+              doctorId: testRequest.doctorId,
+              centerId: testRequest.centerId,
+              testType: testRequest.testType,
+              urgency: testRequest.urgency,
+              status: 'Superadmin_Approved',
+              readyForLab: true
+            },
+            read: false
+          });
+          await notification.save();
+          console.log(`✅ Notification sent to lab staff: ${labMember.staffName}`);
+        }
+      } catch (labNotificationError) {
+        console.error('⚠️ Error sending notifications to lab staff:', labNotificationError);
+      }
+    }
+
+    res.json({
+      message: `Test request ${action}d successfully`,
+      testRequest: updatedTestRequest
+    });
+  } catch (error) {
+    console.error('Error reviewing test request:', error);
+    res.status(500).json({ message: 'Error reviewing test request', error: error.message });
+  }
+};
+
+// ✅ NEW: Get test request statistics for superadmin doctor dashboard
+export const getTestRequestStats = async (req, res) => {
+  try {
+    const stats = await TestRequest.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const totalPending = await TestRequest.countDocuments({
+      status: { $in: ['Superadmin_Review', 'Superadmin_Rejected'] },
+      'superadminReview.status': { $in: ['pending', 'requires_changes'] }
+    });
+
+    const totalApproved = await TestRequest.countDocuments({
+      status: 'Superadmin_Approved'
+    });
+
+    const totalRejected = await TestRequest.countDocuments({
+      status: 'Superadmin_Rejected'
+    });
+
+    res.json({
+      stats: {
+        totalPending,
+        totalApproved,
+        totalRejected,
+        breakdown: stats
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching test request stats:', error);
+    res.status(500).json({ message: 'Error fetching test request stats', error: error.message });
+  }
+}; 

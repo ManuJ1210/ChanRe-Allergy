@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateReceptionistThunk } from '../../../features/centerAdmin/centerAdminThunks';
 import { resetCenterAdminState } from '../../../features/centerAdmin/centerAdminSlice';
 import { Eye, EyeOff, UserCheck, ArrowLeft, Save } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const EditReceptionist = () => {
   const { id } = useParams();
@@ -35,6 +36,19 @@ const EditReceptionist = () => {
     }
   }, [updateSuccess, dispatch, navigate]);
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  }, [error]);
+
   const fetchReceptionist = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -45,6 +59,14 @@ const EditReceptionist = () => {
       setFormData({ ...data, password: '' });
     } catch (err) {
       console.error('Failed to fetch receptionist:', err);
+      toast.error('Failed to fetch receptionist details', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } finally {
       setInitialLoading(false);
     }

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCenterAdminDoctorById } from '../../../features/centerAdmin/centerAdminDoctorSlice';
-import { ArrowLeft, User, Mail, Phone, GraduationCap, Building, Calendar, Clock } from 'lucide-react';
+import { ArrowLeft, User, Mail, Phone, GraduationCap, Building, Calendar, Clock, Stethoscope, Award, FileText, Edit } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const ViewDoctor = () => {
   const { id } = useParams();
@@ -17,12 +18,26 @@ const ViewDoctor = () => {
     }
   }, [dispatch, id]);
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  }, [error]);
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading doctor details...</p>
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
+          <p className="text-slate-600 text-xs sm:text-base font-medium">Loading doctor details...</p>
+          <p className="text-slate-500 text-xs sm:text-xs mt-1">Please wait while we fetch the data</p>
         </div>
       </div>
     );
@@ -30,13 +45,13 @@ const ViewDoctor = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="text-red-600 text-lg mb-4">Error</div>
-          <p className="text-gray-600">{error}</p>
+          <div className="text-red-600 text-sm sm:text-lg mb-4 font-semibold">Error</div>
+          <p className="text-slate-600 text-xs sm:text-base mb-6">{error}</p>
           <button
             onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs sm:text-base"
           >
             Back to List
           </button>
@@ -47,12 +62,12 @@ const ViewDoctor = () => {
 
   if (!currentDoctor) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="text-gray-600 text-lg mb-4">Doctor not found</div>
+          <div className="text-slate-600 text-sm sm:text-lg mb-4 font-semibold">Doctor not found</div>
           <button
             onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs sm:text-base"
           >
             Back to List
           </button>
@@ -62,28 +77,33 @@ const ViewDoctor = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-4 sm:py-6 lg:py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all duration-200"
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Doctor Details</h1>
-                <p className="text-gray-600">View comprehensive information about the doctor</p>
+                <h1 className="text-sm sm:text-lg md:text-xl font-bold text-slate-900 text-center sm:text-left bg-clip-text ">
+                  Doctor Details
+                </h1>
+                <p className="text-slate-600 text-xs sm:text-base text-center sm:text-left">
+                  View comprehensive information about the doctor
+                </p>
               </div>
             </div>
             <div className="flex space-x-3">
               <button
                 onClick={() => navigate(`/dashboard/centeradmin/doctors/editdoctor/${currentDoctor._id}`)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs sm:text-base w-full sm:w-auto flex items-center justify-center gap-2"
               >
+                <Edit className="h-4 w-4" />
                 Edit Doctor
               </button>
             </div>
@@ -91,93 +111,95 @@ const ViewDoctor = () => {
         </div>
 
         {/* Doctor Information */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
           {/* Header Section */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-8 text-white">
-            <div className="flex items-center space-x-4">
-              <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center">
-                <User className="h-10 w-10" />
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-4 sm:px-6 py-6 sm:py-8 text-white">
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-full flex items-center justify-center">
+                <User className="h-8 w-8 sm:h-10 sm:w-10" />
               </div>
-              <div>
-                <h2 className="text-xl font-bold">{currentDoctor.name}</h2>
-                <p className="text-blue-100">{currentDoctor.designation || 'Doctor'}</p>
-                <p className="text-blue-100">{currentDoctor.qualification}</p>
+              <div className="text-center sm:text-left">
+                <h2 className="text-sm sm:text-lg md:text-xl font-bold">{currentDoctor.name}</h2>
+                <p className="text-blue-100 text-xs sm:text-base">{currentDoctor.designation || 'Doctor'}</p>
+                <p className="text-blue-100 text-xs sm:text-base">{currentDoctor.qualification}</p>
               </div>
             </div>
           </div>
 
           {/* Details Section */}
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-4 sm:p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
               {/* Personal Information */}
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-gray-900 border-b border-gray-200 pb-2">
+              <div className="space-y-4 sm:space-y-6">
+                <h3 className="text-xs sm:text-base font-semibold text-slate-900 border-b border-slate-200 pb-2 flex items-center gap-2">
+                  <User className="h-4 w-4 text-blue-500" />
                   Personal Information
                 </h3>
                 
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <Mail className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="text-xs text-gray-500">Email</p>
-                      <p className="text-gray-900">{currentDoctor.email}</p>
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl">
+                    <Mail className="h-5 w-5 text-blue-500" />
+                    <div className="flex-1">
+                      <p className="text-xs text-slate-500 font-medium">Email</p>
+                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.email}</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-3">
-                    <Phone className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="text-xs text-gray-500">Mobile</p>
-                      <p className="text-gray-900">{currentDoctor.mobile || 'Not provided'}</p>
+                  <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl">
+                    <Phone className="h-5 w-5 text-green-500" />
+                    <div className="flex-1">
+                      <p className="text-xs text-slate-500 font-medium">Phone</p>
+                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.phone || currentDoctor.mobile || 'Not provided'}</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-3">
-                    <User className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="text-xs text-gray-500">Username</p>
-                      <p className="text-gray-900">{currentDoctor.username}</p>
+                  <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl">
+                    <User className="h-5 w-5 text-indigo-500" />
+                    <div className="flex-1">
+                      <p className="text-xs text-slate-500 font-medium">Username</p>
+                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.username}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Professional Information */}
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-gray-900 border-b border-gray-200 pb-2">
+              <div className="space-y-4 sm:space-y-6">
+                <h3 className="text-xs sm:text-base font-semibold text-slate-900 border-b border-slate-200 pb-2 flex items-center gap-2">
+                  <Stethoscope className="h-4 w-4 text-blue-500" />
                   Professional Information
                 </h3>
                 
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <GraduationCap className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="text-xs text-gray-500">Qualification</p>
-                      <p className="text-gray-900">{currentDoctor.qualification || 'Not specified'}</p>
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl">
+                    <GraduationCap className="h-5 w-5 text-purple-500" />
+                    <div className="flex-1">
+                      <p className="text-xs text-slate-500 font-medium">Qualification</p>
+                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.qualification || 'Not specified'}</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-3">
-                    <Building className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="text-xs text-gray-500">Hospital</p>
-                      <p className="text-gray-900">{currentDoctor.hospitalName || 'Not specified'}</p>
+                  <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl">
+                    <Building className="h-5 w-5 text-blue-500" />
+                    <div className="flex-1">
+                      <p className="text-xs text-slate-500 font-medium">Hospital</p>
+                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.hospitalName || 'Not specified'}</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-3">
-                    <User className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="text-xs text-gray-500">KMC Number</p>
-                      <p className="text-gray-900">{currentDoctor.kmcNumber || 'Not specified'}</p>
+                  <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl">
+                    <User className="h-5 w-5 text-indigo-500" />
+                    <div className="flex-1">
+                      <p className="text-xs text-slate-500 font-medium">KMC Number</p>
+                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.kmcNumber || 'Not specified'}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-3">
-                    <GraduationCap className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="text-xs text-gray-500">Specializations</p>
-                      <p className="text-gray-900">
+                  <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl">
+                    <Award className="h-5 w-5 text-yellow-500" />
+                    <div className="flex-1">
+                      <p className="text-xs text-slate-500 font-medium">Specializations</p>
+                      <p className="text-slate-900 text-xs sm:text-base">
                         {currentDoctor.specializations && currentDoctor.specializations.length > 0 
                           ? currentDoctor.specializations.join(', ')
                           : currentDoctor.specialization || 'Not specified'
@@ -186,11 +208,11 @@ const ViewDoctor = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-3">
-                    <Calendar className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="text-xs text-gray-500">Experience</p>
-                      <p className="text-gray-900">{currentDoctor.experience || 'Not specified'}</p>
+                  <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl">
+                    <Calendar className="h-5 w-5 text-green-500" />
+                    <div className="flex-1">
+                      <p className="text-xs text-slate-500 font-medium">Experience</p>
+                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.experience || 'Not specified'}</p>
                     </div>
                   </div>
                 </div>
@@ -199,46 +221,50 @@ const ViewDoctor = () => {
 
             {/* Bio Section */}
             {currentDoctor.bio && (
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">
+              <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-slate-200">
+                <h3 className="text-xs sm:text-base font-semibold text-slate-900 border-b border-slate-200 pb-2 mb-4 flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-blue-500" />
                   Bio
                 </h3>
-                <p className="text-gray-700 leading-relaxed">{currentDoctor.bio}</p>
+                <div className="bg-slate-50 p-4 rounded-xl">
+                  <p className="text-slate-700 leading-relaxed text-xs sm:text-base">{currentDoctor.bio}</p>
+                </div>
               </div>
             )}
 
             {/* Account Information */}
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <h3 className="text-sm font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">
+            <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-slate-200">
+              <h3 className="text-xs sm:text-base font-semibold text-slate-900 border-b border-slate-200 pb-2 mb-4 flex items-center gap-2">
+                <Clock className="h-4 w-4 text-blue-500" />
                 Account Information
               </h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="flex items-center space-x-3">
-                  <Calendar className="h-5 w-5 text-gray-400" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl">
+                  <Calendar className="h-5 w-5 text-blue-500" />
                   <div>
-                    <p className="text-xs text-gray-500">Created</p>
-                    <p className="text-gray-900">
+                    <p className="text-xs text-slate-500 font-medium">Created</p>
+                    <p className="text-slate-900 text-xs sm:text-base">
                       {new Date(currentDoctor.createdAt).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-3">
-                  <Clock className="h-5 w-5 text-gray-400" />
+                <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl">
+                  <Clock className="h-5 w-5 text-green-500" />
                   <div>
-                    <p className="text-xs text-gray-500">Last Updated</p>
-                    <p className="text-gray-900">
+                    <p className="text-xs text-slate-500 font-medium">Last Updated</p>
+                    <p className="text-slate-900 text-xs sm:text-base">
                       {new Date(currentDoctor.updatedAt).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl sm:col-span-2 lg:col-span-1">
                   <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   <div>
-                    <p className="text-xs text-gray-500">Status</p>
-                    <p className="text-gray-900">
+                    <p className="text-xs text-slate-500 font-medium">Status</p>
+                    <p className="text-slate-900 text-xs sm:text-base">
                       {currentDoctor.isDeleted ? 'Inactive' : 'Active'}
                     </p>
                   </div>

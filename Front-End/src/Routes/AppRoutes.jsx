@@ -40,7 +40,13 @@ import ViewSuperadminDoctor from '../pages/Superadmin/Docters/ViewSuperadminDoct
 import EditSuperadminDoctor from '../pages/Superadmin/Docters/EditSuperadminDoctor';
 
 import AllTestReports from '../pages/Superadmin/Docters/AllTestReports';
-import SuperadminTestRequestDetails from '../pages/Superadmin/Docters/SuperadminTestRequestDetails';
+import OldSuperadminTestRequestDetails from '../pages/Superadmin/Docters/SuperadminTestRequestDetails';
+
+// Test Request Pages
+import TestRequestsList from '../pages/Superadmin/TestRequests/TestRequestsList';
+import SuperadminTestRequestDetails from '../pages/Superadmin/TestRequests/TestRequestDetails';
+import TestRequestReview from '../pages/Superadmin/DoctorsLogin/TestRequestReview';
+import TestRequestReviewDetails from '../pages/Superadmin/DoctorsLogin/TestRequestReviewDetails';
 
 // Superadmin Doctor Working Pages
 import SuperadminDoctorDashboard from '../pages/Superadmin/DoctorsLogin/Dashboard';
@@ -210,6 +216,8 @@ export default function AppRoutes() {
         <Route path="superadmin/doctor/patients" element={<PatientDetails />} />
         <Route path="superadmin/doctor/my-patients" element={<SuperadminDoctorMyPatients />} />
         <Route path="superadmin/doctor/lab-reports" element={<SuperadminDoctorReviewLabReports />} />
+        <Route path="superadmin/doctor/test-requests" element={<TestRequestReview />} />
+        <Route path="superadmin/doctor/test-requests/:id" element={<TestRequestReviewDetails />} />
         <Route path="superadmin/doctor/patient/:patientId" element={<PatientDetails />} />
         <Route path="superadmin/doctor/patient/:patientId/profile" element={<PatientProfile />} />
         <Route path="superadmin/doctor/patient/:patientId/lab-reports" element={<PatientLabReports />} />
@@ -282,13 +290,17 @@ export default function AppRoutes() {
         <Route path="superadmin/lab/editlabstaff/:id" element={<EditLabStaff />} />
         <Route path="superadmin/lab/labreports" element={<LabReports />} />
         
+        {/* Test Request Routes */}
+        <Route path="superadmin/test-requests" element={<TestRequestsList />} />
+        <Route path="superadmin/test-requests/:id" element={<SuperadminTestRequestDetails />} />
+        
         {/* Doctors Routes */}
         <Route path="superadmin/doctors/superadmindoctorlist" element={<SuperAdminDoctorList />} />
         <Route path="superadmin/doctors/addsuperadmindoctor" element={<AddSuperAdminDoctor />} />
         <Route path="superadmin/doctors/viewsuperadmindoctor/:id" element={<ViewSuperadminDoctor />} />
         <Route path="superadmin/doctors/editsuperadmindoctor/:id" element={<EditSuperadminDoctor />} />
         <Route path="superadmin/doctors/all-test-reports" element={<AllTestReports />} />
-        <Route path="superadmin/doctors/test-request/:id" element={<SuperadminTestRequestDetails />} />
+        <Route path="superadmin/doctors/test-request/:id" element={<OldSuperadminTestRequestDetails />} />
         
         {/* Additional routes to match navigation patterns */}
         <Route path="Superadmin/Docters/SuperAdminDoctorList" element={<SuperAdminDoctorList />} />

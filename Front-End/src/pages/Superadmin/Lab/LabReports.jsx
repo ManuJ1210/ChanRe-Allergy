@@ -16,7 +16,9 @@ import {
   AlertCircle,
   XCircle,
   Mail,
-  Phone
+  Phone,
+  TrendingUp,
+  Activity
 } from 'lucide-react';
 
 const LabReports = () => {
@@ -56,32 +58,32 @@ const LabReports = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'Report_Sent':
-        return 'bg-green-100 text-green-800';
+        return 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-green-200';
       case 'Report_Generated':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-blue-200';
       case 'Testing_Completed':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-800 border-yellow-200';
       case 'In_Lab_Testing':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-gradient-to-r from-purple-100 to-violet-100 text-purple-800 border-purple-200';
       case 'Sample_Collected':
-        return 'bg-indigo-100 text-indigo-800';
+        return 'bg-gradient-to-r from-indigo-100 to-blue-100 text-indigo-800 border-indigo-200';
       case 'Pending':
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gradient-to-r from-slate-100 to-gray-100 text-slate-800 border-slate-200';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gradient-to-r from-slate-100 to-gray-100 text-slate-800 border-slate-200';
     }
   };
 
   const getUrgencyColor = (urgency) => {
     switch (urgency) {
       case 'Emergency':
-        return 'bg-red-100 text-red-800';
+        return 'bg-gradient-to-r from-red-100 to-pink-100 text-red-800 border-red-200';
       case 'Urgent':
-        return 'bg-orange-100 text-orange-800';
+        return 'bg-gradient-to-r from-orange-100 to-amber-100 text-orange-800 border-orange-200';
       case 'Normal':
-        return 'bg-green-100 text-green-800';
+        return 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-green-200';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gradient-to-r from-slate-100 to-gray-100 text-slate-800 border-slate-200';
     }
   };
 
@@ -329,13 +331,13 @@ const LabReports = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-2 sm:p-3 md:p-6">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
-            <div className="flex flex-col items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
-              <p className="text-slate-600 font-medium">Loading lab reports...</p>
-              <p className="text-slate-500 text-xs">Please wait while we fetch the data</p>
+          <div className="bg-white rounded-2xl shadow-lg border border-blue-100 p-4 sm:p-6">
+            <div className="flex flex-col items-center justify-center py-8 sm:py-12">
+              <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
+              <p className="text-slate-600 font-medium text-xs sm:text-base">Loading lab reports...</p>
+              <p className="text-slate-500 text-xs mt-1">Please wait while we fetch the data</p>
             </div>
           </div>
         </div>
@@ -345,17 +347,19 @@ const LabReports = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-2 sm:p-3 md:p-6">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-xl shadow-sm border border-red-100 p-6">
-            <div className="flex flex-col items-center justify-center py-12">
-              <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-              <p className="text-red-700 font-medium">{error}</p>
-              <p className="text-red-600 text-xs mt-1">Please try refreshing the page</p>
+          <div className="bg-white rounded-2xl shadow-lg border border-red-100 p-4 sm:p-6">
+            <div className="flex flex-col items-center justify-center py-8 sm:py-12">
+              <div className="bg-red-100 p-3 rounded-full mb-4">
+                <AlertCircle className="h-8 w-8 sm:h-12 sm:w-12 text-red-600" />
+              </div>
+              <p className="text-red-700 font-medium text-xs sm:text-base text-center">{error}</p>
+              <p className="text-red-600 text-xs mt-1 text-center">Please try refreshing the page</p>
               {error.includes('login') && (
                 <button
                   onClick={() => navigate('/login')}
-                  className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                  className="mt-4 px-6 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 text-xs shadow-lg hover:shadow-xl transition-all duration-200"
                 >
                   Login
                 </button>
@@ -368,28 +372,30 @@ const LabReports = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-2 sm:p-3 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-3 sm:space-y-4 md:space-y-6">
         {/* Header */}
-        <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <div className="flex-1">
-              <h1 className="text-xl font-bold text-slate-800 flex items-center mb-2">
-                <FileText className="h-8 w-8 mr-3 text-blue-500" />
-                Lab Reports
-              </h1>
-              <div className="flex items-center gap-4 text-xs text-slate-600">
-                <div className="flex items-center gap-1">
-                  <Building className="h-4 w-4" />
-                  <span>All Centers</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{reports.length} total reports</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <CheckCircle className="h-4 w-4" />
-                  <span>{reports.filter(r => r.status === 'Report_Sent').length} sent</span>
+        <div className="bg-white rounded-2xl shadow-lg border border-blue-100 p-4 sm:p-6 overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-4 sm:p-6 rounded-xl">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+              <div className="flex-1">
+                <h1 className="text-lg sm:text-xl md:text-xl font-bold text-slate-800 flex items-center mb-3 justify-center sm:justify-start bg-clip-text">
+                  
+                  Lab Reports
+                </h1>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-xs sm:text-xs text-slate-600">
+                  <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                    <Building className="h-4 w-4 text-blue-500" />
+                    <span className="font-medium">All Centers</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                    <Calendar className="h-4 w-4 text-green-500" />
+                    <span className="font-medium">{reports.length} total reports</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                    <CheckCircle className="h-4 w-4 text-emerald-500" />
+                    <span className="font-medium">{reports.filter(r => r.status === 'Report_Sent').length} sent</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -398,17 +404,19 @@ const LabReports = () => {
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <div className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl p-3 sm:p-4 mb-3 sm:mb-4 md:mb-6 shadow-sm">
             <div className="flex items-center">
-              <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-              <p className="text-red-700">{error}</p>
+              <div className="bg-red-100 p-2 rounded-full mr-3">
+                <AlertCircle className="h-5 w-5 text-red-600" />
+              </div>
+              <p className="text-red-700 text-xs sm:text-base font-medium">{error}</p>
             </div>
           </div>
         )}
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white rounded-2xl shadow-lg border border-blue-100 p-4 sm:p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {/* Search */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -417,7 +425,7 @@ const LabReports = () => {
                 placeholder="Search reports..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-base transition-all duration-200"
               />
             </div>
 
@@ -425,7 +433,7 @@ const LabReports = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-base transition-all duration-200"
             >
               <option value="all">All Statuses</option>
               {statuses.map(status => (
@@ -437,7 +445,7 @@ const LabReports = () => {
             <select
               value={filterCenter}
               onChange={(e) => setFilterCenter(e.target.value)}
-              className="px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-base transition-all duration-200"
             >
               <option value="all">All Centers</option>
               {centers.map(center => (
@@ -452,30 +460,116 @@ const LabReports = () => {
                 setFilterStatus('all');
                 setFilterCenter('all');
               }}
-              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-slate-100 to-gray-100 hover:from-slate-200 hover:to-gray-200 text-slate-700 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 text-xs sm:text-base shadow-sm hover:shadow-md"
             >
               <XCircle className="h-4 w-4" />
-              Clear Filters
+              <span className="hidden sm:inline">Clear Filters</span>
+              <span className="sm:hidden">Clear</span>
             </button>
           </div>
         </div>
 
         {/* Reports Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-blue-100 overflow-hidden">
-          <div className="p-6 border-b border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
-              <FileText className="h-5 w-5 mr-2 text-blue-500" />
+        <div className="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
+          <div className="p-4 sm:p-6 border-b border-blue-100 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
+            <h2 className="text-sm sm:text-lg font-semibold text-slate-800 flex items-center justify-center sm:justify-start mb-2">
+              <Activity className="h-5 w-5 mr-2 text-blue-600" />
               Lab Reports ({filteredReports.length})
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-xs sm:text-base text-center sm:text-left">
               View and manage lab reports from all centers
             </p>
           </div>
           
-          <div className="overflow-x-auto">
+          {/* Mobile Card View */}
+          <div className="block lg:hidden">
+            {filteredReports.length === 0 ? (
+              <div className="p-8 sm:p-12 text-center">
+                <div className="bg-slate-100 w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FileText className="h-10 w-10 sm:h-12 sm:w-12 text-slate-400" />
+                </div>
+                <p className="text-slate-600 font-medium text-xs sm:text-base mb-2">No reports found</p>
+                <p className="text-slate-500 text-xs sm:text-xs">Try adjusting your search or filters</p>
+              </div>
+            ) : (
+              <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
+                {filteredReports.map(report => (
+                  <div key={report._id} className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-xl p-4 sm:p-5 space-y-4 border border-slate-200 hover:border-blue-300 transition-all duration-200 hover:shadow-md">
+                    {/* Patient Info */}
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-slate-800 text-base sm:text-sm mb-1">{report.patientName}</h3>
+                        <p className="text-slate-500 text-xs sm:text-xs">ID: {report.patientId}</p>
+                      </div>
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(report.status)}`}>
+                        {report.status.replace(/_/g, ' ')}
+                      </span>
+                    </div>
+                    
+                    {/* Center & Test Info */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                        <Building className="h-4 w-4 text-blue-500" />
+                        <span className="text-slate-700 text-xs font-medium">{report.centerName}</span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                        <FileText className="h-4 w-4 text-indigo-500" />
+                        <span className="text-slate-700 text-xs font-medium">{report.testType}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Urgency & Date */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="flex items-center gap-2">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getUrgencyColor(report.urgency)}`}>
+                          {report.urgency}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                        <Calendar className="h-4 w-4 text-green-500" />
+                        <span className="text-slate-700 text-xs font-medium">
+                          {report.reportGeneratedDate ? 
+                            new Date(report.reportGeneratedDate).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric'
+                            }) : 
+                            'Not generated'
+                          }
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Actions */}
+                    {(report.status === 'Report_Generated' || report.status === 'Report_Sent' || report.status === 'Completed' || report.status === 'feedback_sent') && report.reportFilePath && (
+                      <div className="flex flex-col gap-2 pt-3 border-t border-slate-200">
+                        <button
+                          onClick={() => handleViewReport(report._id)}
+                          className="w-full px-3 py-2.5 text-xs font-medium bg-gradient-to-r from-purple-100 to-violet-100 text-purple-800 rounded-lg hover:from-purple-200 hover:to-violet-200 flex items-center justify-center gap-2 border border-purple-200 hover:border-purple-300 transition-all duration-200"
+                        >
+                          <Eye className="h-4 w-4" />
+                          View PDF
+                        </button>
+                        <button
+                          onClick={() => handleDownloadReport(report._id)}
+                          className="w-full px-3 py-2.5 text-xs font-medium bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 rounded-lg hover:from-green-200 hover:to-emerald-200 flex items-center justify-center gap-2 border border-green-200 hover:border-green-300 transition-all duration-200"
+                        >
+                          <Download className="h-4 w-4" />
+                          Download
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          {/* Desktop Table View */}
+          <div className="hidden lg:block overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-slate-50 border-b border-slate-200">
+                <tr className="bg-gradient-to-r from-slate-50 to-blue-50 border-b border-slate-200">
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Patient</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Center</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Test Type</th>
@@ -489,37 +583,39 @@ const LabReports = () => {
                   <tr>
                     <td colSpan={6} className="px-6 py-12 text-center">
                       <div className="flex flex-col items-center">
-                        <FileText className="h-16 w-16 text-slate-300 mb-4" />
-                        <p className="text-slate-600 font-medium text-sm">No reports found</p>
+                        <div className="bg-slate-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <FileText className="h-12 w-12 text-slate-400" />
+                        </div>
+                        <p className="text-slate-600 font-medium text-xs">No reports found</p>
                         <p className="text-slate-500 text-xs mt-1">Try adjusting your search or filters</p>
                       </div>
                     </td>
                   </tr>
                 ) : (
                   filteredReports.map(report => (
-                    <tr key={report._id} className="hover:bg-slate-50 transition-colors">
+                    <tr key={report._id} className="hover:bg-gradient-to-r hover:from-slate-50 hover:to-blue-50 transition-all duration-200">
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-xs font-medium text-slate-800">{report.patientName}</div>
+                          <div className="text-xs font-semibold text-slate-800">{report.patientName}</div>
                           <div className="text-xs text-slate-500">ID: {report.patientId}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-xs font-medium text-slate-800">{report.centerName}</div>
+                          <div className="text-xs font-semibold text-slate-800">{report.centerName}</div>
                           <div className="text-xs text-slate-500">Code: {report.centerCode}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-xs font-medium text-slate-800">{report.testType}</div>
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(report.urgency)}`}>
+                          <div className="text-xs font-semibold text-slate-800">{report.testType}</div>
+                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getUrgencyColor(report.urgency)}`}>
                             {report.urgency}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(report.status)}`}>
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(report.status)}`}>
                           {report.status.replace(/_/g, ' ')}
                         </span>
                       </td>
@@ -541,14 +637,14 @@ const LabReports = () => {
                             <>
                               <button
                                 onClick={() => handleViewReport(report._id)}
-                                className="px-3 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-md hover:bg-purple-200"
+                                className="px-3 py-1.5 text-xs font-medium bg-gradient-to-r from-purple-100 to-violet-100 text-purple-800 rounded-lg hover:from-purple-200 hover:to-violet-200 border border-purple-200 hover:border-purple-300 transition-all duration-200"
                               >
                                 <Eye className="inline mr-1 h-3 w-3" />
                                 View PDF
                               </button>
                               <button
                                 onClick={() => handleDownloadReport(report._id)}
-                                className="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-md hover:bg-green-200"
+                                className="px-3 py-1.5 text-xs font-medium bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 rounded-lg hover:from-green-200 hover:to-emerald-200 border border-green-200 hover:border-green-300 transition-all duration-200"
                               >
                                 <Download className="inline mr-1 h-3 w-3" />
                                 Download

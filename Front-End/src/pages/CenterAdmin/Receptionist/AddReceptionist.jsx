@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, UserCheck, ArrowLeft, Save } from 'lucide-react';
+import { toast } from 'react-toastify';
 import { addCenterAdminReceptionist, clearError, clearSuccess } from '../../../features/centerAdmin/centerAdminReceptionistSlice';
 
 const AddReceptionist = () => {
@@ -29,12 +30,33 @@ const AddReceptionist = () => {
 
   useEffect(() => {
     if (success) {
+      toast.success('Receptionist added successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       setTimeout(() => {
         dispatch(clearSuccess());
         navigate('/dashboard/centeradmin/receptionist/managereceptionists');
       }, 1500);
     }
   }, [success, dispatch, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  }, [error]);
 
   useEffect(() => {
     return () => {
@@ -51,7 +73,14 @@ const AddReceptionist = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!centerId) {
-      alert('No center ID found. Please log in again as a center admin.');
+      toast.error('No center ID found. Please log in again as a center admin.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       return;
     }
     

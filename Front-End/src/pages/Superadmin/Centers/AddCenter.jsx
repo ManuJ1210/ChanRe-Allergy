@@ -8,6 +8,7 @@ import {
   Building2, MapPin, Mail, Phone, Plus, User, GraduationCap, 
   Badge, Hash, Eye, EyeOff, Save, ArrowLeft, CheckCircle, AlertCircle
 } from "lucide-react";
+import { toast } from "react-toastify";
 
 export default function AddCenterWithAdmin() {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ export default function AddCenterWithAdmin() {
 
   useEffect(() => {
     if (success) {
+      toast.success("Successfully added center and admin!");
       setCenter({ centername: "", location: "", fulladdress: "", email: "", phone: "", code: "" });
       setAdmin({
         name: "", qualification: "", designation: "", kmcNumber: "", hospitalName: "",
@@ -56,50 +58,56 @@ export default function AddCenterWithAdmin() {
     }
   }, [success, navigate, dispatch]);
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-3 sm:p-4 md:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate('/dashboard/Superadmin/Centers/CentersList')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-sm sm:text-base"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Centers
           </button>
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-lg sm:text-xl font-bold text-slate-800 mb-2">
             Add Healthcare Center & Admin
           </h1>
-          <p className="text-slate-600">
+          <p className="text-sm sm:text-base text-slate-600">
             Create a new healthcare center with its administrator
           </p>
         </div>
 
         {/* Alert Messages */}
         {success && (
-          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 flex items-center">
             <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700">Successfully added center and admin!</span>
+            <span className="text-green-700 text-sm sm:text-base">Successfully added center and admin!</span>
           </div>
         )}
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 flex items-center">
             <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700">{error}</span>
+            <span className="text-red-700 text-sm sm:text-base">{error}</span>
           </div>
         )}
 
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-          <form onSubmit={handleSubmit} className="p-6 space-y-8">
+          <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-6 sm:space-y-8">
             {/* Center Information Section */}
-            <div className="bg-slate-50 border border-slate-200 rounded-lg p-6">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 sm:p-6">
               <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center">
                 <Building2 className="h-5 w-5 mr-2 text-blue-500" />
                 Center Information
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
                 <Input 
                   label="Center Name" 
                   name="centername" 
@@ -121,7 +129,7 @@ export default function AddCenterWithAdmin() {
                   onChange={handleCenterChange} 
                   icon={<Hash className="h-4 w-4 text-blue-500" />} 
                 />
-                <div className="md:col-span-2">
+                <div className="sm:col-span-2">
                   <TextArea 
                     label="Full Address" 
                     name="fulladdress" 
@@ -149,12 +157,12 @@ export default function AddCenterWithAdmin() {
             </div>
 
             {/* Admin Information Section */}
-            <div className="bg-slate-50 border border-slate-200 rounded-lg p-6">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 sm:p-6">
               <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center">
                 <User className="h-5 w-5 mr-2 text-blue-500" />
                 Administrator Information
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
                 <Input 
                   label="Full Name" 
                   name="name" 
@@ -226,12 +234,12 @@ export default function AddCenterWithAdmin() {
                       value={admin.password}
                       onChange={handleAdminChange}
                       required
-                      className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                       placeholder="Enter password"
                     />
                     <button
                       type="button"
-                      className="absolute right-3 top-3 text-slate-400 hover:text-blue-500 transition-colors"
+                      className="absolute right-3 top-2 sm:top-3 text-slate-400 hover:text-blue-500 transition-colors"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -240,7 +248,7 @@ export default function AddCenterWithAdmin() {
                 </div>
 
                 {/* User Type */}
-                <div className="md:col-span-2">
+                <div className="sm:col-span-2">
                   <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                     <User className="h-4 w-4 text-blue-500" />
                     User Type *
@@ -250,7 +258,7 @@ export default function AddCenterWithAdmin() {
                     value={admin.userType}
                     onChange={handleAdminChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   >
                     <option value="centeradmin">Center Admin</option>
                     <option value="doctor">Doctor</option>
@@ -266,7 +274,7 @@ export default function AddCenterWithAdmin() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
               >
                 {loading ? (
                   <>
@@ -300,7 +308,7 @@ const Input = ({ label, name, value, onChange, type = "text", icon }) => (
       value={value}
       onChange={onChange}
       required
-      className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
       placeholder={`Enter ${label.toLowerCase()}`}
     />
   </div>
@@ -318,7 +326,7 @@ const TextArea = ({ label, name, value, onChange, icon }) => (
       onChange={onChange}
       required
       rows={3}
-      className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none text-sm sm:text-base"
       placeholder={`Enter ${label.toLowerCase()}`}
     />
   </div>

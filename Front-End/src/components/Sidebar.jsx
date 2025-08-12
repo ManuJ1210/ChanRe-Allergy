@@ -15,6 +15,7 @@ import {
   FaCheckCircle,
   FaBell,
   FaComments,
+  FaClipboardList,
 } from 'react-icons/fa';
 
 export default function Sidebar(props) {
@@ -103,6 +104,16 @@ export default function Sidebar(props) {
                 currentPath={location.pathname}
               />
               <SidebarGroup
+                label="Test Requests"
+                icon={<FaClipboardList />}
+                open={centerOpen === 'testrequests'}
+                toggle={() => setCenterOpen(centerOpen === 'testrequests' ? null : 'testrequests')}
+                links={[
+                  { to: "/dashboard/superadmin/test-requests", label: "View All Requests" },
+                ]}
+                currentPath={location.pathname}
+              />
+              <SidebarGroup
                 label="Follow Ups"
                 icon={<FaUserCheck />}
                 open={centerOpen === 'followup'}
@@ -136,6 +147,12 @@ export default function Sidebar(props) {
                 label="Review Lab Reports"
                 icon={<FaVials />}
                 isActive={isActive("/dashboard/superadmin/doctor/lab-reports")}
+              />
+              <SidebarLink
+                to="/dashboard/superadmin/doctor/test-requests"
+                label="Test Request Reviews"
+                icon={<FaClipboardList />}
+                isActive={isActive("/dashboard/superadmin/doctor/test-requests")}
               />
             </>
           )}

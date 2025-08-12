@@ -107,11 +107,11 @@ export default function EditLabStaff() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-3 sm:p-4 md:p-6">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-slate-600">Loading lab staff data...</p>
+          <div className="text-center py-8 sm:py-12">
+            <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-slate-600 text-sm sm:text-base">Loading lab staff data...</p>
           </div>
         </div>
       </div>
@@ -119,58 +119,58 @@ export default function EditLabStaff() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-3 sm:p-4 md:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate('/dashboard/Superadmin/Lab/LabStaffList')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-sm sm:text-base"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Lab Staff
           </button>
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center sm:text-left">
             Edit Lab Staff
           </h1>
-          <p className="text-slate-600">
+          <p className="text-sm sm:text-base text-slate-600 text-center sm:text-left">
             Update laboratory staff member information
           </p>
         </div>
 
         {/* Success Message */}
         {updateSuccess && (
-          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700">Lab staff member updated successfully!</span>
+            <span className="text-green-700 text-sm sm:text-base">Lab staff member updated successfully!</span>
           </div>
         )}
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 flex items-center">
             <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700">{error}</span>
+            <span className="text-red-700 text-sm sm:text-base">{error}</span>
           </div>
         )}
 
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-          <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+          <div className="p-4 sm:p-6 border-b border-blue-100">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center justify-center sm:justify-start">
               <Microscope className="h-5 w-5 mr-2 text-blue-500" />
               Lab Staff Information
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-sm sm:text-base text-slate-600 mt-1 text-center sm:text-left">
               Update the details below to modify the lab staff account
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Personal Information */}
             <div>
-              <h3 className="text-sm font-medium text-slate-800 mb-4">Personal Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <h3 className="text-sm font-medium text-slate-800 mb-3 sm:mb-4">Personal Information</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-xs font-medium text-slate-700 mb-2">
                     Staff Name *
@@ -181,7 +181,7 @@ export default function EditLabStaff() {
                     value={formData.staffName}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                     placeholder="Enter staff name"
                   />
                 </div>
@@ -196,7 +196,7 @@ export default function EditLabStaff() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                     placeholder="Enter email address"
                   />
                 </div>
@@ -211,7 +211,7 @@ export default function EditLabStaff() {
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                     placeholder="Enter phone number"
                   />
                 </div>
@@ -224,7 +224,7 @@ export default function EditLabStaff() {
                     name="role"
                     value={formData.role}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   >
                     <option value="Lab Staff">Lab Staff</option>
                     <option value="Lab Technician">Lab Technician</option>
@@ -237,11 +237,11 @@ export default function EditLabStaff() {
 
             {/* Account Security */}
             <div>
-              <h3 className="text-sm font-medium text-slate-800 mb-4">Account Security (Optional)</h3>
-              <p className="text-slate-600 mb-4 text-xs">
+              <h3 className="text-sm font-medium text-slate-800 mb-3 sm:mb-4">Account Security (Optional)</h3>
+              <p className="text-slate-600 mb-3 sm:mb-4 text-xs sm:text-sm">
                 Leave password fields empty if you don't want to change the password
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-xs font-medium text-slate-700 mb-2">
                     New Password
@@ -252,7 +252,7 @@ export default function EditLabStaff() {
                     value={formData.password}
                     onChange={handleChange}
                     minLength={6}
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                     placeholder="Enter new password (min 6 characters)"
                   />
                 </div>
@@ -266,7 +266,7 @@ export default function EditLabStaff() {
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                     placeholder="Confirm new password"
                   />
                 </div>
@@ -274,11 +274,11 @@ export default function EditLabStaff() {
             </div>
 
             {/* Submit Buttons */}
-            <div className="flex gap-4 pt-6 border-t border-slate-200">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 sm:pt-6 border-t border-slate-200">
               <button
                 type="button"
                 onClick={() => navigate('/dashboard/Superadmin/Lab/LabStaffList')}
-                className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
+                className="px-4 sm:px-6 py-2 sm:py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Cancel
@@ -286,7 +286,7 @@ export default function EditLabStaff() {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
               >
                 {loading ? (
                   <>

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCenterAdmin, createCenterAdmin, updateCenterAdmin } from '../../../features/superadmin/superadminThunks';
 import { resetSuperadminState } from '../../../features/superadmin/superadminSlice';
 import { User, GraduationCap, Badge, Building2, Hash, Phone, Mail, Save, ArrowLeft, CheckCircle, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 export default function EditCenterAdmin() {
   const { id } = useParams(); // id is centerId when assigning
@@ -55,13 +56,30 @@ export default function EditCenterAdmin() {
   }, [centerAdmin]);
 
   useEffect(() => {
-    if (addSuccess || updateSuccess) {
+    if (addSuccess) {
+      toast.success('Admin created successfully!');
       setTimeout(() => {
         dispatch(resetSuperadminState());
         navigate('/dashboard/Superadmin/Centers/ManageAdmins');
       }, 1500);
     }
-  }, [addSuccess, updateSuccess, dispatch, navigate]);
+  }, [addSuccess, dispatch, navigate]);
+
+  useEffect(() => {
+    if (updateSuccess) {
+      toast.success('Admin updated successfully!');
+      setTimeout(() => {
+        dispatch(resetSuperadminState());
+        navigate('/dashboard/Superadmin/Centers/ManageAdmins');
+      }, 1500);
+    }
+  }, [updateSuccess, dispatch, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   const handleAdminChange = (e) => {
     setAdmin({ ...admin, [e.target.name]: e.target.value });
@@ -78,12 +96,12 @@ export default function EditCenterAdmin() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-3 sm:p-4 md:p-6">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-8">
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6 sm:p-8">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-slate-600">Loading admin details...</p>
+              <p className="text-slate-600 text-sm sm:text-base">Loading admin details...</p>
             </div>
           </div>
         </div>
@@ -92,59 +110,59 @@ export default function EditCenterAdmin() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-3 sm:p-4 md:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate('/dashboard/Superadmin/Centers/ManageAdmins')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-sm sm:text-base"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Admins
           </button>
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-lg sm:text-xl font-bold text-slate-800 mb-2">
             {isNewAdmin ? 'Assign Center Admin' : 'Edit Center Admin'}
           </h1>
-          <p className="text-slate-600">
+          <p className="text-sm sm:text-base text-slate-600">
             {isNewAdmin ? 'Create a new administrator for this center' : 'Update administrator information'}
           </p>
         </div>
 
         {/* Alert Messages */}
         {addSuccess && (
-          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 flex items-center">
             <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700">Admin created successfully</span>
+            <span className="text-green-700 text-sm sm:text-base">Admin created successfully</span>
           </div>
         )}
         {updateSuccess && (
-          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 flex items-center">
             <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700">Admin updated successfully</span>
+            <span className="text-green-700 text-sm sm:text-base">Admin updated successfully</span>
           </div>
         )}
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 flex items-center">
             <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700">{error}</span>
+            <span className="text-red-700 text-sm sm:text-base">{error}</span>
           </div>
         )}
 
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-          <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+          <div className="p-4 sm:p-6 border-b border-blue-100">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center">
               <User className="h-5 w-5 mr-2 text-blue-500" />
               Administrator Information
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-sm sm:text-base text-slate-600 mt-1">
               {isNewAdmin ? 'Fill in the details for the new administrator' : 'Update the administrator details below'}
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-xs font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <User className="h-4 w-4 text-blue-500" />
@@ -156,7 +174,7 @@ export default function EditCenterAdmin() {
                   value={admin.name || ''}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   placeholder="Enter full name"
                 />
               </div>
@@ -172,7 +190,7 @@ export default function EditCenterAdmin() {
                   value={admin.qualification || ''}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   placeholder="Enter qualification"
                 />
               </div>
@@ -188,7 +206,7 @@ export default function EditCenterAdmin() {
                   value={admin.designation}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   placeholder="Enter designation"
                 />
               </div>
@@ -204,7 +222,7 @@ export default function EditCenterAdmin() {
                   value={admin.kmcNumber}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   placeholder="Enter KMC number"
                 />
               </div>
@@ -220,7 +238,7 @@ export default function EditCenterAdmin() {
                   value={admin.hospitalName}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   placeholder="Enter hospital name"
                 />
               </div>
@@ -236,7 +254,7 @@ export default function EditCenterAdmin() {
                   value={admin.centerCode}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   placeholder="Enter center code"
                 />
               </div>
@@ -252,7 +270,7 @@ export default function EditCenterAdmin() {
                   value={admin.phone}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   placeholder="Enter phone number"
                 />
               </div>
@@ -268,7 +286,7 @@ export default function EditCenterAdmin() {
                   value={admin.email}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   placeholder="Enter email address"
                 />
               </div>
@@ -284,7 +302,7 @@ export default function EditCenterAdmin() {
                   value={admin.username}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                   placeholder="Enter username"
                 />
               </div>
@@ -301,12 +319,12 @@ export default function EditCenterAdmin() {
                     value={admin.password}
                     onChange={handleAdminChange}
                     required={isNewAdmin}
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
                     placeholder={isNewAdmin ? "Enter password" : "Enter new password (optional)"}
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-3 text-slate-400 hover:text-blue-500 transition-colors"
+                    className="absolute right-3 top-2 sm:top-3 text-slate-400 hover:text-blue-500 transition-colors"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -320,7 +338,7 @@ export default function EditCenterAdmin() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
               >
                 {loading ? (
                   <>

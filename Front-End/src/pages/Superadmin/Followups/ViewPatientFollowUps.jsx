@@ -52,50 +52,121 @@ export default function ViewPatientFollowUps() {
   }, [patientId]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-3 sm:p-4 md:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-sm sm:text-base"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </button>
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center sm:text-left">
             Patient Follow-ups
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-sm sm:text-base text-center sm:text-left">
             View all follow-up assessments for this patient
           </p>
         </div>
 
         {/* Follow-ups Table */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-          <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+          <div className="p-4 sm:p-6 border-b border-blue-100">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center justify-center sm:justify-start">
               <Activity className="h-5 w-5 mr-2 text-blue-500" />
               Follow-up Records
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-sm sm:text-base text-center sm:text-left">
               Total: {records.length} records
             </p>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* Mobile Card View */}
+          <div className="block sm:hidden">
+            {loading ? (
+              <div className="p-6">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                  <p className="text-slate-600 text-sm">Loading follow-ups...</p>
+                </div>
+              </div>
+            ) : error ? (
+              <div className="p-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 flex items-center">
+                  <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
+                  <span className="text-red-700 text-sm sm:text-base">{error}</span>
+                </div>
+              </div>
+            ) : records.length === 0 ? (
+              <div className="p-6">
+                <div className="text-center">
+                  <Activity className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                  <h3 className="text-sm font-medium text-slate-600 mb-2">No Follow-ups Found</h3>
+                  <p className="text-slate-500 text-sm">No follow-up records available for this patient.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="p-4 space-y-4">
+                {records.map((rec, idx) => (
+                  <div key={rec._id || idx} className="bg-slate-50 rounded-lg p-4 space-y-3">
+                    {/* Follow-up Type */}
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="font-medium text-slate-800 text-sm">{rec.type}</h3>
+                      </div>
+                      <span className="text-slate-600 text-xs bg-blue-100 px-2 py-1 rounded-full">
+                        Follow-up
+                      </span>
+                    </div>
+                    
+                    {/* Date & Updated By */}
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4 text-blue-500" />
+                        <span className="text-slate-700 text-sm">
+                          {new Date(rec.updatedAt || rec.createdAt || rec.date).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <User className="h-4 w-4 text-blue-500" />
+                        <span className="text-slate-700 text-sm">
+                          {rec.updatedBy?.name || "Not specified"}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Actions */}
+                    <div className="pt-2 border-t border-slate-200">
+                      <button
+                        className="w-full px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2"
+                        onClick={() => navigate(typeToRoute[rec.type](rec._id))}
+                      >
+                        <Eye className="h-4 w-4" />
+                        View Details
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Desktop Table View */}
+          <div className="hidden sm:block overflow-x-auto">
             {loading ? (
               <div className="p-8">
                 <div className="text-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                  <p className="text-slate-600">Loading follow-ups...</p>
+                  <p className="text-slate-600 text-sm sm:text-base">Loading follow-ups...</p>
                 </div>
               </div>
             ) : error ? (
               <div className="p-6">
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
                   <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
-                  <span className="text-red-700">{error}</span>
+                  <span className="text-red-700 text-sm sm:text-base">{error}</span>
                 </div>
               </div>
             ) : records.length === 0 ? (
@@ -103,23 +174,23 @@ export default function ViewPatientFollowUps() {
                 <div className="text-center">
                   <Activity className="h-12 w-12 text-slate-400 mx-auto mb-4" />
                   <h3 className="text-sm font-medium text-slate-600 mb-2">No Follow-ups Found</h3>
-                  <p className="text-slate-500">No follow-up records available for this patient.</p>
+                  <p className="text-slate-500 text-sm">No follow-up records available for this patient.</p>
                 </div>
               </div>
             ) : (
               <table className="w-full">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                       Type
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                       Date
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                       Updated By
                     </th>
-                    <th className="px-6 py-4 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    <th className="px-4 sm:px-6 py-3 sm:py-4 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -127,22 +198,22 @@ export default function ViewPatientFollowUps() {
                 <tbody className="divide-y divide-slate-200">
                   {records.map((rec, idx) => (
                     <tr key={rec._id || idx} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-3 sm:py-4">
                         <div className="text-xs font-medium text-slate-800">{rec.type}</div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-3 sm:py-4">
                         <div className="flex items-center gap-2 text-xs text-slate-600">
                           <Calendar className="h-4 w-4 text-blue-500" />
                           {new Date(rec.updatedAt || rec.createdAt || rec.date).toLocaleDateString()}
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-3 sm:py-4">
                         <div className="flex items-center gap-2 text-xs text-slate-600">
                           <User className="h-4 w-4 text-blue-500" />
                           {rec.updatedBy?.name || "-"}
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-3 sm:py-4">
                         <div className="flex justify-center">
                           <button
                             className="flex items-center gap-2 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-medium transition-colors"

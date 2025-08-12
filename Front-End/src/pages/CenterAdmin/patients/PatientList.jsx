@@ -14,7 +14,9 @@ import {
   Phone,
   User,
   Calendar,
-  MapPin
+  MapPin,
+  ArrowLeft,
+  ArrowRight
 } from 'lucide-react';
 
 export default function PatientList() {
@@ -60,36 +62,36 @@ export default function PatientList() {
   const genderStats = getGenderStats();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-2 sm:p-3 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800 mb-2 text-center sm:text-left">
             Patient List
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-sm sm:text-base text-center sm:text-left">
             View and manage all patients in your center
           </p>
         </div>
 
         {/* Search and Add Button */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-6">
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-              <div className="relative flex-1 max-w-md">
+              <div className="relative flex-1 max-w-md w-full">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input
                   type="text"
                   placeholder="Search patients by name, email, phone..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 sm:py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                 />
               </div>
-                              <button
-                  onClick={() => navigate('/dashboard/CenterAdmin/patients/AddPatient')}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-                >
+              <button
+                onClick={() => navigate('/dashboard/CenterAdmin/patients/AddPatient')}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2 w-full sm:w-auto justify-center"
+              >
                 <Plus className="h-4 w-4" />
                 Add Patient
               </button>
@@ -98,71 +100,168 @@ export default function PatientList() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mb-6">
+          <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                <p className="text-xl font-bold text-slate-800">{(patients || []).length}</p>
+                <p className="text-slate-600 text-xs sm:text-sm font-medium">Total Patients</p>
+                <p className="text-lg sm:text-xl font-bold text-slate-800">{(patients || []).length}</p>
               </div>
-              <Users className="h-8 w-8 text-blue-500" />
+              <Users className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500" />
             </div>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
+          <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Male Patients</p>
-                <p className="text-xl font-bold text-slate-800">{genderStats.maleCount}</p>
+                <p className="text-slate-600 text-xs sm:text-sm font-medium">Male Patients</p>
+                <p className="text-lg sm:text-xl font-bold text-slate-800">{genderStats.maleCount}</p>
               </div>
-              <User className="h-8 w-8 text-blue-600" />
+              <User className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
             </div>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
+          <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Female Patients</p>
-                <p className="text-xl font-bold text-slate-800">{genderStats.femaleCount}</p>
+                <p className="text-slate-600 text-xs sm:text-sm font-medium">Female Patients</p>
+                <p className="text-lg sm:text-xl font-bold text-slate-800">{genderStats.femaleCount}</p>
               </div>
-              <User className="h-8 w-8 text-pink-500" />
+              <User className="h-6 w-6 sm:h-8 sm:w-8 text-pink-500" />
             </div>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
+          <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">With Email</p>
-                <p className="text-xl font-bold text-slate-800">
+                <p className="text-slate-600 text-xs sm:text-sm font-medium">With Email</p>
+                <p className="text-lg sm:text-xl font-bold text-slate-800">
                   {(patients || []).filter(p => p?.email).length}
                 </p>
               </div>
-              <Mail className="h-8 w-8 text-green-500" />
+              <Mail className="h-6 w-6 sm:h-8 sm:w-8 text-green-500" />
             </div>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
+          <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-blue-100 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">With Phone</p>
-                <p className="text-xl font-bold text-slate-800">
+                <p className="text-slate-600 text-xs sm:text-sm font-medium">With Phone</p>
+                <p className="text-lg sm:text-xl font-bold text-slate-800">
                   {(patients || []).filter(p => p?.phone || p?.contact).length}
                 </p>
               </div>
-              <Phone className="h-8 w-8 text-orange-500" />
+              <Phone className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
             </div>
           </div>
         </div>
 
         {/* Patients Table */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-          <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
-              <Users className="h-5 w-5 mr-2 text-blue-500" />
+          <div className="p-4 sm:p-6 border-b border-blue-100">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center justify-center sm:justify-start">
+              <Users className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-500" />
               Patients List
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-sm sm:text-base text-center sm:text-left">
               {filteredPatients.length} of {(patients || []).length} patients
             </p>
           </div>
           
-          <div className="p-6">
+          {/* Mobile Card View */}
+          <div className="block lg:hidden p-4">
+            {getLoading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                <p className="text-slate-600 text-sm sm:text-base">Loading patients...</p>
+              </div>
+            ) : filteredPatients.length === 0 ? (
+              <div className="text-center py-8">
+                <Users className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                <p className="text-slate-500 text-sm sm:text-base">
+                  {searchTerm ? 'No patients found matching your search.' : 'No patients found.'}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredPatients.map((patient, index) => (
+                  <div key={patient?._id || index} className="bg-slate-50 rounded-lg p-4 space-y-3 border border-slate-200">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-semibold text-slate-800 text-base">{patient?.name || 'N/A'}</h3>
+                        <p className="text-slate-500 text-sm">#{index + 1}</p>
+                      </div>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
+                        patient?.gender === 'male' ? 'bg-blue-100 text-blue-700' :
+                        patient?.gender === 'female' ? 'bg-pink-100 text-pink-700' :
+                        'bg-slate-100 text-slate-700'
+                      }`}>
+                        {patient?.gender || 'N/A'}
+                      </span>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                        <Mail className="h-4 w-4 text-blue-500" />
+                        <span className="text-slate-700 text-sm font-medium">{patient?.email || 'No email'}</span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                        <Phone className="h-4 w-4 text-green-500" />
+                        <span className="text-slate-700 text-sm font-medium">{patient?.phone || patient?.contact || 'No phone'}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                        <User className="h-4 w-4 text-indigo-500" />
+                        <span className="text-slate-700 text-sm font-medium">{patient?.age || 'N/A'} years</span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                        <MapPin className="h-4 w-4 text-purple-500" />
+                        <span className="text-slate-700 text-sm font-medium">{patient?.centerCode || 'Not assigned'}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                      <Users className="h-4 w-4 text-orange-500" />
+                      <span className="text-slate-700 text-sm font-medium">
+                        Dr. {patient?.assignedDoctor?.name || 'Not assigned'}
+                      </span>
+                    </div>
+                    
+                    <div className="flex gap-2 pt-3 border-t border-slate-200">
+                      <button
+                        onClick={() => {
+                          if (patient?._id) {
+                            navigate(`/dashboard/CenterAdmin/patients/profile/ViewProfile/${patient._id}`);
+                          } else {
+                            alert('Patient ID not found. Please refresh the page and try again.');
+                          }
+                        }}
+                        className="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                      >
+                        <Eye className="h-4 w-4" />
+                        View
+                      </button>
+                      <button
+                        onClick={() => navigate(`/dashboard/CenterAdmin/patients/EditPatient/${patient?._id}`)}
+                        className="flex-1 bg-green-50 hover:bg-green-100 text-green-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                      >
+                        <Edit className="h-4 w-4" />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(patient?._id)}
+                        className="flex-1 bg-red-50 hover:bg-red-100 text-red-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          {/* Desktop Table View */}
+          <div className="hidden lg:block p-6">
             {getLoading ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
@@ -204,10 +303,10 @@ export default function PatientList() {
                     {filteredPatients.map((patient, index) => (
                       <tr key={patient?._id || index} className="hover:bg-slate-50 transition-colors">
                         <td className="px-6 py-4">
-                                                      <div>
-                              <div className="font-semibold text-slate-800">{patient?.name || 'N/A'}</div>
-                              <div className="text-sm text-slate-500">#{index + 1}</div>
-                            </div>
+                          <div>
+                            <div className="font-semibold text-slate-800">{patient?.name || 'N/A'}</div>
+                            <div className="text-sm text-slate-500">#{index + 1}</div>
+                          </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="space-y-1">

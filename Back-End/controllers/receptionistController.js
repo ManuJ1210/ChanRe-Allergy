@@ -67,6 +67,38 @@ export const getAllReceptionists = async (req, res) => {
       ]
     };
 
+    // Handle status filtering
+    if (req.query.status !== undefined && req.query.status !== '') {
+      if (req.query.status === 'true') {
+        query.isDeleted = true;
+      } else if (req.query.status === 'false') {
+        query.isDeleted = { $ne: true };
+      }
+    }
+
+    // Handle search functionality
+    if (req.query.search && req.query.search.trim() !== '') {
+      const searchRegex = new RegExp(req.query.search.trim(), 'i');
+      query.$and = [
+        {
+          $or: [
+            { name: searchRegex },
+            { email: searchRegex },
+            { username: searchRegex }
+          ]
+        },
+        {
+          $or: [
+            { isSuperAdminStaff: { $exists: false } }, // No isSuperAdminStaff field
+            { isSuperAdminStaff: false }, // Or explicitly set to false
+            { isSuperAdminStaff: { $ne: true } } // Or not true
+          ]
+        }
+      ];
+      // Remove the original $or since we're now using $and
+      delete query.$or;
+    }
+
     // Superadmin and center admin can see all receptionists (except superadmin staff)
     if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
       console.log('🔍 Superadmin/Center Admin - showing all receptionists (excluding superadmin staff)');
@@ -223,7 +255,7 @@ export const updateReceptionist = async (req, res) => {
     }
     
     // Update fields
-    const fields = ['name', 'phone', 'email', 'username'];
+    const fields = ['name', 'phone', 'email', 'username', 'isDeleted'];
     fields.forEach((field) => {
       if (req.body[field] !== undefined) {
         receptionist[field] = req.body[field];

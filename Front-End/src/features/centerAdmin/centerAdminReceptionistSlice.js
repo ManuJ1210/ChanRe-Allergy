@@ -70,10 +70,24 @@ export const deleteCenterAdminReceptionist = createAsyncThunk(
 
 export const toggleCenterAdminReceptionistStatus = createAsyncThunk(
   'centerAdminReceptionists/toggleCenterAdminReceptionistStatus',
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, getState }) => {
     try {
-      const response = await API.patch(`/receptionists/${id}/toggle-status`);
-      return response.data;
+      // Get current receptionist from state to check current status
+      const state = getState();
+      const currentReceptionist = state.centerAdminReceptionists.receptionists.find(r => r._id === id);
+      
+      if (!currentReceptionist) {
+        return rejectWithValue('Receptionist not found');
+      }
+
+      // Toggle the isDeleted status
+      const newIsDeletedStatus = !currentReceptionist.isDeleted;
+      
+      const response = await API.put(`/receptionists/${id}`, {
+        isDeleted: newIsDeletedStatus
+      });
+      
+      return { ...response.data, isDeleted: newIsDeletedStatus };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to toggle receptionist status');
     }
@@ -244,7 +258,9 @@ const centerAdminReceptionistSlice = createSlice({
       .addCase(toggleCenterAdminReceptionistStatus.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.message = 'Receptionist status updated successfully';
+        // Check if the receptionist was activated or deactivated
+        const wasDeleted = action.payload.isDeleted;
+        state.message = wasDeleted ? 'Receptionist deactivated successfully' : 'Receptionist activated successfully';
         const index = state.receptionists.findIndex(r => r._id === action.payload._id);
         if (index !== -1) {
           state.receptionists[index] = action.payload;

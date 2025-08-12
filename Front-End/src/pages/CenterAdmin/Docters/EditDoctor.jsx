@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCenterAdminDoctor, fetchCenterAdminDoctorById, clearError, clearSuccess } from '../../../features/centerAdmin/centerAdminDoctorSlice';
-import { Eye, EyeOff, UserCheck, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, UserCheck, ArrowLeft, User, Mail, Phone, GraduationCap, Award, Stethoscope, Calendar, FileText, Building } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const EditDoctor = () => {
   const { id } = useParams();
@@ -12,7 +13,7 @@ const EditDoctor = () => {
   
   const [formData, setFormData] = useState({
     name: '',
-    mobile: '',
+    phone: '',
     email: '',
     username: '',
     password: '',
@@ -39,7 +40,7 @@ const EditDoctor = () => {
     if (currentDoctor) {
       setFormData({
         name: currentDoctor.name || '',
-        mobile: currentDoctor.mobile || currentDoctor.phone || '',
+        phone: currentDoctor.phone || currentDoctor.mobile || '',
         email: currentDoctor.email || '',
         username: currentDoctor.username || '',
         password: '',
@@ -58,12 +59,33 @@ const EditDoctor = () => {
 
   useEffect(() => {
     if (success) {
+      toast.success('Doctor updated successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       setTimeout(() => {
         dispatch(clearSuccess());
         navigate('/dashboard/centeradmin/doctors/doctorlist');
       }, 1500);
     }
   }, [success, dispatch, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  }, [error]);
 
   // Clear error and success messages on component unmount
   useEffect(() => {
@@ -103,6 +125,7 @@ const EditDoctor = () => {
     const result = await dispatch(updateCenterAdminDoctor({ id, data: formData }));
     
     if (updateCenterAdminDoctor.fulfilled.match(result)) {
+     
       setTimeout(() => {
         navigate('/dashboard/centeradmin/doctors/doctorlist');
       }, 1500);
@@ -111,11 +134,11 @@ const EditDoctor = () => {
 
   if (initialLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-2 sm:p-3 md:p-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-slate-600">Loading doctor details...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
+            <p className="text-slate-600 text-xs sm:text-base">Loading doctor details...</p>
           </div>
         </div>
       </div>
@@ -123,277 +146,292 @@ const EditDoctor = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-2 sm:p-3 md:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-xs sm:text-base"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Doctors
           </button>
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-sm sm:text-lg md:text-xl font-bold text-slate-800 mb-2 text-center sm:text-left  bg-clip-text ">
             Edit Doctor
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-xs sm:text-base text-center sm:text-left">
             Update doctor information
           </p>
         </div>
 
-        {/* Alert Messages */}
-        {success && (
-          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
-            <UserCheck className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700">{message}</span>
-          </div>
-        )}
-        {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
-            <UserCheck className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700">{error}</span>
-          </div>
-        )}
-
         {/* Form */}
-        <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-          <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
-              <UserCheck className="h-5 w-5 mr-2 text-blue-500" />
+        <div className="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 sm:p-6 border-b border-blue-100">
+            <h2 className="text-base sm:text-sm font-semibold text-slate-800 flex items-center justify-center sm:justify-start mb-2">
+              <div className="bg-blue-100 p-2 rounded-full mr-3">
+                <UserCheck className="h-5 w-5 text-blue-600" />
+              </div>
               Doctor Information
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-xs sm:text-base text-center sm:text-left">
               Update the doctor details below
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter full name"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  Mobile Number *
-                </label>
-                <input
-                  type="tel"
-                  name="mobile"
-                  value={formData.mobile}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter mobile number"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter email address"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  Username *
-                </label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter username"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  Qualification
-                </label>
-                <input
-                  type="text"
-                  name="qualification"
-                  value={formData.qualification}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter qualification"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  Password
-                </label>
-                <div className="relative">
+          <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+            {/* Personal Information */}
+            <div className="space-y-4 sm:space-y-6">
+              <h3 className="text-xs font-medium text-slate-800 flex items-center gap-2">
+                <User className="h-4 w-4 text-blue-500" />
+                Personal Information
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
+                    Full Name *
+                  </label>
                   <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={formData.password}
+                    type="text"
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 pr-12 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    placeholder="Leave blank to keep current password"
+                    required
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
+                    placeholder="Enter full name"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  Designation
-                </label>
-                <input
-                  type="text"
-                  name="designation"
-                  value={formData.designation}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter designation"
-                />
-              </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
+                    placeholder="Enter phone number"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  KMC Number
-                </label>
-                <input
-                  type="text"
-                  name="kmcNumber"
-                  value={formData.kmcNumber}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter KMC number"
-                />
-              </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
+                    placeholder="Enter email address"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  Hospital Name
-                </label>
-                <input
-                  type="text"
-                  name="hospitalName"
-                  value={formData.hospitalName}
-                  readOnly
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg bg-slate-50 text-slate-700 cursor-not-allowed"
-                  placeholder="Hospital name (read-only)"
-                />
-                <p className="text-xs text-slate-500 mt-1">
-                  Hospital name cannot be modified
-                </p>
-              </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
+                    Username *
+                  </label>
+                  <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
+                    placeholder="Enter username"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  Experience
-                </label>
-                <input
-                  type="text"
-                  name="experience"
-                  value={formData.experience}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter experience (e.g., 5 years)"
-                />
-              </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
+                    Qualification
+                  </label>
+                  <input
+                    type="text"
+                    name="qualification"
+                    value={formData.qualification}
+                    onChange={handleChange}
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
+                    placeholder="Enter qualification"
+                  />
+                </div>
 
-              <div className="md:col-span-2">
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  Specializations
-                </label>
-                <div className="space-y-4">
-                  <div className="flex gap-2">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
+                    Password
+                  </label>
+                  <div className="relative">
                     <input
-                      type="text"
-                      value={newSpecialization}
-                      onChange={(e) => setNewSpecialization(e.target.value)}
-                      className="flex-1 px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                      placeholder="Add specialization"
-                      onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddSpecialization())}
+                      type={showPassword ? 'text' : 'password'}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pr-12 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
+                      placeholder="Leave blank to keep current password"
                     />
                     <button
                       type="button"
-                      onClick={handleAddSpecialization}
-                      className="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
                     >
-                      Add
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
-                  {formData.specializations.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {formData.specializations.map((spec, index) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs"
-                        >
-                          {spec}
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveSpecialization(index)}
-                            className="text-blue-600 hover:text-blue-800"
-                          >
-                            ×
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
               </div>
+            </div>
 
-              <div className="md:col-span-2">
-                <label className="block text-xs font-medium text-slate-700 mb-2">
-                  Bio
-                </label>
+            {/* Professional Information */}
+            <div className="space-y-4 sm:space-y-6">
+              <h3 className="text-xs font-medium text-slate-800 flex items-center gap-2">
+                <Stethoscope className="h-4 w-4 text-blue-500" />
+                Professional Information
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
+                    Designation
+                  </label>
+                  <input
+                    type="text"
+                    name="designation"
+                    value={formData.designation}
+                    onChange={handleChange}
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
+                    placeholder="Enter designation"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
+                    KMC Number
+                  </label>
+                  <input
+                    type="text"
+                    name="kmcNumber"
+                    value={formData.kmcNumber}
+                    onChange={handleChange}
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
+                    placeholder="Enter KMC number"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-2">
+                    Experience
+                  </label>
+                  <input
+                    type="text"
+                    name="experience"
+                    value={formData.experience}
+                    onChange={handleChange}
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
+                    placeholder="Enter experience (e.g., 5 years)"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-600 mb-2">
+                    Hospital Name
+                  </label>
+                  <input
+                    type="text"
+                    name="hospitalName"
+                    value={formData.hospitalName}
+                    readOnly
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-700 cursor-not-allowed text-xs sm:text-base"
+                    placeholder="Hospital name (read-only)"
+                  />
+                  <p className="text-xs text-slate-500 mt-1">
+                    Hospital name cannot be modified
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Specializations */}
+            <div className="space-y-4 sm:space-y-6">
+              <h3 className="text-xs font-medium text-slate-800 flex items-center gap-2">
+                <Award className="h-4 w-4 text-blue-500" />
+                Specializations
+              </h3>
+              
+              <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <input
+                    type="text"
+                    value={newSpecialization}
+                    onChange={(e) => setNewSpecialization(e.target.value)}
+                    className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
+                    placeholder="Add specialization"
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddSpecialization())}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddSpecialization}
+                    className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl transition-all duration-200 font-medium text-xs sm:text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  >
+                    Add
+                  </button>
+                </div>
+                {formData.specializations.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {formData.specializations.map((spec, index) => (
+                      <span
+                        key={index}
+                        className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 rounded-full text-xs font-medium border border-blue-200"
+                      >
+                        {spec}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSpecialization(index)}
+                          className="text-blue-600 hover:text-blue-800 font-bold"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Bio */}
+            <div className="space-y-4 sm:space-y-6">
+              <h3 className="text-xs font-medium text-slate-800 flex items-center gap-2">
+                <FileText className="h-4 w-4 text-blue-500" />
+                Bio
+              </h3>
+              
+              <div>
                 <textarea
                   name="bio"
                   value={formData.bio}
                   onChange={handleChange}
                   rows="3"
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
                   placeholder="Enter doctor bio"
                 />
               </div>
             </div>
 
-            <div className="flex gap-4 pt-6">
+            {/* Submit Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 sm:pt-6 border-t border-slate-200">
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 disabled:from-blue-300 disabled:to-indigo-400 text-white py-2.5 sm:py-3 px-6 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
               >
                 {loading ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
                     Updating Doctor...
                   </>
                 ) : (
@@ -406,7 +444,7 @@ const EditDoctor = () => {
               <button
                 type="button"
                 onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
-                className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
+                className="px-6 py-2.5 sm:py-3 border border-slate-300 text-slate-700 rounded-xl hover:bg-slate-50 transition-all duration-200 text-xs sm:text-base w-full sm:w-auto"
               >
                 Cancel
               </button>

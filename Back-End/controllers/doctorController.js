@@ -21,6 +21,38 @@ export const getAllDoctors = async (req, res) => {
         { isSuperAdminStaff: { $ne: true } } // Or not true
       ]
     };
+
+    // Handle status filtering
+    if (req.query.status !== undefined && req.query.status !== '') {
+      if (req.query.status === 'true') {
+        query.isDeleted = true;
+      } else if (req.query.status === 'false') {
+        query.isDeleted = { $ne: true };
+      }
+    }
+
+    // Handle search functionality
+    if (req.query.search && req.query.search.trim() !== '') {
+      const searchRegex = new RegExp(req.query.search.trim(), 'i');
+      query.$and = [
+        {
+          $or: [
+            { name: searchRegex },
+            { email: searchRegex },
+            { username: searchRegex }
+          ]
+        },
+        {
+          $or: [
+            { isSuperAdminStaff: { $exists: false } }, // No isSuperAdminStaff field
+            { isSuperAdminStaff: false }, // Or explicitly set to false
+            { isSuperAdminStaff: { $ne: true } } // Or not true
+          ]
+        }
+      ];
+      // Remove the original $or since we're now using $and
+      delete query.$or;
+    }
     
     console.log('🔍 getAllDoctors - User info:', {
       userId: req.user._id,
@@ -265,7 +297,8 @@ export const updateDoctor = async (req, res) => {
       specializations,
       experience,
       bio,
-      hospitalName
+      hospitalName,
+      isDeleted
     } = req.body;
 
     if (name) doctor.name = name;
@@ -281,6 +314,7 @@ export const updateDoctor = async (req, res) => {
     if (experience) doctor.experience = experience;
     if (bio) doctor.bio = bio;
     if (hospitalName) doctor.hospitalName = hospitalName;
+    if (isDeleted !== undefined) doctor.isDeleted = isDeleted;
 
     await doctor.save();
     

@@ -10,19 +10,65 @@ import fs from 'fs';
 // Get all test requests (for superadmin)
 export const getAllTestRequests = async (req, res) => {
   try {
-    const testRequests = await TestRequest.find({ isActive: true })
+    const { page = 1, limit = 10, status, urgency, centerId, search } = req.query;
+    
+    // Build query
+    let query = { isActive: true };
+    
+    if (status && status !== 'all') {
+      query.status = status;
+    }
+    
+    if (urgency && urgency !== 'all') {
+      query.urgency = urgency;
+    }
+    
+    if (centerId && centerId !== 'all') {
+      query.centerId = centerId;
+    }
+    
+    if (search) {
+      query.$or = [
+        { testType: { $regex: search, $options: 'i' } },
+        { 'patientId.name': { $regex: search, $options: 'i' } },
+        { 'doctorId.name': { $regex: search, $options: 'i' } },
+        { 'centerId.name': { $regex: search, $options: 'i' } }
+      ];
+    }
+    
+    // Calculate pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    
+    // Get total count
+    const total = await TestRequest.countDocuments(query);
+    
+    // Get test requests with pagination
+    const testRequests = await TestRequest.find(query)
       .populate('doctorId', 'name email phone')
       .populate('patientId', 'name phone address age gender')
       .populate('assignedLabStaffId', 'staffName phone')
       .populate('sampleCollectorId', 'staffName phone')
       .populate('labTechnicianId', 'staffName phone')
       .populate('reportGeneratedBy', 'staffName')
-      .sort({ createdAt: -1 });
+      .populate('centerId', 'name code')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+    
+    const totalPages = Math.ceil(total / parseInt(limit));
 
-    res.status(200).json(testRequests);
+    res.status(200).json({
+      testRequests,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages,
+        total,
+        limit: parseInt(limit)
+      }
+    });
   } catch (error) {
     console.error('Error fetching all test requests:', error);
-    res.status(500).json({ message: 'Failed to fetch test requests' });
+    res.status(500).json({ message: 'Failed to fetch test requests', error: error.message });
   }
 };
 
@@ -339,11 +385,118 @@ export const createTestRequest = async (req, res) => {
       patientName: patient.name,
       patientPhone: patient.phone,
       patientAddress: patient.address,
-      status: 'Pending'
+      status: 'Superadmin_Review',
+      workflowStage: 'superadmin_review',
+      superadminReview: {
+        status: 'pending',
+        approvedForLab: false
+      }
     });
 
     const savedTestRequest = await newTestRequest.save();
     console.log('Test request saved:', savedTestRequest);
+
+    // ✅ NEW: Send notifications to superadmin, superadmin doctor, and lab
+    try {
+      // Import Notification model dynamically to avoid circular dependencies
+      const Notification = (await import('../models/Notification.js')).default;
+      
+      // 1. Find superadmin users
+      const superadmins = await User.find({ 
+        role: 'superadmin', 
+        isSuperAdminStaff: true,
+        isDeleted: { $ne: true }
+      });
+      
+      // 2. Find superadmin doctors
+      const SuperAdminDoctor = (await import('../models/SuperAdminDoctor.js')).default;
+      const superadminDoctors = await SuperAdminDoctor.find({ 
+        status: 'active',
+        isSuperAdminStaff: true
+      });
+      
+      // 3. Find lab staff
+      const LabStaff = (await import('../models/LabStaff.js')).default;
+      const labStaff = await LabStaff.find({ 
+        isDeleted: { $ne: true }
+      });
+      
+      // Create notifications for superadmins
+      for (const superadmin of superadmins) {
+        const notification = new Notification({
+          recipient: superadmin._id,
+          sender: doctorId,
+          type: 'test_request',
+          title: 'New Test Request',
+          message: `Dr. ${doctor.name} has requested ${testType} test for patient ${patient.name} from ${center ? center.name : 'Unknown Center'}`,
+          data: {
+            testRequestId: savedTestRequest._id,
+            patientId: patient._id,
+            doctorId: doctorId,
+            centerId: patient.centerId,
+            testType,
+            urgency,
+            status: 'Pending'
+          },
+          read: false
+        });
+        await notification.save();
+        console.log(`✅ Notification sent to superadmin: ${superadmin.name}`);
+      }
+      
+      // Create notifications for superadmin doctors
+      for (const superadminDoctor of superadminDoctors) {
+        const notification = new Notification({
+          recipient: superadminDoctor._id,
+          sender: doctorId,
+          type: 'test_request',
+          title: 'New Test Request for Review',
+          message: `Dr. ${doctor.name} has requested ${testType} test for patient ${patient.name}. Test requires superadmin doctor review before lab processing.`,
+          data: {
+            testRequestId: savedTestRequest._id,
+            patientId: patient._id,
+            doctorId: doctorId,
+            centerId: patient.centerId,
+            testType,
+            urgency,
+            status: 'Pending',
+            requiresSuperadminReview: true
+          },
+          read: false
+        });
+        await notification.save();
+        console.log(`✅ Notification sent to superadmin doctor: ${superadminDoctor.name}`);
+      }
+      
+      // Create notifications for lab staff
+      for (const labMember of labStaff) {
+        const notification = new Notification({
+          recipient: labMember._id,
+          sender: doctorId,
+          type: 'test_request',
+          title: 'New Test Request Pending',
+          message: `Dr. ${doctor.name} has requested ${testType} test for patient ${patient.name}. Test is pending superadmin review before lab assignment.`,
+          data: {
+            testRequestId: savedTestRequest._id,
+            patientId: patient._id,
+            doctorId: doctorId,
+            centerId: patient.centerId,
+            testType,
+            urgency,
+            status: 'Pending',
+            awaitingSuperadminReview: true
+          },
+          read: false
+        });
+        await notification.save();
+        console.log(`✅ Notification sent to lab staff: ${labMember.staffName}`);
+      }
+      
+      console.log('✅ All notifications sent successfully');
+    } catch (notificationError) {
+      console.error('⚠️ Error sending notifications:', notificationError);
+      // Don't fail the test request creation if notifications fail
+    }
 
     // Populate the saved test request
     const populatedTestRequest = await TestRequest.findById(savedTestRequest._id)
@@ -352,7 +505,7 @@ export const createTestRequest = async (req, res) => {
       .populate('assignedLabStaffId', 'staffName phone');
 
     res.status(201).json({
-      message: 'Test request created successfully',
+      message: 'Test request created successfully and notifications sent to superadmin, superadmin doctor, and lab',
       testRequest: populatedTestRequest
     });
   } catch (error) {
@@ -372,9 +525,27 @@ export const assignLabStaff = async (req, res) => {
       return res.status(404).json({ message: 'Test request not found' });
     }
 
+    // ✅ NEW: Check if test request has been approved by superadmin doctor
+    if (testRequest.status !== 'Superadmin_Approved') {
+      return res.status(400).json({ 
+        message: 'Test request must be approved by superadmin doctor before lab assignment',
+        currentStatus: testRequest.status,
+        requiredStatus: 'Superadmin_Approved'
+      });
+    }
+
+    // ✅ NEW: Check if superadmin review is complete and approved
+    if (!testRequest.superadminReview || testRequest.superadminReview.status !== 'approved') {
+      return res.status(400).json({ 
+        message: 'Test request must be reviewed and approved by superadmin doctor before lab assignment',
+        reviewStatus: testRequest.superadminReview?.status || 'not_reviewed'
+      });
+    }
+
     testRequest.assignedLabStaffId = assignedLabStaffId;
     testRequest.assignedLabStaffName = assignedLabStaffName;
     testRequest.status = 'Assigned';
+    testRequest.workflowStage = 'lab_assignment';
     testRequest.updatedAt = new Date();
 
     const updatedTestRequest = await testRequest.save();
@@ -384,13 +555,37 @@ export const assignLabStaff = async (req, res) => {
       .populate('patientId', 'name phone address age gender')
       .populate('assignedLabStaffId', 'staffName phone');
 
+    // ✅ NEW: Send notification to center doctor that lab staff has been assigned
+    try {
+      const Notification = (await import('../models/Notification.js')).default;
+      const notification = new Notification({
+        recipient: testRequest.doctorId,
+        sender: req.user.id,
+        type: 'test_request',
+        title: 'Lab Staff Assigned',
+        message: `Lab staff ${assignedLabStaffName} has been assigned to your test request for ${testRequest.patientName}. Test is now in progress.`,
+        data: {
+          testRequestId: testRequest._id,
+          patientId: testRequest.patientId,
+          assignedLabStaffId,
+          assignedLabStaffName,
+          status: 'Assigned'
+        },
+        read: false
+      });
+      await notification.save();
+      console.log(`✅ Notification sent to center doctor about lab staff assignment`);
+    } catch (notificationError) {
+      console.error('⚠️ Error sending notification to center doctor:', notificationError);
+    }
+
     res.status(200).json({
       message: 'Lab staff assigned successfully',
       testRequest: populatedTestRequest
     });
   } catch (error) {
     console.error('Error assigning lab staff:', error);
-    res.status(500).json({ message: 'Failed to assign lab staff' });
+    res.status(500).json({ message: 'Failed to assign lab staff', error: error.message });
   }
 };
 
