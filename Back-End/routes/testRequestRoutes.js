@@ -1,5 +1,5 @@
 import express from 'express';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, ensureCenterIsolation } from '../middleware/authMiddleware.js';
 import { pdfAuth } from '../middleware/pdfAuthMiddleware.js';
 import upload from '../middleware/uploadMiddleware.js';
 import {
@@ -44,13 +44,13 @@ router.get('/completed', protect, getCompletedTestRequests);
 router.get('/stats', protect, getTestRequestStats);
 
 // Get test requests for current doctor (authenticated)
-router.get('/doctor', protect, getTestRequestsForCurrentDoctor);
+router.get('/doctor', protect, ensureCenterIsolation, getTestRequestsForCurrentDoctor);
 
 // Get completed test requests for current doctor (authenticated)
-router.get('/doctor/completed', protect, getCompletedTestRequestsForCurrentDoctor);
+router.get('/doctor/completed', protect, ensureCenterIsolation, getCompletedTestRequestsForCurrentDoctor);
 
 // Get test requests for current lab staff (authenticated)
-router.get('/lab-staff', protect, getTestRequestsForCurrentLabStaff);
+router.get('/lab-staff', protect, ensureCenterIsolation, getTestRequestsForCurrentLabStaff);
 
 // Get test requests by doctor
 router.get('/doctor/:doctorId', protect, getTestRequestsByDoctor);
@@ -71,7 +71,7 @@ router.get('/:id/download-report', protect, downloadTestReport);
 router.get('/:id', protect, getTestRequestById);
 
 // Create new test request
-router.post('/', protect, createTestRequest);
+router.post('/', protect, ensureCenterIsolation, createTestRequest);
 
 // Assign lab staff to test request
 router.put('/:id/assign', protect, assignLabStaff);

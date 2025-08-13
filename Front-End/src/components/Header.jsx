@@ -20,8 +20,8 @@ export default function Header({ onHamburgerClick }) {
     async function fetchCenterName() {
       if (!user) return;
       
-      // For superadmin, no center needed
-      if (user.role === 'superadmin') {
+      // Only fetch center data for roles that should show center name
+      if (!shouldShowCenterName) {
         return;
       }
 
@@ -101,19 +101,24 @@ export default function Header({ onHamburgerClick }) {
     }
   }, []);
 
-  const isSuperadmin = user?.role?.toLowerCase() === 'superadmin';
+  // Only show center name for center-related roles
+  const shouldShowCenterName = ['centeradmin', 'centerAdmin', 'receptionist', 'doctor'].includes(user?.role?.toLowerCase()) && 
+                              !user?.isSuperAdminStaff; // Exclude superadmin doctors
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    localStorage.removeItem('centerName');
-    setCenterName('');
+    // Only clear center name if it was being used
+    if (shouldShowCenterName) {
+      localStorage.removeItem('centerName');
+      setCenterName('');
+    }
     dispatch(logout());
     navigate('/login');
   };
 
   const refreshCenterName = async () => {
-    if (user && user.role !== 'superadmin') {
+    if (user && shouldShowCenterName) {
       // Trigger the center fetching logic again
       const event = new Event('storage');
       window.dispatchEvent(event);
@@ -209,9 +214,9 @@ export default function Header({ onHamburgerClick }) {
         >
           <svg className="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
         </button>
-        {/* Left: Center name */}
+        {/* Left: Center name - only for center-related roles */}
         <div className="flex items-center min-w-[100px] max-w-[160px] truncate flex-shrink-0 text-xs md:min-w-[180px] md:max-w-[220px] md:text-sm">
-          {!isSuperadmin && (
+          {shouldShowCenterName && (
             <span className="font-bold text-blue-700 whitespace-nowrap truncate">
               {isLoadingCenter ? (
                 <span className="animate-pulse">Loading...</span>
@@ -285,9 +290,12 @@ export default function Header({ onHamburgerClick }) {
               <p><strong>Email:</strong> {getUserEmail()}</p>
               <p><strong>Role:</strong> {user?.role || '-'}</p>
               <p><strong>Phone:</strong> {getUserPhone()}</p>
-              <p><strong>Hospital Name:</strong> {getHospitalName()}</p>
-              <p><strong>Center ID:</strong> {getCenterId()}</p>
-             
+              {shouldShowCenterName && (
+                <>
+                  <p><strong>Hospital Name:</strong> {getHospitalName()}</p>
+                  <p><strong>Center ID:</strong> {getCenterId()}</p>
+                </>
+              )}
             </div>
           </div>
         </div>

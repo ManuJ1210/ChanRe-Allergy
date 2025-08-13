@@ -69,9 +69,18 @@ const checkCenterAccess = (req, res, next) => {
 
 // Ensure center isolation for data access
 const ensureCenterIsolation = (req, res, next) => {
+  // Superadmin can access all data
   if (req.user && req.user.role === 'superadmin') {
     return next();
   }
+  
+  // For all other roles, ensure they have a centerId
+  if (!req.user || !req.user.centerId) {
+    return res.status(403).json({ 
+      message: 'Access denied. Center-specific access required.' 
+    });
+  }
+  
   next();
 };
 

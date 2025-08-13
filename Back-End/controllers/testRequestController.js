@@ -151,8 +151,10 @@ export const getTestRequestsForCurrentDoctor = async (req, res) => {
     
     console.log('Searching for test requests with doctorId:', doctorId);
     
+    // Ensure doctor can only see test requests from their center
     const testRequests = await TestRequest.find({ 
       doctorId, 
+      centerId: req.user.centerId, // Only test requests from same center
       isActive: true 
     })
       .populate('doctorId', 'name email phone')
@@ -181,8 +183,10 @@ export const getCompletedTestRequestsForCurrentDoctor = async (req, res) => {
       return res.status(400).json({ message: 'Doctor ID not found in token' });
     }
     
+    // Ensure doctor can only see completed test requests from their center
     const completedTestRequests = await TestRequest.find({ 
       doctorId, 
+      centerId: req.user.centerId, // Only test requests from same center
       status: { $in: ['Completed', 'Report_Sent', 'feedback_sent'] },
       isActive: true 
     })

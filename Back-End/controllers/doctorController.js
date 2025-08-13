@@ -61,13 +61,18 @@ export const getAllDoctors = async (req, res) => {
       userCenterIdType: typeof req.user.centerId
     });
     
-    // Superadmin and center admin can see all doctors (except superadmin staff)
-    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
-      console.log('🔍 Superadmin/Center Admin - showing all doctors (excluding superadmin staff)');
+    // Superadmin can see all doctors (except superadmin staff)
+    if (req.user.role === 'superadmin') {
+      console.log('🔍 Superadmin - showing all doctors (excluding superadmin staff)');
     } else {
-      // Other users can only see doctors from their center
-      query.centerId = req.user.centerId;
-      console.log('🔍 Filtering by centerId:', req.user.centerId);
+      // Center admin and other users can only see doctors from their center
+      if (req.user.centerId) {
+        query.centerId = req.user.centerId;
+        console.log('🔍 Filtering by centerId:', req.user.centerId);
+      } else {
+        console.log('❌ User has no centerId, cannot fetch doctors');
+        return res.status(403).json({ message: 'Access denied. Center-specific access required.' });
+      }
     }
 
     const doctors = await User.find(query).select('-password');
@@ -187,8 +192,11 @@ export const deleteDoctor = async (req, res) => {
       return res.status(200).json({ message: 'Doctor deleted successfully' });
     }
 
-    // Allow center admin to delete any doctor (except superadmin staff)
+    // Allow center admin to delete doctors from their center only (except superadmin staff)
     if (req.user.role === 'centeradmin') {
+      if (doctor.centerId?.toString() !== req.user.centerId?.toString()) {
+        return res.status(403).json({ message: 'Access denied. You can only delete doctors from your own center.' });
+      }
       await doctor.deleteOne();
       console.log(`✅ Doctor deleted successfully by center admin`);
       return res.status(200).json({ message: 'Doctor deleted successfully' });
@@ -213,8 +221,8 @@ export const getDoctorById = async (req, res) => {
   try {
     let doctor;
     
-    // Superadmin and center admin can view any doctor (except superadmin staff)
-    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
+    // Superadmin can view any doctor (except superadmin staff)
+    if (req.user.role === 'superadmin') {
       doctor = await User.findOne({ 
         _id: req.params.id,
         role: 'doctor', // Only get doctors
@@ -225,7 +233,12 @@ export const getDoctorById = async (req, res) => {
         ]
       }).select('-password');
     } else {
-      // Other users can only view doctors from their center
+      // Center admin and other users can only view doctors from their center
+      if (!req.user.centerId) {
+        return res.status(403).json({ 
+          message: 'Access denied. Center-specific access required.' 
+        });
+      }
       doctor = await User.findOne({ 
         _id: req.params.id,
         role: 'doctor', // Only get doctors
@@ -253,8 +266,8 @@ export const updateDoctor = async (req, res) => {
   try {
     let doctor;
     
-    // Superadmin and center admin can update any doctor (except superadmin staff)
-    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
+    // Superadmin can update any doctor (except superadmin staff)
+    if (req.user.role === 'superadmin') {
       doctor = await User.findOne({ 
         _id: req.params.id,
         role: 'doctor', // Only update doctors
@@ -268,7 +281,12 @@ export const updateDoctor = async (req, res) => {
         return res.status(404).json({ message: 'Doctor not found' });
       }
     } else {
-      // Other users can only update doctors from their center
+      // Center admin and other users can only update doctors from their center
+      if (!req.user.centerId) {
+        return res.status(403).json({ 
+          message: 'Access denied. Center-specific access required.' 
+        });
+      }
       doctor = await User.findOne({ 
         _id: req.params.id,
         role: 'doctor', // Only update doctors

@@ -99,11 +99,11 @@ export const getAllReceptionists = async (req, res) => {
       delete query.$or;
     }
 
-    // Superadmin and center admin can see all receptionists (except superadmin staff)
-    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
-      console.log('🔍 Superadmin/Center Admin - showing all receptionists (excluding superadmin staff)');
+    // Superadmin can see all receptionists (except superadmin staff)
+    if (req.user.role === 'superadmin') {
+      console.log('🔍 Superadmin - showing all receptionists (excluding superadmin staff)');
     } else {
-      // Other users can only see receptionists from their center
+      // Center admin and other users can only see receptionists from their center
       if (!req.user.centerId) {
         return res.status(403).json({ 
           message: 'Access denied. Center-specific access required.' 
@@ -139,8 +139,8 @@ export const getReceptionistById = async (req, res) => {
   try {
     let receptionist;
     
-    // Superadmin and center admin can view any receptionist (except superadmin staff)
-    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
+    // Superadmin can view any receptionist (except superadmin staff)
+    if (req.user.role === 'superadmin') {
       receptionist = await User.findOne({ 
         _id: req.params.id,
         role: 'receptionist', // Only get receptionists
@@ -151,7 +151,12 @@ export const getReceptionistById = async (req, res) => {
         ]
       }).select('-password');
     } else {
-      // Other users can only view receptionists from their center
+      // Center admin and other users can only view receptionists from their center
+      if (!req.user.centerId) {
+        return res.status(403).json({ 
+          message: 'Access denied. Center-specific access required.' 
+        });
+      }
       receptionist = await User.findOne({ 
         _id: req.params.id,
         role: 'receptionist', // Only get receptionists
@@ -197,8 +202,11 @@ export const deleteReceptionist = async (req, res) => {
       return res.status(200).json({ message: 'Receptionist deleted successfully' });
     }
 
-    // Allow center admin to delete any receptionist (except superadmin staff)
+    // Allow center admin to delete receptionists from their center only (except superadmin staff)
     if (req.user.role === 'centeradmin') {
+      if (receptionist.centerId?.toString() !== req.user.centerId?.toString()) {
+        return res.status(403).json({ message: 'Access denied. You can only delete receptionists from your own center.' });
+      }
       await receptionist.deleteOne();
       console.log(`✅ Receptionist deleted successfully by center admin`);
       return res.status(200).json({ message: 'Receptionist deleted successfully' });
@@ -223,8 +231,8 @@ export const updateReceptionist = async (req, res) => {
   try {
     let receptionist;
     
-    // Superadmin and center admin can update any receptionist (except superadmin staff)
-    if (req.user.role === 'superadmin' || req.user.role === 'centeradmin') {
+    // Superadmin can update any receptionist (except superadmin staff)
+    if (req.user.role === 'superadmin') {
       receptionist = await User.findOne({ 
         _id: req.params.id,
         role: 'receptionist', // Only update receptionists
@@ -238,7 +246,12 @@ export const updateReceptionist = async (req, res) => {
         return res.status(404).json({ message: 'Receptionist not found' });
       }
     } else {
-      // Other users can only update receptionists from their center
+      // Center admin and other users can only update receptionists from their center
+      if (!req.user.centerId) {
+        return res.status(403).json({ 
+          message: 'Access denied. Center-specific access required.' 
+        });
+      }
       receptionist = await User.findOne({ 
         _id: req.params.id,
         role: 'receptionist', // Only update receptionists
