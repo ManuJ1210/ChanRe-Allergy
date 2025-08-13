@@ -345,13 +345,24 @@ const PatientProfile = () => {
         {activeTab === "Medical History" && (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
-                <FileText className="h-5 w-5 mr-2 text-blue-500" />
-                Medical History
-              </h2>
-              <p className="text-slate-600 mt-1">
-                Complete patient medical history and examination records
-              </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+                    <FileText className="h-5 w-5 mr-2 text-blue-500" />
+                    Medical History
+                  </h2>
+                  <p className="text-slate-600 mt-1">
+                    Complete patient medical history and examination records
+                  </p>
+                </div>
+                <button
+                  onClick={() => navigate(`/dashboard/superadmin/doctor/patient/${patientId}/history`)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  View Full History
+                </button>
+              </div>
             </div>
             <div className="p-6">
               {!history || !history.historyData || history.historyData.length === 0 ? (
@@ -480,13 +491,24 @@ const PatientProfile = () => {
         {activeTab === "Lab Reports" && (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
-                <Activity className="h-5 w-5 mr-2 text-blue-500" />
-                Lab Reports
-              </h2>
-              <p className="text-slate-600 mt-1">
-                Laboratory test results and medical investigations
-              </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+                    <Activity className="h-5 w-5 mr-2 text-blue-500" />
+                    Lab Reports
+                  </h2>
+                  <p className="text-slate-600 mt-1">
+                    Laboratory test results and medical investigations
+                  </p>
+                </div>
+                <button
+                  onClick={() => navigate(`/dashboard/superadmin/doctor/patient/${patientId}/lab-reports`)}
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                >
+                  <Activity className="h-4 w-4" />
+                  View All Reports
+                </button>
+              </div>
             </div>
             <div className="p-6">
               {!labReports || labReports.length === 0 ? (

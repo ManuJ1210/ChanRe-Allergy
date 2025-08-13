@@ -40,6 +40,9 @@ const protect = async (req, res, next) => {
         return res.status(401).json({ message: 'Not authorized, user not found' });
       }
       
+      // Preserve the userType from the JWT token
+      user.userType = decoded.userType;
+      
       req.user = user;
       next();
     } catch (error) {
@@ -71,6 +74,11 @@ const checkCenterAccess = (req, res, next) => {
 const ensureCenterIsolation = (req, res, next) => {
   // Superadmin can access all data
   if (req.user && req.user.role === 'superadmin') {
+    return next();
+  }
+  
+  // Lab staff can access lab-related endpoints
+  if (req.user && req.user.userType === 'LabStaff') {
     return next();
   }
   

@@ -294,8 +294,8 @@ export const getSuperAdminDoctorAssignedPatients = async (req, res) => {
 
 export const getSuperAdminDoctorPatientById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const patient = await Patient.findById(id)
+    const { patientId } = req.params;
+    const patient = await Patient.findById(patientId)
       .populate('centerId', 'name code')
       .populate('assignedDoctor', 'name email');
 
@@ -304,27 +304,27 @@ export const getSuperAdminDoctorPatientById = async (req, res) => {
     }
 
     // Get patient history
-    const history = await History.findOne({ patientId: id });
+    const history = await History.findOne({ patientId: patientId });
 
     // Get patient medications
-    const medications = await Medication.find({ patientId: id });
+    const medications = await Medication.find({ patientId: patientId });
 
     // Get patient tests
-    const tests = await Test.find({ patient: id });
+    const tests = await Test.find({ patient: patientId });
 
     // Get patient followups
-    const followups = await FollowUp.find({ patientId: id })
+    const followups = await FollowUp.find({ patientId: patientId })
       .populate('updatedBy', 'name');
 
     // Get specific allergy records
-    const allergicRhinitis = await AllergicRhinitis.find({ patientId: id });
-    const allergicConjunctivitis = await AllergicConjunctivitis.find({ patientId: id });
-    const allergicBronchitis = await AllergicBronchitis.find({ patientId: id });
-    const atopicDermatitis = await AtopicDermatitis.find({ patientId: id });
-    const gpe = await GPE.find({ patientId: id });
+    const allergicRhinitis = await AllergicRhinitis.find({ patientId: patientId });
+    const allergicConjunctivitis = await AllergicConjunctivitis.find({ patientId: patientId });
+    const allergicBronchitis = await AllergicBronchitis.find({ patientId: patientId });
+    const atopicDermatitis = await AtopicDermatitis.find({ patientId: patientId });
+    const gpe = await GPE.find({ patientId: patientId });
 
     // Get prescriptions
-    const prescriptions = await Prescription.find({ patientId: id })
+    const prescriptions = await Prescription.find({ patientId: patientId })
       .populate('doctorId', 'name');
 
     res.json({

@@ -10,7 +10,7 @@ import {
   AlertCircle,
   RefreshCw
 } from 'lucide-react';
-import { fetchSuperAdminDoctorPatientHistory } from '../../../features/superadmin/superAdminDoctorSlice';
+import { fetchSuperAdminDoctorPatientHistory, fetchSuperAdminDoctorPatientLabReports } from '../../../features/superadmin/superAdminDoctorSlice';
 
 const PatientHistory = () => {
   const dispatch = useDispatch();
@@ -23,17 +23,52 @@ const PatientHistory = () => {
     dataError
   } = useSelector((state) => state.superAdminDoctors);
 
+  const [labReports, setLabReports] = useState([]);
+  const [labReportsLoading, setLabReportsLoading] = useState(false);
+
   useEffect(() => {
     if (patientId) {
       dispatch(fetchSuperAdminDoctorPatientHistory(patientId));
+      fetchLabReports();
     }
   }, [dispatch, patientId]);
+
+  const fetchLabReports = async () => {
+    if (!patientId) return;
+    
+    setLabReportsLoading(true);
+    try {
+      const response = await fetch(`/api/superadmin/doctors/working/patient/${patientId}/lab-reports`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setLabReports(data);
+      }
+    } catch (error) {
+      console.error('Error fetching lab reports:', error);
+    } finally {
+      setLabReportsLoading(false);
+    }
+  };
 
   const handleBack = () => {
     navigate('/dashboard/superadmin/doctor/patients');
   };
 
-  if (dataLoading) {
+  const handleViewReport = (report) => {
+    if (report.pdfFile) {
+      // Open PDF in new tab
+      window.open(`/uploads/${report.pdfFile}`, '_blank');
+    } else {
+      alert('No PDF report available for this test request.');
+    }
+  };
+
+  if (dataLoading || labReportsLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-6">
         <div className="max-w-7xl mx-auto">
@@ -64,11 +99,14 @@ const PatientHistory = () => {
               </div>
             </div>
             <button
-              onClick={() => dispatch(fetchSuperAdminDoctorPatientHistory(patientId))}
-              disabled={dataLoading}
+              onClick={() => {
+                dispatch(fetchSuperAdminDoctorPatientHistory(patientId));
+                fetchLabReports();
+              }}
+              disabled={dataLoading || labReportsLoading}
               className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 flex items-center shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50"
             >
-              <RefreshCw className={`w-5 h-5 mr-2 ${dataLoading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-5 h-5 mr-2 ${dataLoading || labReportsLoading ? 'animate-spin' : ''}`} />
               Refresh
             </button>
           </div>
@@ -252,6 +290,87 @@ const PatientHistory = () => {
                     </div>
                   </div>
                 )}
+
+                {/* Lab Reports Section */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                    <FileText className="w-5 h-5 mr-2 text-red-600" />
+                    Lab Reports
+                  </h3>
+                  {labReports && labReports.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-4">
+                      {labReports.map((report, index) => (
+                        <div key={index} className="bg-red-50 p-4 rounded-lg border-l-4 border-red-500 hover:shadow-md transition-shadow">
+                          <div className="flex items-center justify-between mb-3">
+                            <div>
+                              <h6 className="font-semibold text-gray-800 text-sm">{report.testType || 'Lab Test'}</h6>
+                              <p className="text-xs text-gray-600 mt-1">{report.testDescription || 'No description available'}</p>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs text-gray-500">{new Date(report.createdAt).toLocaleDateString()}</span>
+                              {report.hasPdf ? (
+                                <div className="flex items-center space-x-2">
+                                  <button
+                                    onClick={() => handleViewReport(report)}
+                                    className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors flex items-center"
+                                    title="View Report"
+                                  >
+                                    <FileText className="w-3 h-3 mr-1" />
+                                    View
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      const link = document.createElement('a');
+                                      link.href = `/uploads/${report.pdfFile}`;
+                                      link.download = `Lab_Report_${report.testType || 'Test'}_${new Date(report.createdAt).toLocaleDateString()}.pdf`;
+                                      link.click();
+                                    }}
+                                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors flex items-center"
+                                    title="Download Report"
+                                  >
+                                    <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    Download
+                                  </button>
+                                </div>
+                              ) : (
+                                <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">
+                                  No PDF Available
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                            <div><span className="font-medium">Status:</span> 
+                              <span className={`ml-1 px-2 py-1 rounded-full text-xs ${
+                                report.status === 'Completed' || report.status === 'Report_Generated' || report.status === 'Report_Sent' 
+                                  ? 'bg-green-100 text-green-800' 
+                                  : 'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {report.status}
+                              </span>
+                            </div>
+                            <div><span className="font-medium">Urgency:</span> {report.urgency || 'Normal'}</div>
+                            {report.doctorId?.name && <div><span className="font-medium">Requested By:</span> Dr. {report.doctorId.name}</div>}
+                            {report.assignedLabStaffId?.name && <div><span className="font-medium">Lab Staff:</span> {report.assignedLabStaffId.name}</div>}
+                            {report.reportGeneratedDate && <div className="md:col-span-2"><span className="font-medium">Report Generated:</span> {new Date(report.reportGeneratedDate).toLocaleDateString()}</div>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 bg-gray-50 rounded-lg">
+                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <FileText className="w-8 h-8 text-gray-400" />
+                      </div>
+                      <h4 className="text-sm font-medium text-gray-900 mb-2">No Lab Reports Available</h4>
+                      <p className="text-xs text-gray-500 max-w-sm mx-auto">
+                        No lab test reports have been generated for this patient yet. Reports will appear here once they are completed.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>

@@ -221,6 +221,7 @@ export default function AppRoutes() {
         <Route path="superadmin/doctor/patient/:patientId" element={<PatientDetails />} />
         <Route path="superadmin/doctor/patient/:patientId/profile" element={<PatientProfile />} />
         <Route path="superadmin/doctor/patient/:patientId/lab-reports" element={<PatientLabReports />} />
+        <Route path="superadmin/doctor/patient/:patientId/history" element={<SuperadminDoctorPatientHistory />} />
         
 
         

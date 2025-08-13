@@ -122,7 +122,7 @@ export const fetchSuperAdminDoctorPatientHistory = createAsyncThunk(
   'superAdminDoctor/fetchSuperAdminDoctorPatientHistory',
   async (patientId, { rejectWithValue }) => {
     try {
-      const response = await API.get(`/superadmin/doctors/working/patients/${patientId}/history`);
+      const response = await API.get(`/superadmin/doctors/working/patient/${patientId}/history`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient history');
@@ -134,7 +134,7 @@ export const fetchSuperAdminDoctorPatientFollowups = createAsyncThunk(
   'superAdminDoctor/fetchSuperAdminDoctorPatientFollowups',
   async (patientId, { rejectWithValue }) => {
     try {
-      const response = await API.get(`/superadmin/doctors/working/patients/${patientId}/followups`);
+      const response = await API.get(`/superadmin/doctors/working/patient/${patientId}/followups`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient followups');
@@ -146,7 +146,7 @@ export const fetchSuperAdminDoctorPatientMedications = createAsyncThunk(
   'superAdminDoctor/fetchSuperAdminDoctorPatientMedications',
   async (patientId, { rejectWithValue }) => {
     try {
-      const response = await API.get(`/superadmin/doctors/working/patients/${patientId}/medications`);
+      const response = await API.get(`/superadmin/doctors/working/patient/${patientId}/medications`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient medications');
@@ -158,7 +158,7 @@ export const fetchSuperAdminDoctorPatientLabReports = createAsyncThunk(
   'superAdminDoctor/fetchSuperAdminDoctorPatientLabReports',
   async (patientId, { rejectWithValue }) => {
     try {
-      const response = await API.get(`/superadmin/doctors/working/patients/${patientId}/lab-reports`);
+      const response = await API.get(`/superadmin/doctors/working/patient/${patientId}/lab-reports`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient lab reports');
@@ -182,7 +182,7 @@ export const fetchSuperAdminDoctorPatientById = createAsyncThunk(
   'superAdminDoctor/fetchSuperAdminDoctorPatientById',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await API.get(`/superadmin/doctors/working/patients/${id}`);
+      const response = await API.get(`/superadmin/doctors/working/patient/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient');

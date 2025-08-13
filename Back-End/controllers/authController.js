@@ -19,7 +19,9 @@ const generateToken = (user, userType) => {
     payload.isSuperAdminStaff = true;
   }
 
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '30d' });
+  // Use environment variable or fallback to a default secret
+  const jwtSecret = process.env.JWT_SECRET || 'fallback-secret-key-for-development';
+  return jwt.sign(payload, jwtSecret, { expiresIn: '30d' });
 };
 
 export const register = async (req, res) => {
@@ -126,6 +128,7 @@ export const login = async (req, res) => {
         userData.centerName = user.centerId.name;
       }
     } else if (userType === 'LabStaff') {
+      userData.name = user.staffName; // Map staffName to name for consistency
       userData.phone = user.phone;
       userData.staffName = user.staffName;
       userData.labId = user.labId;
@@ -287,6 +290,7 @@ export const getCurrentUser = async (req, res) => {
         userData.centerName = user.centerId.name;
       }
     } else if (userType === 'LabStaff') {
+      userData.name = user.staffName; // Map staffName to name for consistency
       userData.phone = user.phone;
       userData.staffName = user.staffName;
       userData.labId = user.labId;
