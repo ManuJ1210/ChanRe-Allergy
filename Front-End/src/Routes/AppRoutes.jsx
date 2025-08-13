@@ -109,6 +109,10 @@ import PrescriptionList from '../pages/CenterAdmin/patients/FollowUp/Prescriptio
 import AddPrescription from '../pages/CenterAdmin/patients/FollowUp/Prescription/AddPrescription';
 import ViewPrescription from '../pages/CenterAdmin/patients/FollowUp/Prescription/ViewPrescription';
 
+// Center Admin Test Request Pages
+import CenterAdminTestRequestsList from '../pages/CenterAdmin/TestRequests/TestRequestsList';
+import CenterAdminTestRequestDetails from '../pages/CenterAdmin/TestRequests/TestRequestDetails';
+
 // Receptionist Pages
 import ReceptionistDashboard from '../pages/Receptionist/Dashboard';
 import AddReceptionistPatient from '../pages/Receptionist/AddPatient';
@@ -367,6 +371,10 @@ export default function AppRoutes() {
         <Route path="centeradmin/receptionist/addreceptionist" element={<CenterAdminAddReceptionist />} />
         <Route path="centeradmin/receptionist/viewreceptionist/:id" element={<CenterAdminViewReceptionist />} />
         <Route path="centeradmin/receptionist/editreceptionist/:id" element={<EditReceptionist />} />
+        
+        {/* Center Admin Test Request Routes */}
+        <Route path="centeradmin/test-requests" element={<ErrorBoundary><CenterAdminTestRequestsList /></ErrorBoundary>} />
+        <Route path="centeradmin/test-requests/:id" element={<ErrorBoundary><CenterAdminTestRequestDetails /></ErrorBoundary>} />
         
         {/* Center Admin Followup Routes (lowercase) */}
         <Route path="centeradmin/patients/followup/:id" element={<FollowUp />} />

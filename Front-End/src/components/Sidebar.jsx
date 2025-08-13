@@ -201,6 +201,16 @@ export default function Sidebar(props) {
                 ]}
                 currentPath={location.pathname}
               />
+              <SidebarGroup
+                label="Test Requests"
+                icon={<FaClipboardList />}
+                open={centerOpen === 'testrequests'}
+                toggle={() => setCenterOpen(centerOpen === 'testrequests' ? null : 'testrequests')}
+                links={[
+                  { to: "/dashboard/centeradmin/test-requests", label: "View All Requests" },
+                ]}
+                currentPath={location.pathname}
+              />
               <SidebarLink
                 to="/dashboard/centeradmin/center-profile"
                 label="Center Profile"
