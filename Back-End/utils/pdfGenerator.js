@@ -35,67 +35,74 @@ export const generateLabReportPDF = async (testRequest, reportData) => {
          .text('LABORATORY TEST REPORT', { align: 'center' })
          .moveDown(1.5);
 
-      // Report Information Box
+      // Report Information Box - Adjusted positioning
       doc.fontSize(10)
          .font('Helvetica')
          .text(`Report ID: ${testRequest._id}`, 400, 100)
-         .text(`Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 400, 115)
-         .text(`Status: ${testRequest.status.replace(/_/g, ' ')}`, 400, 130);
+         .text(`Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 400, 120)
+         .text(`Status: ${testRequest.status.replace(/_/g, ' ')}`, 400, 140);
 
-      // Patient Information Section
+      // Patient Information Section - Increased spacing
       doc.fontSize(14)
          .font('Helvetica-Bold')
-         .text('PATIENT INFORMATION', 50, 180)
-         .moveTo(50, 195)
-         .lineTo(550, 195)
+         .text('PATIENT INFORMATION', 50, 200)
+         .moveTo(50, 215)
+         .lineTo(550, 215)
          .stroke();
 
       doc.fontSize(11)
          .font('Helvetica')
-         .text(`Patient Name: ${testRequest.patientName || testRequest.patientId?.name || 'N/A'}`, 50, 210)
-         .text(`Patient ID: ${testRequest.patientId && typeof testRequest.patientId === 'object' ? testRequest.patientId._id : testRequest.patientId || 'N/A'}`, 50, 225)
-         .text(`Phone: ${testRequest.patientPhone || testRequest.patientId?.phone || 'N/A'}`, 50, 240)
-         .text(`Address: ${testRequest.patientAddress || testRequest.patientId?.address || 'N/A'}`, 50, 255);
+         .text(`Patient Name: ${testRequest.patientName || testRequest.patientId?.name || 'N/A'}`, 50, 235)
+         .text(`Patient ID: ${testRequest.patientId && typeof testRequest.patientId === 'object' ? testRequest.patientId._id : testRequest.patientId || 'N/A'}`, 50, 255)
+         .text(`Phone: ${testRequest.patientPhone || testRequest.patientId?.phone || 'N/A'}`, 50, 275)
+         .text(`Address: ${testRequest.patientAddress || testRequest.patientId?.address || 'N/A'}`, 50, 295);
 
-      // Doctor Information Section
+      // Doctor Information Section - Increased spacing
       doc.fontSize(14)
          .font('Helvetica-Bold')
-         .text('REQUESTING DOCTOR', 50, 290)
-         .moveTo(50, 305)
-         .lineTo(550, 305)
+         .text('REQUESTING DOCTOR', 50, 320)
+         .moveTo(50, 335)
+         .lineTo(550, 335)
          .stroke();
 
       doc.fontSize(11)
          .font('Helvetica')
-         .text(`Doctor Name: ${testRequest.doctorName || testRequest.doctorId?.name || 'N/A'}`, 50, 320)
-         .text(`Doctor Email: ${testRequest.doctorId?.email || 'N/A'}`, 50, 335)
-         .text(`Doctor Phone: ${testRequest.doctorId?.phone || 'N/A'}`, 50, 350);
+         .text(`Doctor Name: ${testRequest.doctorName || testRequest.doctorId?.name || 'N/A'}`, 50, 355)
+         .text(`Doctor Email: ${testRequest.doctorId?.email || 'N/A'}`, 50, 375)
+         .text(`Doctor Phone: ${testRequest.doctorId?.phone || 'N/A'}`, 50, 395);
 
-      // Test Information Section
+      // Test Information Section - Increased spacing
       doc.fontSize(14)
          .font('Helvetica-Bold')
-         .text('TEST INFORMATION', 50, 385)
-         .moveTo(50, 400)
-         .lineTo(550, 400)
+         .text('TEST INFORMATION', 50, 420)
+         .moveTo(50, 435)
+         .lineTo(550, 435)
          .stroke();
 
       doc.fontSize(11)
          .font('Helvetica')
-         .text(`Test Type: ${testRequest.testType || 'N/A'}`, 50, 415)
-         .text(`Test Description: ${testRequest.testDescription || 'N/A'}`, 50, 430)
-         .text(`Urgency: ${testRequest.urgency || 'Normal'}`, 50, 445)
-         .text(`Sample Collection Date: ${testRequest.sampleCollectionActualDate ? new Date(testRequest.sampleCollectionActualDate).toLocaleDateString() : 'N/A'}`, 50, 460)
-         .text(`Testing Completed Date: ${testRequest.labTestingCompletedDate ? new Date(testRequest.labTestingCompletedDate).toLocaleDateString() : 'N/A'}`, 50, 475);
+         .text(`Test Type: ${testRequest.testType || 'N/A'}`, 50, 455)
+         .text(`Test Description: ${testRequest.testDescription || 'N/A'}`, 50, 475)
+         .text(`Urgency: ${testRequest.urgency || 'Normal'}`, 50, 495)
+         .text(`Sample Collection Date: ${testRequest.sampleCollectionActualDate ? new Date(testRequest.sampleCollectionActualDate).toLocaleDateString() : 'N/A'}`, 50, 515)
+         .text(`Testing Completed Date: ${testRequest.labTestingCompletedDate ? new Date(testRequest.labTestingCompletedDate).toLocaleDateString() : 'N/A'}`, 50, 535);
 
-      // Test Results Section
+      // Test Results Section - Increased spacing
       doc.fontSize(14)
          .font('Helvetica-Bold')
-         .text('TEST RESULTS', 50, 510)
-         .moveTo(50, 525)
-         .lineTo(550, 525)
+         .text('TEST RESULTS', 50, 560)
+         .moveTo(50, 575)
+         .lineTo(550, 575)
          .stroke();
 
-      let yPosition = 540;
+      let yPosition = 590;
+
+      // Debug: Log the testRequest structure to help identify data
+      console.log('Test Request Object Keys:', Object.keys(testRequest));
+      console.log('Test Request resultValues:', testRequest.resultValues);
+      console.log('Test Request testParameters:', testRequest.testParameters);
+      console.log('Test Request parameters:', testRequest.parameters);
+      console.log('Test Request results:', testRequest.results);
 
       if (testRequest.testResults) {
         doc.fontSize(11)
@@ -115,7 +122,14 @@ export const generateLabReportPDF = async (testRequest, reportData) => {
       }
 
       // Test Parameters (if available)
-      if (testRequest.resultValues && testRequest.resultValues.length > 0) {
+      // Check multiple possible data structures for test parameters
+      const testParameters = testRequest.resultValues || 
+                           testRequest.testParameters || 
+                           testRequest.parameters || 
+                           testRequest.results || 
+                           [];
+      
+      if (testParameters && testParameters.length > 0) {
         doc.fontSize(11)
            .font('Helvetica-Bold')
            .text('Test Parameters:', 50, yPosition);
@@ -139,18 +153,38 @@ export const generateLabReportPDF = async (testRequest, reportData) => {
 
         yPosition += 10;
 
-        testRequest.resultValues.forEach((param) => {
-          if (yPosition > 700) { // Start new page if needed
+        testParameters.forEach((param, index) => {
+          if (yPosition > 750) { // Start new page if needed - increased threshold
             doc.addPage();
             yPosition = 50;
           }
 
+          // Debug: Log each parameter object to see its structure
+          console.log(`Parameter ${index}:`, param);
+          console.log(`Parameter keys:`, Object.keys(param));
+
+          // Handle different parameter object structures - based on actual data
+          let parameterName = param.parameter || param.name || param.testName || param.paramName || param.param || param.test || '-';
+          const parameterValue = param.value || param.result || param.testValue || param.paramValue || param.actualValue || '-';
+          const parameterUnit = param.unit || param.measurementUnit || param.unitOfMeasure || param.unitOfMeasure || '-';
+          const parameterRange = param.normalRange || param.referenceRange || param.range || param.normal || param.reference || '-';
+          const parameterStatus = param.status || param.resultStatus || param.abnormal || param.flag || 'Normal';
+          
+          // If parameter name is still '-', try to use the first available string value or create a generic name
+          if (parameterName === '-') {
+            // Try to find any string value that could be a parameter name
+            const possibleName = Object.values(param).find(val => 
+              typeof val === 'string' && val.length > 0 && val !== 'Normal' && val !== 'Normal'
+            );
+            parameterName = possibleName || `Parameter ${index + 1}`;
+          }
+
           doc.font('Helvetica')
-             .text(param.parameter || param.name || '-', 50, yPosition)
-             .text(param.value || '-', 200, yPosition)
-             .text(param.unit || '-', 300, yPosition)
-             .text(param.normalRange || '-', 400, yPosition)
-             .text(param.status || 'Normal', 500, yPosition);
+             .text(parameterName, 50, yPosition)
+             .text(parameterValue, 200, yPosition)
+             .text(parameterUnit, 300, yPosition)
+             .text(parameterRange, 400, yPosition)
+             .text(parameterStatus, 500, yPosition);
 
           yPosition += 15;
         });
@@ -164,15 +198,38 @@ export const generateLabReportPDF = async (testRequest, reportData) => {
         
         yPosition += 20;
         
+        // Debug information to help identify the data structure
         doc.font('Helvetica')
            .text('No specific parameters recorded for this test.', 50, yPosition);
+        
+        yPosition += 15;
+        
+        // Show available data structure for debugging
+        doc.fontSize(9)
+           .font('Helvetica')
+           .text('Available data keys:', 50, yPosition);
+        
+        yPosition += 15;
+        
+        const availableKeys = Object.keys(testRequest).filter(key => 
+          key.toLowerCase().includes('result') || 
+          key.toLowerCase().includes('test') || 
+          key.toLowerCase().includes('param') ||
+          key.toLowerCase().includes('value')
+        );
+        
+        if (availableKeys.length > 0) {
+          doc.text(`Found keys: ${availableKeys.join(', ')}`, 50, yPosition);
+        } else {
+          doc.text('No parameter-related keys found', 50, yPosition);
+        }
            
         yPosition += 30;
       }
 
       // Clinical Interpretation
       if (reportData.clinicalInterpretation || testRequest.clinicalInterpretation) {
-        if (yPosition > 650) { // Start new page if needed
+        if (yPosition > 750) { // Start new page if needed - increased threshold
           doc.addPage();
           yPosition = 50;
         }
@@ -194,7 +251,7 @@ export const generateLabReportPDF = async (testRequest, reportData) => {
 
       // Conclusion
       if (testRequest.conclusion) {
-        if (yPosition > 650) { // Start new page if needed
+        if (yPosition > 750) { // Start new page if needed - increased threshold
           doc.addPage();
           yPosition = 50;
         }
@@ -216,7 +273,7 @@ export const generateLabReportPDF = async (testRequest, reportData) => {
 
       // Recommendations
       if (testRequest.recommendations) {
-        if (yPosition > 650) { // Start new page if needed
+        if (yPosition > 750) { // Start new page if needed - increased threshold
           doc.addPage();
           yPosition = 50;
         }
@@ -238,7 +295,7 @@ export const generateLabReportPDF = async (testRequest, reportData) => {
 
       // Report Summary
       if (reportData.reportSummary || testRequest.reportSummary) {
-        if (yPosition > 650) { // Start new page if needed
+        if (yPosition > 750) { // Start new page if needed - increased threshold
           doc.addPage();
           yPosition = 50;
         }
@@ -259,7 +316,7 @@ export const generateLabReportPDF = async (testRequest, reportData) => {
       }
 
       // Lab Information and Signature Section
-      if (yPosition > 650) { // Start new page if needed
+      if (yPosition > 750) { // Start new page if needed - increased threshold
         doc.addPage();
         yPosition = 50;
       } else {

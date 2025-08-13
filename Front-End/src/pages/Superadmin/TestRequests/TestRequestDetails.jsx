@@ -353,7 +353,7 @@ const TestRequestDetails = () => {
                 <label className="block text-xs sm:text-xs font-medium text-gray-500">Doctor Phone</label>
                 <p className="text-gray-900 font-medium flex items-center text-xs sm:text-base">
                   <Phone className="h-4 w-4 mr-2 text-gray-500" />
-                  {testRequest.doctorPhone || 'N/A'}
+                  {testRequest.doctorId?.phone || 'N/A'}
                 </p>
               </div>
             </div>

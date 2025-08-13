@@ -216,7 +216,7 @@ const ReviewLabReports = () => {
       }
       
       // Use the correct endpoint for lab reports
-      downloadUrl = `http://localhost:5000/api/test-requests/${report._id}/download-report`;
+      const downloadUrl = `http://localhost:5000/api/test-requests/${report._id}/download-report`;
       
       const response = await fetch(downloadUrl, {
         method: 'GET',
@@ -313,84 +313,67 @@ const ReviewLabReports = () => {
 
       {/* Reports List */}
       <div className="bg-white rounded-lg shadow">
-        <div className="px-6 py-4 border-b border-gray-200">
+        <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-800">Lab Reports</h2>
         </div>
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {labReports.length === 0 ? (
             <div className="text-center py-8">
               <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-500">No lab reports available for review.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Patient
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Test Type
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Requested By
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Completed Date
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      PDF
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {labReports.map((report) => (
-                    <tr key={report._id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            <User className="h-5 w-5 text-blue-600" />
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-xs font-medium text-gray-900">
-                              {report.patientId?.name || 'N/A'}
-                            </div>
-                            <div className="text-xs text-gray-500">
-                              {report.patientId?.age || 'N/A'} years
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-xs text-gray-900">{report.testType || 'N/A'}</div>
-                        <div className="text-xs text-gray-500">{report.testDescription || 'N/A'}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-xs text-gray-900">
-                          Dr. {report.doctorId?.name || 'N/A'}
+            <div className="space-y-4">
+              {/* Mobile/Tablet View - Card Layout */}
+              <div className="block lg:hidden">
+                {labReports.map((report) => (
+                  <div key={report._id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    {/* Patient Info */}
+                    <div className="flex items-center mb-3">
+                      <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <User className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div className="ml-3 min-w-0 flex-1">
+                        <div className="text-sm font-medium text-gray-900 truncate">
+                          {report.patientId?.name || 'N/A'}
                         </div>
                         <div className="text-xs text-gray-500">
-                          {report.centerId?.name || report.centerName || 'N/A'}
+                          {report.patientId?.age || 'N/A'} years
                         </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      </div>
+                    </div>
+
+                    {/* Test Info */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                      <div>
+                        <p className="text-xs text-gray-500">Test Type</p>
+                        <p className="text-sm font-medium text-gray-900">{report.testType || 'N/A'}</p>
+                        {report.testDescription && (
+                          <p className="text-xs text-gray-600">{report.testDescription}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Requested By</p>
+                        <p className="text-sm font-medium text-gray-900">Dr. {report.doctorId?.name || 'N/A'}</p>
+                        <p className="text-xs text-gray-600">{report.centerId?.name || report.centerName || 'N/A'}</p>
+                      </div>
+                    </div>
+
+                    {/* Date and Status */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                      <div>
+                        <p className="text-xs text-gray-500">Completed Date</p>
                         <div className="flex items-center">
                           <Calendar className="w-4 h-4 mr-2 text-gray-400" />
-                          <span className="text-xs text-gray-900">
+                          <span className="text-sm text-gray-900">
                             {report.completedDate || report.reportGeneratedDate || report.updatedAt ? 
                               new Date(report.completedDate || report.reportGeneratedDate || report.updatedAt).toLocaleDateString() 
                               : 'N/A'}
                           </span>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Status</p>
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(report.status)}`}>
                           {getStatusIcon(report.status)}
                           <span className="ml-1">
@@ -399,49 +382,172 @@ const ReviewLabReports = () => {
                             {report.status === 'feedback_sent' && 'Feedback Sent'}
                           </span>
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center space-x-2">
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <FileText className="w-3 h-3 mr-1" />
-                            Viewable
-                          </span>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-gray-200">
+                      <div className="flex items-center space-x-2">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          <FileText className="w-3 h-3 mr-1" />
+                          Viewable
+                        </span>
+                        <button
+                          onClick={() => handleViewPDF(report)}
+                          className="text-green-600 hover:text-green-900 flex items-center text-xs"
+                          title="View PDF Report"
+                        >
+                          <ExternalLink className="w-3 h-3 mr-1" />
+                          View
+                        </button>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => handleReviewReport(report)}
+                          className="text-blue-600 hover:text-blue-900 flex items-center text-xs"
+                        >
+                          <Eye className="w-4 h-4 mr-1" />
+                          Review
+                        </button>
+                        
+                        {report.reportFile && (
                           <button
-                            onClick={() => handleViewPDF(report)}
-                            className="text-green-600 hover:text-green-900 flex items-center text-xs"
-                            title="View PDF Report"
+                            onClick={() => handleDownloadPDF(report)}
+                            className="text-purple-600 hover:text-purple-900 flex items-center text-xs"
+                            title="Download PDF Report"
                           >
-                            <ExternalLink className="w-3 h-3 mr-1" />
-                            View
+                            <Download className="w-4 h-4 mr-1" />
+                            Download
                           </button>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-xs font-medium">
-                        <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => handleReviewReport(report)}
-                            className="text-blue-600 hover:text-blue-900 flex items-center"
-                          >
-                            <Eye className="w-4 h-4 mr-1" />
-                            Review
-                          </button>
-                          
-                          {report.reportFile && (
-                            <button
-                              onClick={() => handleDownloadPDF(report)}
-                              className="text-purple-600 hover:text-purple-900 flex items-center"
-                              title="Download PDF Report"
-                            >
-                              <Download className="w-4 h-4 mr-1" />
-                              Download
-                            </button>
-                          )}
-                        </div>
-                      </td>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop View - Table Layout */}
+              <div className="hidden lg:block">
+                <table className="w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Patient
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Test Type
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Requested By
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Completed Date
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        PDF
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {labReports.map((report) => (
+                      <tr key={report._id} className="hover:bg-gray-50">
+                        <td className="px-4 py-4">
+                          <div className="flex items-center">
+                            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                              <User className="h-5 w-5 text-blue-600" />
+                            </div>
+                            <div className="ml-3 min-w-0">
+                              <div className="text-sm font-medium text-gray-900 truncate">
+                                {report.patientId?.name || 'N/A'}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {report.patientId?.age || 'N/A'} years
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="text-sm text-gray-900">{report.testType || 'N/A'}</div>
+                          <div className="text-sm text-gray-500">{report.testDescription || 'N/A'}</div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="text-sm text-gray-900">
+                            Dr. {report.doctorId?.name || 'N/A'}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {report.centerId?.name || report.centerName || 'N/A'}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="flex items-center">
+                            <Calendar className="w-4 h-4 mr-2 text-gray-400" />
+                            <span className="text-sm text-gray-900">
+                              {report.completedDate || report.reportGeneratedDate || report.updatedAt ? 
+                                new Date(report.completedDate || report.reportGeneratedDate || report.updatedAt).toLocaleDateString() 
+                                : 'N/A'}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(report.status)}`}>
+                            {getStatusIcon(report.status)}
+                            <span className="ml-1">
+                              {report.status === 'completed' && 'Completed'}
+                              {report.status === 'pending_review' && 'Pending Review'}
+                              {report.status === 'feedback_sent' && 'Feedback Sent'}
+                            </span>
+                          </span>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="flex items-center space-x-2">
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                              <FileText className="w-3 h-3 mr-1" />
+                              Viewable
+                            </span>
+                            <button
+                              onClick={() => handleViewPDF(report)}
+                              className="text-green-600 hover:text-green-900 flex items-center text-sm"
+                              title="View PDF Report"
+                            >
+                              <ExternalLink className="w-3 h-3 mr-1" />
+                              View
+                            </button>
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-sm font-medium">
+                          <div className="flex items-center space-x-2">
+                            <button
+                              onClick={() => handleReviewReport(report)}
+                              className="text-blue-600 hover:text-blue-900 flex items-center"
+                            >
+                              <Eye className="w-4 h-4 mr-1" />
+                              Review
+                            </button>
+                            
+                            {report.reportFile && (
+                              <button
+                                onClick={() => handleDownloadPDF(report)}
+                                className="text-purple-600 hover:text-purple-900 flex items-center"
+                                title="Download PDF Report"
+                              >
+                                <Download className="w-4 h-4 mr-1" />
+                                Download
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
@@ -450,18 +556,18 @@ const ReviewLabReports = () => {
       {/* Feedback Modal */}
       {showFeedbackModal && selectedReport && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="px-6 py-4 border-b border-gray-200">
+          <div className="bg-white rounded-lg w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
               <h3 className="text-sm font-semibold text-gray-800">
                 Review Lab Report - {selectedReport.patientId?.name || 'N/A'}
               </h3>
             </div>
             
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               {/* Report Details */}
               <div className="mb-6">
                 <h4 className="text-md font-semibold text-gray-800 mb-3">Report Details</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-gray-600">Patient</p>
                     <p className="font-medium">{selectedReport.patientId?.name || 'N/A'}</p>
