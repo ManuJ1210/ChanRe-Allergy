@@ -86,11 +86,11 @@ const ViewAllergicConjunctivitis = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">Error Loading Record</h2>
-              <p className="text-gray-600 mb-4">{error}</p>
+              <h2 className="text-md font-semibold text-gray-800 mb-2">Error Loading Record</h2>
+              <p className="text-gray-600 mb-4 text-xs">{error}</p>
               <button
                 onClick={() => navigate(-1)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs"
               >
                 Go Back
               </button>
@@ -108,11 +108,11 @@ const ViewAllergicConjunctivitis = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">No Record Found</h2>
-              <p className="text-gray-600 mb-4">No allergic conjunctivitis record found for this patient.</p>
+              <h2 className="text-md font-semibold text-gray-800 mb-2">No Record Found</h2>
+              <p className="text-gray-600 mb-4 text-xs">No allergic conjunctivitis record found for this patient.</p>
               <button
                 onClick={() => navigate(-1)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs"
               >
                 Go Back
               </button>
@@ -147,24 +147,24 @@ const ViewAllergicConjunctivitis = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate(-1)}
-                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors text-xs"
               >
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-xl font-bold text-gray-800">Allergic Conjunctivitis Medical Record</h1>
+              <h1 className="text-md font-bold text-gray-800">Allergic Conjunctivitis Medical Record</h1>
             </div>
             <div className="flex space-x-3">
               <button
                 onClick={handlePrint}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-2"
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-2 text-xs"
               >
                 <FileText size={16} />
                 <span>Print</span>
               </button>
               <button
                 onClick={handleDownload}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2 text-xs"
               >
                 <FileText size={16} />
                 <span>Download</span>
@@ -177,28 +177,28 @@ const ViewAllergicConjunctivitis = () => {
         <div className="bg-white rounded-lg shadow-lg p-8">
           {/* Record Header */}
           <div className="text-center mb-8">
-            <h1 className="text-xl font-bold text-gray-800 mb-2">ALLERGIC CONJUNCTIVITIS</h1>
-            <p className="text-gray-600">Medical Assessment Record</p>
+            <h1 className="text-md font-bold text-gray-800 mb-2">ALLERGIC CONJUNCTIVITIS</h1>
+            <p className="text-gray-600 text-xs">Medical Assessment Record</p>
           </div>
           
           {/* Patient Information */}
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-600" />
               Patient Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-medium text-gray-500">Patient Name</label>
-                <p className="text-gray-900 font-medium">{latestRecord.patientId?.name || 'N/A'}</p>
+                <p className="text-gray-900 font-medium text-xs">{latestRecord.patientId?.name || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-500">Patient ID</label>
-                <p className="text-gray-900 font-medium">{latestRecord.patientId?._id || 'N/A'}</p>
+                <p className="text-gray-900 font-medium text-xs">{latestRecord.patientId?._id || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-500">Assessment Date</label>
-                <p className="text-gray-900 font-medium">
+                <p className="text-gray-900 font-medium text-xs">
                   {latestRecord.createdAt ? new Date(latestRecord.createdAt).toLocaleDateString() : 'N/A'}
                 </p>
               </div>
@@ -209,12 +209,12 @@ const ViewAllergicConjunctivitis = () => {
           <div className="space-y-8">
             {/* Diagnosis */}
             <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
                 <Eye className="h-5 w-5 mr-2 text-blue-600" />
                 Clinical Diagnosis
               </h2>
               <div className="bg-white rounded-lg p-4 border">
-                <span className="text-sm font-semibold text-blue-600 capitalize">
+                <span className="text-xs font-semibold text-blue-600 capitalize">
                   {latestRecord.type || 'Not specified'}
                 </span>
               </div>
@@ -222,14 +222,14 @@ const ViewAllergicConjunctivitis = () => {
 
             {/* Presenting Symptoms */}
             <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">Presenting Symptoms</h2>
+              <h2 className="text-sm font-semibold text-gray-800 mb-4">Presenting Symptoms</h2>
               {presentSymptoms.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {presentSymptoms.map((symptom, index) => (
                     <div key={index} className="bg-white rounded-lg p-3 border-l-4 border-green-500">
                       <div className="flex items-center space-x-2">
                         <CheckCircle className="h-4 w-4 text-green-500" />
-                        <span className="text-gray-800 font-medium">{symptom}</span>
+                        <span className="text-gray-800 font-medium text-xs">{symptom}</span>
                       </div>
                     </div>
                   ))}
@@ -238,7 +238,7 @@ const ViewAllergicConjunctivitis = () => {
                 <div className="bg-white rounded-lg p-4 border-l-4 border-gray-300">
                   <div className="flex items-center space-x-2">
                     <XCircle className="h-4 w-4 text-gray-400" />
-                    <span className="text-gray-600">No symptoms reported</span>
+                    <span className="text-gray-600 text-xs">No symptoms reported</span>
                   </div>
                 </div>
               )}
@@ -246,13 +246,13 @@ const ViewAllergicConjunctivitis = () => {
 
             {/* Severity Assessment */}
             <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">Severity Assessment</h2>
+              <h2 className="text-sm font-semibold text-gray-800 mb-4">Severity Assessment</h2>
               {severitySummary.length > 0 ? (
                 <div className="space-y-4">
                   {severitySummary.map(({ criterion, severity }, index) => (
                     <div key={index} className="bg-white rounded-lg p-4 border">
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-800 font-medium">{criterion}</span>
+                        <span className="text-gray-800 font-medium text-xs">{criterion}</span>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                           severity === 'mild' ? 'bg-green-100 text-green-800' :
                           severity === 'moderate' ? 'bg-yellow-100 text-yellow-800' :
@@ -271,7 +271,7 @@ const ViewAllergicConjunctivitis = () => {
                 <div className="bg-white rounded-lg p-4 border-l-4 border-gray-300">
                   <div className="flex items-center space-x-2">
                     <XCircle className="h-4 w-4 text-gray-400" />
-                    <span className="text-gray-600">No severity assessment completed</span>
+                    <span className="text-gray-600 text-xs">No severity assessment completed</span>
                   </div>
                 </div>
               )}
@@ -279,14 +279,14 @@ const ViewAllergicConjunctivitis = () => {
 
             {/* Clinical Summary */}
             <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">Clinical Summary</h2>
+              <h2 className="text-sm font-semibold text-gray-800 mb-4">Clinical Summary</h2>
               <div className="bg-white rounded-lg p-6 border">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                   <div>
                     <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
                       <span className="text-xl font-bold text-blue-600">{presentSymptoms.length}</span>
                     </div>
-                    <h3 className="font-medium text-gray-800 mb-1">Symptoms</h3>
+                    <h3 className="font-medium text-gray-800 mb-1 text-xs">Symptoms</h3>
                     <p className="text-xs text-gray-500">Present</p>
                   </div>
                   
@@ -296,7 +296,7 @@ const ViewAllergicConjunctivitis = () => {
                         {latestRecord.type ? latestRecord.type.split(' ')[0] : 'N/A'}
                       </span>
                     </div>
-                    <h3 className="font-medium text-gray-800 mb-1">Type</h3>
+                    <h3 className="font-medium text-gray-800 mb-1 text-xs">Type</h3>
                     <p className="text-xs text-gray-500">Diagnosis</p>
                   </div>
                   
@@ -304,7 +304,7 @@ const ViewAllergicConjunctivitis = () => {
                     <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
                       <span className="text-xl font-bold text-purple-600">{severitySummary.length}</span>
                     </div>
-                    <h3 className="font-medium text-gray-800 mb-1">Criteria</h3>
+                    <h3 className="font-medium text-gray-800 mb-1 text-xs">Criteria</h3>
                     <p className="text-xs text-gray-500">Assessed</p>
                   </div>
                 </div>

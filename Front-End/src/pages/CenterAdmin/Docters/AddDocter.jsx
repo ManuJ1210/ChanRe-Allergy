@@ -254,15 +254,15 @@ const AddDocter = () => {
         <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-sm sm:text-base"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-xs"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Doctors
           </button>
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800 mb-2 text-center sm:text-left bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          <h1 className="text-md font-bold text-slate-800 mb-2 text-center sm:text-left bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
             Add New Doctor
           </h1>
-          <p className="text-slate-600 text-sm sm:text-base text-center sm:text-left">
+          <p className="text-slate-600 text-xs text-center sm:text-left">
             Register a new doctor for your center
           </p>
         </div>
@@ -270,13 +270,13 @@ const AddDocter = () => {
         {/* Form */}
         <div className="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 sm:p-6 border-b border-blue-100">
-            <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center justify-center sm:justify-start mb-2">
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center justify-center sm:justify-start mb-2">
               <div className="bg-blue-100 p-2 rounded-full mr-3">
                 <UserCheck className="h-5 w-5 text-blue-600" />
               </div>
               Doctor Information
             </h2>
-            <p className="text-slate-600 mt-1 text-sm sm:text-base text-center sm:text-left">
+            <p className="text-slate-600 mt-1 text-xs text-center sm:text-left">
               Fill in the doctor details below
             </p>
           </div>
@@ -300,7 +300,7 @@ const AddDocter = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                     placeholder="Enter full name"
                   />
                 </div>
@@ -315,7 +315,7 @@ const AddDocter = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                     placeholder="Enter phone number"
                   />
                 </div>
@@ -330,7 +330,7 @@ const AddDocter = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                     placeholder="Enter email address"
                   />
                 </div>
@@ -345,7 +345,7 @@ const AddDocter = () => {
                     value={formData.username}
                     onChange={handleChange}
                     required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                     placeholder="Enter username"
                   />
                 </div>
@@ -361,7 +361,7 @@ const AddDocter = () => {
                       value={formData.password}
                       onChange={handleChange}
                       required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pr-12 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pr-12 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                       placeholder="Enter password"
                     />
                     <button
@@ -383,7 +383,7 @@ const AddDocter = () => {
                     name="qualification"
                     value={formData.qualification}
                     onChange={handleChange}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                     placeholder="Enter qualification"
                   />
                 </div>
@@ -407,7 +407,7 @@ const AddDocter = () => {
                     name="designation"
                     value={formData.designation}
                     onChange={handleChange}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                     placeholder="Enter designation"
                   />
                 </div>
@@ -421,7 +421,7 @@ const AddDocter = () => {
                     name="kmcNumber"
                     value={formData.kmcNumber}
                     onChange={handleChange}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                     placeholder="Enter KMC number"
                   />
                 </div>
@@ -435,7 +435,7 @@ const AddDocter = () => {
                     name="experience"
                     value={formData.experience}
                     onChange={handleChange}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                     placeholder="Enter experience (e.g., 5 years)"
                   />
                 </div>
@@ -458,7 +458,7 @@ const AddDocter = () => {
                     type="text"
                     value={centerInfo.name || 'Loading center...'}
                     readOnly
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-700 cursor-not-allowed text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-700 cursor-not-allowed text-xs"
                     placeholder="Hospital name will be auto-filled"
                   />
                 </div>
@@ -470,7 +470,7 @@ const AddDocter = () => {
                     type="text"
                     value={centerInfo.code || 'Loading...'}
                     readOnly
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-700 cursor-not-allowed text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-700 cursor-not-allowed text-xs"
                     placeholder="Center code will be auto-filled"
                   />
                 </div>
@@ -495,14 +495,14 @@ const AddDocter = () => {
                     type="text"
                     value={newSpecialization}
                     onChange={(e) => setNewSpecialization(e.target.value)}
-                    className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                    className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                     placeholder="Add specialization"
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddSpecialization())}
                   />
                   <button
                     type="button"
                     onClick={handleAddSpecialization}
-                    className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl transition-all duration-200 font-medium text-sm sm:text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                    className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl transition-all duration-200 font-medium text-xs shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                   >
                     Add
                   </button>
@@ -542,7 +542,7 @@ const AddDocter = () => {
                   value={formData.bio}
                   onChange={handleChange}
                   rows="3"
-                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                   placeholder="Enter doctor bio"
                 />
               </div>
@@ -553,7 +553,7 @@ const AddDocter = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 disabled:from-blue-300 disabled:to-indigo-400 text-white py-2.5 sm:py-3 px-6 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
+                className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 disabled:from-blue-300 disabled:to-indigo-400 text-white py-2.5 sm:py-3 px-6 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none text-xs"
               >
                 {loading ? (
                   <>
@@ -570,7 +570,7 @@ const AddDocter = () => {
               <button
                 type="button"
                 onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
-                className="px-6 py-2.5 sm:py-3 border border-slate-300 text-slate-700 rounded-xl hover:bg-slate-50 transition-all duration-200 text-sm sm:text-base w-full sm:w-auto"
+                className="px-6 py-2.5 sm:py-3 border border-slate-300 text-slate-700 rounded-xl hover:bg-slate-50 transition-all duration-200 text-xs w-full sm:w-auto"
               >
                 Cancel
               </button>

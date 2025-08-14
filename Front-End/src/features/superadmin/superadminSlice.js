@@ -24,7 +24,13 @@ import {
   fetchLabStaff,
   createLabStaff,
   updateLabStaff,
-  deleteLabStaff
+  deleteLabStaff,
+  fetchPatientComprehensiveData,
+  fetchPatientTestHistory,
+  fetchPatientMedications,
+  fetchPatientPrescriptions,
+  fetchPatientHistory,
+  fetchPatientGeneralFollowUps
 } from './superadminThunks';
 
 const initialState = {
@@ -60,7 +66,18 @@ const initialState = {
   addSuccess: false,
   updateSuccess: false,
   deleteSuccess: false,
-  addLabStaffSuccess: false
+  addLabStaffSuccess: false,
+  // New patient data state
+  patientData: {
+    patient: null,
+    history: [],
+    medications: [],
+    labReports: [],
+    testRequests: [],
+    prescriptions: []
+  },
+  patientDataLoading: false,
+  patientDataError: null
 };
 
 const superadminSlice = createSlice({
@@ -171,6 +188,21 @@ const superadminSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchPatientFollowUps.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch patient general follow-ups
+      .addCase(fetchPatientGeneralFollowUps.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPatientGeneralFollowUps.fulfilled, (state, action) => {
+        state.loading = false;
+        state.patientFollowUps = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchPatientGeneralFollowUps.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
@@ -472,6 +504,81 @@ const superadminSlice = createSlice({
       .addCase(deleteLabStaff.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // Fetch comprehensive patient data
+      .addCase(fetchPatientComprehensiveData.pending, (state) => {
+        state.patientDataLoading = true;
+        state.patientDataError = null;
+      })
+      .addCase(fetchPatientComprehensiveData.fulfilled, (state, action) => {
+        state.patientDataLoading = false;
+        state.patientData = action.payload;
+        state.patientDataError = null;
+      })
+      .addCase(fetchPatientComprehensiveData.rejected, (state, action) => {
+        state.patientDataLoading = false;
+        state.patientDataError = action.payload;
+      })
+
+      // Fetch patient test history
+      .addCase(fetchPatientTestHistory.pending, (state) => {
+        state.patientDataLoading = true;
+        state.patientDataError = null;
+      })
+      .addCase(fetchPatientTestHistory.fulfilled, (state, action) => {
+        state.patientDataLoading = false;
+        state.patientData.testRequests = action.payload;
+        state.patientDataError = null;
+      })
+      .addCase(fetchPatientTestHistory.rejected, (state, action) => {
+        state.patientDataLoading = false;
+        state.patientDataError = action.payload;
+      })
+
+      // Fetch patient medications
+      .addCase(fetchPatientMedications.pending, (state) => {
+        state.patientDataLoading = true;
+        state.patientDataError = null;
+      })
+      .addCase(fetchPatientMedications.fulfilled, (state, action) => {
+        state.patientDataLoading = false;
+        state.patientData.medications = action.payload;
+        state.patientDataError = null;
+      })
+      .addCase(fetchPatientMedications.rejected, (state, action) => {
+        state.patientDataLoading = false;
+        state.patientDataError = action.payload;
+      })
+
+      // Fetch patient prescriptions
+      .addCase(fetchPatientPrescriptions.pending, (state) => {
+        state.patientDataLoading = true;
+        state.patientDataError = null;
+      })
+      .addCase(fetchPatientPrescriptions.fulfilled, (state, action) => {
+        state.patientDataLoading = false;
+        state.patientData.prescriptions = action.payload;
+        state.patientDataError = null;
+      })
+      .addCase(fetchPatientPrescriptions.rejected, (state, action) => {
+        state.patientDataLoading = false;
+        state.patientDataError = action.payload;
+      })
+
+      // Fetch patient medical history
+      .addCase(fetchPatientHistory.pending, (state) => {
+        state.patientDataLoading = true;
+        state.patientDataError = null;
+      })
+      .addCase(fetchPatientHistory.fulfilled, (state, action) => {
+        state.patientDataLoading = false;
+        state.patientData.history = action.payload;
+        state.patientDataError = null;
+      })
+      .addCase(fetchPatientHistory.rejected, (state, action) => {
+        state.patientDataLoading = false;
+        state.patientDataError = action.payload;
       });
   }
 });

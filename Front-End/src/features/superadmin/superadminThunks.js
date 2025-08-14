@@ -86,7 +86,89 @@ export const fetchDetailedFollowUps = createAsyncThunk(
   }
 );
 
-// Fetch patient follow-ups
+
+
+// Fetch comprehensive patient data
+export const fetchPatientComprehensiveData = createAsyncThunk(
+  'superadmin/fetchPatientComprehensiveData',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      // Fetch all patient data in parallel using working endpoints
+      const [patientRes, historyRes, medicationsRes, prescriptionsRes, testRequestsRes] = await Promise.all([
+        API.get(`/patients/${patientId}`),
+        API.get(`/history/${patientId}`),
+        API.get(`/medications?patientId=${patientId}`),
+        API.get(`/prescriptions?patientId=${patientId}`),
+        API.get(`/test-requests/patient/${patientId}`)
+      ]);
+
+      return {
+        patient: patientRes.data,
+        history: historyRes.data,
+        medications: medicationsRes.data,
+        prescriptions: prescriptionsRes.data,
+        testRequests: testRequestsRes.data
+      };
+    } catch (error) {
+      console.error('Error fetching patient data:', error);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient data');
+    }
+  }
+);
+
+// Fetch patient test history
+export const fetchPatientTestHistory = createAsyncThunk(
+  'superadmin/fetchPatientTestHistory',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/test-requests/patient/${patientId}`);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch test history');
+    }
+  }
+);
+
+// Fetch patient medications
+export const fetchPatientMedications = createAsyncThunk(
+  'superadmin/fetchPatientMedications',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/medications?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch medications');
+    }
+  }
+);
+
+// Fetch patient prescriptions
+export const fetchPatientPrescriptions = createAsyncThunk(
+  'superadmin/fetchPatientPrescriptions',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/prescriptions?patientId=${patientId}`);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch prescriptions');
+    }
+  }
+);
+
+// Fetch patient medical history
+export const fetchPatientHistory = createAsyncThunk(
+  'superadmin/fetchPatientHistory',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      const res = await API.get(`/history/${patientId}`);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch medical history');
+    }
+  }
+);
+
+// Fetch patient follow-ups by type
 export const fetchPatientFollowUps = createAsyncThunk(
   'superadmin/fetchPatientFollowUps',
   async ({ patientId, type }, { rejectWithValue }) => {
@@ -113,6 +195,38 @@ export const fetchPatientFollowUps = createAsyncThunk(
       return res.data;
     } catch (error) {
    
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient follow-ups');
+    }
+  }
+);
+
+// Fetch general patient follow-ups
+export const fetchPatientGeneralFollowUps = createAsyncThunk(
+  'superadmin/fetchPatientGeneralFollowUps',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      // Validate patientId before making API call
+      if (!patientId || patientId === 'undefined' || patientId === 'null' || patientId === '') {
+        console.error('❌ fetchPatientGeneralFollowUps: Invalid patientId:', patientId);
+        return rejectWithValue('Invalid patient ID provided');
+      }
+      
+      console.log('🔍 fetchPatientGeneralFollowUps: Making API call with patientId:', patientId);
+      const res = await API.get(`/followups/detailed`);
+      console.log('✅ fetchPatientGeneralFollowUps: API response:', res.data);
+      
+      // Filter the detailed follow-ups by patientId
+      const patientFollowUps = res.data.filter(followUp => 
+        followUp.patientId?._id === patientId || followUp.patientId === patientId
+      );
+      console.log('🔍 Filtered follow-ups for patient:', patientFollowUps);
+      
+      return patientFollowUps;
+    } catch (error) {
+      console.error('❌ Error fetching patient general follow-ups:', error);
+      console.error('❌ Error response:', error.response);
+      console.error('❌ Error status:', error.response?.status);
+      console.error('❌ Error data:', error.response?.data);
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient follow-ups');
     }
   }

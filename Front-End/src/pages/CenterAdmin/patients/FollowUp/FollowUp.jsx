@@ -103,11 +103,11 @@ const FollowUp = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h3 className="text-sm font-semibold text-gray-800 mb-2">Error Loading Follow-ups</h3>
-              <p className="text-gray-600 mb-4">{error}</p>
+              <h3 className="text-md font-semibold text-gray-800 mb-2">Error Loading Follow-ups</h3>
+              <p className="text-gray-600 mb-4 text-xs">{error}</p>
               <button
                 onClick={() => dispatch(fetchAllFollowUps())}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-xs"
               >
                 Try Again
               </button>
@@ -125,11 +125,11 @@ const FollowUp = () => {
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-xl font-bold text-gray-800 flex items-center">
+              <h1 className="text-md font-bold text-gray-800 flex items-center">
                 <Activity className="h-6 w-6 mr-2 text-blue-600" />
                 Patient Follow-ups
               </h1>
-              <p className="text-gray-600 mt-1">Manage and track patient follow-up appointments</p>
+              <p className="text-gray-600 mt-1 text-xs">Manage and track patient follow-up appointments</p>
             </div>
             <div className="flex items-center space-x-3">
               <div className="relative">
@@ -139,13 +139,13 @@ const FollowUp = () => {
                   placeholder="Search patients..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 />
               </div>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
               >
                 <option value="all">All Status</option>
                 <option value="pending">Pending</option>
@@ -162,7 +162,7 @@ const FollowUp = () => {
             <div className="p-8 text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-sm font-semibold text-gray-800 mb-2">No Follow-ups Found</h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-xs">
                 {searchTerm || filterStatus !== 'all' 
                   ? 'Try adjusting your search or filter criteria'
                   : 'No follow-up appointments have been scheduled yet'
@@ -290,7 +290,7 @@ const FollowUp = () => {
                 </div>
                 <div className="ml-4">
                   <p className="text-xs font-medium text-gray-600">Total Follow-ups</p>
-                  <p className="text-xl font-bold text-gray-900">{filteredFollowUps.length}</p>
+                  <p className="text-sm font-bold text-gray-900">{filteredFollowUps.length}</p>
                 </div>
               </div>
             </div>
@@ -301,7 +301,7 @@ const FollowUp = () => {
                 </div>
                 <div className="ml-4">
                   <p className="text-xs font-medium text-gray-600">Pending</p>
-                  <p className="text-xl font-bold text-gray-900">
+                  <p className="text-sm font-bold text-gray-900">
                     {filteredFollowUps.filter(f => f.status === 'pending').length}
                   </p>
                 </div>
@@ -314,7 +314,7 @@ const FollowUp = () => {
                 </div>
                 <div className="ml-4">
                   <p className="text-xs font-medium text-gray-600">Completed</p>
-                  <p className="text-xl font-bold text-gray-900">
+                  <p className="text-sm font-bold text-gray-900">
                     {filteredFollowUps.filter(f => f.status === 'completed').length}
                   </p>
                 </div>
@@ -327,7 +327,7 @@ const FollowUp = () => {
                 </div>
                 <div className="ml-4">
                   <p className="text-xs font-medium text-gray-600">Overdue</p>
-                  <p className="text-xl font-bold text-gray-900">
+                  <p className="text-sm font-bold text-gray-900">
                     {filteredFollowUps.filter(f => f.status === 'overdue').length}
                   </p>
                 </div>

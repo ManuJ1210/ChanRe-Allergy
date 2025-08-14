@@ -30,6 +30,10 @@ import ViewAtopicDermatitis from '../pages/Superadmin/Followups/ViewAtopicDermat
 import ViewAllergicConjunctivitis from '../pages/Superadmin/Followups/ViewAllergicConjunctivitis';
 import ViewAllergicBronchitis from '../pages/Superadmin/Followups/ViewAllergicBronchitis';
 import ViewGPE from '../pages/Superadmin/Followups/ViewGPE';
+import PatientProfile from '../pages/Superadmin/Followups/PatientProfile';
+import PatientHistory from '../pages/Superadmin/Followups/PatientHistory';
+import PatientMedications from '../pages/Superadmin/Followups/PatientMedications';
+import FollowupsPatientLabReports from '../pages/Superadmin/Followups/PatientLabReports';
 import LabStaffList from '../pages/Superadmin/Lab/LabStaffList';
 import AddLabStaff from '../pages/Superadmin/Lab/AddLabStaff';
 import EditLabStaff from '../pages/Superadmin/Lab/EditLabStaff';
@@ -52,7 +56,6 @@ import TestRequestReviewDetails from '../pages/Superadmin/DoctorsLogin/TestReque
 import SuperadminDoctorDashboard from '../pages/Superadmin/DoctorsLogin/Dashboard';
 import SuperadminDoctorMyPatients from '../pages/Superadmin/DoctorsLogin/MyPatients';
 import PatientDetails from '../pages/Superadmin/DoctorsLogin/PatientDetails';
-import PatientProfile from '../pages/Superadmin/DoctorsLogin/PatientProfile';
 import PatientLabReports from '../pages/Superadmin/DoctorsLogin/PatientLabReports';
 import SuperadminDoctorReviewLabReports from '../pages/Superadmin/DoctorsLogin/ReviewLabReports';
 import SuperadminDoctorPatientHistory from '../pages/Superadmin/DoctorsLogin/PatientHistory';
@@ -265,6 +268,10 @@ export default function AppRoutes() {
         <Route path="Superadmin/Followups/ViewAllergicRhinitis/:patientId" element={<ViewAllergicRhinitis />} />
         <Route path="Superadmin/Followups/ViewAtopicDermatitis/:patientId" element={<ViewAtopicDermatitis />} />
         <Route path="Superadmin/Followups/ViewGPE/:patientId" element={<ViewGPE />} />
+        <Route path="Superadmin/Followups/PatientProfile/:patientId" element={<PatientProfile />} />
+        <Route path="Superadmin/Followups/PatientHistory/:patientId" element={<PatientHistory />} />
+        <Route path="Superadmin/Followups/PatientMedications/:patientId" element={<PatientMedications />} />
+        <Route path="Superadmin/Followups/PatientLabReports/:patientId" element={<FollowupsPatientLabReports />} />
         
         {/* Centers Routes */}
         <Route path="superadmin/centers/centerslist" element={<CentersList />} />
@@ -288,6 +295,10 @@ export default function AppRoutes() {
         <Route path="superadmin/followups/viewallergicconjunctivitis/:patientId" element={<ViewAllergicConjunctivitis />} />
         <Route path="superadmin/followups/viewallergicbronchitis/:patientId" element={<ViewAllergicBronchitis />} />
         <Route path="superadmin/followups/viewgpe/:patientId" element={<ViewGPE />} />
+        <Route path="superadmin/followups/PatientProfile/:patientId" element={<PatientProfile />} />
+        <Route path="superadmin/followups/PatientHistory/:patientId" element={<PatientHistory />} />
+        <Route path="superadmin/followups/PatientMedications/:patientId" element={<PatientMedications />} />
+        <Route path="superadmin/followups/PatientLabReports/:patientId" element={<FollowupsPatientLabReports />} />
         
         {/* Lab Routes */}
         <Route path="superadmin/lab/labstafflist" element={<LabStaffList />} />

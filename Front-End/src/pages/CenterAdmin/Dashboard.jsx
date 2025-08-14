@@ -91,10 +91,10 @@ export default function CenterAdminDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-md font-bold text-slate-800 mb-2">
             Welcome back, {user?.name}
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-xs">
             Manage your center, patients, and staff
           </p>
         </div>
@@ -119,8 +119,8 @@ export default function CenterAdminDashboard() {
               <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 text-sm font-medium">Total Patients</p>
-                    <p className="text-xl font-bold text-slate-800">{stats.totalPatients}</p>
+                    <p className="text-slate-600 text-xs font-medium">Total Patients</p>
+                    <p className="text-sm font-bold text-slate-800">{stats.totalPatients}</p>
                   </div>
                   <Users className="h-8 w-8 text-blue-500" />
                 </div>
@@ -129,8 +129,8 @@ export default function CenterAdminDashboard() {
               <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 text-sm font-medium">Doctors</p>
-                    <p className="text-xl font-bold text-slate-800">{stats.totalDoctors}</p>
+                    <p className="text-slate-600 text-xs font-medium">Doctors</p>
+                    <p className="text-sm font-bold text-slate-800">{stats.totalDoctors}</p>
                   </div>
                   <User className="h-8 w-8 text-green-500" />
                 </div>
@@ -139,8 +139,8 @@ export default function CenterAdminDashboard() {
               <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 text-sm font-medium">Receptionists</p>
-                    <p className="text-xl font-bold text-slate-800">{stats.totalReceptionists}</p>
+                    <p className="text-slate-600 text-xs font-medium">Receptionists</p>
+                    <p className="text-sm font-bold text-slate-800">{stats.totalReceptionists}</p>
                   </div>
                   <UserCheck className="h-8 w-8 text-purple-500" />
                 </div>
@@ -149,8 +149,8 @@ export default function CenterAdminDashboard() {
               <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 text-sm font-medium">Total Tests</p>
-                    <p className="text-xl font-bold text-slate-800">{stats.totalTests}</p>
+                    <p className="text-slate-600 text-xs font-medium">Total Tests</p>
+                    <p className="text-sm font-bold text-slate-800">{stats.totalTests}</p>
                   </div>
                   <FileText className="h-8 w-8 text-orange-500" />
                 </div>
@@ -162,8 +162,8 @@ export default function CenterAdminDashboard() {
         {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-6">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800">Quick Actions</h2>
-            <p className="text-slate-600 mt-1">Common tasks to get you started</p>
+            <h2 className="text-sm font-semibold text-slate-800">Quick Actions</h2>
+            <p className="text-slate-600 mt-1 text-xs">Common tasks to get you started</p>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -177,8 +177,8 @@ export default function CenterAdminDashboard() {
                     {action.icon}
                     <Plus className="h-4 w-4 opacity-75" />
                   </div>
-                  <h3 className="font-semibold text-left">{action.title}</h3>
-                  <p className="text-sm opacity-90 text-left mt-1">{action.description}</p>
+                  <h3 className="font-semibold text-left text-xs">{action.title}</h3>
+                  <p className="text-xs opacity-90 text-left mt-1">{action.description}</p>
                 </button>
               ))}
             </div>
@@ -190,7 +190,7 @@ export default function CenterAdminDashboard() {
           {/* Patient Management */}
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+              <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                 <Users className="h-5 w-5 mr-2 text-blue-500" />
                 Patient Management
               </h2>
@@ -202,7 +202,7 @@ export default function CenterAdminDashboard() {
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-slate-700">Add New Patient</span>
+                    <span className="font-medium text-slate-700 text-xs">Add New Patient</span>
                     <Plus className="h-4 w-4 text-slate-400" />
                   </div>
                 </button>
@@ -211,7 +211,7 @@ export default function CenterAdminDashboard() {
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-slate-700">View All Patients</span>
+                    <span className="font-medium text-slate-700 text-xs">View All Patients</span>
                     <Eye className="h-4 w-4 text-slate-400" />
                   </div>
                 </button>
@@ -220,7 +220,7 @@ export default function CenterAdminDashboard() {
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-slate-700">Manage Patients</span>
+                    <span className="font-medium text-slate-700 text-xs">Manage Patients</span>
                     <Settings className="h-4 w-4 text-slate-400" />
                   </div>
                 </button>
@@ -231,7 +231,7 @@ export default function CenterAdminDashboard() {
           {/* Staff Management */}
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+              <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                 <User className="h-5 w-5 mr-2 text-green-500" />
                 Staff Management
               </h2>
@@ -243,7 +243,7 @@ export default function CenterAdminDashboard() {
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-slate-700">Add Doctor</span>
+                    <span className="font-medium text-slate-700 text-xs">Add Doctor</span>
                     <Plus className="h-4 w-4 text-slate-400" />
                   </div>
                 </button>
@@ -252,7 +252,7 @@ export default function CenterAdminDashboard() {
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-slate-700">View Doctors</span>
+                    <span className="font-medium text-slate-700 text-xs">View Doctors</span>
                     <Eye className="h-4 w-4 text-slate-400" />
                   </div>
                 </button>
@@ -261,7 +261,7 @@ export default function CenterAdminDashboard() {
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-slate-700">Add Receptionist</span>
+                    <span className="font-medium text-slate-700 text-xs">Add Receptionist</span>
                     <Plus className="h-4 w-4 text-slate-400" />
                   </div>
                 </button>
@@ -270,7 +270,7 @@ export default function CenterAdminDashboard() {
                   className="w-full text-left p-3 rounded-lg hover:bg-slate-50 transition-colors border border-slate-200"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-slate-700">Manage Receptionists</span>
+                    <span className="font-medium text-slate-700 text-xs">Manage Receptionists</span>
                     <Settings className="h-4 w-4 text-slate-400" />
                   </div>
                 </button>

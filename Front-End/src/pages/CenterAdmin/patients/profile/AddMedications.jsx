@@ -52,15 +52,15 @@ export default function AddMedications() {
           <div className="mb-8">
             <button
                               onClick={() => navigate(`/dashboard/CenterAdmin/patients/profile/ViewProfile/${id}`)}
-              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-xs"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Patient
             </button>
-            <h1 className="text-xl font-bold text-slate-800 mb-2">
+            <h1 className="text-md font-bold text-slate-800 mb-2">
               Add Medication
             </h1>
-            <p className="text-slate-600">
+            <p className="text-slate-600 text-xs">
               Prescribe medication for the patient
             </p>
           </div>
@@ -69,13 +69,13 @@ export default function AddMedications() {
           {addMedicationSuccess && (
             <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
               <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-              <span className="text-green-700">Medication added successfully!</span>
+              <span className="text-green-700 text-xs">Medication added successfully!</span>
             </div>
           )}
           {error && (
             <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
               <CheckCircle className="h-5 w-5 text-red-500 mr-3" />
-              <span className="text-red-700">{error}</span>
+              <span className="text-red-700 text-xs">{error}</span>
             </div>
           )}
 
@@ -86,7 +86,7 @@ export default function AddMedications() {
                 <Pill className="h-5 w-5 mr-2 text-blue-500" />
                 Medication Information
               </h2>
-              <p className="text-slate-600 mt-1">
+              <p className="text-slate-600 mt-1 text-xs">
                 Fill in the medication details below
               </p>
             </div>
@@ -103,7 +103,7 @@ export default function AddMedications() {
                     value={formData.drugName}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="Enter medication name"
                   />
                 </div>
@@ -118,7 +118,7 @@ export default function AddMedications() {
                     value={formData.dose}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="e.g., 500mg"
                   />
                 </div>
@@ -133,7 +133,7 @@ export default function AddMedications() {
                     value={formData.frequency}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="e.g., Twice daily"
                   />
                 </div>
@@ -148,7 +148,7 @@ export default function AddMedications() {
                     value={formData.duration}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="e.g., 7 days"
                   />
                 </div>
@@ -163,7 +163,7 @@ export default function AddMedications() {
                     value={formData.prescribedBy}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="Enter doctor's name"
                   />
                 </div>
@@ -178,7 +178,7 @@ export default function AddMedications() {
                     value={formData.prescribedDate}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   />
                 </div>
               </div>
@@ -192,7 +192,7 @@ export default function AddMedications() {
                   value={formData.instructions}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter medication instructions"
                 />
               </div>
@@ -201,7 +201,7 @@ export default function AddMedications() {
                 <button
                   type="button"
                   onClick={() => navigate(`/dashboard/CenterAdmin/patients/profile/ViewProfile/${id}`)}
-                  className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
+                  className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2 text-xs"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   Cancel
@@ -209,7 +209,7 @@ export default function AddMedications() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 text-xs"
                 >
                   {loading ? (
                     <>

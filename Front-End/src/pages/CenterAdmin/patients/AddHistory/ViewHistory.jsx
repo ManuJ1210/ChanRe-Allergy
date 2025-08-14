@@ -24,7 +24,7 @@ const ViewHistory = () => {
           <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-slate-600">Loading history details...</p>
+              <p className="text-slate-600 text-xs">Loading history details...</p>
             </div>
           </div>
         </div>
@@ -37,7 +37,7 @@ const ViewHistory = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-4xl mx-auto">
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-600">{historyError}</p>
+            <p className="text-red-600 text-xs">{historyError}</p>
           </div>
         </div>
       </div>
@@ -52,15 +52,15 @@ const ViewHistory = () => {
           <div className="mb-8">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-xs"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Patient Profile
             </button>
-            <h1 className="text-lg font-bold text-slate-800 mb-2">
+            <h1 className="text-md font-bold text-slate-800 mb-2">
               Medical History Details
             </h1>
-            <p className="text-slate-600">
+            <p className="text-slate-600 text-xs">
               No history records found for this patient
             </p>
           </div>
@@ -69,16 +69,16 @@ const ViewHistory = () => {
           <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-8">
             <div className="text-center">
               <FileText className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-xs font-semibold text-slate-700 mb-2">
+              <h3 className="text-sm font-semibold text-slate-700 mb-2">
                 No Medical History Found
               </h3>
-              <p className="text-slate-500 mb-6">
+              <p className="text-slate-500 mb-6 text-xs">
                 This patient doesn't have any medical history records yet. 
                 History records will appear here once they are added.
               </p>
               <button
                 onClick={() => navigate(-1)}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors text-xs"
               >
                 Go Back
               </button>
@@ -96,15 +96,15 @@ const ViewHistory = () => {
         <div className="mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-xs"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Patient Profile
           </button>
-          <h1 className="text-lg font-bold text-slate-800 mb-2">
+          <h1 className="text-md font-bold text-slate-800 mb-2">
             Medical History Details
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-xs">
             Complete medical history and examination records ({history.length} records)
           </p>
         </div>
@@ -114,7 +114,7 @@ const ViewHistory = () => {
           {history.map((historyRecord, index) => (
             <div key={historyRecord._id || index} className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center">
               <FileText className="h-5 w-5 mr-2 text-blue-500" />
                   History Record #{index + 1}
             </h2>
@@ -127,7 +127,7 @@ const ViewHistory = () => {
           <div className="p-6 space-y-8">
             {/* Medical Conditions */}
             <div>
-              <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+              <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                 Medical Conditions
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -203,7 +203,7 @@ const ViewHistory = () => {
             {/* Hay Fever Details */}
                 {(historyRecord.feverGrade || historyRecord.itchingSoreThroat || historyRecord.specificDayExposure) && (
               <div>
-                <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                   Hay Fever Details
                 </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -232,7 +232,7 @@ const ViewHistory = () => {
             {/* Asthma Details */}
                 {(historyRecord.asthmaType || historyRecord.exacerbationsFrequency || historyRecord.hospitalAdmission || historyRecord.gpAttendances || historyRecord.aeAttendances || historyRecord.ituAdmissions || historyRecord.coughWheezeFrequency) && (
               <div>
-                <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                   Asthma Details
                 </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -285,7 +285,7 @@ const ViewHistory = () => {
                 {/* Medical Events */}
                 {(historyRecord.intervalSymptoms || historyRecord.nightCoughFrequency || historyRecord.earlyMorningCough || historyRecord.exerciseInducedSymptoms || historyRecord.familySmoking || historyRecord.petsAtHome) && (
                   <div>
-                    <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                    <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                       Medical Events & Symptoms
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -332,7 +332,7 @@ const ViewHistory = () => {
                 {/* Triggers */}
                 {(historyRecord.triggersUrtis !== undefined || historyRecord.triggersColdWeather !== undefined || historyRecord.triggersPollen !== undefined || historyRecord.triggersSmoke !== undefined || historyRecord.triggersExercise !== undefined || historyRecord.triggersPets !== undefined || historyRecord.triggersOthers) && (
                   <div>
-                    <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                    <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                       Triggers
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -397,7 +397,7 @@ const ViewHistory = () => {
                 {/* Allergic Rhinitis */}
                 {(historyRecord.allergicRhinitisType || historyRecord.rhinitisSneezing || historyRecord.rhinitisNasalCongestion || historyRecord.rhinitisRunningNose || historyRecord.rhinitisItchingNose || historyRecord.rhinitisItchingEyes || historyRecord.rhinitisCoughing || historyRecord.rhinitisWheezing || historyRecord.rhinitisCoughingWheezing || historyRecord.rhinitisWithExercise || historyRecord.rhinitisHeadaches || historyRecord.rhinitisPostNasalDrip) && (
                   <div>
-                    <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                    <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                       Allergic Rhinitis
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -480,7 +480,7 @@ const ViewHistory = () => {
                 {/* Skin Allergy */}
                 {(historyRecord.skinAllergyType || historyRecord.skinHeavesPresent || historyRecord.skinEczemaPresent || historyRecord.skinUlcerPresent || historyRecord.skinPapuloSquamousRashesPresent || historyRecord.skinItchingNoRashesPresent) && (
                   <div>
-                    <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                    <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                       Skin Allergy
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -557,7 +557,7 @@ const ViewHistory = () => {
                 {/* Medical History */}
                 {(historyRecord.hypertension || historyRecord.diabetes || historyRecord.epilepsy || historyRecord.ihd) && (
                   <div>
-                    <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                    <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                       Medical History
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -592,7 +592,7 @@ const ViewHistory = () => {
                 {/* Drug Allergies */}
                 {(historyRecord.drugAllergyKnown || historyRecord.probable || historyRecord.definite) && (
                   <div>
-                    <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                    <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                       Drug Allergies
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -621,7 +621,7 @@ const ViewHistory = () => {
                 {/* Occupation and Exposure */}
                 {(historyRecord.occupation || historyRecord.probableChemicalExposure || historyRecord.location || historyRecord.familyHistory) && (
                   <div>
-                    <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                    <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                       Occupation & Exposure
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -656,7 +656,7 @@ const ViewHistory = () => {
                 {/* Examination */}
                 {(historyRecord.oralCavity || historyRecord.skin || historyRecord.ent || historyRecord.eye || historyRecord.respiratorySystem || historyRecord.cvs || historyRecord.cns || historyRecord.abdomen || historyRecord.otherFindings) && (
                   <div>
-                    <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                    <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                       Examination Findings
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -721,7 +721,7 @@ const ViewHistory = () => {
                 {/* Report File */}
                 {historyRecord.reportFile && (
               <div>
-                <h3 className="text-xs font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
                       Attached Report
                 </h3>
                     <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">

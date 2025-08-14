@@ -113,12 +113,12 @@ const AddAllergicRhinitis = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate(-1)}
-                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors text-xs"
               >
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-lg font-bold text-gray-800">ALLERGIC RHINITIS</h1>
+              <h1 className="text-md font-bold text-gray-800">ALLERGIC RHINITIS</h1>
             </div>
           </div>
         </div>
@@ -131,7 +131,7 @@ const AddAllergicRhinitis = () => {
               <h3 className="text-sm font-semibold text-gray-800 mb-4">Allergic Rhinitis</h3>
               
               <div className="mb-6">
-                <h4 className="text-xs font-medium text-gray-700 mb-4">Nasal Symptom Severity</h4>
+                <h4 className="text-sm font-medium text-gray-700 mb-4">Nasal Symptom Severity</h4>
                 <div className="mb-2">
                   <label className="text-xs font-medium text-gray-600">Score(0-7)</label>
                 </div>
@@ -163,7 +163,7 @@ const AddAllergicRhinitis = () => {
                     type="text"
                     value={nasalTotal}
                     readOnly
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-xs"
                   />
                 </div>
               </div>
@@ -202,7 +202,7 @@ const AddAllergicRhinitis = () => {
                     type="text"
                     value={nonNasalTotal}
                     readOnly
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-xs"
                   />
                 </div>
               </div>
@@ -238,7 +238,7 @@ const AddAllergicRhinitis = () => {
                     name="medications.nonNasal"
                     value={formData.medications.nonNasal}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -250,7 +250,7 @@ const AddAllergicRhinitis = () => {
                     name="medications.nasal"
                     value={formData.medications.nasal}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
               </div>
@@ -264,7 +264,7 @@ const AddAllergicRhinitis = () => {
                     name="medications.antihistamine"
                     value={formData.medications.antihistamine}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -276,7 +276,7 @@ const AddAllergicRhinitis = () => {
                     name="medications.other"
                     value={formData.medications.other}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
               </div>
@@ -292,7 +292,7 @@ const AddAllergicRhinitis = () => {
                     type="text"
                     name="gpe.weight"
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -301,7 +301,7 @@ const AddAllergicRhinitis = () => {
                     type="text"
                     name="gpe.pulse"
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -310,7 +310,7 @@ const AddAllergicRhinitis = () => {
                     type="text"
                     name="gpe.temp"
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -319,7 +319,7 @@ const AddAllergicRhinitis = () => {
                     type="text"
                     name="gpe.spo2"
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -328,7 +328,7 @@ const AddAllergicRhinitis = () => {
                     type="text"
                     name="gpe.bp"
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -337,7 +337,7 @@ const AddAllergicRhinitis = () => {
                     type="text"
                     name="gpe.rr"
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
               </div>
@@ -348,7 +348,7 @@ const AddAllergicRhinitis = () => {
                   value={formData.entExamination}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-xs"
                 />
               </div>
             </div>
@@ -364,7 +364,7 @@ const AddAllergicRhinitis = () => {
                     name="systematicExamination.cns"
                     value={formData.systematicExamination.cns}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -374,7 +374,7 @@ const AddAllergicRhinitis = () => {
                     name="systematicExamination.cvs"
                     value={formData.systematicExamination.cvs}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -384,7 +384,7 @@ const AddAllergicRhinitis = () => {
                     name="systematicExamination.rs"
                     value={formData.systematicExamination.rs}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -394,7 +394,7 @@ const AddAllergicRhinitis = () => {
                     name="systematicExamination.pa"
                     value={formData.systematicExamination.pa}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -404,7 +404,7 @@ const AddAllergicRhinitis = () => {
                     name="systematicExamination.drugAdverseNotion"
                     value={formData.systematicExamination.drugAdverseNotion}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
                 <div>
@@ -414,7 +414,7 @@ const AddAllergicRhinitis = () => {
                     name="systematicExamination.drugCompliance"
                     value={formData.systematicExamination.drugCompliance}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                 </div>
               </div>
@@ -425,7 +425,7 @@ const AddAllergicRhinitis = () => {
                   value={formData.systematicExamination.followUpAdvice}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-xs"
                 />
               </div>
             </div>
@@ -435,7 +435,7 @@ const AddAllergicRhinitis = () => {
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                 <div className="flex items-center">
                   <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-                  <span className="text-red-700">{error}</span>
+                  <span className="text-red-700 text-xs">{error}</span>
                 </div>
               </div>
             )}
@@ -445,14 +445,14 @@ const AddAllergicRhinitis = () => {
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 text-xs"
               >
                 {loading ? (
                   <>

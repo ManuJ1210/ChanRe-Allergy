@@ -152,23 +152,23 @@ const ManageReceptionists = () => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4 sm:mb-6">
             <button
               onClick={() => navigate('/dashboard/centeradmin/dashboard')}
-              className="flex items-center text-slate-600 hover:text-slate-800 transition-colors text-sm sm:text-base w-fit"
+              className="flex items-center text-slate-600 hover:text-slate-800 transition-colors text-xs w-fit"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </button>
             <button
               onClick={() => navigate('/dashboard/centeradmin/receptionist/addreceptionist')}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg flex items-center gap-2 transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg flex items-center gap-2 transition-colors text-xs w-full sm:w-auto justify-center"
             >
               <Plus className="h-4 w-4" />
               Add Receptionist
             </button>
           </div>
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800 mb-2 text-center sm:text-left">
+          <h1 className="text-md font-bold text-slate-800 mb-2 text-center sm:text-left">
             Center Receptionists
           </h1>
-          <p className="text-slate-600 text-sm sm:text-base text-center sm:text-left">
+          <p className="text-slate-600 text-xs text-center sm:text-left">
             Manage all receptionists in your center
           </p>
         </div>
@@ -179,7 +179,7 @@ const ManageReceptionists = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Total Receptionists</p>
-                <p className="text-lg sm:text-xl font-bold text-slate-800">{stats.total}</p>
+                <p className="text-sm font-bold text-slate-800">{stats.total}</p>
               </div>
               <div className="bg-blue-100 p-2 sm:p-3 rounded-lg">
                 <UserCheck className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
@@ -190,7 +190,7 @@ const ManageReceptionists = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Active Receptionists</p>
-                <p className="text-lg sm:text-xl font-bold text-green-600">{stats.active}</p>
+                <p className="text-sm font-bold text-green-600">{stats.active}</p>
               </div>
               <div className="bg-green-100 p-2 sm:p-3 rounded-lg">
                 <UserCheck className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
@@ -201,7 +201,7 @@ const ManageReceptionists = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Inactive Receptionists</p>
-                <p className="text-lg sm:text-xl font-bold text-red-600">{stats.inactive}</p>
+                <p className="text-sm font-bold text-red-600">{stats.inactive}</p>
               </div>
               <div className="bg-red-100 p-2 sm:p-3 rounded-lg">
                 <UserX className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
@@ -214,13 +214,13 @@ const ManageReceptionists = () => {
         {success && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700 text-sm sm:text-base">{message}</span>
+            <span className="text-green-700 text-xs">{message}</span>
           </div>
         )}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700 text-sm sm:text-base">{error}</span>
+            <span className="text-red-700 text-xs">{error}</span>
           </div>
         )}
 
@@ -235,7 +235,7 @@ const ManageReceptionists = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search receptionists by name, email, or username..."
-                  className="w-full pl-10 pr-4 py-2 sm:py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                  className="w-full pl-10 pr-4 py-2 sm:py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 />
               </div>
             </form>
@@ -281,19 +281,19 @@ const ManageReceptionists = () => {
             {loading ? (
               <div className="p-8 text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
-                <p className="text-slate-600 font-medium">Loading receptionists...</p>
-                <p className="text-slate-500 text-sm mt-1">Please wait while we fetch the data</p>
+                <p className="text-slate-600 font-medium text-xs">Loading receptionists...</p>
+                <p className="text-slate-500 text-xs mt-1">Please wait while we fetch the data</p>
               </div>
             ) : receptionists.length === 0 ? (
               <div className="p-8 text-center">
                 <div className="bg-slate-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4">
                   <UserCheck className="h-12 w-12 text-slate-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-slate-700 mb-2">No Receptionists Found</h3>
-                <p className="text-slate-500 mb-6 text-base">Get started by adding your first receptionist.</p>
+                <h3 className="text-sm font-semibold text-slate-700 mb-2">No Receptionists Found</h3>
+                <p className="text-slate-500 mb-6 text-xs">Get started by adding your first receptionist.</p>
                 <button
                   onClick={() => navigate('/dashboard/centeradmin/receptionist/addreceptionist')}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto text-xs"
                 >
                   <Plus className="h-4 w-4" />
                   Add Receptionist
@@ -306,13 +306,13 @@ const ManageReceptionists = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                          <span className="text-blue-600 font-semibold text-lg">
+                          <span className="text-blue-600 font-semibold text-xs">
                             {receptionist.name ? receptionist.name.charAt(0).toUpperCase() : 'R'}
                           </span>
                         </div>
                         <div>
-                          <h3 className="font-medium text-slate-800 text-base">{receptionist.name || 'Unknown'}</h3>
-                          <p className="text-slate-500 text-sm">ID: {receptionist._id?.slice(-6)}</p>
+                          <h3 className="font-medium text-slate-800 text-sm">{receptionist.name || 'Unknown'}</h3>
+                          <p className="text-slate-500 text-xs">ID: {receptionist._id?.slice(-6)}</p>
                         </div>
                       </div>
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -327,22 +327,22 @@ const ManageReceptionists = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
                         <Mail className="h-4 w-4 text-blue-500" />
-                        <span className="text-slate-700 text-sm font-medium">{receptionist.email}</span>
+                        <span className="text-slate-700 text-xs font-medium">{receptionist.email}</span>
                       </div>
                       <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
                         <Phone className="h-4 w-4 text-green-500" />
-                        <span className="text-slate-700 text-sm font-medium">{receptionist.phone || 'N/A'}</span>
+                        <span className="text-slate-700 text-xs font-medium">{receptionist.phone || 'N/A'}</span>
                       </div>
                     </div>
                     
                     <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
                       <User className="h-4 w-4 text-indigo-500" />
-                      <span className="text-slate-700 text-sm font-medium">@{receptionist.username || 'N/A'}</span>
+                      <span className="text-slate-700 text-xs font-medium">@{receptionist.username || 'N/A'}</span>
                     </div>
                     
                     <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
                       <Calendar className="h-4 w-4 text-green-500" />
-                      <span className="text-slate-700 text-sm font-medium">
+                      <span className="text-slate-700 text-xs font-medium">
                         Joined: {formatDate(receptionist.createdAt)}
                       </span>
                     </div>
@@ -350,21 +350,21 @@ const ManageReceptionists = () => {
                     <div className="flex gap-2 pt-3 border-t border-slate-200">
                       <button
                         onClick={() => navigate(`/dashboard/centeradmin/receptionist/viewreceptionist/${receptionist._id}`)}
-                        className="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                        className="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2"
                       >
                         <Eye className="h-4 w-4" />
                         View
                       </button>
                       <button
                         onClick={() => navigate(`/dashboard/centeradmin/receptionist/editreceptionist/${receptionist._id}`)}
-                        className="flex-1 bg-green-50 hover:bg-green-100 text-green-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                        className="flex-1 bg-green-50 hover:bg-green-100 text-green-700 px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2"
                       >
                         <Edit className="h-4 w-4" />
                         Edit
                       </button>
                       <button
                         onClick={() => handleToggleStatus(receptionist)}
-                        className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                        className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2 ${
                           !receptionist.isDeleted 
                             ? 'bg-orange-50 hover:bg-orange-100 text-orange-700' 
                             : 'bg-green-50 hover:bg-green-100 text-green-700'
@@ -378,7 +378,7 @@ const ManageReceptionists = () => {
                           setSelectedReceptionist(receptionist);
                           setShowDeleteModal(true);
                         }}
-                        className="flex-1 bg-red-50 hover:bg-red-100 text-red-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                        className="flex-1 bg-red-50 hover:bg-red-100 text-red-700 px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2"
                       >
                         <Trash2 className="h-4 w-4" />
                         Delete
@@ -422,13 +422,13 @@ const ManageReceptionists = () => {
                       <td colSpan="6" className="px-6 py-4 text-center">
                         <div className="flex items-center justify-center">
                           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-                          <span className="ml-2 text-slate-600">Loading receptionists...</span>
+                          <span className="ml-2 text-slate-600 text-xs">Loading receptionists...</span>
                         </div>
                       </td>
                     </tr>
                   ) : receptionists.length === 0 ? (
                     <tr>
-                      <td colSpan="6" className="px-6 py-4 text-center text-slate-500">
+                      <td colSpan="6" className="px-6 py-4 text-center text-slate-500 text-xs">
                         No receptionists found
                       </td>
                     </tr>
@@ -438,7 +438,7 @@ const ManageReceptionists = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                              <span className="text-blue-600 font-semibold">
+                              <span className="text-blue-600 font-semibold text-xs">
                                 {receptionist.name ? receptionist.name.charAt(0).toUpperCase() : 'R'}
                               </span>
                             </div>
@@ -518,7 +518,7 @@ const ManageReceptionists = () => {
         {/* Pagination */}
         {pagination.totalPages > 1 && (
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs sm:text-sm text-slate-700 text-center sm:text-left">
+            <div className="text-xs text-slate-700 text-center sm:text-left">
               Showing {((pagination.currentPage - 1) * pagination.limit) + 1} to{' '}
               {Math.min(pagination.currentPage * pagination.limit, pagination.total)} of{' '}
               {pagination.total} results
@@ -531,7 +531,7 @@ const ManageReceptionists = () => {
               >
                 <ArrowLeft className="h-4 w-4" />
               </button>
-              <span className="px-3 py-2 text-xs sm:text-sm text-slate-700">
+              <span className="px-3 py-2 text-xs text-slate-700">
                 Page {pagination.currentPage} of {pagination.totalPages}
               </span>
               <button
@@ -551,19 +551,19 @@ const ManageReceptionists = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-sm font-semibold text-slate-900 mb-4">Confirm Delete</h3>
-            <p className="text-slate-600 mb-6">
+            <p className="text-slate-600 mb-6 text-xs">
               Are you sure you want to delete <strong>{selectedReceptionist?.name}</strong>? This action cannot be undone.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50"
+                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 text-xs"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-xs"
               >
                 Delete
               </button>

@@ -103,15 +103,15 @@ const AddReceptionist = () => {
         <div className="mb-8">
           <button
                             onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-xs"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Receptionists
           </button>
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-md font-bold text-slate-800 mb-2">
             Add New Receptionist
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-xs">
             Register a new receptionist for your center
           </p>
         </div>
@@ -120,24 +120,24 @@ const AddReceptionist = () => {
         {success && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700">{message}</span>
+            <span className="text-green-700 text-xs">{message}</span>
           </div>
         )}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700">{error}</span>
+            <span className="text-red-700 text-xs">{error}</span>
           </div>
         )}
 
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-500" />
               Receptionist Information
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-xs">
               Fill in the receptionist details below
             </p>
           </div>
@@ -157,7 +157,7 @@ const AddReceptionist = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="Enter full name"
                   />
                 </div>
@@ -172,7 +172,7 @@ const AddReceptionist = () => {
                     value={formData.mobile}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="Enter mobile number"
                   />
                 </div>
@@ -187,7 +187,7 @@ const AddReceptionist = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="Enter email address"
                   />
                 </div>
@@ -202,7 +202,7 @@ const AddReceptionist = () => {
                     value={formData.username}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="Enter username"
                   />
                 </div>
@@ -218,7 +218,7 @@ const AddReceptionist = () => {
                       value={formData.password}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 pr-12 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      className="w-full px-4 py-3 pr-12 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                       placeholder="Enter password"
                     />
                     <button
@@ -246,7 +246,7 @@ const AddReceptionist = () => {
                     value={formData.address}
                     onChange={handleChange}
                     rows="3"
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="Enter full address"
                   />
                 </div>
@@ -260,7 +260,7 @@ const AddReceptionist = () => {
                     name="emergencyContact"
                     value={formData.emergencyContact}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="Enter emergency contact number"
                   />
                 </div>
@@ -274,7 +274,7 @@ const AddReceptionist = () => {
                     name="emergencyContactName"
                     value={formData.emergencyContactName}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="Enter emergency contact name"
                   />
                 </div>
@@ -286,7 +286,7 @@ const AddReceptionist = () => {
               <button
                 type="button"
                 onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
-                className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
+                className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2 text-xs"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Cancel
@@ -294,7 +294,7 @@ const AddReceptionist = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 text-xs"
               >
                 {loading ? (
                   <>

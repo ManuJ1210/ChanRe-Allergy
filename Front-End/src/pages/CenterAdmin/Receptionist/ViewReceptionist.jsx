@@ -22,7 +22,7 @@ const ViewReceptionist = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading receptionist details...</p>
+          <p className="mt-4 text-gray-600 text-xs">Loading receptionist details...</p>
         </div>
       </div>
     );
@@ -32,11 +32,11 @@ const ViewReceptionist = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-red-600 text-lg mb-4">Error</div>
-          <p className="text-gray-600">{error}</p>
+          <div className="text-red-600 text-sm mb-4">Error</div>
+          <p className="text-gray-600 text-xs">{error}</p>
           <button
             onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-xs"
           >
             Back to List
           </button>
@@ -49,10 +49,10 @@ const ViewReceptionist = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-gray-600 text-lg mb-4">Receptionist not found</div>
+          <div className="text-gray-600 text-sm mb-4">Receptionist not found</div>
           <button
             onClick={() => navigate('/dashboard/centeradmin/receptionist/managereceptionists')}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-xs"
           >
             Back to List
           </button>
@@ -75,14 +75,14 @@ const ViewReceptionist = () => {
                 <ArrowLeft className="h-5 w-5" />
               </button>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Receptionist Details</h1>
-                <p className="text-gray-600">View comprehensive information about the receptionist</p>
+                <h1 className="text-md font-bold text-gray-900">Receptionist Details</h1>
+                <p className="text-gray-600 text-xs">View comprehensive information about the receptionist</p>
               </div>
             </div>
             <div className="flex space-x-3">
               <button
                 onClick={() => navigate(`/dashboard/centeradmin/receptionist/editreceptionist/${currentReceptionist._id}`)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs"
               >
                 Edit Receptionist
               </button>
@@ -99,8 +99,8 @@ const ViewReceptionist = () => {
                 <User className="h-10 w-10" />
               </div>
               <div>
-                <h2 className="text-xl font-bold">{currentReceptionist.name}</h2>
-                <p className="text-green-100">Receptionist</p>
+                <h2 className="text-sm font-bold">{currentReceptionist.name}</h2>
+                <p className="text-green-100 text-xs">Receptionist</p>
               </div>
             </div>
           </div>
@@ -119,7 +119,7 @@ const ViewReceptionist = () => {
                     <Mail className="h-5 w-5 text-gray-400" />
                     <div>
                       <p className="text-xs text-gray-500">Email</p>
-                      <p className="text-gray-900">{currentReceptionist.email}</p>
+                      <p className="text-gray-900 text-xs">{currentReceptionist.email}</p>
                     </div>
                   </div>
                   
@@ -127,7 +127,7 @@ const ViewReceptionist = () => {
                     <Phone className="h-5 w-5 text-gray-400" />
                     <div>
                       <p className="text-xs text-gray-500">Phone</p>
-                      <p className="text-gray-900">{currentReceptionist.phone || 'Not provided'}</p>
+                      <p className="text-gray-900 text-xs">{currentReceptionist.phone || 'Not provided'}</p>
                     </div>
                   </div>
                   
@@ -135,7 +135,7 @@ const ViewReceptionist = () => {
                     <User className="h-5 w-5 text-gray-400" />
                     <div>
                       <p className="text-xs text-gray-500">Username</p>
-                      <p className="text-gray-900">{currentReceptionist.username}</p>
+                      <p className="text-gray-900 text-xs">{currentReceptionist.username}</p>
                     </div>
                   </div>
                 </div>
@@ -152,7 +152,7 @@ const ViewReceptionist = () => {
                     <Calendar className="h-5 w-5 text-gray-400" />
                     <div>
                       <p className="text-xs text-gray-500">Created</p>
-                      <p className="text-gray-900">
+                      <p className="text-gray-900 text-xs">
                         {new Date(currentReceptionist.createdAt).toLocaleDateString()}
                       </p>
                     </div>
@@ -162,7 +162,7 @@ const ViewReceptionist = () => {
                     <Clock className="h-5 w-5 text-gray-400" />
                     <div>
                       <p className="text-xs text-gray-500">Last Updated</p>
-                      <p className="text-gray-900">
+                      <p className="text-gray-900 text-xs">
                         {new Date(currentReceptionist.updatedAt).toLocaleDateString()}
                       </p>
                     </div>
@@ -172,7 +172,7 @@ const ViewReceptionist = () => {
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                     <div>
                       <p className="text-xs text-gray-500">Status</p>
-                      <p className="text-gray-900">
+                      <p className="text-gray-900 text-xs">
                         {currentReceptionist.isDeleted ? 'Inactive' : 'Active'}
                       </p>
                     </div>

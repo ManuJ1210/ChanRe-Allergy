@@ -108,7 +108,7 @@ const CenterProfile = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-slate-600">Loading center profile...</p>
+            <p className="text-slate-600 text-xs">Loading center profile...</p>
           </div>
         </div>
       </div>
@@ -120,10 +120,10 @@ const CenterProfile = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-6xl mx-auto">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-            <p className="text-red-600">{centerError}</p>
+            <p className="text-red-600 text-xs">{centerError}</p>
             <button
               onClick={() => centerId && dispatch(fetchCenterStats(centerId))}
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-xs"
             >
               Try Again
             </button>
@@ -139,10 +139,10 @@ const CenterProfile = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-6xl mx-auto">
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
-            <p className="text-yellow-700">Please log in to view center profile.</p>
+            <p className="text-yellow-700 text-xs">Please log in to view center profile.</p>
             <button
               onClick={() => navigate('/login')}
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-xs"
             >
               Go to Login
             </button>
@@ -158,10 +158,10 @@ const CenterProfile = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-6xl mx-auto">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-            <p className="text-red-700">Access denied. Only center admins can view this page.</p>
+            <p className="text-red-700 text-xs">Access denied. Only center admins can view this page.</p>
             <button
               onClick={() => navigate('/')}
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-xs"
             >
               Go Home
             </button>
@@ -176,7 +176,7 @@ const CenterProfile = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-6xl mx-auto">
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
-            <p className="text-yellow-700 mb-4">No center data available.</p>
+            <p className="text-yellow-700 mb-4 text-xs">No center data available.</p>
             {centerError && (
               <p className="text-red-600 mb-4 text-xs">Error: {centerError}</p>
             )}
@@ -192,13 +192,13 @@ const CenterProfile = () => {
               <button
                 onClick={() => centerId && dispatch(fetchCenterStats(centerId))}
                 disabled={!centerId}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 text-xs"
               >
                 Retry Loading Data
               </button>
               <button
                 onClick={() => dispatch(setUserFromLocal())}
-                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-xs"
               >
                 Reload User Data
               </button>
@@ -216,15 +216,15 @@ const CenterProfile = () => {
         <div className="mb-8">
           <button
             onClick={() => navigate('/dashboard/centeradmin/dashboard')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-xs"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
           </button>
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-md font-bold text-slate-800 mb-2">
             Center Profile
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-xs">
             Overview and statistics for your healthcare center
           </p>
         </div>
@@ -232,11 +232,11 @@ const CenterProfile = () => {
         {/* Center Information */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-8">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center">
               <Building className="h-5 w-5 mr-2 text-blue-500" />
               {center.name || 'Unnamed Center'}
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-xs">
               Center Code: {center.code || 'N/A'}
             </p>
           </div>
@@ -248,7 +248,7 @@ const CenterProfile = () => {
                     <MapPin className="h-4 w-4 text-blue-500" />
                     <div>
                       <p className="text-xs font-medium text-slate-500">Location</p>
-                      <p>{center.location}</p>
+                      <p className="text-xs">{center.location}</p>
                     </div>
                   </div>
                 )}
@@ -257,7 +257,7 @@ const CenterProfile = () => {
                     <MapPin className="h-4 w-4 text-blue-500 mt-1" />
                     <div>
                       <p className="text-xs font-medium text-slate-500">Address</p>
-                      <p>{center.address}</p>
+                      <p className="text-xs">{center.address}</p>
                     </div>
                   </div>
                 )}
@@ -268,7 +268,7 @@ const CenterProfile = () => {
                     <Mail className="h-4 w-4 text-blue-500" />
                     <div>
                       <p className="text-xs font-medium text-slate-500">Email</p>
-                      <p>{center.email}</p>
+                      <p className="text-xs">{center.email}</p>
                     </div>
                   </div>
                 )}
@@ -277,7 +277,7 @@ const CenterProfile = () => {
                     <Phone className="h-4 w-4 text-blue-500" />
                     <div>
                       <p className="text-xs font-medium text-slate-500">Phone</p>
-                      <p>{center.phone}</p>
+                      <p className="text-xs">{center.phone}</p>
                     </div>
                   </div>
                 )}
@@ -292,7 +292,7 @@ const CenterProfile = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Total Patients</p>
-                <p className="text-xl font-bold text-slate-800">{center.patientCount || 0}</p>
+                <p className="text-sm font-bold text-slate-800">{center.patientCount || 0}</p>
               </div>
               <Users className="h-8 w-8 text-blue-500" />
             </div>
@@ -302,7 +302,7 @@ const CenterProfile = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Total Doctors</p>
-                <p className="text-xl font-bold text-slate-800">{center.doctorCount || 0}</p>
+                <p className="text-sm font-bold text-slate-800">{center.doctorCount || 0}</p>
               </div>
               <User className="h-8 w-8 text-green-500" />
             </div>
@@ -312,7 +312,7 @@ const CenterProfile = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Receptionists</p>
-                <p className="text-xl font-bold text-slate-800">{center.receptionistCount || 0}</p>
+                <p className="text-sm font-bold text-slate-800">{center.receptionistCount || 0}</p>
               </div>
               <UserCheck className="h-8 w-8 text-purple-500" />
             </div>
@@ -322,7 +322,7 @@ const CenterProfile = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Lab Staff</p>
-                <p className="text-xl font-bold text-slate-800">{center.labCount || 0}</p>
+                <p className="text-sm font-bold text-slate-800">{center.labCount || 0}</p>
               </div>
               <FlaskConical className="h-8 w-8 text-orange-500" />
             </div>
@@ -332,11 +332,11 @@ const CenterProfile = () => {
         {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center">
               <Shield className="h-5 w-5 mr-2 text-blue-500" />
               Quick Actions
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-xs">
               Manage your center operations
             </p>
           </div>
@@ -348,7 +348,7 @@ const CenterProfile = () => {
               >
                 <User className="h-6 w-6" />
                 <div className="text-center">
-                  <h3 className="font-semibold">Manage Doctors</h3>
+                  <h3 className="font-semibold text-xs">Manage Doctors</h3>
                   <p className="text-xs opacity-90">View and manage doctors</p>
                 </div>
               </button>
@@ -359,7 +359,7 @@ const CenterProfile = () => {
               >
                 <Users className="h-6 w-6" />
                 <div className="text-center">
-                  <h3 className="font-semibold">Manage Patients</h3>
+                  <h3 className="font-semibold text-xs">Manage Patients</h3>
                   <p className="text-xs opacity-90">View and manage patients</p>
                 </div>
               </button>
@@ -370,7 +370,7 @@ const CenterProfile = () => {
               >
                 <UserCheck className="h-6 w-6" />
                 <div className="text-center">
-                  <h3 className="font-semibold">Manage Receptionists</h3>
+                  <h3 className="font-semibold text-xs">Manage Receptionists</h3>
                   <p className="text-xs opacity-90">View and manage receptionists</p>
                 </div>
               </button>
@@ -381,7 +381,7 @@ const CenterProfile = () => {
               >
                 <Shield className="h-6 w-6" />
                 <div className="text-center">
-                  <h3 className="font-semibold">Dashboard</h3>
+                  <h3 className="font-semibold text-xs">Dashboard</h3>
                   <p className="text-xs opacity-90">View center dashboard</p>
                 </div>
               </button>

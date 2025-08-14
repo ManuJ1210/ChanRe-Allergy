@@ -54,11 +54,11 @@ const ViewAllergicRhinitis = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h3 className="text-sm font-semibold text-gray-800 mb-2">Error Loading Record</h3>
-              <p className="text-gray-600 mb-4">{error}</p>
+              <h3 className="text-md font-semibold text-gray-800 mb-2">Error Loading Record</h3>
+              <p className="text-gray-600 mb-4 text-xs">{error}</p>
               <button
                 onClick={() => navigate(-1)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-xs"
               >
                 Go Back
               </button>
@@ -76,17 +76,17 @@ const ViewAllergicRhinitis = () => {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-sm font-semibold text-gray-800 mb-2">No Allergic Rhinitis Record Found</h3>
-              <p className="text-gray-600 mb-4">This patient doesn't have any allergic rhinitis records yet.</p>
+              <h3 className="text-md font-semibold text-gray-800 mb-2">No Allergic Rhinitis Record Found</h3>
+              <p className="text-gray-600 mb-4 text-xs">This patient doesn't have any allergic rhinitis records yet.</p>
               <button
                 onClick={() => navigate(`/center-admin/followup/allergic-rhinitis/add/${patientId}`)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors mr-2"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors mr-2 text-xs"
               >
                 Add Record
               </button>
               <button
                 onClick={() => navigate(-1)}
-                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-xs"
               >
                 Go Back
               </button>
@@ -108,17 +108,17 @@ const ViewAllergicRhinitis = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate(-1)}
-                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors text-xs"
               >
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-xl font-bold text-gray-800">ALLERGIC RHINITIS RECORD</h1>
+              <h1 className="text-md font-bold text-gray-800">ALLERGIC RHINITIS RECORD</h1>
             </div>
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => navigate(`/center-admin/followup/allergic-rhinitis/add/${patientId}`)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-xs"
               >
                 Add New Record
               </button>
@@ -136,10 +136,10 @@ const ViewAllergicRhinitis = () => {
                 Patient Information
               </h3>
               <div className="space-y-2">
-                <p><span className="font-medium">Name:</span> {record.patientId?.name || 'N/A'}</p>
-                <p><span className="font-medium">Age:</span> {record.patientId?.age || 'N/A'}</p>
-                <p><span className="font-medium">Gender:</span> {record.patientId?.gender || 'N/A'}</p>
-                <p><span className="font-medium">Phone:</span> {record.patientId?.phone || 'N/A'}</p>
+                <p className="text-xs"><span className="font-medium">Name:</span> {record.patientId?.name || 'N/A'}</p>
+                <p className="text-xs"><span className="font-medium">Age:</span> {record.patientId?.age || 'N/A'}</p>
+                <p className="text-xs"><span className="font-medium">Gender:</span> {record.patientId?.gender || 'N/A'}</p>
+                <p className="text-xs"><span className="font-medium">Phone:</span> {record.patientId?.phone || 'N/A'}</p>
               </div>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg">
@@ -148,9 +148,9 @@ const ViewAllergicRhinitis = () => {
                 Record Details
               </h3>
               <div className="space-y-2">
-                <p><span className="font-medium">Date:</span> {new Date(record.createdAt).toLocaleDateString()}</p>
-                <p><span className="font-medium">Quality of Life Score:</span> {record.qualityOfLife || 'N/A'}</p>
-                <p><span className="font-medium">Updated:</span> {new Date(record.updatedAt).toLocaleDateString()}</p>
+                <p className="text-xs"><span className="font-medium">Date:</span> {new Date(record.createdAt).toLocaleDateString()}</p>
+                <p className="text-xs"><span className="font-medium">Quality of Life Score:</span> {record.qualityOfLife || 'N/A'}</p>
+                <p className="text-xs"><span className="font-medium">Updated:</span> {new Date(record.updatedAt).toLocaleDateString()}</p>
               </div>
             </div>
           </div>
@@ -166,7 +166,7 @@ const ViewAllergicRhinitis = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {Object.entries(record.nasalSymptoms).map(([symptom, value]) => (
                     <div key={symptom} className="flex items-center justify-between">
-                      <span className="font-medium text-gray-700 capitalize">
+                      <span className="font-medium text-gray-700 capitalize text-xs">
                         {symptom.replace(/([A-Z])/g, ' $1').trim()}:
                       </span>
                       <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
@@ -176,7 +176,7 @@ const ViewAllergicRhinitis = () => {
                   ))}
                 </div>
                 <div className="mt-4 pt-4 border-t border-gray-200">
-                  <p className="font-medium text-gray-700">
+                  <p className="font-medium text-gray-700 text-xs">
                     Total Nasal Symptoms: {Object.values(record.nasalSymptoms).reduce((sum, val) => sum + (parseInt(val) || 0), 0)}
                   </p>
                 </div>
@@ -195,7 +195,7 @@ const ViewAllergicRhinitis = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {Object.entries(record.nonNasalSymptoms).map(([symptom, value]) => (
                     <div key={symptom} className="flex items-center justify-between">
-                      <span className="font-medium text-gray-700 capitalize">
+                      <span className="font-medium text-gray-700 capitalize text-xs">
                         {symptom.replace(/([A-Z])/g, ' $1').trim()}:
                       </span>
                       <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
@@ -205,7 +205,7 @@ const ViewAllergicRhinitis = () => {
                   ))}
                 </div>
                 <div className="mt-4 pt-4 border-t border-gray-200">
-                  <p className="font-medium text-gray-700">
+                  <p className="font-medium text-gray-700 text-xs">
                     Total Non-Nasal Symptoms: {Object.values(record.nonNasalSymptoms).reduce((sum, val) => sum + (parseInt(val) || 0), 0)}
                   </p>
                 </div>
@@ -218,7 +218,7 @@ const ViewAllergicRhinitis = () => {
             <div className="mb-6">
               <h3 className="text-sm font-semibold text-gray-800 mb-4">Quality of Life Assessment</h3>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="font-medium text-gray-700">
+                <p className="font-medium text-gray-700 text-xs">
                   Severity Score: <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">{record.qualityOfLife}</span>
                 </p>
               </div>
@@ -239,7 +239,7 @@ const ViewAllergicRhinitis = () => {
                       <label className="block text-xs font-medium text-gray-700 mb-1 capitalize">
                         {type.replace(/([A-Z])/g, ' $1').trim()}:
                       </label>
-                      <p className="text-gray-800">{medication || 'Not specified'}</p>
+                      <p className="text-gray-800 text-xs">{medication || 'Not specified'}</p>
                     </div>
                   ))}
                 </div>
@@ -255,7 +255,7 @@ const ViewAllergicRhinitis = () => {
                 ENT Examination
               </h3>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-800">{record.entExamination}</p>
+                <p className="text-gray-800 text-xs">{record.entExamination}</p>
               </div>
             </div>
           )}
@@ -271,7 +271,7 @@ const ViewAllergicRhinitis = () => {
                       <label className="block text-xs font-medium text-gray-700 mb-1 uppercase">
                         {vital}:
                       </label>
-                      <p className="text-gray-800">{value || 'Not recorded'}</p>
+                      <p className="text-gray-800 text-xs">{value || 'Not recorded'}</p>
                     </div>
                   ))}
                 </div>
@@ -292,7 +292,7 @@ const ViewAllergicRhinitis = () => {
                         <label className="block text-xs font-medium text-gray-700 mb-1 uppercase">
                           {system}:
                         </label>
-                        <p className="text-gray-800">{value || 'Not recorded'}</p>
+                        <p className="text-gray-800 text-xs">{value || 'Not recorded'}</p>
                       </div>
                     );
                   })}
@@ -300,7 +300,7 @@ const ViewAllergicRhinitis = () => {
                 {record.systematicExamination.followUpAdvice && (
                   <div className="mt-4 pt-4 border-t border-gray-200">
                     <label className="block text-xs font-medium text-gray-700 mb-2">Follow-up Advice:</label>
-                    <p className="text-gray-800">{record.systematicExamination.followUpAdvice}</p>
+                    <p className="text-gray-800 text-xs">{record.systematicExamination.followUpAdvice}</p>
                   </div>
                 )}
               </div>
@@ -311,13 +311,13 @@ const ViewAllergicRhinitis = () => {
           <div className="flex items-center justify-end space-x-4 pt-6 border-t">
             <button
               onClick={() => navigate(-1)}
-              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs"
             >
               Back to Follow-ups
             </button>
             <button
               onClick={() => navigate(`/center-admin/followup/allergic-rhinitis/add/${patientId}`)}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs"
             >
               Add New Record
             </button>

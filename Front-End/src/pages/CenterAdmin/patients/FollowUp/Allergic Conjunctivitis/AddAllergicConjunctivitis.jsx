@@ -115,7 +115,7 @@ export default function AddAllergicConjunctivitis() {
       <div className="max-w-4xl mx-auto p-6">
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8 space-y-8">
           {/* Main Title */}
-          <h1 className="text-lg font-bold text-gray-800 text-center mb-8">ALLERGIC CONJUNCTIVITIS</h1>
+          <h1 className="text-md font-bold text-gray-800 text-center mb-8">ALLERGIC CONJUNCTIVITIS</h1>
           
           {/* Symptoms Section */}
           <div className="space-y-6">
@@ -179,7 +179,7 @@ export default function AddAllergicConjunctivitis() {
 
           {/* Grading Section */}
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Grading</h2>
+            <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Grading</h2>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border border-gray-300">
                 <thead>
@@ -221,7 +221,7 @@ export default function AddAllergicConjunctivitis() {
           <div className="flex justify-center pt-6">
             <button
               type="submit"
-              className="bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+              className="bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 text-xs"
             >
               Submit
             </button>

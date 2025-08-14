@@ -68,16 +68,16 @@ export default function AtopicDermatitisFollowUp() {
       <div className="max-w-4xl mx-auto p-6">
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8 space-y-8">
           {/* Main Title */}
-          <h1 className="text-xl font-bold text-gray-800 text-center mb-8">ATOPIC DERMATITIS</h1>
+          <h1 className="text-md font-bold text-gray-800 text-center mb-8">ATOPIC DERMATITIS</h1>
           
           {/* Symptoms Section */}
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Atopic Dermatitis</h2>
+            <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Atopic Dermatitis</h2>
             <div className="grid grid-cols-1 gap-4">
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-2">Symptoms</label>
                 <textarea
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
                   rows="3"
                   value={form.symptoms}
                   onChange={e => handleChange("symptoms", e.target.value)}
@@ -87,7 +87,7 @@ export default function AtopicDermatitisFollowUp() {
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-2">Affected Areas/Surface of the body</label>
                 <textarea
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
                   rows="3"
                   value={form.affectedAreas}
                   onChange={e => handleChange("affectedAreas", e.target.value)}
@@ -99,13 +99,13 @@ export default function AtopicDermatitisFollowUp() {
 
           {/* Intensity Section */}
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Intensity</h2>
+            <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Intensity</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {Object.keys(form.intensity).map((key) => (
                 <div key={key} className="flex flex-col">
                   <label className="text-xs font-medium text-gray-700 mb-1">{key}</label>
                   <select
-                    className="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
                     value={form.intensity[key]}
                     onChange={e => handleIntensityChange(key, e.target.value)}
                   >
@@ -121,7 +121,7 @@ export default function AtopicDermatitisFollowUp() {
 
           {/* On skin without eczema Section */}
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">On skin without eczema</h2>
+            <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">On skin without eczema</h2>
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-3">Dryness</label>
@@ -146,7 +146,7 @@ export default function AtopicDermatitisFollowUp() {
 
           {/* On skin with eczema Section */}
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">On skin with eczema</h2>
+            <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">On skin with eczema</h2>
             <div className="space-y-4">
               {[
                 { key: "redness", label: "Redness" },
@@ -179,7 +179,7 @@ export default function AtopicDermatitisFollowUp() {
 
           {/* Severity Sliders Section */}
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Severity Assessment</h2>
+            <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Severity Assessment</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-3">Severity of Itching</label>
@@ -210,12 +210,12 @@ export default function AtopicDermatitisFollowUp() {
 
           {/* Medications Section */}
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">Medications/Applications</h2>
+            <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Medications/Applications</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-2">Present Medications</label>
                 <textarea
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
                   rows="4"
                   value={form.presentMedications}
                   onChange={e => handleChange("presentMedications", e.target.value)}
@@ -225,7 +225,7 @@ export default function AtopicDermatitisFollowUp() {
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-2">Local Applications</label>
                 <textarea
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
                   rows="4"
                   value={form.localApplications}
                   onChange={e => handleChange("localApplications", e.target.value)}
@@ -236,7 +236,7 @@ export default function AtopicDermatitisFollowUp() {
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-2">Other Medications</label>
               <textarea
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs"
                 rows="4"
                 value={form.otherMedications}
                 onChange={e => handleChange("otherMedications", e.target.value)}
@@ -249,7 +249,7 @@ export default function AtopicDermatitisFollowUp() {
           <div className="flex justify-center pt-6">
             <button
               type="submit"
-              className="bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+              className="bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 text-xs"
             >
               Submit
             </button>

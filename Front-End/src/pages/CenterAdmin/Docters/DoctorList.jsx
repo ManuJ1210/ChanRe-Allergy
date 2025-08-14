@@ -155,23 +155,23 @@ const DoctorList = () => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4 sm:mb-6">
             <button
               onClick={() => navigate('/dashboard/centeradmin/dashboard')}
-              className="flex items-center text-slate-600 hover:text-slate-800 transition-colors text-xs sm:text-base w-fit"
+              className="flex items-center text-slate-600 hover:text-slate-800 transition-colors text-xs w-fit"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </button>
             <button
               onClick={() => navigate('/dashboard/centeradmin/doctors/adddoctor')}
-              className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl flex items-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs sm:text-base w-full sm:w-auto justify-center"
+              className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl flex items-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs w-full sm:w-auto justify-center"
             >
               <Plus className="h-4 w-4" />
               Add Doctor
             </button>
           </div>
-          <h1 className="text-sm sm:text-lg md:text-xl font-bold text-slate-800 mb-2 text-center sm:text-left  bg-clip-text ">
+          <h1 className="text-md font-bold text-slate-800 mb-2 text-center sm:text-left  bg-clip-text ">
             Center Doctors
           </h1>
-          <p className="text-slate-600 text-xs sm:text-base text-center sm:text-left">
+          <p className="text-slate-600 text-xs text-center sm:text-left">
             Manage all doctors in your center
           </p>
         </div>
@@ -182,7 +182,7 @@ const DoctorList = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Total Doctors</p>
-                <p className="text-sm sm:text-lg font-bold text-slate-800">{stats.total || 0}</p>
+                <p className="text-sm font-bold text-slate-800">{stats.total || 0}</p>
               </div>
               <div className="bg-blue-100 p-2 sm:p-3 rounded-xl">
                 <UserCheck className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
@@ -193,7 +193,7 @@ const DoctorList = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Active Doctors</p>
-                <p className="text-sm sm:text-lg font-bold text-green-600">{stats.active || 0}</p>
+                <p className="text-sm font-bold text-green-600">{stats.active || 0}</p>
               </div>
               <div className="bg-green-100 p-2 sm:p-3 rounded-xl">
                 <UserCheck className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
@@ -204,7 +204,7 @@ const DoctorList = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Inactive Doctors</p>
-                <p className="text-sm sm:text-lg font-bold text-red-600">{stats.inactive || 0}</p>
+                <p className="text-sm font-bold text-red-600">{stats.inactive || 0}</p>
               </div>
               <div className="bg-red-100 p-2 sm:p-3 rounded-xl">
                 <UserX className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
@@ -224,7 +224,7 @@ const DoctorList = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search doctors by name, email, or username..."
-                  className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs sm:text-base"
+                  className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-xs"
                 />
               </div>
             </form>
@@ -270,7 +270,7 @@ const DoctorList = () => {
             {loading ? (
               <div className="p-8 text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
-                <p className="text-slate-600 font-medium">Loading doctors...</p>
+                <p className="text-slate-600 font-medium text-xs">Loading doctors...</p>
                 <p className="text-slate-500 text-xs mt-1">Please wait while we fetch the data</p>
               </div>
             ) : doctors.length === 0 ? (
@@ -279,10 +279,10 @@ const DoctorList = () => {
                   <UserCheck className="h-12 w-12 text-slate-400" />
                 </div>
                 <h3 className="text-sm font-semibold text-slate-700 mb-2">No Doctors Found</h3>
-                <p className="text-slate-500 mb-6 text-base">Get started by adding your first doctor.</p>
+                <p className="text-slate-500 mb-6 text-xs">Get started by adding your first doctor.</p>
                 <button
                   onClick={() => navigate('/dashboard/centeradmin/doctors/adddoctor')}
-                  className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs"
                 >
                   <Plus className="h-4 w-4" />
                   Add Doctor
@@ -295,12 +295,12 @@ const DoctorList = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mr-3">
-                          <span className="text-blue-600 font-semibold text-sm">
+                          <span className="text-blue-600 font-semibold text-xs">
                             {doctor.name ? doctor.name.charAt(0).toUpperCase() : 'D'}
                           </span>
                         </div>
                         <div>
-                          <h3 className="font-semibold text-slate-800 text-base">Dr. {doctor.name || 'Unknown'}</h3>
+                          <h3 className="font-semibold text-slate-800 text-sm">Dr. {doctor.name || 'Unknown'}</h3>
                           <p className="text-slate-500 text-xs">@{doctor.username || 'N/A'}</p>
                         </div>
                       </div>
@@ -422,7 +422,7 @@ const DoctorList = () => {
                       <td colSpan="6" className="px-6 py-12 text-center">
                         <div className="flex items-center justify-center">
                           <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600"></div>
-                          <span className="ml-3 text-slate-600 font-medium">Loading doctors...</span>
+                          <span className="ml-3 text-slate-600 font-medium text-xs">Loading doctors...</span>
                         </div>
                       </td>
                     </tr>
@@ -434,10 +434,10 @@ const DoctorList = () => {
                             <UserCheck className="h-12 w-12 text-slate-400" />
                           </div>
                           <h3 className="text-sm font-semibold text-slate-700 mb-2">No Doctors Found</h3>
-                          <p className="text-slate-500 mb-6 text-base">Get started by adding your first doctor.</p>
+                          <p className="text-slate-500 mb-6 text-xs">Get started by adding your first doctor.</p>
                           <button
                             onClick={() => navigate('/dashboard/centeradmin/doctors/adddoctor')}
-                            className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs"
                           >
                             <Plus className="h-4 w-4" />
                             Add Doctor
@@ -451,7 +451,7 @@ const DoctorList = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
-                              <span className="text-blue-600 font-semibold text-sm">
+                              <span className="text-blue-600 font-semibold text-xs">
                                 {doctor.name ? doctor.name.charAt(0).toUpperCase() : 'D'}
                               </span>
                             </div>
@@ -537,7 +537,7 @@ const DoctorList = () => {
         {/* Pagination */}
         {pagination.totalPages > 1 && (
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs sm:text-xs text-slate-700 text-center sm:text-left">
+            <div className="text-xs text-slate-700 text-center sm:text-left">
               Showing {((pagination.currentPage - 1) * pagination.limit) + 1} to{' '}
               {Math.min(pagination.currentPage * pagination.limit, pagination.total)} of{' '}
               {pagination.total} results
@@ -550,7 +550,7 @@ const DoctorList = () => {
               >
                 <ArrowLeft className="h-4 w-4" />
               </button>
-              <span className="px-3 py-2 text-xs sm:text-xs text-slate-700">
+              <span className="px-3 py-2 text-xs text-slate-700">
                 Page {pagination.currentPage} of {pagination.totalPages}
               </span>
               <button
@@ -570,7 +570,7 @@ const DoctorList = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl">
             <h3 className="text-sm font-semibold text-slate-900 mb-4">Confirm Delete</h3>
-            <p className="text-slate-600 mb-6">
+            <p className="text-slate-600 mb-6 text-xs">
               Are you sure you want to delete <strong>Dr. {selectedDoctor?.name}</strong>? This action cannot be undone.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">

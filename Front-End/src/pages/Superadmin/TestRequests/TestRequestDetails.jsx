@@ -213,7 +213,7 @@ const TestRequestDetails = () => {
           
           {/* Test Request Information */}
           <div className="bg-blue-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-            <h2 className="text-sm sm:text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-sm sm:text-xl  text-gray-800 mb-4 flex items-center">
               <UserCheck className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
               Test Request Information
             </h2>
@@ -463,6 +463,166 @@ const TestRequestDetails = () => {
                     <p className="text-gray-900 font-medium text-xs sm:text-base">{testRequest.reportSentByName || 'N/A'}</p>
                   </div>
                 )}
+              </div>
+              
+              {/* Report Action Buttons */}
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                  <button
+                    onClick={async () => {
+                      try {
+                        setError(null);
+                        
+                        // Check if user is authenticated
+                        const token = localStorage.getItem('token');
+                        if (!token) {
+                          setError('Please login to view reports');
+                          return;
+                        }
+
+                        const response = await API.get(`/test-requests/${testRequest._id}/download-report`, {
+                          responseType: 'blob',
+                          headers: {
+                            'Accept': 'application/pdf',
+                            'Authorization': `Bearer ${token}`
+                          }
+                        });
+                        
+                        const contentType = response.headers['content-type'] || response.headers['Content-Type'];
+                        
+                        let blob;
+                        if (contentType && contentType.includes('application/pdf')) {
+                          blob = new Blob([response.data], { type: 'application/pdf' });
+                        } else {
+                          // Handle text/JSON response
+                          let pdfContent = response.data;
+                          if (typeof pdfContent === 'object' && pdfContent.pdfContent) {
+                            pdfContent = pdfContent.pdfContent;
+                          }
+                          
+                          const cleanedPdfContent = pdfContent
+                            .replace(/\\n/g, '\n')
+                            .replace(/\\r/g, '\r')
+                            .replace(/\\t/g, '\t')
+                            .replace(/\\\\/g, '\\')
+                            .replace(/\\"/g, '"');
+                          
+                          const byteCharacters = cleanedPdfContent;
+                          const byteNumbers = new Array(byteCharacters.length);
+                          for (let i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                          }
+                          const byteArray = new Uint8Array(byteNumbers);
+                          blob = new Blob([byteArray], { type: 'application/pdf' });
+                        }
+                        
+                        // Open PDF in new tab for viewing
+                        const url = window.URL.createObjectURL(blob);
+                        window.open(url, '_blank');
+                        
+                        // Clean up the URL after a delay
+                        setTimeout(() => {
+                          window.URL.revokeObjectURL(url);
+                        }, 1000);
+                        
+                      } catch (error) {
+                        console.error('Error viewing report:', error);
+                        if (error.response?.status === 401) {
+                          setError('Authentication failed. Please login again to view reports.');
+                        } else if (error.response?.status === 404) {
+                          setError('Report not found. The report may not have been generated yet.');
+                        } else {
+                          setError('Failed to view report. Please try again.');
+                        }
+                      }
+                    }}
+                    className="flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-base w-full sm:w-auto"
+                  >
+                    <Eye className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                    View Report
+                  </button>
+                  <button
+                    onClick={async () => {
+                      try {
+                        setError(null);
+                        
+                        // Check if user is authenticated
+                        const token = localStorage.getItem('token');
+                        if (!token) {
+                          setError('Please login to download reports');
+                          return;
+                        }
+
+                        const response = await API.get(`/test-requests/${testRequest._id}/download-report`, {
+                          responseType: 'blob',
+                          headers: {
+                            'Accept': 'application/pdf',
+                            'Authorization': `Bearer ${token}`
+                          }
+                        });
+                        
+                        const contentType = response.headers['content-type'] || response.headers['Content-Type'];
+                        
+                        if (contentType && contentType.includes('application/pdf')) {
+                          // Handle proper PDF response
+                          const blob = new Blob([response.data], { type: 'application/pdf' });
+                          const url = window.URL.createObjectURL(blob);
+                          const link = document.createElement('a');
+                          link.href = url;
+                          link.setAttribute('download', `lab-report-${testRequest._id}.pdf`);
+                          document.body.appendChild(link);
+                          link.click();
+                          link.remove();
+                          window.URL.revokeObjectURL(url);
+                        } else {
+                          // Handle text/JSON response
+                          let pdfContent = response.data;
+                          if (typeof pdfContent === 'object' && pdfContent.pdfContent) {
+                            pdfContent = pdfContent.pdfContent;
+                          }
+                          
+                          const cleanedPdfContent = pdfContent
+                            .replace(/\\n/g, '\n')
+                            .replace(/\\r/g, '\r')
+                            .replace(/\\t/g, '\t')
+                            .replace(/\\\\/g, '\\')
+                            .replace(/\\"/g, '"');
+                          
+                          const byteCharacters = cleanedPdfContent;
+                          const byteNumbers = new Array(byteCharacters.length);
+                          for (let i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                          }
+                          const byteArray = new Uint8Array(byteNumbers);
+                          
+                          const blob = new Blob([byteArray], { type: 'application/pdf' });
+                          const url = window.URL.createObjectURL(blob);
+                          const link = document.createElement('a');
+                          link.href = url;
+                          link.setAttribute('download', `lab-report-${testRequest._id}.pdf`);
+                          document.body.appendChild(link);
+                          link.click();
+                          link.remove();
+                          window.URL.revokeObjectURL(url);
+                        }
+                        
+                      } catch (error) {
+                        console.error('Error downloading report:', error);
+                        if (error.response?.status === 401) {
+                          setError('Authentication failed. Please login again to download reports.');
+                        } else if (error.response?.status === 404) {
+                          setError('Report not found. The report may not have been generated yet.');
+                        } else {
+                          setError('Failed to download report. Please try again.');
+                        }
+                      }
+                    }}
+                    className="flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-base w-full sm:w-auto"
+                  >
+                    <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                    Download Report
+                  </button>
+                </div>
               </div>
             </div>
           )}

@@ -67,7 +67,7 @@ const ViewProfile = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-2 sm:p-3 md:p-6">
       <div className="max-w-4xl mx-auto">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-600 text-sm sm:text-base">No patient ID provided in the URL.</p>
+          <p className="text-red-600 text-xs">No patient ID provided in the URL.</p>
         </div>
       </div>
     </div>
@@ -79,7 +79,7 @@ const ViewProfile = () => {
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-4 sm:p-6">
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-slate-600 text-sm sm:text-base">Loading patient information...</p>
+            <p className="text-slate-600 text-xs">Loading patient information...</p>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@ const ViewProfile = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-2 sm:p-3 md:p-6">
       <div className="max-w-4xl mx-auto">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-600 text-sm sm:text-base">{error}</p>
+          <p className="text-red-600 text-xs">{error}</p>
         </div>
       </div>
     </div>
@@ -100,10 +100,10 @@ const ViewProfile = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-2 sm:p-3 md:p-6">
       <div className="max-w-4xl mx-auto">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-600 text-sm sm:text-base">
+          <p className="text-red-600 text-xs">
             {loading ? 'Loading patient information...' : 'Patient not found or failed to load.'}
           </p>
-          {error && <p className="text-red-500 mt-2 text-sm sm:text-base">Error: {error}</p>}
+          {error && <p className="text-red-500 mt-2 text-xs">Error: {error}</p>}
         </div>
       </div>
     </div>
@@ -115,7 +115,7 @@ const ViewProfile = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-2 sm:p-3 md:p-6">
         <div className="max-w-4xl mx-auto">
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-600 text-sm sm:text-base">Invalid patient data format.</p>
+            <p className="text-red-600 text-xs">Invalid patient data format.</p>
           </div>
         </div>
       </div>
@@ -129,7 +129,7 @@ const ViewProfile = () => {
           <div className="mb-6 sm:mb-8">
               <button
                               onClick={() => navigate('/dashboard/CenterAdmin/patients/PatientList')}
-              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-sm sm:text-base"
+              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-xs"
               >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Patients List
@@ -144,8 +144,8 @@ const ViewProfile = () => {
                   <User className="h-8 w-8 sm:h-10 sm:w-10 text-blue-500" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h1 className="text-base sm:text-lg font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
-                                      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-slate-600 text-xs sm:text-sm">
+                  <h1 className="text-md font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
+                                      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-slate-600 text-xs">
                       {patient?.gender && (
                         <span className="flex items-center gap-1">
                           <UserCheck className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -181,7 +181,7 @@ const ViewProfile = () => {
             </div>
               <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/EditPatient/${patient?._id}`)}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 w-full md:w-auto justify-center mt-4 md:mt-0"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 w-full md:w-auto justify-center mt-4 md:mt-0 text-xs"
               >
                 <Edit className="h-4 w-4" />
                 Edit Patient
@@ -197,7 +197,7 @@ const ViewProfile = () => {
               {TABS.map((tab) => (
                 <button
                   key={tab}
-                  className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors flex-1 text-xs sm:text-sm ${
+                  className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors flex-1 text-xs ${
                     activeTab === tab
                       ? "bg-blue-500 text-white"
                       : "text-slate-600 hover:text-slate-800 hover:bg-slate-50"
@@ -216,11 +216,11 @@ const ViewProfile = () => {
               {/* Patient Details Card */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-4 sm:p-6 border-b border-blue-100">
-                  <h2 className="text-xs sm:text-sm font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                     <User className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-500" />
                     Patient Details
             </h2>
-                  <p className="text-slate-600 mt-1 text-xs sm:text-sm">
+                  <p className="text-slate-600 mt-1 text-xs">
                     Complete patient information and contact details
                   </p>
                 </div>
@@ -229,42 +229,42 @@ const ViewProfile = () => {
                     <div className="space-y-3 sm:space-y-4">
                       <div>
                         <label className="block text-xs font-medium text-slate-500 mb-1">Full Name</label>
-                        <p className="text-slate-800 font-medium text-sm sm:text-base">{patient.name || 'N/A'}</p>
+                        <p className="text-slate-800 font-medium text-xs">{patient.name || 'N/A'}</p>
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-slate-500 mb-1">Mobile</label>
-                        <p className="text-slate-800 text-sm sm:text-base">
+                        <p className="text-slate-800 text-xs">
                           {typeof patient.phone === 'string' ? patient.phone :
                            typeof patient.contact === 'string' ? patient.contact : 'N/A'}
                         </p>
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-slate-500 mb-1">Email</label>
-                        <p className="text-slate-800 text-sm sm:text-base">{typeof patient.email === 'string' ? patient.email : 'N/A'}</p>
+                        <p className="text-slate-800 text-xs">{typeof patient.email === 'string' ? patient.email : 'N/A'}</p>
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-slate-500 mb-1">Location</label>
-                        <p className="text-slate-800 text-sm sm:text-base">{typeof patient.address === 'string' ? patient.address : 'N/A'}</p>
+                        <p className="text-slate-800 text-xs">{typeof patient.address === 'string' ? patient.address : 'N/A'}</p>
                       </div>
                     </div>
                     <div className="space-y-3 sm:space-y-4">
                       <div>
                         <label className="block text-xs font-medium text-slate-500 mb-1">Assigned Doctor</label>
-                        <p className="text-slate-800 text-sm sm:text-base">
+                        <p className="text-slate-800 text-xs">
                           {patient.assignedDoctor?.name || 'Not assigned'}
                         </p>
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-slate-500 mb-1">Gender</label>
-                        <p className="text-slate-800 capitalize text-sm sm:text-base">{patient.gender || 'N/A'}</p>
+                        <p className="text-slate-800 capitalize text-xs">{patient.gender || 'N/A'}</p>
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-slate-500 mb-1">Age</label>
-                        <p className="text-slate-800 text-sm sm:text-base">{patient.age ? `${patient.age} years` : 'N/A'}</p>
+                        <p className="text-slate-800 text-xs">{patient.age ? `${patient.age} years` : 'N/A'}</p>
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-slate-500 mb-1">Center</label>
-                        <p className="text-slate-800 text-sm sm:text-base">
+                        <p className="text-slate-800 text-xs">
                           {patient.centerId?.name ||
                            (typeof patient.centerCode === 'string' ? patient.centerCode : 'N/A')}
                         </p>
@@ -277,11 +277,11 @@ const ViewProfile = () => {
               {/* Investigations */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-4 sm:p-6 border-b border-blue-100">
-                  <h2 className="text-xs sm:text-sm font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                     <Activity className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-500" />
                     Investigations
                   </h2>
-                  <p className="text-slate-600 mt-1 text-xs sm:text-sm">
+                  <p className="text-slate-600 mt-1 text-xs">
                     Laboratory test results and medical investigations
                   </p>
                 </div>
@@ -349,11 +349,11 @@ const ViewProfile = () => {
               {/* Medications */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-4 sm:p-6 border-b border-blue-100">
-                  <h2 className="text-xs sm:text-sm font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                     <Pill className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-500" />
                     Medications
                   </h2>
-                  <p className="text-slate-600 mt-1 text-xs sm:text-sm">
+                  <p className="text-slate-600 mt-1 text-xs">
                     Current and past medications prescribed
                   </p>
                 </div>
@@ -361,16 +361,16 @@ const ViewProfile = () => {
                   {medLoading ? (
                     <div className="text-center py-8">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                      <p className="text-slate-600 text-sm sm:text-base">Loading medications...</p>
+                      <p className="text-slate-600 text-xs">Loading medications...</p>
                     </div>
                   ) : medError ? (
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <p className="text-red-600 text-sm sm:text-base">{medError}</p>
+                      <p className="text-red-600 text-xs">{medError}</p>
                     </div>
                   ) : medications.length === 0 ? (
                     <div className="text-center py-8">
                       <Pill className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                      <p className="text-slate-500 text-xs sm:text-sm">No medications found</p>
+                      <p className="text-slate-500 text-xs">No medications found</p>
                     </div>
                   ) : (
                     <div className="overflow-x-auto">
@@ -406,11 +406,11 @@ const ViewProfile = () => {
               {/* History */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-4 sm:p-6 border-b border-blue-100">
-                  <h2 className="text-xs sm:text-sm font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                     <FileText className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-500" />
                     Medical History
                   </h2>
-                  <p className="text-slate-600 mt-1 text-xs sm:text-sm">
+                  <p className="text-slate-600 mt-1 text-xs">
                     Complete patient medical history and examination records
                   </p>
                 </div>
@@ -418,16 +418,16 @@ const ViewProfile = () => {
                   {historyLoading ? (
                     <div className="text-center py-8">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                      <p className="text-slate-600 text-sm sm:text-base">Loading history...</p>
+                      <p className="text-slate-600 text-xs">Loading history...</p>
                     </div>
                   ) : historyError ? (
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <p className="text-red-600 text-sm sm:text-base">{historyError}</p>
+                      <p className="text-red-600 text-xs">{historyError}</p>
                     </div>
                   ) : !Array.isArray(history) || history.length === 0 ? (
                     <div className="text-center py-8">
                       <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                      <p className="text-slate-500 text-xs sm:text-sm">No history found</p>
+                      <p className="text-slate-500 text-xs">No history found</p>
                     </div>
                   ) : (
                     <div className="overflow-x-auto">
@@ -483,10 +483,10 @@ const ViewProfile = () => {
               {/* Allergic Rhinitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-4 sm:p-6 border-b border-blue-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <h2 className="text-xs sm:text-sm font-semibold text-slate-800">Allergic Rhinitis</h2>
+                  <h2 className="text-sm font-semibold text-slate-800">Allergic Rhinitis</h2>
                   <button
                                                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddAllergicRhinitis/${patient._id}`)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm w-full sm:w-auto"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs w-full sm:w-auto"
                   >
                     Add Follow Up
                   </button>
@@ -529,7 +529,7 @@ const ViewProfile = () => {
                           <tr>
                             <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
                               <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                              <p className="text-xs sm:text-sm">No allergic rhinitis records found</p>
+                              <p className="text-xs">No allergic rhinitis records found</p>
                             </td>
                           </tr>
                         )}
@@ -542,10 +542,10 @@ const ViewProfile = () => {
               {/* Atopic Dermatitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-4 sm:p-6 border-b border-blue-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <h2 className="text-xs sm:text-sm font-semibold text-slate-800">Atopic Dermatitis</h2>
+                  <h2 className="text-sm font-semibold text-slate-800">Atopic Dermatitis</h2>
                                 <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AtopicDermatitis/${patient._id}`)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm w-full sm:w-auto"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs w-full sm:w-auto"
               >
                 Add Follow Up
               </button>
@@ -590,7 +590,7 @@ const ViewProfile = () => {
                           <tr>
                             <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
                               <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                              <p className="text-xs sm:text-sm">No atopic dermatitis records found</p>
+                              <p className="text-xs">No atopic dermatitis records found</p>
                             </td>
                           </tr>
                         )}
@@ -603,10 +603,10 @@ const ViewProfile = () => {
               {/* Allergic Conjunctivitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-4 sm:p-6 border-b border-blue-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <h2 className="text-xs sm:text-sm font-semibold text-slate-800">Allergic Conjunctivitis</h2>
+                  <h2 className="text-sm font-semibold text-slate-800">Allergic Conjunctivitis</h2>
                                 <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddAllergicConjunctivitis/${patient._id}`)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm w-full sm:w-auto"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs w-full sm:w-auto"
               >
                 Add Follow Up
               </button>
@@ -649,7 +649,7 @@ const ViewProfile = () => {
                           <tr>
                             <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
                               <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                              <p className="text-xs sm:text-sm">No allergic conjunctivitis records found</p>
+                              <p className="text-xs">No allergic conjunctivitis records found</p>
                             </td>
                           </tr>
                         )}
@@ -662,10 +662,10 @@ const ViewProfile = () => {
               {/* Allergic Bronchitis */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-4 sm:p-6 border-b border-blue-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <h2 className="text-xs sm:text-sm font-semibold text-slate-800">Allergic Bronchitis</h2>
+                  <h2 className="text-sm font-semibold text-slate-800">Allergic Bronchitis</h2>
                             <button
                 onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddAllergicBronchitis/${patient._id}`)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm w-full sm:w-auto"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs w-full sm:w-auto"
               >
                 Add Follow Up
               </button>
@@ -708,7 +708,7 @@ const ViewProfile = () => {
                           <tr>
                             <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
                               <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                              <p className="text-xs sm:text-sm">No allergic bronchitis records found</p>
+                              <p className="text-xs">No allergic bronchitis records found</p>
                             </td>
                           </tr>
                         )}
@@ -721,10 +721,10 @@ const ViewProfile = () => {
               {/* GPE */}
               <div className="bg-white rounded-xl shadow-sm border border-blue-100">
                 <div className="p-4 sm:p-6 border-b border-blue-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <h2 className="text-xs sm:text-sm font-semibold text-slate-800">GPE</h2>
+                  <h2 className="text-sm font-semibold text-slate-800">GPE</h2>
                         <button
               onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddGPE/${patient._id}`)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm w-full sm:w-auto"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs w-full sm:w-auto"
             >
               Add Follow Up
             </button>
@@ -767,7 +767,7 @@ const ViewProfile = () => {
                                                     <tr>
                             <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
                               <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                              <p className="text-xs sm:text-sm">No GPE records found</p>
+                              <p className="text-xs">No GPE records found</p>
                             </td>
                           </tr>
                         )}
@@ -781,10 +781,10 @@ const ViewProfile = () => {
           {activeTab === "Prescription" && (
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
               <div className="p-4 sm:p-6 border-b border-blue-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h2 className="text-xs sm:text-sm font-semibold text-slate-800">Prescription</h2>
+                <h2 className="text-sm font-semibold text-slate-800">Prescription</h2>
                         <button
               onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/AddPrescription/${patient._id}`)}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm w-full sm:w-auto"
+              className="bg-orange-500 hover:bg-orange-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs w-full sm:w-auto"
             >
               Add Prescription
             </button>
@@ -829,7 +829,7 @@ const ViewProfile = () => {
                         <tr>
                           <td colSpan={5} className="px-4 py-8 text-center text-slate-500">
                             <Pill className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                            <p className="text-xs sm:text-sm">No prescriptions found</p>
+                            <p className="text-xs">No prescriptions found</p>
                           </td>
                         </tr>
                       )}

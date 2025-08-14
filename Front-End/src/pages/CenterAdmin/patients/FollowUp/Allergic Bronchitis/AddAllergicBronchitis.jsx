@@ -94,12 +94,12 @@ const AddAllergicBronchitis = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate(-1)}
-                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors text-xs"
               >
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-sm font-bold text-gray-800">Add Allergic Bronchitis Record</h1>
+              <h1 className="text-md font-bold text-gray-800">Add Allergic Bronchitis Record</h1>
             </div>
           </div>
         </div>
@@ -108,11 +108,11 @@ const AddAllergicBronchitis = () => {
         <div className="bg-white rounded-lg shadow-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Main Title */}
-            <h1 className="text-sm font-bold text-gray-800 text-center mb-8">ALLERGIC BRONCHITIS</h1>
+            <h1 className="text-md font-bold text-gray-800 text-center mb-8">ALLERGIC BRONCHITIS</h1>
             
             {/* Allergic Bronchitis Section */}
             <div className="space-y-6">
-              <h2 className="text-xs font-semibold text-gray-800 border-b border-gray-200 pb-2">Allergic Bronchitis</h2>
+              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Allergic Bronchitis</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-3">Symptoms</label>
@@ -122,7 +122,7 @@ const AddAllergicBronchitis = () => {
                     onChange={handleChange}
                     placeholder="Enter symptoms..."
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-xs"
                   />
                 </div>
                 <div>
@@ -137,7 +137,7 @@ const AddAllergicBronchitis = () => {
                         onChange={handleChange}
                         className="mr-2 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="text-gray-700">Acute</span>
+                      <span className="text-gray-700 text-xs">Acute</span>
                     </label>
                     <label className="flex items-center">
                       <input
@@ -148,7 +148,7 @@ const AddAllergicBronchitis = () => {
                         onChange={handleChange}
                         className="mr-2 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="text-gray-700">Chronic</span>
+                      <span className="text-gray-700 text-xs">Chronic</span>
                     </label>
                   </div>
                 </div>
@@ -157,7 +157,7 @@ const AddAllergicBronchitis = () => {
 
             {/* GINA Grading Section */}
             <div className="space-y-6">
-              <h2 className="text-xs font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
+              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-blue-600" />
                 GINA Grading of Asthma
               </h2>
@@ -200,7 +200,7 @@ const AddAllergicBronchitis = () => {
 
             {/* PFT Grading Section */}
             <div className="space-y-6">
-              <h2 className="text-xs font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
+              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2 flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-blue-600" />
                 Grading based on PFT
               </h2>
@@ -217,7 +217,7 @@ const AddAllergicBronchitis = () => {
                         className="mr-3 text-blue-600 focus:ring-blue-500"
                       />
                       <div>
-                        <div className="font-medium text-gray-800">{grade.label}</div>
+                        <div className="font-medium text-gray-800 text-xs">{grade.label}</div>
                         <div className="text-xs text-gray-600">{grade.description}</div>
                       </div>
                     </label>
@@ -228,7 +228,7 @@ const AddAllergicBronchitis = () => {
 
             {/* Habits Section */}
             <div className="space-y-6">
-              <h2 className="text-xs font-semibold text-gray-800 border-b border-gray-200 pb-2">Habits</h2>
+              <h2 className="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">Habits</h2>
               <div className="bg-gray-50 rounded-lg p-6">
                 <div className="flex space-x-6">
                   {HABITS.map(habit => (
@@ -241,7 +241,7 @@ const AddAllergicBronchitis = () => {
                         onChange={handleChange}
                         className="mr-3 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="font-medium text-gray-800">{habit}</span>
+                      <span className="font-medium text-gray-800 text-xs">{habit}</span>
                     </label>
                   ))}
                 </div>
@@ -253,7 +253,7 @@ const AddAllergicBronchitis = () => {
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                 <div className="flex items-center">
                   <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-                  <span className="text-red-700">{error}</span>
+                  <span className="text-red-700 text-xs">{error}</span>
                 </div>
               </div>
             )}
@@ -263,7 +263,7 @@ const AddAllergicBronchitis = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 text-xs"
               >
                 {loading ? (
                   <>

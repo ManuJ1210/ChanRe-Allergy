@@ -36,8 +36,8 @@ const ViewDoctor = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
-          <p className="text-slate-600 text-xs sm:text-base font-medium">Loading doctor details...</p>
-          <p className="text-slate-500 text-xs sm:text-xs mt-1">Please wait while we fetch the data</p>
+          <p className="text-slate-600 text-xs font-medium">Loading doctor details...</p>
+          <p className="text-slate-500 text-xs mt-1">Please wait while we fetch the data</p>
         </div>
       </div>
     );
@@ -47,11 +47,11 @@ const ViewDoctor = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="text-red-600 text-sm sm:text-lg mb-4 font-semibold">Error</div>
-          <p className="text-slate-600 text-xs sm:text-base mb-6">{error}</p>
+          <div className="text-red-600 text-sm mb-4 font-semibold">Error</div>
+          <p className="text-slate-600 text-xs mb-6">{error}</p>
           <button
             onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
-            className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs sm:text-base"
+            className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs"
           >
             Back to List
           </button>
@@ -64,10 +64,10 @@ const ViewDoctor = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="text-slate-600 text-sm sm:text-lg mb-4 font-semibold">Doctor not found</div>
+          <div className="text-slate-600 text-sm mb-4 font-semibold">Doctor not found</div>
           <button
             onClick={() => navigate('/dashboard/centeradmin/doctors/doctorlist')}
-            className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs sm:text-base"
+            className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs"
           >
             Back to List
           </button>
@@ -90,10 +90,10 @@ const ViewDoctor = () => {
                 <ArrowLeft className="h-5 w-5" />
               </button>
               <div>
-                <h1 className="text-sm sm:text-lg md:text-xl font-bold text-slate-900 text-center sm:text-left bg-clip-text ">
+                <h1 className="text-md font-bold text-slate-900 text-center sm:text-left bg-clip-text ">
                   Doctor Details
                 </h1>
-                <p className="text-slate-600 text-xs sm:text-base text-center sm:text-left">
+                <p className="text-slate-600 text-xs text-center sm:text-left">
                   View comprehensive information about the doctor
                 </p>
               </div>
@@ -101,7 +101,7 @@ const ViewDoctor = () => {
             <div className="flex space-x-3">
               <button
                 onClick={() => navigate(`/dashboard/centeradmin/doctors/editdoctor/${currentDoctor._id}`)}
-                className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs sm:text-base w-full sm:w-auto flex items-center justify-center gap-2"
+                className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs w-full sm:w-auto flex items-center justify-center gap-2"
               >
                 <Edit className="h-4 w-4" />
                 Edit Doctor
@@ -119,9 +119,9 @@ const ViewDoctor = () => {
                 <User className="h-8 w-8 sm:h-10 sm:w-10" />
               </div>
               <div className="text-center sm:text-left">
-                <h2 className="text-sm sm:text-lg md:text-xl font-bold">{currentDoctor.name}</h2>
-                <p className="text-blue-100 text-xs sm:text-base">{currentDoctor.designation || 'Doctor'}</p>
-                <p className="text-blue-100 text-xs sm:text-base">{currentDoctor.qualification}</p>
+                <h2 className="text-sm font-bold">{currentDoctor.name}</h2>
+                <p className="text-blue-100 text-xs">{currentDoctor.designation || 'Doctor'}</p>
+                <p className="text-blue-100 text-xs">{currentDoctor.qualification}</p>
               </div>
             </div>
           </div>
@@ -131,7 +131,7 @@ const ViewDoctor = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
               {/* Personal Information */}
               <div className="space-y-4 sm:space-y-6">
-                <h3 className="text-xs sm:text-base font-semibold text-slate-900 border-b border-slate-200 pb-2 flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-slate-900 border-b border-slate-200 pb-2 flex items-center gap-2">
                   <User className="h-4 w-4 text-blue-500" />
                   Personal Information
                 </h3>
@@ -141,7 +141,7 @@ const ViewDoctor = () => {
                     <Mail className="h-5 w-5 text-blue-500" />
                     <div className="flex-1">
                       <p className="text-xs text-slate-500 font-medium">Email</p>
-                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.email}</p>
+                      <p className="text-slate-900 text-xs">{currentDoctor.email}</p>
                     </div>
                   </div>
                   
@@ -149,7 +149,7 @@ const ViewDoctor = () => {
                     <Phone className="h-5 w-5 text-green-500" />
                     <div className="flex-1">
                       <p className="text-xs text-slate-500 font-medium">Phone</p>
-                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.phone || currentDoctor.mobile || 'Not provided'}</p>
+                      <p className="text-slate-900 text-xs">{currentDoctor.phone || currentDoctor.mobile || 'Not provided'}</p>
                     </div>
                   </div>
                   
@@ -157,7 +157,7 @@ const ViewDoctor = () => {
                     <User className="h-5 w-5 text-indigo-500" />
                     <div className="flex-1">
                       <p className="text-xs text-slate-500 font-medium">Username</p>
-                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.username}</p>
+                      <p className="text-slate-900 text-xs">{currentDoctor.username}</p>
                     </div>
                   </div>
                 </div>
@@ -165,7 +165,7 @@ const ViewDoctor = () => {
 
               {/* Professional Information */}
               <div className="space-y-4 sm:space-y-6">
-                <h3 className="text-xs sm:text-base font-semibold text-slate-900 border-b border-slate-200 pb-2 flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-slate-900 border-b border-slate-200 pb-2 flex items-center gap-2">
                   <Stethoscope className="h-4 w-4 text-blue-500" />
                   Professional Information
                 </h3>
@@ -175,7 +175,7 @@ const ViewDoctor = () => {
                     <GraduationCap className="h-5 w-5 text-purple-500" />
                     <div className="flex-1">
                       <p className="text-xs text-slate-500 font-medium">Qualification</p>
-                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.qualification || 'Not specified'}</p>
+                      <p className="text-slate-900 text-xs">{currentDoctor.qualification || 'Not specified'}</p>
                     </div>
                   </div>
                   
@@ -183,7 +183,7 @@ const ViewDoctor = () => {
                     <Building className="h-5 w-5 text-blue-500" />
                     <div className="flex-1">
                       <p className="text-xs text-slate-500 font-medium">Hospital</p>
-                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.hospitalName || 'Not specified'}</p>
+                      <p className="text-slate-900 text-xs">{currentDoctor.hospitalName || 'Not specified'}</p>
                     </div>
                   </div>
                   
@@ -191,7 +191,7 @@ const ViewDoctor = () => {
                     <User className="h-5 w-5 text-indigo-500" />
                     <div className="flex-1">
                       <p className="text-xs text-slate-500 font-medium">KMC Number</p>
-                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.kmcNumber || 'Not specified'}</p>
+                      <p className="text-slate-900 text-xs">{currentDoctor.kmcNumber || 'Not specified'}</p>
                     </div>
                   </div>
 
@@ -199,7 +199,7 @@ const ViewDoctor = () => {
                     <Award className="h-5 w-5 text-yellow-500" />
                     <div className="flex-1">
                       <p className="text-xs text-slate-500 font-medium">Specializations</p>
-                      <p className="text-slate-900 text-xs sm:text-base">
+                      <p className="text-slate-900 text-xs">
                         {currentDoctor.specializations && currentDoctor.specializations.length > 0 
                           ? currentDoctor.specializations.join(', ')
                           : currentDoctor.specialization || 'Not specified'
@@ -212,7 +212,7 @@ const ViewDoctor = () => {
                     <Calendar className="h-5 w-5 text-green-500" />
                     <div className="flex-1">
                       <p className="text-xs text-slate-500 font-medium">Experience</p>
-                      <p className="text-slate-900 text-xs sm:text-base">{currentDoctor.experience || 'Not specified'}</p>
+                      <p className="text-slate-900 text-xs">{currentDoctor.experience || 'Not specified'}</p>
                     </div>
                   </div>
                 </div>
@@ -222,19 +222,19 @@ const ViewDoctor = () => {
             {/* Bio Section */}
             {currentDoctor.bio && (
               <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-slate-200">
-                <h3 className="text-xs sm:text-base font-semibold text-slate-900 border-b border-slate-200 pb-2 mb-4 flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-slate-900 border-b border-slate-200 pb-2 mb-4 flex items-center gap-2">
                   <FileText className="h-4 w-4 text-blue-500" />
                   Bio
                 </h3>
                 <div className="bg-slate-50 p-4 rounded-xl">
-                  <p className="text-slate-700 leading-relaxed text-xs sm:text-base">{currentDoctor.bio}</p>
+                  <p className="text-slate-700 leading-relaxed text-xs">{currentDoctor.bio}</p>
                 </div>
               </div>
             )}
 
             {/* Account Information */}
             <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-slate-200">
-              <h3 className="text-xs sm:text-base font-semibold text-slate-900 border-b border-slate-200 pb-2 mb-4 flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-slate-900 border-b border-slate-200 pb-2 mb-4 flex items-center gap-2">
                 <Clock className="h-4 w-4 text-blue-500" />
                 Account Information
               </h3>
@@ -244,7 +244,7 @@ const ViewDoctor = () => {
                   <Calendar className="h-5 w-5 text-blue-500" />
                   <div>
                     <p className="text-xs text-slate-500 font-medium">Created</p>
-                    <p className="text-slate-900 text-xs sm:text-base">
+                    <p className="text-slate-900 text-xs">
                       {new Date(currentDoctor.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -254,7 +254,7 @@ const ViewDoctor = () => {
                   <Clock className="h-5 w-5 text-green-500" />
                   <div>
                     <p className="text-xs text-slate-500 font-medium">Last Updated</p>
-                    <p className="text-slate-900 text-xs sm:text-base">
+                    <p className="text-slate-900 text-xs">
                       {new Date(currentDoctor.updatedAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -264,7 +264,7 @@ const ViewDoctor = () => {
                   <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   <div>
                     <p className="text-xs text-slate-500 font-medium">Status</p>
-                    <p className="text-slate-900 text-xs sm:text-base">
+                    <p className="text-slate-900 text-xs">
                       {currentDoctor.isDeleted ? 'Inactive' : 'Active'}
                     </p>
                   </div>

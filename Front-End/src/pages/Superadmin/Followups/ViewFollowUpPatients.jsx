@@ -15,29 +15,7 @@ export default function ViewFollowUpPatients() {
     dispatch(fetchDetailedFollowUps());
   }, [dispatch]);
 
-  const typeToRoute = {
-    "Allergic Rhinitis": (patientId) => `/dashboard/Superadmin/Followups/ViewAllergicRhinitis/${patientId}`,
-    "Atopic Dermatitis": (patientId) => `/dashboard/Superadmin/Followups/ViewAtopicDermatitis/${patientId}`,
-    "Allergic Conjunctivitis": (patientId) => `/dashboard/Superadmin/Followups/ViewAllergicConjunctivitis/${patientId}`,
-    "Allergic Bronchitis": (patientId) => `/dashboard/Superadmin/Followups/ViewAllergicBronchitis/${patientId}`,
-    "GPE": (patientId) => `/dashboard/Superadmin/Followups/ViewGPE/${patientId}`,
-  };
 
-  const typeToColor = {
-    "Allergic Rhinitis": "bg-blue-500 hover:bg-blue-600",
-    "Atopic Dermatitis": "bg-red-500 hover:bg-red-600",
-    "Allergic Conjunctivitis": "bg-emerald-500 hover:bg-emerald-600",
-    "Allergic Bronchitis": "bg-indigo-500 hover:bg-indigo-600",
-    "GPE": "bg-purple-500 hover:bg-purple-600",
-  };
-
-  const followupTypes = [
-    "Allergic Rhinitis",
-    "Atopic Dermatitis",
-    "Allergic Conjunctivitis",
-    "Allergic Bronchitis",
-    "GPE",
-  ];
 
   // Filter patients by search
   const filteredPatients = patientFollowUps.filter((p) =>
@@ -183,18 +161,15 @@ export default function ViewFollowUpPatients() {
                     </div>
                     
                     {/* Actions */}
-                    <div className="pt-2 border-t border-slate-200">
-                      <div className="grid grid-cols-2 gap-2">
-                        {followupTypes.map((type) => (
-                          <button
-                            key={type}
-                            onClick={() => navigate(typeToRoute[type](patient.patient._id))}
-                            className={`${typeToColor[type]} text-white px-2 py-2 rounded text-xs font-medium transition-colors text-center`}
-                          >
-                            {type}
-                          </button>
-                        ))}
-                      </div>
+                    <div className="pt-2 border-t border-slate-200 space-y-2">
+                      <button
+                        onClick={() => navigate(`/dashboard/superadmin/followups/PatientProfile/${patient.patient._id}`)}
+                        className="w-full bg-slate-600 hover:bg-slate-700 text-white px-3 py-2 rounded text-xs font-medium transition-colors text-center flex items-center justify-center"
+                      >
+                        <Users className="h-3 w-3 mr-2" />
+                        View Profile
+                      </button>
+
                     </div>
                   </div>
                 ))}
@@ -268,15 +243,14 @@ export default function ViewFollowUpPatients() {
                       </td>
                       <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-center text-xs font-medium">
                         <div className="flex flex-wrap gap-2 justify-center">
-                          {followupTypes.map((type) => (
-                            <button
-                              key={type}
-                              onClick={() => navigate(typeToRoute[type](patient.patient._id))}
-                              className={`${typeToColor[type]} text-white px-3 py-1 rounded text-xs font-medium transition-colors`}
-                            >
-                              View {type}
-                            </button>
-                          ))}
+                          <button
+                            onClick={() => navigate(`/dashboard/superadmin/followups/PatientProfile/${patient.patient._id}`)}
+                            className="bg-slate-600 hover:bg-slate-700 text-white px-3 py-1 rounded text-xs font-medium transition-colors flex items-center justify-center"
+                          >
+                            <Users className="h-3 w-3 mr-2" />
+                            View Profile
+                          </button>
+
                         </div>
                       </td>
                     </tr>

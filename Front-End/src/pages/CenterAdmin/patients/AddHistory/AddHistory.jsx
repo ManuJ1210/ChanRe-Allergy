@@ -183,15 +183,15 @@ export default function AddHistory() {
           <div className="mb-8">
             <button
                               onClick={() => navigate(`/dashboard/CenterAdmin/patients/PatientList`)}
-              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-xs"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Patient
             </button>
-            <h1 className="text-sm font-bold text-slate-800 mb-2">
+            <h1 className="text-md font-bold text-slate-800 mb-2">
               Add Medical History
             </h1>
-            <p className="text-slate-600">
+            <p className="text-slate-600 text-xs">
               Comprehensive medical history form
             </p>
           </div>
@@ -200,19 +200,19 @@ export default function AddHistory() {
           {addHistorySuccess && (
             <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
               <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-              <span className="text-green-700">Medical history added successfully!</span>
+              <span className="text-green-700 text-xs">Medical history added successfully!</span>
             </div>
           )}
           {error && (
             <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
               <CheckCircle className="h-5 w-5 text-red-500 mr-3" />
-              <span className="text-red-700">{error}</span>
+              <span className="text-red-700 text-xs">{error}</span>
             </div>
           )}
           {historyError && (
             <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
               <CheckCircle className="h-5 w-5 text-red-500 mr-3" />
-              <span className="text-red-700">{historyError}</span>
+              <span className="text-red-700 text-xs">{historyError}</span>
             </div>
           )}
 
@@ -221,17 +221,17 @@ export default function AddHistory() {
             <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                <p className="text-slate-600">Loading existing history data...</p>
+                <p className="text-slate-600 text-xs">Loading existing history data...</p>
               </div>
             </div>
           ) : (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-xs font-semibold text-slate-800 flex items-center">
+              <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                 <FileText className="h-5 w-5 mr-2 text-blue-500" />
                 Medical History Information
               </h2>
-              <p className="text-slate-600 mt-1">
+              <p className="text-slate-600 mt-1 text-xs">
                 Fill in the comprehensive medical history details below
               </p>
             </div>
@@ -239,7 +239,7 @@ export default function AddHistory() {
             <form onSubmit={handleSubmit} className="p-6 space-y-8">
               {/* 1. Medical Conditions */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   1. Have you ever had the following conditions:
                 </h3>
                 
@@ -290,7 +290,7 @@ export default function AddHistory() {
 
               {/* 2. Hay Fever Details */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   2. Details of Hay fever:
                 </h3>
                 
@@ -343,7 +343,7 @@ export default function AddHistory() {
                     name="specificDayExposure"
                     value={formData.specificDayExposure}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                     placeholder="Any specific day"
                   />
                 </div>
@@ -351,7 +351,7 @@ export default function AddHistory() {
 
               {/* 3. Asthma */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   3. Asthma:
                 </h3>
                 
@@ -362,7 +362,7 @@ export default function AddHistory() {
                       name="asthmaType"
                       value={formData.asthmaType}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                     >
                       <option value="">Select</option>
                       <option value="mild">Mild</option>
@@ -380,7 +380,7 @@ export default function AddHistory() {
                       value={formData.exacerbationsFrequency}
                       onChange={handleChange}
                       rows={3}
-                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Write here."
                     />
                   </div>
@@ -389,7 +389,7 @@ export default function AddHistory() {
 
               {/* 4. Medical Events */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   4. Have these required any of the following and if so how frequently?:
                 </h3>
                 
@@ -440,7 +440,7 @@ export default function AddHistory() {
 
               {/* 5. Triggers */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   5. What triggers exacerbations?:
                 </h3>
                 
@@ -476,7 +476,7 @@ export default function AddHistory() {
                       name="triggersOthers"
                       value={formData.triggersOthers}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Others, please specify"
                     />
                   </div>
@@ -485,7 +485,7 @@ export default function AddHistory() {
 
               {/* 6. Allergic Rhinitis */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   6. Allergic Rhinitis:
                 </h3>
                 
@@ -495,7 +495,7 @@ export default function AddHistory() {
                     name="allergicRhinitisType"
                     value={formData.allergicRhinitisType}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   >
                     <option value="">Select</option>
                     <option value="seasonal">Seasonal</option>
@@ -545,7 +545,7 @@ export default function AddHistory() {
 
               {/* 7. Skin Allergy */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   7. Skin Allergy:
                 </h3>
                 
@@ -555,7 +555,7 @@ export default function AddHistory() {
                     name="skinAllergyType"
                     value={formData.skinAllergyType}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   >
                     <option value="">Select</option>
                     <option value="contact">Contact Dermatitis</option>
@@ -608,7 +608,7 @@ export default function AddHistory() {
                             placeholder={`${condition.label} Distribution`}
                             value={formData[condition.key + 'Distribution']}
                             onChange={handleChange}
-                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                           />
                         </div>
                       </div>
@@ -619,7 +619,7 @@ export default function AddHistory() {
 
               {/* 8. Medical History */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   8. History:
                 </h3>
                 
@@ -663,7 +663,7 @@ export default function AddHistory() {
 
               {/* 9. New Drugs */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   9. Any New Drugs recently prescribed before the onset:
                 </h3>
                 
@@ -675,7 +675,7 @@ export default function AddHistory() {
                       name="drugAllergyKnown"
                       value={formData.drugAllergyKnown}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Write here"
                     />
                   </div>
@@ -686,7 +686,7 @@ export default function AddHistory() {
                       name="probable"
                       value={formData.probable}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Write here"
                     />
                   </div>
@@ -697,7 +697,7 @@ export default function AddHistory() {
                       name="definite"
                       value={formData.definite}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Write here"
                     />
                   </div>
@@ -706,7 +706,7 @@ export default function AddHistory() {
 
               {/* 10. Occupation and Exposure */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   10. Occupation and Exposure possibility:
                 </h3>
                 
@@ -718,7 +718,7 @@ export default function AddHistory() {
                       name="occupation"
                       value={formData.occupation}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Write here"
                     />
                   </div>
@@ -729,7 +729,7 @@ export default function AddHistory() {
                       name="probableChemicalExposure"
                       value={formData.probableChemicalExposure}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Write here"
                     />
                   </div>
@@ -740,7 +740,7 @@ export default function AddHistory() {
                       name="location"
                       value={formData.location}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Write here"
                     />
                   </div>
@@ -751,7 +751,7 @@ export default function AddHistory() {
                       name="familyHistory"
                       value={formData.familyHistory}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Write here"
                     />
                   </div>
@@ -760,7 +760,7 @@ export default function AddHistory() {
 
               {/* 11. Examination */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   11. Examination:
                 </h3>
                 
@@ -782,7 +782,7 @@ export default function AddHistory() {
                         value={formData[system.name]}
                         onChange={handleChange}
                         rows={3}
-                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                         placeholder="Write here"
                       />
                     </div>
@@ -796,7 +796,7 @@ export default function AddHistory() {
                     value={formData.otherFindings}
                     onChange={handleChange}
                     rows={3}
-                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                     placeholder="Write here"
                   />
                 </div>
@@ -804,7 +804,7 @@ export default function AddHistory() {
 
               {/* 12. Report */}
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold text-slate-800 border-b border-slate-200 pb-2">
+                <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-2">
                   12. Report:
                 </h3>
                 
@@ -814,7 +814,7 @@ export default function AddHistory() {
                     type="file"
                     name="reportFile"
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   />
                   <p className="text-xs text-slate-500 mt-1">No file chosen</p>
                 </div>
@@ -825,7 +825,7 @@ export default function AddHistory() {
                 <button
                   type="button"
                   onClick={() => navigate(`/dashboard/CenterAdmin/patients/profile/ViewProfile/${patientId}`)}
-                  className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
+                  className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2 text-xs"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   Cancel
@@ -834,7 +834,7 @@ export default function AddHistory() {
                   type="submit"
                   disabled={loading}
                   onClick={() => console.log('Submit button clicked')}
-                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                  className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 text-xs"
                 >
                   {loading ? (
                     <>

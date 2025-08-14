@@ -74,12 +74,12 @@ const AddFollowUp = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate(-1)}
-                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors text-xs"
               >
                 <ArrowLeft size={20} />
                 <span>Back</span>
               </button>
-              <h1 className="text-lg font-bold text-gray-800">Add Follow-up</h1>
+              <h1 className="text-md font-bold text-gray-800">Add Follow-up</h1>
             </div>
           </div>
         </div>
@@ -113,7 +113,7 @@ const AddFollowUp = () => {
                     />
                     <div className="flex items-center space-x-3">
                       <span className="text-xl">{type.icon}</span>
-                      <span className="font-medium text-gray-900">{type.label}</span>
+                      <span className="font-medium text-gray-900 text-xs">{type.label}</span>
                     </div>
                     {formData.followUpType === type.value && (
                       <CheckCircle className="absolute top-2 right-2 h-5 w-5 text-blue-500" />
@@ -136,7 +136,7 @@ const AddFollowUp = () => {
                   value={formData.scheduledDate}
                   onChange={handleChange}
                   required
-                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 />
               </div>
             </div>
@@ -153,7 +153,7 @@ const AddFollowUp = () => {
                   value={formData.status}
                   onChange={handleChange}
                   required
-                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 >
                   {statusOptions.map((status) => (
                     <option key={status.value} value={status.value}>
@@ -175,7 +175,7 @@ const AddFollowUp = () => {
                 onChange={handleChange}
                 rows={4}
                 placeholder="Enter any additional notes or instructions..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-xs"
               />
             </div>
 
@@ -184,7 +184,7 @@ const AddFollowUp = () => {
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                 <div className="flex items-center">
                   <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-                  <span className="text-red-700">{error}</span>
+                  <span className="text-red-700 text-xs">{error}</span>
                 </div>
               </div>
             )}
@@ -194,14 +194,14 @@ const AddFollowUp = () => {
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-xs"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 text-xs"
               >
                 {loading ? (
                   <>

@@ -75,7 +75,7 @@ export default function EditPatient() {
           <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-slate-600">Loading patient information...</p>
+              <p className="text-slate-600 text-xs">Loading patient information...</p>
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function EditPatient() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-4xl mx-auto">
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-600">{patientError}</p>
+            <p className="text-red-600 text-xs">{patientError}</p>
           </div>
         </div>
       </div>
@@ -102,23 +102,23 @@ export default function EditPatient() {
         <div className="mb-8">
           <button
             onClick={() => navigate('/dashboard/CenterAdmin/patients/PatientList')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-xs"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Patients List
           </button>
-          <h1 className="text-xl font-bold text-slate-800 mb-2">Edit Patient</h1>
-          <p className="text-slate-600">Update patient information</p>
+          <h1 className="text-md font-bold text-slate-800 mb-2">Edit Patient</h1>
+          <p className="text-slate-600 text-xs">Update patient information</p>
         </div>
 
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center">
               <User className="h-5 w-5 mr-2 text-blue-500" />
               Patient Information
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-xs">
               Update the patient's personal and contact details
             </p>
           </div>
@@ -126,14 +126,14 @@ export default function EditPatient() {
           <form onSubmit={handleSubmit} className="p-6">
             {error && (
               <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
-                <p className="text-red-600">{error}</p>
+                <p className="text-red-600 text-xs">{error}</p>
               </div>
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Full Name *
                 </label>
                 <input
@@ -142,14 +142,14 @@ export default function EditPatient() {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   placeholder="Enter full name"
                 />
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Email Address
                 </label>
                 <input
@@ -157,14 +157,14 @@ export default function EditPatient() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   placeholder="Enter email address"
                 />
               </div>
 
               {/* Phone */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Phone Number *
                 </label>
                 <input
@@ -173,14 +173,14 @@ export default function EditPatient() {
                   value={formData.phone}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   placeholder="Enter phone number"
                 />
               </div>
 
               {/* Age */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Age *
                 </label>
                 <input
@@ -191,14 +191,14 @@ export default function EditPatient() {
                   required
                   min="0"
                   max="150"
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   placeholder="Enter age"
                 />
               </div>
 
               {/* Gender */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Gender *
                 </label>
                 <select
@@ -206,7 +206,7 @@ export default function EditPatient() {
                   value={formData.gender}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 >
                   <option value="">Select gender</option>
                   <option value="male">Male</option>
@@ -217,7 +217,7 @@ export default function EditPatient() {
 
               {/* Address */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium text-slate-700 mb-2">
                   Address
                 </label>
                 <textarea
@@ -225,7 +225,7 @@ export default function EditPatient() {
                   value={formData.address}
                   onChange={handleInputChange}
                   rows="3"
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   placeholder="Enter address"
                 />
               </div>
@@ -236,7 +236,7 @@ export default function EditPatient() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
+                className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 text-xs"
               >
                 <Save className="h-4 w-4" />
                 {loading ? 'Updating...' : 'Update Patient'}

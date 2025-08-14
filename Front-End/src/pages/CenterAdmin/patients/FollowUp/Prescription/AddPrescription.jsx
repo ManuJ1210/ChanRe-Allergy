@@ -62,15 +62,15 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
         <div className="mb-8">
           <button
             onClick={() => navigate(`/dashboard/CenterAdmin/patients/FollowUp/prescriptionlist/${patientId}`)}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-xs"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Prescriptions
           </button>
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-md font-bold text-slate-800 mb-2">
             Add Prescription
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-xs">
             Create a new prescription for the patient
           </p>
         </div>
@@ -79,24 +79,24 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
         {success && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
             <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700">Prescription added successfully!</span>
+            <span className="text-green-700 text-xs">Prescription added successfully!</span>
           </div>
         )}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
             <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700">{error}</span>
+            <span className="text-red-700 text-xs">{error}</span>
           </div>
         )}
 
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center">
               <Pill className="h-5 w-5 mr-2 text-blue-500" />
               Prescription Information
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-xs">
               Enter visit details and medication information
             </p>
           </div>
@@ -109,7 +109,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                 value={visit}
                 onChange={e => setVisit(e.target.value)}
                 placeholder="e.g., Initial Consultation, Follow-up, Emergency"
@@ -123,7 +123,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
                 <h3 className="text-sm font-semibold text-slate-800">Medications</h3>
                 <button
                   type="button"
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-xs"
                   onClick={addMedicationRow}
                 >
                   <Plus className="h-4 w-4" />
@@ -202,7 +202,7 @@ const AddPrescription = ({ patientId: propPatientId, onSuccess, onCancel }) => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-xs"
               >
                 {loading ? (
                   <>
