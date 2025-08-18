@@ -134,10 +134,49 @@ export const fetchSuperAdminDoctorPatientFollowups = createAsyncThunk(
   'superAdminDoctor/fetchSuperAdminDoctorPatientFollowups',
   async (patientId, { rejectWithValue }) => {
     try {
+      console.log('🔍 Frontend - Fetching followups for patient:', patientId);
+      
+      if (!patientId || patientId === 'undefined' || patientId === 'null') {
+        console.error('❌ Invalid patientId:', patientId);
+        return rejectWithValue('Invalid patient ID');
+      }
+
       const response = await API.get(`/superadmin/doctors/working/patient/${patientId}/followups`);
+      console.log('✅ Frontend - Followups API response:', response.data);
+      console.log('✅ Frontend - Response status:', response.status);
+      console.log('✅ Frontend - Response headers:', response.headers);
+      
+      // Validate response data
+      if (!response.data) {
+        console.error('❌ No data in response');
+        return rejectWithValue('No data received from server');
+      }
+
+      if (!Array.isArray(response.data)) {
+        console.error('❌ Response data is not an array:', typeof response.data);
+        return rejectWithValue('Invalid data format received');
+      }
+
+      console.log('✅ Frontend - Followups count:', response.data.length);
+      console.log('✅ Frontend - First followup sample:', response.data[0]);
+      
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient followups');
+      console.error('❌ Frontend - Error fetching followups:', error);
+      console.error('❌ Frontend - Error message:', error.message);
+      console.error('❌ Frontend - Error response:', error.response?.data);
+      console.error('❌ Frontend - Error status:', error.response?.status);
+      console.error('❌ Frontend - Error headers:', error.response?.headers);
+      
+      if (error.response?.status === 404) {
+        return rejectWithValue('Patient not found');
+      } else if (error.response?.status === 500) {
+        return rejectWithValue('Server error occurred while fetching followups');
+      } else if (error.code === 'NETWORK_ERROR') {
+        return rejectWithValue('Network error - please check your connection');
+      } else {
+        return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient followups');
+      }
     }
   }
 );

@@ -84,6 +84,14 @@ const TestRequestsList = () => {
 
       const response = await API.get(`/test-requests?${params}`);
       
+      console.log('🔍 Debug - API Response:', response.data);
+      console.log('🔍 Debug - Response structure:', {
+        hasData: !!response.data,
+        dataType: typeof response.data,
+        isArray: Array.isArray(response.data),
+        keys: response.data ? Object.keys(response.data) : 'No data'
+      });
+      
       setTestRequests(response.data.testRequests || response.data || []);
       setTotalPages(response.data.pagination?.totalPages || response.data.totalPages || 1);
       

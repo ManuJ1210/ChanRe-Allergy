@@ -298,3 +298,4 @@ const PatientMedications = () => {
 export default PatientMedications;
 
 
+

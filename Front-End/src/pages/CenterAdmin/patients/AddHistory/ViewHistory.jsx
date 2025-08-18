@@ -126,79 +126,160 @@ const ViewHistory = () => {
 
           <div className="p-6 space-y-8">
             {/* Medical Conditions */}
-            <div>
-              <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
-                Medical Conditions
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {historyRecord.hayFever && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-medium text-slate-600">Hay Fever:</span>
-                        <span className="text-xs text-slate-800 font-medium">{historyRecord.hayFever}</span>
-                  </div>
-                )}
-                    {historyRecord.asthma && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-medium text-slate-600">Asthma:</span>
-                        <span className="text-xs text-slate-800 font-medium">{historyRecord.asthma}</span>
-                  </div>
-                )}
-                    {historyRecord.breathingProblems && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-medium text-slate-600">Breathing Problems:</span>
-                        <span className="text-xs text-slate-800 font-medium">{historyRecord.breathingProblems}</span>
-                  </div>
-                )}
-                    {historyRecord.hivesSwelling && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-medium text-slate-600">Hives/Swelling:</span>
-                        <span className="text-xs text-slate-800 font-medium">{historyRecord.hivesSwelling}</span>
-                  </div>
-                )}
-                    {historyRecord.sinusTrouble && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-medium text-slate-600">Sinus Trouble:</span>
-                        <span className="text-xs text-slate-800 font-medium">{historyRecord.sinusTrouble}</span>
-                  </div>
-                )}
-                    {historyRecord.eczemaRashes && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-medium text-slate-600">Eczema/Rashes:</span>
-                        <span className="text-xs text-slate-800 font-medium">{historyRecord.eczemaRashes}</span>
-                  </div>
-                )}
-                    {historyRecord.foodAllergies && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-medium text-slate-600">Food Allergies:</span>
-                        <span className="text-xs text-slate-800 font-medium">{historyRecord.foodAllergies}</span>
-                  </div>
-                )}
-                    {historyRecord.drugAllergy && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-medium text-slate-600">Drug Allergy:</span>
-                        <span className="text-xs text-slate-800 font-medium">{historyRecord.drugAllergy}</span>
-                  </div>
-                )}
-                    {historyRecord.arthriticDiseases && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-medium text-slate-600">Arthritic Diseases:</span>
-                        <span className="text-xs text-slate-800 font-medium">{historyRecord.arthriticDiseases}</span>
-                  </div>
-                )}
-                    {historyRecord.immuneDefect && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-medium text-slate-600">Immune Defect:</span>
-                        <span className="text-xs text-slate-800 font-medium">{historyRecord.immuneDefect}</span>
-                  </div>
-                )}
-                    {historyRecord.beeStingHypersensitivity && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-medium text-slate-600">Bee Sting Hypersensitivity:</span>
-                        <span className="text-xs text-slate-800 font-medium">{historyRecord.beeStingHypersensitivity}</span>
-                  </div>
-                )}
+            {(historyRecord.hayFever || historyRecord.asthma || historyRecord.breathingProblems || historyRecord.hivesSwelling || 
+              historyRecord.sinusTrouble || historyRecord.eczemaRashes || historyRecord.foodAllergies || historyRecord.arthriticDiseases || 
+              historyRecord.immuneDefect || historyRecord.drugAllergy || historyRecord.beeStingHypersensitivity) && (
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                  Medical Conditions
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {historyRecord.hayFever && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Hay Fever:</span>
+                        <span className="text-sm text-slate-800 font-medium">{historyRecord.hayFever}</span>
+                      </div>
+                      {historyRecord.hayFeverDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {historyRecord.hayFeverDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {historyRecord.asthma && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Asthma:</span>
+                        <span className="text-sm text-slate-800 font-medium">{historyRecord.asthma}</span>
+                      </div>
+                      {historyRecord.asthmaDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {historyRecord.asthmaDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {historyRecord.breathingProblems && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Breathing Problems:</span>
+                        <span className="text-sm text-slate-800 font-medium">{historyRecord.breathingProblems}</span>
+                      </div>
+                      {historyRecord.breathingProblemsDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {historyRecord.breathingProblemsDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {historyRecord.hivesSwelling && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Hives/Swelling:</span>
+                        <span className="text-sm text-slate-800 font-medium">{historyRecord.hivesSwelling}</span>
+                      </div>
+                      {historyRecord.hivesSwellingDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {historyRecord.hivesSwellingDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {historyRecord.sinusTrouble && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Sinus Trouble:</span>
+                        <span className="text-sm text-slate-800 font-medium">{historyRecord.sinusTrouble}</span>
+                      </div>
+                      {historyRecord.sinusTroubleDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {historyRecord.sinusTroubleDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {historyRecord.eczemaRashes && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Eczema/Rashes:</span>
+                        <span className="text-sm text-slate-800 font-medium">{historyRecord.eczemaRashes}</span>
+                      </div>
+                      {historyRecord.eczemaRashesDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {historyRecord.eczemaRashesDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {historyRecord.foodAllergies && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Food Allergies:</span>
+                        <span className="text-sm text-slate-800 font-medium">{historyRecord.foodAllergies}</span>
+                      </div>
+                      {historyRecord.foodAllergiesDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {historyRecord.foodAllergiesDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {historyRecord.drugAllergy && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Drug Allergy:</span>
+                        <span className="text-sm text-slate-800 font-medium">{historyRecord.drugAllergy}</span>
+                      </div>
+                      {historyRecord.drugAllergyDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {historyRecord.drugAllergyDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {historyRecord.arthriticDiseases && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Arthritic Diseases:</span>
+                        <span className="text-sm text-slate-800 font-medium">{historyRecord.arthriticDiseases}</span>
+                      </div>
+                      {historyRecord.arthriticDiseasesDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {historyRecord.arthriticDiseasesDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {historyRecord.immuneDefect && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Immune Defect:</span>
+                        <span className="text-sm text-slate-800 font-medium">{historyRecord.immuneDefect}</span>
+                      </div>
+                      {historyRecord.immuneDefectDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {historyRecord.immuneDefectDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {historyRecord.beeStingHypersensitivity && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Bee Sting Hypersensitivity:</span>
+                        <span className="text-sm text-slate-800 font-medium">{historyRecord.beeStingHypersensitivity}</span>
+                      </div>
+                      {historyRecord.beeStingHypersensitivityDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {historyRecord.beeStingHypersensitivityDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Hay Fever Details */}
                 {(historyRecord.feverGrade || historyRecord.itchingSoreThroat || historyRecord.specificDayExposure) && (

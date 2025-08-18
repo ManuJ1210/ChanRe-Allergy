@@ -384,3 +384,4 @@ const PatientLabReports = () => {
 export default PatientLabReports;
 
 
+

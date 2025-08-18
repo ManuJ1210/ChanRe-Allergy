@@ -173,79 +173,160 @@ const ViewHistory = () => {
 
           <div className="p-6 space-y-8">
             {/* Medical Conditions */}
-            <div>
-              <h3 className="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
-                Medical Conditions
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {history.hayFever && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm font-medium text-slate-600">Hay Fever:</span>
-                    <span className="text-sm text-slate-800 font-medium">{history.hayFever}</span>
-                  </div>
-                )}
-                {history.asthma && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm font-medium text-slate-600">Asthma:</span>
-                    <span className="text-sm text-slate-800 font-medium">{history.asthma}</span>
-                  </div>
-                )}
-                {history.breathingProblems && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm font-medium text-slate-600">Breathing Problems:</span>
-                    <span className="text-sm text-slate-800 font-medium">{history.breathingProblems}</span>
-                  </div>
-                )}
-                {history.hivesSwelling && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm font-medium text-slate-600">Hives/Swelling:</span>
-                    <span className="text-sm text-slate-800 font-medium">{history.hivesSwelling}</span>
-                  </div>
-                )}
-                {history.sinusTrouble && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm font-medium text-slate-600">Sinus Trouble:</span>
-                    <span className="text-sm text-slate-800 font-medium">{history.sinusTrouble}</span>
-                  </div>
-                )}
-                {history.eczemaRashes && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm font-medium text-slate-600">Eczema/Rashes:</span>
-                    <span className="text-sm text-slate-800 font-medium">{history.eczemaRashes}</span>
-                  </div>
-                )}
-                {history.foodAllergies && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm font-medium text-slate-600">Food Allergies:</span>
-                    <span className="text-sm text-slate-800 font-medium">{history.foodAllergies}</span>
-                  </div>
-                )}
-                {history.drugAllergy && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm font-medium text-slate-600">Drug Allergy:</span>
-                    <span className="text-sm text-slate-800 font-medium">{history.drugAllergy}</span>
-                  </div>
-                )}
-                {history.arthriticDiseases && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm font-medium text-slate-600">Arthritic Diseases:</span>
-                    <span className="text-sm text-slate-800 font-medium">{history.arthriticDiseases}</span>
-                  </div>
-                )}
-                {history.immuneDefect && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm font-medium text-slate-600">Immune Defect:</span>
-                    <span className="text-sm text-slate-800 font-medium">{history.immuneDefect}</span>
-                  </div>
-                )}
-                {history.beeStingHypersensitivity && (
-                  <div className="flex justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="text-sm font-medium text-slate-600">Bee Sting Hypersensitivity:</span>
-                    <span className="text-sm text-slate-800 font-medium">{history.beeStingHypersensitivity}</span>
-                  </div>
-                )}
+            {(history.hayFever || history.asthma || history.breathingProblems || history.hivesSwelling || 
+              history.sinusTrouble || history.eczemaRashes || history.foodAllergies || history.arthriticDiseases || 
+              history.immuneDefect || history.drugAllergy || history.beeStingHypersensitivity) && (
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">
+                  Medical Conditions
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {history.hayFever && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Hay Fever:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.hayFever}</span>
+                      </div>
+                      {history.hayFeverDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.hayFeverDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {history.asthma && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Asthma:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.asthma}</span>
+                      </div>
+                      {history.asthmaDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.asthmaDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {history.breathingProblems && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Breathing Problems:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.breathingProblems}</span>
+                      </div>
+                      {history.breathingProblemsDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.breathingProblemsDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {history.hivesSwelling && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Hives/Swelling:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.hivesSwelling}</span>
+                      </div>
+                      {history.hivesSwellingDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.hivesSwellingDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {history.sinusTrouble && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Sinus Trouble:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.sinusTrouble}</span>
+                      </div>
+                      {history.sinusTroubleDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.sinusTroubleDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {history.eczemaRashes && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Eczema/Rashes:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.eczemaRashes}</span>
+                      </div>
+                      {history.eczemaRashesDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.eczemaRashesDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {history.foodAllergies && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Food Allergies:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.foodAllergies}</span>
+                      </div>
+                      {history.foodAllergiesDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.foodAllergiesDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {history.drugAllergy && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Drug Allergy:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.drugAllergy}</span>
+                      </div>
+                      {history.drugAllergyDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.drugAllergyDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {history.arthriticDiseases && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Arthritic Diseases:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.arthriticDiseases}</span>
+                      </div>
+                      {history.arthriticDiseasesDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.arthriticDiseasesDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {history.immuneDefect && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Immune Defect:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.immuneDefect}</span>
+                      </div>
+                      {history.immuneDefectDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.immuneDefectDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {history.beeStingHypersensitivity && (
+                    <div className="p-3 bg-slate-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Bee Sting Hypersensitivity:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.beeStingHypersensitivity}</span>
+                      </div>
+                      {history.beeStingHypersensitivityDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.beeStingHypersensitivityDuration} months
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Hay Fever Details */}
             {(history.feverGrade || history.itchingSoreThroat || history.specificDayExposure) && (
@@ -309,69 +390,146 @@ const ViewHistory = () => {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {history.hospitalAdmission && (
-                    <div className="flex justify-between p-3 bg-purple-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Hospital Admission:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.hospitalAdmission}</span>
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Hospital Admission:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.hospitalAdmission}</span>
+                      </div>
+                      {history.hospitalAdmissionDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.hospitalAdmissionDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.gpAttendances && (
-                    <div className="flex justify-between p-3 bg-purple-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">GP Attendances:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.gpAttendances}</span>
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">GP Attendances:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.gpAttendances}</span>
+                      </div>
+                      {history.gpAttendancesDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.gpAttendancesDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.aeAttendances && (
-                    <div className="flex justify-between p-3 bg-purple-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">AE Attendances:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.aeAttendances}</span>
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">AE Attendances:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.aeAttendances}</span>
+                      </div>
+                      {history.aeAttendancesDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.aeAttendancesDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.ituAdmissions && (
-                    <div className="flex justify-between p-3 bg-purple-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">ITU Admissions:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.ituAdmissions}</span>
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">ITU Admissions:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.ituAdmissions}</span>
+                      </div>
+                      {history.ituAdmissionsDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.ituAdmissionsDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.coughWheezeFrequency && (
-                    <div className="flex justify-between p-3 bg-purple-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Cough/Wheeze Frequency:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.coughWheezeFrequency}</span>
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Cough/Wheeze Frequency:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.coughWheezeFrequency}</span>
+                      </div>
+                      {history.coughWheezeFrequencyDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.coughWheezeFrequencyDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.intervalSymptoms && (
-                    <div className="flex justify-between p-3 bg-purple-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Interval Symptoms:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.intervalSymptoms}</span>
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Interval Symptoms:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.intervalSymptoms}</span>
+                      </div>
+                      {history.intervalSymptomsDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.intervalSymptomsDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.nightCoughFrequency && (
-                    <div className="flex justify-between p-3 bg-purple-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Night Cough Frequency:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.nightCoughFrequency}</span>
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Night Cough Frequency:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.nightCoughFrequency}</span>
+                      </div>
+                      {history.nightCoughFrequencyDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.nightCoughFrequencyDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.earlyMorningCough && (
-                    <div className="flex justify-between p-3 bg-purple-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Early Morning Cough:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.earlyMorningCough}</span>
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Early Morning Cough:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.earlyMorningCough}</span>
+                      </div>
+                      {history.earlyMorningCoughDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.earlyMorningCoughDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.exerciseInducedSymptoms && (
-                    <div className="flex justify-between p-3 bg-purple-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Exercise Induced Symptoms:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.exerciseInducedSymptoms}</span>
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Exercise Induced Symptoms:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.exerciseInducedSymptoms}</span>
+                      </div>
+                      {history.exerciseInducedSymptomsDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.exerciseInducedSymptomsDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.familySmoking && (
-                    <div className="flex justify-between p-3 bg-purple-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Family Smoking:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.familySmoking}</span>
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Family Smoking:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.familySmoking}</span>
+                      </div>
+                      {history.familySmokingDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.familySmokingDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.petsAtHome && (
-                    <div className="flex justify-between p-3 bg-purple-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Pets at Home:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.petsAtHome}</span>
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Pets at Home:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.petsAtHome}</span>
+                      </div>
+                      {history.petsAtHomeDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.petsAtHomeDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -537,63 +695,93 @@ const ViewHistory = () => {
                     </div>
                   )}
                   {history.skinHeavesPresent && (
-                    <div className="flex justify-between p-3 bg-orange-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Heaves Present:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.skinHeavesPresent}</span>
-                    </div>
-                  )}
-                  {history.skinHeavesDistribution && (
-                    <div className="flex justify-between p-3 bg-orange-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Heaves Distribution:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.skinHeavesDistribution}</span>
+                    <div className="p-3 bg-orange-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Heaves Present:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.skinHeavesPresent}</span>
+                      </div>
+                      {history.skinHeavesDuration && (
+                        <div className="text-xs text-slate-500 mb-1">
+                          Duration: {history.skinHeavesDuration} months
+                        </div>
+                      )}
+                      {history.skinHeavesDistribution && (
+                        <div className="text-xs text-slate-500">
+                          Distribution: {history.skinHeavesDistribution}
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.skinEczemaPresent && (
-                    <div className="flex justify-between p-3 bg-orange-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Eczema Present:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.skinEczemaPresent}</span>
-                    </div>
-                  )}
-                  {history.skinEczemaDistribution && (
-                    <div className="flex justify-between p-3 bg-orange-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Eczema Distribution:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.skinEczemaDistribution}</span>
+                    <div className="p-3 bg-orange-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Eczema Present:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.skinEczemaPresent}</span>
+                      </div>
+                      {history.skinEczemaDuration && (
+                        <div className="text-xs text-slate-500 mb-1">
+                          Duration: {history.skinEczemaDuration} months
+                        </div>
+                      )}
+                      {history.skinEczemaDistribution && (
+                        <div className="text-xs text-slate-500">
+                          Distribution: {history.skinEczemaDistribution}
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.skinUlcerPresent && (
-                    <div className="flex justify-between p-3 bg-orange-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Ulcer Present:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.skinUlcerPresent}</span>
-                    </div>
-                  )}
-                  {history.skinUlcerDistribution && (
-                    <div className="flex justify-between p-3 bg-orange-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Ulcer Distribution:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.skinUlcerDistribution}</span>
+                    <div className="p-3 bg-orange-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Ulcer Present:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.skinUlcerPresent}</span>
+                      </div>
+                      {history.skinUlcerDuration && (
+                        <div className="text-xs text-slate-500 mb-1">
+                          Duration: {history.skinUlcerDuration} months
+                        </div>
+                      )}
+                      {history.skinUlcerDistribution && (
+                        <div className="text-xs text-slate-500">
+                          Distribution: {history.skinUlcerDistribution}
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.skinPapuloSquamousRashesPresent && (
-                    <div className="flex justify-between p-3 bg-orange-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Papulo-Squamous Rashes:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.skinPapuloSquamousRashesPresent}</span>
-                    </div>
-                  )}
-                  {history.skinPapuloSquamousRashesDistribution && (
-                    <div className="flex justify-between p-3 bg-orange-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Rashes Distribution:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.skinPapuloSquamousRashesDistribution}</span>
+                    <div className="p-3 bg-orange-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Papulo-Squamous Rashes:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.skinPapuloSquamousRashesPresent}</span>
+                      </div>
+                      {history.skinPapuloSquamousRashesDuration && (
+                        <div className="text-xs text-slate-500 mb-1">
+                          Duration: {history.skinPapuloSquamousRashesDuration} months
+                        </div>
+                      )}
+                      {history.skinPapuloSquamousRashesDistribution && (
+                        <div className="text-xs text-slate-500">
+                          Distribution: {history.skinPapuloSquamousRashesDistribution}
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.skinItchingNoRashesPresent && (
-                    <div className="flex justify-between p-3 bg-orange-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Itching (No Rashes):</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.skinItchingNoRashesPresent}</span>
-                    </div>
-                  )}
-                  {history.skinItchingNoRashesDistribution && (
-                    <div className="flex justify-between p-3 bg-orange-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Itching Distribution:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.skinItchingNoRashesDistribution}</span>
+                    <div className="p-3 bg-orange-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Itching (No Rashes):</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.skinItchingNoRashesPresent}</span>
+                      </div>
+                      {history.skinItchingNoRashesDuration && (
+                        <div className="text-xs text-slate-500 mb-1">
+                          Duration: {history.skinItchingNoRashesDuration} months
+                        </div>
+                      )}
+                      {history.skinItchingNoRashesDistribution && (
+                        <div className="text-xs text-slate-500">
+                          Distribution: {history.skinItchingNoRashesDistribution}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -608,27 +796,55 @@ const ViewHistory = () => {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {history.hypertension && (
-                    <div className="flex justify-between p-3 bg-red-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Hypertension:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.hypertension}</span>
+                    <div className="p-3 bg-red-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Hypertension:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.hypertension}</span>
+                      </div>
+                      {history.hypertensionDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.hypertensionDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.diabetes && (
-                    <div className="flex justify-between p-3 bg-red-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Diabetes:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.diabetes}</span>
+                    <div className="p-3 bg-red-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Diabetes:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.diabetes}</span>
+                      </div>
+                      {history.diabetesDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.diabetesDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.epilepsy && (
-                    <div className="flex justify-between p-3 bg-red-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">Epilepsy:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.epilepsy}</span>
+                    <div className="p-3 bg-red-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">Epilepsy:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.epilepsy}</span>
+                      </div>
+                      {history.epilepsyDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.epilepsyDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                   {history.ihd && (
-                    <div className="flex justify-between p-3 bg-red-50 rounded-lg">
-                      <span className="text-sm font-medium text-slate-600">IHD:</span>
-                      <span className="text-sm text-slate-800 font-medium">{history.ihd}</span>
+                    <div className="p-3 bg-red-50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-slate-600">IHD:</span>
+                        <span className="text-sm text-slate-800 font-medium">{history.ihd}</span>
+                      </div>
+                      {history.ihdDuration && (
+                        <div className="text-xs text-slate-500">
+                          Duration: {history.ihdDuration} months
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

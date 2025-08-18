@@ -25,7 +25,9 @@ import {
   // ✅ NEW: Test request review functionality
   getTestRequestsForReview,
   reviewTestRequest,
-  getTestRequestStats
+  getTestRequestStats,
+  // Test endpoint
+  testFollowupAPI
 } from '../controllers/superAdminDoctorController.js';
 import { protect, checkSuperAdmin } from '../middleware/authMiddleware.js';
 
@@ -45,6 +47,9 @@ router.get('/working/completed-reports', protect, getSuperAdminDoctorCompletedRe
 router.get('/working/stats', protect, getSuperAdminDoctorWorkingStats);
 router.get('/working/lab-reports', protect, getSuperAdminDoctorLabReports);
 router.post('/working/send-feedback', protect, sendFeedbackToCenterDoctor);
+
+// Test endpoint for debugging
+router.get('/working/test', protect, testFollowupAPI);
 
 // ✅ NEW: Test request review routes for superadmin doctors
 router.get('/working/test-requests-for-review', protect, getTestRequestsForReview);

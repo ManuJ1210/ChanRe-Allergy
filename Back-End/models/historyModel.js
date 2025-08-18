@@ -5,16 +5,27 @@ const historySchema = new mongoose.Schema({
 
   // Medical Conditions
   hayFever: String,
+  hayFeverDuration: Number,
   asthma: String,
+  asthmaDuration: Number,
   breathingProblems: String,
+  breathingProblemsDuration: Number,
   hivesSwelling: String,
+  hivesSwellingDuration: Number,
   sinusTrouble: String,
+  sinusTroubleDuration: Number,
   eczemaRashes: String,
+  eczemaRashesDuration: Number,
   foodAllergies: String,
+  foodAllergiesDuration: Number,
   arthriticDiseases: String,
+  arthriticDiseasesDuration: Number,
   immuneDefect: String,
+  immuneDefectDuration: Number,
   drugAllergy: String,
+  drugAllergyDuration: Number,
   beeStingHypersensitivity: String,
+  beeStingHypersensitivityDuration: Number,
   
   // Hay Fever Details
   feverGrade: String,
@@ -27,9 +38,13 @@ const historySchema = new mongoose.Schema({
   
   // Medical Events
   hospitalAdmission: String,
+  hospitalAdmissionDuration: Number,
   gpAttendances: String,
+  gpAttendancesDuration: Number,
   aeAttendances: String,
+  aeAttendancesDuration: Number,
   ituAdmissions: String,
+  ituAdmissionsDuration: Number,
   coughWheezeFrequency: String,
   intervalSymptoms: String,
   nightCoughFrequency: String,
@@ -64,21 +79,30 @@ const historySchema = new mongoose.Schema({
   // Skin Allergy
   skinAllergyType: String,
   skinHeavesPresent: String,
+  skinHeavesDuration: Number,
   skinHeavesDistribution: String,
   skinEczemaPresent: String,
+  skinEczemaDuration: Number,
   skinEczemaDistribution: String,
   skinUlcerPresent: String,
+  skinUlcerDuration: Number,
   skinUlcerDistribution: String,
   skinPapuloSquamousRashesPresent: String,
+  skinPapuloSquamousRashesDuration: Number,
   skinPapuloSquamousRashesDistribution: String,
   skinItchingNoRashesPresent: String,
+  skinItchingNoRashesDuration: Number,
   skinItchingNoRashesDistribution: String,
   
   // Medical History
   hypertension: String,
+  hypertensionDuration: Number,
   diabetes: String,
+  diabetesDuration: Number,
   epilepsy: String,
+  epilepsyDuration: Number,
   ihd: String,
+  ihdDuration: Number,
   
   // New Drugs
   drugAllergyKnown: String,

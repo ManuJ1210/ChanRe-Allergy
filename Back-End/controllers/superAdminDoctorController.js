@@ -832,20 +832,162 @@ export const getSuperAdminDoctorPatientFollowups = async (req, res) => {
   try {
     const { patientId } = req.params;
     
+    console.log('🔍 Fetching followups for patient:', patientId);
+    console.log('🔍 Request user:', req.user);
+    console.log('🔍 Request headers:', req.headers);
+    
+    // Validate patientId
+    if (!patientId || patientId === 'undefined' || patientId === 'null') {
+      console.error('❌ Invalid patientId:', patientId);
+      return res.status(400).json({ message: 'Invalid patient ID' });
+    }
+
     // Check if patient exists
-    const patient = await Patient.findById(patientId);
+    const patient = await Patient.findById(patientId).populate('centerId', 'name');
     if (!patient) {
+      console.log('❌ Patient not found:', patientId);
       return res.status(404).json({ message: 'Patient not found' });
     }
 
-    // Get real followup data from database
-    const followups = await FollowUp.find({ patientId })
-      .populate('updatedBy', 'name')
-      .populate('allergicRhinitisId')
-      .sort({ createdAt: -1 });
+    console.log('✅ Patient found:', patient.name);
+    console.log('🔍 Patient centerId:', patient.centerId);
+    console.log('🔍 Patient centerId type:', typeof patient.centerId);
+    console.log('🔍 Patient centerId value:', patient.centerId);
 
-    res.json(followups);
+    // Test database connection and model availability
+    try {
+      console.log('🔍 Testing database connection...');
+      const testPatient = await Patient.findOne().limit(1);
+      console.log('✅ Database connection test successful');
+    } catch (dbError) {
+      console.error('❌ Database connection test failed:', dbError);
+      return res.status(500).json({ message: 'Database connection error', error: dbError.message });
+    }
+
+    // Get comprehensive followup data from all models with better error handling
+    let basicFollowups = [];
+    let allergicRhinitis = [];
+    let allergicConjunctivitis = [];
+    let atopicDermatitis = [];
+    let allergicBronchitis = [];
+    let gpeRecords = [];
+
+    try {
+      console.log('🔍 Fetching data from models...');
+      
+      const [basicFollowupsResult, allergicRhinitisResult, allergicConjunctivitisResult, atopicDermatitisResult, allergicBronchitisResult, gpeRecordsResult] = await Promise.all([
+        FollowUp.find({ patientId }).populate('updatedBy', 'name').exec(),
+        AllergicRhinitis.find({ patientId }).sort({ createdAt: -1 }).exec(),
+        AllergicConjunctivitis.find({ patientId }).sort({ createdAt: -1 }).exec(),
+        AtopicDermatitis.find({ patientId }).sort({ createdAt: -1 }).exec(),
+        AllergicBronchitis.find({ patientId }).sort({ createdAt: -1 }).exec(),
+        GPE.find({ patientId }).sort({ createdAt: -1 }).exec()
+      ]);
+
+      basicFollowups = basicFollowupsResult;
+      allergicRhinitis = allergicRhinitisResult;
+      allergicConjunctivitis = allergicConjunctivitisResult;
+      atopicDermatitis = atopicDermatitisResult;
+      allergicBronchitis = allergicBronchitisResult;
+      gpeRecords = gpeRecordsResult;
+
+      console.log('✅ All models fetched successfully');
+    } catch (modelError) {
+      console.error('❌ Error fetching from specific models:', modelError);
+      console.error('❌ Model error details:', {
+        message: modelError.message,
+        stack: modelError.stack,
+        name: modelError.name
+      });
+      // Continue with empty arrays if some models fail
+    }
+
+    console.log('📊 Data fetched from models:', {
+      basicFollowups: basicFollowups.length,
+      allergicRhinitis: allergicRhinitis.length,
+      allergicConjunctivitis: allergicConjunctivitis.length,
+      atopicDermatitis: atopicDermatitis.length,
+      allergicBronchitis: allergicBronchitis.length,
+      gpeRecords: gpeRecords.length
+    });
+
+    // Transform data to a unified format matching the UI requirements
+    const allFollowups = [
+      ...basicFollowups.map(f => ({
+        ...f.toObject(),
+        followupType: f.type || 'General Followup',
+        source: 'FollowUp',
+        patientInfo: `${patient.name} (${patient.centerId?.name || 'Center not assigned'})`,
+        date: f.date || f.createdAt,
+        _id: f._id
+      })),
+      ...allergicRhinitis.map(ar => ({
+        ...ar.toObject(),
+        followupType: 'Allergic Rhinitis',
+        source: 'AllergicRhinitis',
+        patientInfo: `${patient.name} (${patient.centerId?.name || 'Center not assigned'})`,
+        date: ar.createdAt || ar.date,
+        additionalDetails: ar.qualityOfLifeImpact ? `Quality of Life Impact: ${ar.qualityOfLifeImpact}` : null,
+        _id: ar._id
+      })),
+      ...allergicConjunctivitis.map(ac => ({
+        ...ac.toObject(),
+        followupType: 'Allergic Conjunctivitis',
+        source: 'AllergicConjunctivitis',
+        patientInfo: `${patient.name} (${patient.centerId?.name || 'Center not assigned'})`,
+        date: ac.createdAt || ac.date,
+        _id: ac._id
+      })),
+      ...atopicDermatitis.map(ad => ({
+        ...ad.toObject(),
+        followupType: 'Atopic Dermatitis',
+        source: 'AtopicDermatitis',
+        patientInfo: `${patient.name} (${patient.centerId?.name || 'Center not assigned'})`,
+        date: ad.createdAt || ad.date,
+        _id: ad._id
+      })),
+      ...allergicBronchitis.map(ab => ({
+        ...ab.toObject(),
+        followupType: 'Allergic Bronchitis',
+        source: 'AllergicBronchitis',
+        patientInfo: `${patient.name} (${patient.centerId?.name || 'Center not assigned'})`,
+        date: ab.createdAt || ab.date,
+        _id: ab._id
+      })),
+      ...gpeRecords.map(gpe => ({
+        ...gpe.toObject(),
+        followupType: 'GPE',
+        source: 'GPE',
+        patientInfo: `${patient.name} (${patient.centerId?.name || 'Center not assigned'})`,
+        date: gpe.createdAt || gpe.date,
+        _id: gpe._id
+      }))
+    ];
+
+    // Sort by date (newest first)
+    allFollowups.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+
+    console.log('✅ Found followups:', allFollowups.length);
+    console.log('📋 Followups data structure:', allFollowups.map(f => ({ 
+      type: f.followupType, 
+      source: f.source, 
+      date: f.date,
+      patientInfo: f.patientInfo,
+      _id: f._id
+    })));
+
+    // Set proper headers
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'no-cache');
+    
+    res.json(allFollowups);
   } catch (error) {
+    console.error('❌ Error in getSuperAdminDoctorPatientFollowups:', error);
+    console.error('❌ Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
     res.status(500).json({ message: 'Error fetching patient followups', error: error.message });
   }
 };
@@ -1149,5 +1291,67 @@ export const getTestRequestStats = async (req, res) => {
   } catch (error) {
     console.error('Error fetching test request stats:', error);
     res.status(500).json({ message: 'Error fetching test request stats', error: error.message });
+  }
+}; 
+
+// Test endpoint to verify API functionality
+export const testFollowupAPI = async (req, res) => {
+  try {
+    console.log('🧪 Test endpoint called');
+    console.log('🔍 Request method:', req.method);
+    console.log('🔍 Request URL:', req.url);
+    console.log('🔍 Request headers:', req.headers);
+    console.log('🔍 Request user:', req.user);
+    
+    // Test database connection
+    try {
+      const testPatient = await Patient.findOne().limit(1);
+      console.log('✅ Database connection test successful');
+      
+      // Test model availability
+      const models = {
+        Patient: Patient,
+        FollowUp: FollowUp,
+        AllergicRhinitis: AllergicRhinitis,
+        AllergicConjunctivitis: AllergicConjunctivitis,
+        AtopicDermatitis: AtopicDermatitis,
+        AllergicBronchitis: AllergicBronchitis,
+        GPE: GPE
+      };
+      
+      const modelStatus = {};
+      for (const [name, model] of Object.entries(models)) {
+        try {
+          await model.findOne().limit(1);
+          modelStatus[name] = '✅ Available';
+        } catch (error) {
+          modelStatus[name] = `❌ Error: ${error.message}`;
+        }
+      }
+      
+      console.log('📊 Model status:', modelStatus);
+      
+      res.json({
+        message: 'API test successful',
+        timestamp: new Date().toISOString(),
+        database: 'Connected',
+        models: modelStatus,
+        user: req.user ? 'Authenticated' : 'Not authenticated'
+      });
+    } catch (dbError) {
+      console.error('❌ Database test failed:', dbError);
+      res.status(500).json({
+        message: 'Database test failed',
+        error: dbError.message,
+        timestamp: new Date().toISOString()
+      });
+    }
+  } catch (error) {
+    console.error('❌ Test endpoint error:', error);
+    res.status(500).json({
+      message: 'Test endpoint error',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
   }
 }; 
