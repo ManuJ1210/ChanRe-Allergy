@@ -32,10 +32,10 @@ export default function ManageAdmins() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center sm:text-left">
+          <h1 className="text-md font-bold text-slate-800 mb-2 text-center sm:text-left">
             Center Admins Management
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 text-center sm:text-left">
+          <p className="text-xs text-slate-600 text-center sm:text-left">
             Manage and monitor all center administrators
           </p>
         </div>
@@ -44,7 +44,7 @@ export default function ManageAdmins() {
         {deleteSuccess && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700 text-sm sm:text-base">Admin deleted successfully</span>
+            <span className="text-green-700 text-xs">Admin deleted successfully</span>
           </div>
         )}
 
@@ -53,11 +53,11 @@ export default function ManageAdmins() {
           <div className="p-4 sm:p-6 border-b border-blue-100">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="text-center sm:text-left">
-                <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center justify-center sm:justify-start">
+                <h2 className="text-sm font-semibold text-slate-800 flex items-center justify-center sm:justify-start">
                   <UserCheck className="h-5 w-5 mr-2 text-blue-500" />
                   Center Administrators
                 </h2>
-                <p className="text-sm sm:text-base text-slate-600 mt-1">
+                <p className="text-xs text-slate-600 mt-1">
                   Total: {centerAdmins.length} admins
                 </p>
               </div>
@@ -66,7 +66,7 @@ export default function ManageAdmins() {
                   // TODO: AddAdmin route doesn't exist yet
                   alert('Add Admin functionality not implemented yet');
                 }}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-xs w-full sm:w-auto"
               >
                 <Plus className="h-4 w-4" />
                 Add New Admin
@@ -110,7 +110,7 @@ export default function ManageAdmins() {
                     <td colSpan="7" className="px-6 py-8">
                       <div className="text-center">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                        <p className="text-slate-600 text-sm sm:text-base">Loading admins...</p>
+                        <p className="text-slate-600 text-xs">Loading admins...</p>
                       </div>
                     </td>
                   </tr>
@@ -120,13 +120,13 @@ export default function ManageAdmins() {
                       <div className="text-center">
                         <UserCheck className="h-12 w-12 text-slate-400 mx-auto mb-4" />
                         <h3 className="text-sm font-medium text-slate-600 mb-2">No Admins Found</h3>
-                        <p className="text-slate-500 mb-4 text-sm sm:text-base">Get started by adding your first center administrator.</p>
+                        <p className="text-slate-500 mb-4 text-xs">Get started by adding your first center administrator.</p>
                         <button
                           onClick={() => {
                             // TODO: AddAdmin route doesn't exist yet
                             alert('Add Admin functionality not implemented yet');
                           }}
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto text-sm sm:text-base"
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto text-xs"
                         >
                           <Plus className="h-4 w-4" />
                           Add Admin
@@ -138,22 +138,22 @@ export default function ManageAdmins() {
                   centerAdmins.map((admin) => (
                     <tr key={admin._id} className="hover:bg-slate-50 transition-colors">
                       <td className="px-6 py-4">
-                        <div className="text-sm font-medium text-slate-800">{admin.adminName}</div>
+                        <div className="text-xs font-medium text-slate-800">{admin.adminName}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-600">{admin.centerName}</div>
+                        <div className="text-xs text-slate-600">{admin.centerName}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-600">{admin.centerCode}</div>
+                        <div className="text-xs text-slate-600">{admin.centerCode}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-600">{admin.email}</div>
+                        <div className="text-xs text-slate-600">{admin.email}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-600">{admin.phone}</div>
+                        <div className="text-xs text-slate-600">{admin.phone}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-600">
+                        <div className="text-xs text-slate-600">
                           {new Date(admin.createdAt).toLocaleDateString()}
                         </div>
                       </td>
@@ -189,19 +189,19 @@ export default function ManageAdmins() {
           {loading ? (
             <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-slate-600 text-sm sm:text-base">Loading admins...</p>
+              <p className="text-slate-600 text-xs">Loading admins...</p>
             </div>
           ) : centerAdmins.length === 0 ? (
             <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6 text-center">
               <UserCheck className="h-12 w-12 text-slate-400 mx-auto mb-4" />
               <h3 className="text-sm font-medium text-slate-600 mb-2">No Admins Found</h3>
-              <p className="text-slate-500 mb-4 text-sm sm:text-base">Get started by adding your first center administrator.</p>
+              <p className="text-slate-500 mb-4 text-xs">Get started by adding your first center administrator.</p>
               <button
                 onClick={() => {
                   // TODO: AddAdmin route doesn't exist yet
                   alert('Add Admin functionality not implemented yet');
                 }}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto text-sm sm:text-base"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto text-xs"
               >
                 <Plus className="h-4 w-4" />
                 Add Admin
@@ -218,8 +218,8 @@ export default function ManageAdmins() {
                         <UserCheck className="h-5 w-5 text-blue-600" />
                       </div>
                       <div>
-                        <h3 className="font-medium text-slate-800 text-sm sm:text-base">{admin.adminName}</h3>
-                        <p className="text-slate-500 text-xs sm:text-sm">{admin.centerName}</p>
+                        <h3 className="font-medium text-slate-800 text-xs">{admin.adminName}</h3>
+                        <p className="text-slate-500 text-xs">{admin.centerName}</p>
                       </div>
                     </div>
                     <div className="text-right">
@@ -230,7 +230,7 @@ export default function ManageAdmins() {
                   </div>
 
                   {/* Contact Details */}
-                  <div className="grid grid-cols-1 gap-2 text-xs sm:text-sm">
+                  <div className="grid grid-cols-1 gap-2 text-xs">
                     <div className="flex items-center space-x-2">
                       <span className="text-slate-500 w-16">Email:</span>
                       <span className="text-slate-700">{admin.email}</span>

@@ -5,7 +5,8 @@ import {
   fetchSuperAdminDoctorPatientById,
   fetchSuperAdminDoctorPatientMedications, 
   fetchSuperAdminDoctorPatientHistory, 
-  fetchSuperAdminDoctorPatientLabReports
+  fetchSuperAdminDoctorPatientLabReports,
+  fetchSuperAdminDoctorPatientFollowups
 } from '../../../features/superadmin/superAdminDoctorSlice';
 import { 
   ArrowLeft, User, Phone, Calendar, MapPin, Activity, Pill, FileText, Eye, Mail, UserCheck, Building, Stethoscope,
@@ -23,6 +24,7 @@ const PatientProfile = () => {
     patientMedications: medications, 
     patientHistory: history, 
     patientLabReports: labReports,
+    patientFollowups,
     dataLoading, 
     dataError
   } = useSelector(state => state.superAdminDoctors);
@@ -36,7 +38,8 @@ const PatientProfile = () => {
             dispatch(fetchSuperAdminDoctorPatientById(patientId)),
             dispatch(fetchSuperAdminDoctorPatientMedications(patientId)),
             dispatch(fetchSuperAdminDoctorPatientHistory(patientId)),
-            dispatch(fetchSuperAdminDoctorPatientLabReports(patientId))
+            dispatch(fetchSuperAdminDoctorPatientLabReports(patientId)),
+            dispatch(fetchSuperAdminDoctorPatientFollowups(patientId))
           ]);
         } catch (error) {
           console.error('Error fetching patient data:', error);
@@ -76,7 +79,7 @@ const PatientProfile = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
       <div className="max-w-4xl mx-auto">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-600">No patient ID provided in the URL.</p>
+          <p className="text-red-600 text-xs">No patient ID provided in the URL.</p>
         </div>
       </div>
     </div>
@@ -88,7 +91,7 @@ const PatientProfile = () => {
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-slate-600">Loading patient information...</p>
+            <p className="text-slate-600 text-xs">Loading patient information...</p>
           </div>
         </div>
       </div>
@@ -104,10 +107,10 @@ const PatientProfile = () => {
               <AlertCircle className="h-6 w-6 text-red-500 mr-2" />
               <h3 className="text-sm font-semibold text-red-800">Error Loading Patient Data</h3>
             </div>
-            <p className="text-red-700 mb-4">{dataError}</p>
+            <p className="text-red-700 mb-4 text-xs">{dataError}</p>
             <button
               onClick={() => navigate('/dashboard/superadmin/doctor/patients')}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-xs"
             >
               Go Back
             </button>
@@ -126,12 +129,12 @@ const PatientProfile = () => {
               <AlertCircle className="h-6 w-6 text-yellow-500 mr-2" />
               <h3 className="text-sm font-semibold text-yellow-800">Patient Not Found</h3>
             </div>
-            <p className="text-yellow-700 mb-4">
+            <p className="text-yellow-700 mb-4 text-xs">
               The patient with ID "{patientId}" was not found. Please check the URL and try again.
             </p>
             <button
               onClick={() => navigate('/dashboard/superadmin/doctor/patients')}
-              className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors"
+              className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors text-xs"
             >
               Go Back
             </button>
@@ -148,7 +151,7 @@ const PatientProfile = () => {
         <div className="mb-8">
           <button
             onClick={() => navigate('/dashboard/superadmin/doctor/patients')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-xs"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Patients List
@@ -163,8 +166,8 @@ const PatientProfile = () => {
                 <User className="h-10 w-10 text-blue-500" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
-                <div className="flex flex-wrap gap-4 text-slate-600">
+                <h1 className="text-md font-bold text-slate-800 mb-2">{patient?.name || 'Patient Name'}</h1>
+                <div className="flex flex-wrap gap-4 text-slate-600 text-xs">
                   {patient?.gender && (
                     <span className="flex items-center gap-1">
                       <UserCheck className="h-4 w-4" />
@@ -209,10 +212,10 @@ const PatientProfile = () => {
         {/* Tabs */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-2 mb-8">
           <div className="flex gap-2">
-            {["Overview", "Medical History", "Medications", "Lab Reports"].map((tab) => (
+            {["Overview", "Medical History", "Medications", "Lab Reports", "Followups"].map((tab) => (
               <button
                 key={tab}
-                className={`px-6 py-3 rounded-lg font-medium transition-colors flex-1 ${
+                className={`px-6 py-3 rounded-lg font-medium transition-colors flex-1 text-xs ${
                   activeTab === tab
                     ? "bg-blue-500 text-white"
                     : "text-slate-600 hover:text-slate-800 hover:bg-slate-50"
@@ -231,11 +234,11 @@ const PatientProfile = () => {
             {/* Patient Details Card */}
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
               <div className="p-6 border-b border-blue-100">
-                <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+                <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                   <User className="h-5 w-5 mr-2 text-blue-500" />
                   Patient Details
                 </h2>
-                <p className="text-slate-600 mt-1">
+                <p className="text-slate-600 mt-1 text-xs">
                   Complete patient information and contact details
                 </p>
               </div>
@@ -244,43 +247,43 @@ const PatientProfile = () => {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-xs font-medium text-slate-500 mb-1">Full Name</label>
-                      <p className="text-slate-800 font-medium break-words">{patient.name || 'N/A'}</p>
+                      <p className="text-slate-800 font-medium break-words text-xs">{patient.name || 'N/A'}</p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-slate-500 mb-1">Mobile</label>
-                      <p className="text-slate-800 break-words">
+                      <p className="text-slate-800 break-words text-xs">
                         {typeof patient.phone === 'string' ? patient.phone :
                          typeof patient.contact === 'string' ? patient.contact : 'N/A'}
                       </p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-slate-500 mb-1">Email</label>
-                      <p className="text-slate-800 break-words">{typeof patient.email === 'string' ? patient.email : 'N/A'}</p>
+                      <p className="text-slate-800 break-words text-xs">{typeof patient.email === 'string' ? patient.email : 'N/A'}</p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-slate-500 mb-1">Location</label>
-                      <p className="text-slate-800 break-words">{typeof patient.address === 'string' ? patient.address : 'N/A'}</p>
+                      <p className="text-slate-800 break-words text-xs">{typeof patient.address === 'string' ? patient.address : 'N/A'}</p>
                     </div>
                   </div>
                   <div className="space-y-4">
                     <div>
                       <label className="block text-xs font-medium text-slate-500 mb-1">Assigned Doctor</label>
-                      <p className="text-slate-800 break-words flex items-center">
+                      <p className="text-slate-800 break-words flex items-center text-xs">
                         <Stethoscope className="h-4 w-4 mr-2 text-blue-500" />
                         {patient.assignedDoctor?.name || 'Not assigned'}
                       </p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-slate-500 mb-1">Gender</label>
-                      <p className="text-slate-800 capitalize break-words">{patient.gender || 'N/A'}</p>
+                      <p className="text-slate-800 capitalize break-words text-xs">{patient.gender || 'N/A'}</p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-slate-500 mb-1">Age</label>
-                      <p className="text-slate-800 break-words">{patient.age ? `${patient.age} years` : 'N/A'}</p>
+                      <p className="text-slate-800 break-words text-xs">{patient.age ? `${patient.age} years` : 'N/A'}</p>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-slate-500 mb-1">Center</label>
-                      <p className="text-slate-800 break-words flex items-center">
+                      <p className="text-slate-800 break-words flex items-center text-xs">
                         <Building className="h-4 w-4 mr-2 text-blue-500" />
                         {patient.centerId?.name || 'N/A'}
                       </p>
@@ -347,17 +350,17 @@ const PatientProfile = () => {
             <div className="p-6 border-b border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                     <FileText className="h-5 w-5 mr-2 text-blue-500" />
                     Medical History
                   </h2>
-                  <p className="text-slate-600 mt-1">
+                  <p className="text-slate-600 mt-1 text-xs">
                     Complete patient medical history and examination records
                   </p>
                 </div>
                 <button
                   onClick={() => navigate(`/dashboard/superadmin/doctor/patient/${patientId}/history`)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-medium transition-colors flex items-center gap-2"
                 >
                   <FileText className="h-4 w-4" />
                   View Full History
@@ -368,14 +371,14 @@ const PatientProfile = () => {
               {!history || !history.historyData || history.historyData.length === 0 ? (
                 <div className="text-center py-8">
                   <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                  <p className="text-slate-500">No medical history found</p>
+                  <p className="text-slate-500 text-xs">No medical history found</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {history.historyData.map((record, index) => (
                     <div key={index} className="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
                       <div className="flex items-center justify-between mb-3">
-                        <h6 className="font-semibold text-gray-800 text-sm">{record.type}</h6>
+                        <h6 className="font-semibold text-gray-800 text-xs">{record.type}</h6>
                         <span className="text-xs text-gray-500 bg-white px-2 py-1 rounded">
                           {new Date(record.date).toLocaleDateString()}
                         </span>
@@ -423,11 +426,11 @@ const PatientProfile = () => {
         {activeTab === "Medications" && (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
             <div className="p-6 border-b border-blue-100">
-              <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+              <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                 <Pill className="h-5 w-5 mr-2 text-blue-500" />
                 Medications
               </h2>
-              <p className="text-slate-600 mt-1">
+              <p className="text-slate-600 mt-1 text-xs">
                 Current and past medications prescribed
               </p>
             </div>
@@ -435,7 +438,7 @@ const PatientProfile = () => {
               {!medications || medications.length === 0 ? (
                 <div className="text-center py-8">
                   <Pill className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                  <p className="text-slate-500">No medications found</p>
+                  <p className="text-slate-500 text-xs">No medications found</p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -493,17 +496,17 @@ const PatientProfile = () => {
             <div className="p-6 border-b border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+                  <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                     <Activity className="h-5 w-5 mr-2 text-blue-500" />
                     Lab Reports
                   </h2>
-                  <p className="text-slate-600 mt-1">
+                  <p className="text-slate-600 mt-1 text-xs">
                     Laboratory test results and medical investigations
                   </p>
                 </div>
                 <button
                   onClick={() => navigate(`/dashboard/superadmin/doctor/patient/${patientId}/lab-reports`)}
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-xs font-medium transition-colors flex items-center gap-2"
                 >
                   <Activity className="h-4 w-4" />
                   View All Reports
@@ -514,7 +517,7 @@ const PatientProfile = () => {
               {!labReports || labReports.length === 0 ? (
                 <div className="text-center py-8">
                   <Activity className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                  <p className="text-slate-500">No lab reports found</p>
+                  <p className="text-slate-500 text-xs">No lab reports found</p>
                 </div>
               ) : (
                 <div className="space-y-6">
@@ -522,7 +525,7 @@ const PatientProfile = () => {
                     <div key={index} className="bg-gray-50 p-6 rounded-lg border-l-4 border-orange-500">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h6 className="font-semibold text-gray-800 text-sm">{report.testType}</h6>
+                          <h6 className="font-semibold text-gray-800 text-xs">{report.testType}</h6>
                           <p className="text-xs text-gray-500">Created on {new Date(report.createdAt).toLocaleDateString()}</p>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -547,7 +550,7 @@ const PatientProfile = () => {
                       {/* Report Details */}
                       {(report.reportSummary || report.clinicalInterpretation || report.conclusion || report.recommendations) && (
                         <div className="bg-white p-4 rounded-lg mb-4">
-                          <h6 className="font-semibold text-gray-800 mb-3">Report Details</h6>
+                          <h6 className="font-semibold text-gray-800 mb-3 text-xs">Report Details</h6>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                             {report.reportSummary && (
                               <div>
@@ -584,7 +587,7 @@ const PatientProfile = () => {
                             <div className="flex items-center gap-3">
                               <File className="h-6 w-6 text-blue-600" />
                               <div>
-                                <span className="font-medium text-blue-800">PDF Report Available</span>
+                                <span className="font-medium text-blue-800 text-xs">PDF Report Available</span>
                                 <p className="text-xs text-blue-600 mt-1">
                                   Generated on {report.reportGeneratedDate ? new Date(report.reportGeneratedDate).toLocaleDateString() : 'N/A'}
                                 </p>
@@ -613,12 +616,222 @@ const PatientProfile = () => {
                       {/* Additional Files */}
                       {report.additionalFiles && report.additionalFiles.length > 0 && (
                         <div className="bg-gray-50 p-4 rounded-lg mt-4">
-                          <h6 className="font-semibold text-gray-800 mb-3">Additional Files</h6>
+                          <h6 className="font-semibold text-gray-800 mb-3 text-xs">Additional Files</h6>
                           <div className="flex flex-wrap gap-3">
                             {report.additionalFiles.map((file, fileIndex) => (
                               <div key={fileIndex} className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border">
                                 {getFileIcon(file.type)}
                                 <span className="text-xs text-gray-700 truncate max-w-32">{file.name}</span>
+                                <div className="flex gap-1">
+                                  <button
+                                    onClick={() => handleViewFile(file.url, file.name)}
+                                    className="text-blue-600 hover:text-blue-800 p-1"
+                                    title="View file"
+                                  >
+                                    <Eye className="h-3 w-3" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDownloadFile(file.url, file.name)}
+                                    className="text-green-600 hover:text-green-800 p-1"
+                                    title="Download file"
+                                  >
+                                    <Download className="h-3 w-3" />
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === "Followups" && (
+          <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+            <div className="p-6 border-b border-blue-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-sm font-semibold text-slate-800 flex items-center">
+                    <Stethoscope className="h-5 w-5 mr-2 text-blue-500" />
+                    Patient Followups
+                  </h2>
+                  <p className="text-slate-600 mt-1 text-xs">
+                    Complete followup records and treatment plans
+                  </p>
+                </div>
+                <button
+                  onClick={() => navigate(`/dashboard/superadmin/doctor/patient/${patientId}/followups`)}
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-xs font-medium transition-colors flex items-center gap-2"
+                >
+                  <Stethoscope className="h-4 w-4" />
+                  View All Followups
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              {!patientFollowups || patientFollowups.length === 0 ? (
+                <div className="text-center py-8">
+                  <Stethoscope className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                  <p className="text-slate-500 text-xs">No followup records found</p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {patientFollowups.map((followup, index) => (
+                    <div key={index} className="bg-gray-50 p-6 rounded-lg border-l-4 border-purple-500">
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <h6 className="font-semibold text-gray-800 text-xs">{followup.followupType || 'General Followup'}</h6>
+                          <p className="text-xs text-gray-500">
+                            {followup.followupDate ? new Date(followup.followupDate).toLocaleDateString() : 
+                             followup.createdAt ? new Date(followup.createdAt).toLocaleDateString() : 'N/A'}
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            followup.status === 'completed' ? 'bg-green-100 text-green-800' :
+                            followup.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
+                            followup.status === 'scheduled' ? 'bg-blue-100 text-blue-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {followup.status ? followup.status.replace('_', ' ') : 'N/A'}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs mb-4">
+                        <div><span className="font-medium">Followup Type:</span> {followup.followupType || 'General'}</div>
+                        <div><span className="font-medium">Doctor:</span> {followup.doctorId?.name || followup.doctorName || 'N/A'}</div>
+                        {followup.nextFollowupDate && <div><span className="font-medium">Next Followup:</span> {new Date(followup.nextFollowupDate).toLocaleDateString()}</div>}
+                        {followup.notes && <div><span className="font-medium">Notes:</span> {followup.notes}</div>}
+                      </div>
+
+                      {/* Followup Details */}
+                      {(followup.diagnosis || followup.treatment || followup.recommendations) && (
+                        <div className="bg-white p-4 rounded-lg mb-4">
+                          <h6 className="font-semibold text-gray-800 mb-3 text-xs">Followup Details</h6>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                            {followup.diagnosis && (
+                              <div>
+                                <span className="font-medium text-gray-600">Diagnosis:</span>
+                                <p className="text-gray-800 mt-1">{followup.diagnosis}</p>
+                              </div>
+                            )}
+                            {followup.treatment && (
+                              <div>
+                                <span className="font-medium text-gray-600">Treatment:</span>
+                                <p className="text-gray-800 mt-1">{followup.treatment}</p>
+                              </div>
+                            )}
+                            {followup.recommendations && (
+                              <div>
+                                <span className="font-medium text-gray-600">Recommendations:</span>
+                                <p className="text-gray-800 mt-1">{followup.recommendations}</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Specific Followup Type Details */}
+                      {followup.followupType === 'Allergic Rhinitis' && followup.allergicRhinitisData && (
+                        <div className="bg-blue-50 p-4 rounded-lg">
+                          <h6 className="font-semibold text-blue-800 mb-3 text-xs">Allergic Rhinitis Details</h6>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                            {followup.allergicRhinitisData.symptoms && (
+                              <div><span className="font-medium">Symptoms:</span> {followup.allergicRhinitisData.symptoms}</div>
+                            )}
+                            {followup.allergicRhinitisData.severity && (
+                              <div><span className="font-medium">Severity:</span> {followup.allergicRhinitisData.severity}</div>
+                            )}
+                            {followup.allergicRhinitisData.triggers && (
+                              <div><span className="font-medium">Triggers:</span> {followup.allergicRhinitisData.triggers}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {followup.followupType === 'Atopic Dermatitis' && followup.atopicDermatitisData && (
+                        <div className="bg-green-50 p-4 rounded-lg">
+                          <h6 className="font-semibold text-green-800 mb-3 text-xs">Atopic Dermatitis Details</h6>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                            {followup.atopicDermatitisData.affectedAreas && (
+                              <div><span className="font-medium">Affected Areas:</span> {followup.atopicDermatitisData.affectedAreas}</div>
+                            )}
+                            {followup.atopicDermatitisData.severity && (
+                              <div><span className="font-medium">Severity:</span> {followup.atopicDermatitisData.severity}</div>
+                            )}
+                            {followup.atopicDermatitisData.itchLevel && (
+                              <div><span className="font-medium">Itch Level:</span> {followup.atopicDermatitisData.itchLevel}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {followup.followupType === 'Allergic Conjunctivitis' && followup.allergicConjunctivitisData && (
+                        <div className="bg-yellow-50 p-4 rounded-lg">
+                          <h6 className="font-semibold text-yellow-800 mb-3 text-xs">Allergic Conjunctivitis Details</h6>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                            {followup.allergicConjunctivitisData.eyeSymptoms && (
+                              <div><span className="font-medium">Eye Symptoms:</span> {followup.allergicConjunctivitisData.eyeSymptoms}</div>
+                            )}
+                            {followup.allergicConjunctivitisData.severity && (
+                              <div><span className="font-medium">Severity:</span> {followup.allergicConjunctivitisData.severity}</div>
+                            )}
+                            {followup.allergicConjunctivitisData.affectedEye && (
+                              <div><span className="font-medium">Affected Eye:</span> {followup.allergicConjunctivitisData.affectedEye}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {followup.followupType === 'Allergic Bronchitis' && followup.allergicBronchitisData && (
+                        <div className="bg-red-50 p-4 rounded-lg">
+                          <h6 className="font-semibold text-red-800 mb-3 text-xs">Allergic Bronchitis Details</h6>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                            {followup.allergicBronchitisData.respiratorySymptoms && (
+                              <div><span className="font-medium">Respiratory Symptoms:</span> {followup.allergicBronchitisData.respiratorySymptoms}</div>
+                            )}
+                            {followup.allergicBronchitisData.severity && (
+                              <div><span className="font-medium">Severity:</span> {followup.allergicBronchitisData.severity}</div>
+                            )}
+                            {followup.allergicBronchitisData.coughFrequency && (
+                              <div><span className="font-medium">Cough Frequency:</span> {followup.allergicBronchitisData.coughFrequency}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {followup.followupType === 'GPE' && followup.gpeData && (
+                        <div className="bg-indigo-50 p-4 rounded-lg">
+                          <h6 className="font-semibold text-indigo-800 mb-3 text-xs">General Physical Examination Details</h6>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                            {followup.gpeData.vitalSigns && (
+                              <div><span className="font-medium">Vital Signs:</span> {followup.gpeData.vitalSigns}</div>
+                            )}
+                            {followup.gpeData.examinationFindings && (
+                              <div><span className="font-medium">Examination Findings:</span> {followup.gpeData.examinationFindings}</div>
+                            )}
+                            {followup.gpeData.clinicalNotes && (
+                              <div><span className="font-medium">Clinical Notes:</span> {followup.gpeData.clinicalNotes}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* File attachments if any */}
+                      {followup.attachments && followup.attachments.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-gray-200">
+                          <p className="text-xs font-medium text-gray-600 mb-2">Attachments:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {followup.attachments.map((file, fileIndex) => (
+                              <div key={fileIndex} className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border">
+                                {getFileIcon(file.type)}
+                                <span className="text-xs text-gray-700 truncate max-w-24">{file.name}</span>
                                 <div className="flex gap-1">
                                   <button
                                     onClick={() => handleViewFile(file.url, file.name)}

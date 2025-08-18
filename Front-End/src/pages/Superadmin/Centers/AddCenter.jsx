@@ -71,15 +71,15 @@ export default function AddCenterWithAdmin() {
         <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate('/dashboard/Superadmin/Centers/CentersList')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-sm sm:text-base"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-xs"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Centers
           </button>
-          <h1 className="text-lg sm:text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-md font-bold text-slate-800 mb-2">
             Add Healthcare Center & Admin
           </h1>
-          <p className="text-sm sm:text-base text-slate-600">
+          <p className="text-xs text-slate-600">
             Create a new healthcare center with its administrator
           </p>
         </div>
@@ -88,13 +88,13 @@ export default function AddCenterWithAdmin() {
         {success && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 flex items-center">
             <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700 text-sm sm:text-base">Successfully added center and admin!</span>
+            <span className="text-green-700 text-xs">Successfully added center and admin!</span>
           </div>
         )}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 flex items-center">
             <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700 text-sm sm:text-base">{error}</span>
+            <span className="text-red-700 text-xs">{error}</span>
           </div>
         )}
 
@@ -234,7 +234,7 @@ export default function AddCenterWithAdmin() {
                       value={admin.password}
                       onChange={handleAdminChange}
                       required
-                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                       placeholder="Enter password"
                     />
                     <button
@@ -258,7 +258,7 @@ export default function AddCenterWithAdmin() {
                     value={admin.userType}
                     onChange={handleAdminChange}
                     required
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   >
                     <option value="centeradmin">Center Admin</option>
                     <option value="doctor">Doctor</option>
@@ -274,7 +274,7 @@ export default function AddCenterWithAdmin() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
+                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-xs"
               >
                 {loading ? (
                   <>
@@ -308,7 +308,7 @@ const Input = ({ label, name, value, onChange, type = "text", icon }) => (
       value={value}
       onChange={onChange}
       required
-      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
       placeholder={`Enter ${label.toLowerCase()}`}
     />
   </div>
@@ -326,7 +326,7 @@ const TextArea = ({ label, name, value, onChange, icon }) => (
       onChange={onChange}
       required
       rows={3}
-      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none text-sm sm:text-base"
+      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none text-xs"
       placeholder={`Enter ${label.toLowerCase()}`}
     />
   </div>

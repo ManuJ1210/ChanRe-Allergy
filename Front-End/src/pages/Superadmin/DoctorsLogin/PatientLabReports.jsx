@@ -111,10 +111,10 @@ const PatientLabReports = () => {
               <AlertCircle className="h-6 w-6 text-red-500 mr-2" />
               <h3 className="text-sm font-semibold text-red-800">Error Loading Patient Data</h3>
             </div>
-            <p className="text-red-700 mb-4">{dataError}</p>
+            <p className="text-red-700 mb-4 text-xs">{dataError}</p>
             <button
               onClick={handleBack}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-xs"
             >
               Go Back
             </button>
@@ -133,12 +133,12 @@ const PatientLabReports = () => {
               <AlertCircle className="h-6 w-6 text-yellow-500 mr-2" />
               <h3 className="text-sm font-semibold text-yellow-800">Patient Not Found</h3>
             </div>
-            <p className="text-yellow-700 mb-4">
+            <p className="text-yellow-700 mb-4 text-xs">
               The patient with ID "{patientId}" was not found. Please check the URL and try again.
             </p>
             <button
               onClick={handleBack}
-              className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors"
+              className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors text-xs"
             >
               Go Back
             </button>
@@ -162,8 +162,8 @@ const PatientLabReports = () => {
                 <ArrowLeft className="w-6 h-6 text-gray-600" />
               </button>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Lab Reports</h1>
-                <p className="text-gray-600 mt-1">Review and provide feedback on laboratory reports</p>
+                <h1 className="text-md font-bold text-gray-900">Lab Reports</h1>
+                <p className="text-gray-600 mt-1 text-xs">Review and provide feedback on laboratory reports</p>
               </div>
             </div>
             <button
@@ -175,7 +175,7 @@ const PatientLabReports = () => {
               className="bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-3 rounded-xl hover:from-orange-700 hover:to-red-700 flex items-center shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50"
             >
               <RefreshCw className={`w-5 h-5 mr-2 ${dataLoading ? 'animate-spin' : ''}`} />
-              Refresh
+              <span className="text-xs">Refresh</span>
             </button>
           </div>
         </div>
@@ -184,7 +184,7 @@ const PatientLabReports = () => {
         {dataError && (
           <div className="mb-6 bg-red-50 border-l-4 border-red-400 rounded-lg p-4 flex items-center shadow-sm">
             <AlertCircle className="h-6 w-6 text-red-500 mr-3" />
-            <span className="text-red-700 font-medium">{dataError}</span>
+            <span className="text-red-700 font-medium text-xs">{dataError}</span>
           </div>
         )}
 
@@ -197,8 +197,8 @@ const PatientLabReports = () => {
                   <User className="h-8 w-8 text-orange-600" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900">{patient.name}</h2>
-                  <div className="flex items-center space-x-4 text-gray-600 mt-1">
+                  <h2 className="text-sm font-bold text-gray-900">{patient.name}</h2>
+                  <div className="flex items-center space-x-4 text-gray-600 mt-1 text-xs">
                     <span className="flex items-center">
                       <Calendar className="w-4 h-4 mr-1" />
                       {patient.age} years, {patient.gender}
@@ -227,8 +227,8 @@ const PatientLabReports = () => {
           <div className="px-8 py-6 bg-gradient-to-r from-orange-50 to-red-50 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Laboratory Reports</h2>
-                <p className="text-gray-600 mt-1">All test results, reports, and analysis</p>
+                <h2 className="text-sm font-bold text-gray-900">Laboratory Reports</h2>
+                <p className="text-gray-600 mt-1 text-xs">All test results, reports, and analysis</p>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-medium">
@@ -244,8 +244,8 @@ const PatientLabReports = () => {
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Activity className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">No Lab Reports Found</h3>
-                <p className="text-gray-500 max-w-md mx-auto">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">No Lab Reports Found</h3>
+                <p className="text-gray-500 max-w-md mx-auto text-xs">
                   No laboratory reports found for this patient. Reports will appear here once tests are completed.
                 </p>
               </div>
@@ -259,7 +259,7 @@ const PatientLabReports = () => {
                           <Activity className="w-6 h-6 text-orange-600" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-800 text-sm">{report.testType}</h4>
+                          <h4 className="font-semibold text-gray-800 text-xs">{report.testType}</h4>
                           <p className="text-xs text-gray-500">Created on {new Date(report.createdAt).toLocaleDateString()}</p>
                         </div>
                       </div>
@@ -397,7 +397,7 @@ const PatientLabReports = () => {
                         <div className="md:col-span-2 lg:col-span-3 bg-blue-50 p-4 rounded-lg">
                           <div className="flex items-center justify-between">
                             <div>
-                              <span className="font-medium text-blue-800">PDF Report Available</span>
+                              <span className="font-medium text-blue-800 text-xs">PDF Report Available</span>
                               <p className="text-xs text-blue-600 mt-1">
                                 Generated on {report.reportGeneratedDate ? new Date(report.reportGeneratedDate).toLocaleDateString() : 'N/A'}
                               </p>
@@ -430,7 +430,7 @@ const PatientLabReports = () => {
                 <textarea
                   value={feedbackMessage}
                   onChange={(e) => setFeedbackMessage(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   rows="4"
                   placeholder="Enter your feedback for the lab report..."
                 />
@@ -438,7 +438,7 @@ const PatientLabReports = () => {
               <div className="flex gap-3">
                 <button
                   onClick={submitFeedback}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-xs"
                 >
                   Send Feedback
                 </button>
@@ -448,7 +448,7 @@ const PatientLabReports = () => {
                     setFeedbackMessage('');
                     setSelectedReport(null);
                   }}
-                  className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
+                  className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 text-xs"
                 >
                   Cancel
                 </button>

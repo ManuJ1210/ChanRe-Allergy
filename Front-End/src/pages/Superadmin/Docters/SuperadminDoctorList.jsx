@@ -131,23 +131,23 @@ const SuperAdminDoctorList = () => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <button
               onClick={() => navigate('/dashboard/Superadmin')}
-              className="flex items-center text-slate-600 hover:text-slate-800 transition-colors text-sm sm:text-base"
+              className="flex items-center text-slate-600 hover:text-slate-800 transition-colors text-xs"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </button>
             <button
               onClick={() => navigate('/dashboard/Superadmin/Docters/AddSuperadminDoctor')}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 transition-colors text-sm sm:text-base w-full sm:w-auto"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 transition-colors text-xs w-full sm:w-auto"
             >
               <Plus className="h-4 w-4" />
               Add Doctor
             </button>
           </div>
-          <h1 className="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center sm:text-left">
+          <h1 className="text-md font-bold text-slate-800 mb-2 text-center sm:text-left">
             Superadmin Doctors
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 text-center sm:text-left">
+          <p className="text-xs text-slate-600 text-center sm:text-left">
             Manage all superadmin doctors
           </p>
         </div>
@@ -158,7 +158,7 @@ const SuperAdminDoctorList = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Total Doctors</p>
-                <p className="text-base sm:text-lg font-bold text-slate-800">{stats?.total || 0}</p>
+                <p className="text-sm font-bold text-slate-800">{stats?.total || 0}</p>
               </div>
               <div className="bg-blue-100 p-2 sm:p-3 rounded-lg">
                 <UserCheck className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
@@ -169,7 +169,7 @@ const SuperAdminDoctorList = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Active Doctors</p>
-                <p className="text-base sm:text-lg font-bold text-green-600">{stats?.active || 0}</p>
+                <p className="text-sm font-bold text-green-600">{stats?.active || 0}</p>
               </div>
               <div className="bg-green-100 p-2 sm:p-3 rounded-lg">
                 <UserCheck className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
@@ -180,7 +180,7 @@ const SuperAdminDoctorList = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-xs font-medium">Inactive Doctors</p>
-                <p className="text-base sm:text-lg font-bold text-red-600">{stats?.inactive || 0}</p>
+                <p className="text-sm font-bold text-red-600">{stats?.inactive || 0}</p>
               </div>
               <div className="bg-red-100 p-2 sm:p-3 rounded-lg">
                 <UserX className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
@@ -193,13 +193,13 @@ const SuperAdminDoctorList = () => {
         {success && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700 text-sm sm:text-base">{message}</span>
+            <span className="text-green-700 text-xs">{message}</span>
           </div>
         )}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700 text-sm sm:text-base">{error}</span>
+            <span className="text-red-700 text-xs">{error}</span>
           </div>
         )}
 
@@ -214,7 +214,7 @@ const SuperAdminDoctorList = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search doctors by name, email, or username..."
-                  className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                  className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 />
               </div>
             </form>
@@ -285,13 +285,13 @@ const SuperAdminDoctorList = () => {
                     <td colSpan="6" className="px-6 py-4 text-center">
                       <div className="flex items-center justify-center">
                         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-                        <span className="ml-2 text-slate-600 text-sm sm:text-base">Loading doctors...</span>
+                        <span className="ml-2 text-slate-600 text-xs">Loading doctors...</span>
                       </div>
                     </td>
                   </tr>
                 ) : doctors.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-4 text-center text-slate-500 text-sm sm:text-base">
+                    <td colSpan="6" className="px-6 py-4 text-center text-slate-500 text-xs">
                       No doctors found
                     </td>
                   </tr>
@@ -301,25 +301,25 @@ const SuperAdminDoctorList = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            <span className="text-blue-600 font-semibold text-sm">
+                            <span className="text-blue-600 font-semibold text-xs">
                               {doctor.name.charAt(0).toUpperCase()}
                             </span>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-slate-900">{doctor.name}</div>
-                            <div className="text-sm text-slate-500">@{doctor.username}</div>
+                            <div className="text-xs font-medium text-slate-900">{doctor.name}</div>
+                            <div className="text-xs text-slate-500">@{doctor.username}</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-slate-900">{doctor.email}</div>
-                        <div className="text-sm text-slate-500">{doctor.mobile}</div>
+                        <div className="text-xs text-slate-900">{doctor.email}</div>
+                        <div className="text-xs text-slate-500">{doctor.mobile}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-slate-900">
+                        <div className="text-xs text-slate-900">
                           {renderSpecializations(doctor.specializations)}
                         </div>
-                        <div className="text-sm text-slate-500">{doctor.designation || 'N/A'}</div>
+                        <div className="text-xs text-slate-500">{doctor.designation || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -330,10 +330,10 @@ const SuperAdminDoctorList = () => {
                           {doctor.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500">
                         {formatDate(doctor.createdAt)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-xs font-medium">
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => navigate(`/dashboard/Superadmin/Docters/ViewSuperadminDoctor/${doctor._id}`)}
@@ -385,12 +385,12 @@ const SuperAdminDoctorList = () => {
           {loading ? (
             <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-slate-600 text-sm sm:text-base">Loading doctors...</p>
+              <p className="text-slate-600 text-xs">Loading doctors...</p>
             </div>
           ) : doctors.length === 0 ? (
             <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6 text-center">
               <UserCheck className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-500 text-sm sm:text-base">No doctors found</p>
+              <p className="text-slate-500 text-xs">No doctors found</p>
             </div>
           ) : (
             doctors.map((doctor) => (
@@ -400,13 +400,13 @@ const SuperAdminDoctorList = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-600 font-semibold text-sm">
+                        <span className="text-blue-600 font-semibold text-xs">
                           {doctor.name.charAt(0).toUpperCase()}
                         </span>
                       </div>
                       <div>
-                        <h3 className="font-medium text-slate-800 text-sm sm:text-base">{doctor.name}</h3>
-                        <p className="text-slate-500 text-xs sm:text-sm">@{doctor.username}</p>
+                        <h3 className="font-medium text-slate-800 text-xs">{doctor.name}</h3>
+                        <p className="text-slate-500 text-xs">@{doctor.username}</p>
                       </div>
                     </div>
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -419,7 +419,7 @@ const SuperAdminDoctorList = () => {
                   </div>
 
                   {/* Contact Details */}
-                  <div className="grid grid-cols-1 gap-2 text-xs sm:text-sm">
+                  <div className="grid grid-cols-1 gap-2 text-xs">
                     <div className="flex items-center space-x-2">
                       <span className="text-slate-500 w-16">Email:</span>
                       <span className="text-slate-700">{doctor.email}</span>
@@ -438,14 +438,14 @@ const SuperAdminDoctorList = () => {
 
                   {/* Specializations */}
                   <div className="border-t border-slate-100 pt-2">
-                    <div className="text-xs sm:text-sm">
+                    <div className="text-xs">
                       <span className="text-slate-500">Specializations: </span>
                       <span className="text-slate-700">
                         {renderSpecializations(doctor.specializations)}
                       </span>
                     </div>
                     {doctor.designation && (
-                      <div className="text-xs sm:text-sm mt-1">
+                      <div className="text-xs mt-1">
                         <span className="text-slate-500">Designation: </span>
                         <span className="text-slate-700">{doctor.designation}</span>
                       </div>
@@ -532,19 +532,19 @@ const SuperAdminDoctorList = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-sm font-semibold text-slate-900 mb-4">Confirm Delete</h3>
-            <p className="text-slate-600 mb-6 text-sm sm:text-base">
+            <p className="text-slate-600 mb-6 text-xs">
               Are you sure you want to delete <strong>{selectedDoctor?.name}</strong>? This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 text-sm sm:text-base"
+                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 text-xs"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm sm:text-base"
+                className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-xs"
               >
                 Delete
               </button>

@@ -71,7 +71,7 @@ const ViewSuperadminDoctor = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-slate-600">Loading doctor details...</p>
+            <p className="text-slate-600 text-xs">Loading doctor details...</p>
           </div>
         </div>
       </div>
@@ -86,7 +86,7 @@ const ViewSuperadminDoctor = () => {
             
             <button
               onClick={() => navigate('/dashboard/Superadmin/Docters/SuperAdminDoctorList')}
-              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs"
             >
               Back to List
             </button>
@@ -101,10 +101,10 @@ const ViewSuperadminDoctor = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-4xl mx-auto">
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
-            <p className="text-yellow-600">Doctor not found</p>
+            <p className="text-yellow-600 text-xs">Doctor not found</p>
             <button
               onClick={() => navigate('/dashboard/Superadmin/Docters/SuperAdminDoctorList')}
-              className="mt-4 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
+              className="mt-4 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-xs"
             >
               Back to List
             </button>
@@ -121,7 +121,7 @@ const ViewSuperadminDoctor = () => {
         <div className="mb-6">
           <button
             onClick={() => navigate('/dashboard/Superadmin/Docters/SuperAdminDoctorList')}
-            className="flex items-center text-slate-600 hover:text-slate-800 transition-colors mb-4"
+            className="flex items-center text-slate-600 hover:text-slate-800 transition-colors mb-4 text-xs"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Doctor List
@@ -129,21 +129,21 @@ const ViewSuperadminDoctor = () => {
           
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-xl font-bold text-slate-800 mb-2">Doctor Details</h1>
-              <p className="text-slate-600">View comprehensive information about the doctor</p>
+              <h1 className="text-md font-bold text-slate-800 mb-2">Doctor Details</h1>
+              <p className="text-slate-600 text-xs">View comprehensive information about the doctor</p>
             </div>
             
             <div className="flex gap-3 mt-4 sm:mt-0">
               <button
                 onClick={handleEdit}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs"
               >
                 <Edit className="w-4 h-4 mr-2" />
                 Edit
               </button>
               <button
                 onClick={() => setShowDeleteModal(true)}
-                className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete
@@ -155,7 +155,7 @@ const ViewSuperadminDoctor = () => {
         {/* Success/Error Messages */}
         {success && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
-            <p className="text-green-600">{message}</p>
+            <p className="text-green-600 text-xs">{message}</p>
           </div>
         )}
 
@@ -168,8 +168,8 @@ const ViewSuperadminDoctor = () => {
                 <User className="w-10 h-10" />
               </div>
               <div>
-                <h2 className="text-xl font-bold mb-1">{currentDoctor.name}</h2>
-                <p className="text-blue-100">{currentDoctor.designation || 'Doctor'}</p>
+                <h2 className="text-sm font-bold mb-1">{currentDoctor.name}</h2>
+                <p className="text-blue-100 text-xs">{currentDoctor.designation || 'Doctor'}</p>
                 <div className="flex items-center mt-2">
                   <Shield className="w-4 h-4 mr-2" />
                   <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
@@ -195,7 +195,7 @@ const ViewSuperadminDoctor = () => {
                     <Mail className="w-4 h-4 mr-3 text-slate-500" />
                     <div>
                       <p className="text-xs text-slate-500">Email</p>
-                      <p className="font-medium">{currentDoctor.email}</p>
+                      <p className="font-medium text-xs">{currentDoctor.email}</p>
                     </div>
                   </div>
                   
@@ -203,7 +203,7 @@ const ViewSuperadminDoctor = () => {
                     <Phone className="w-4 h-4 mr-3 text-slate-500" />
                     <div>
                       <p className="text-xs text-slate-500">Mobile</p>
-                      <p className="font-medium">{currentDoctor.mobile}</p>
+                      <p className="font-medium text-xs">{currentDoctor.mobile}</p>
                     </div>
                   </div>
                   
@@ -211,7 +211,7 @@ const ViewSuperadminDoctor = () => {
                     <User className="w-4 h-4 mr-3 text-slate-500" />
                     <div>
                       <p className="text-xs text-slate-500">Username</p>
-                      <p className="font-medium">{currentDoctor.username}</p>
+                      <p className="font-medium text-xs">{currentDoctor.username}</p>
                     </div>
                   </div>
                   
@@ -219,7 +219,7 @@ const ViewSuperadminDoctor = () => {
                     <Calendar className="w-4 h-4 mr-3 text-slate-500" />
                     <div>
                       <p className="text-xs text-slate-500">Joined</p>
-                      <p className="font-medium">{formatDate(currentDoctor.createdAt)}</p>
+                      <p className="font-medium text-xs">{formatDate(currentDoctor.createdAt)}</p>
                     </div>
                   </div>
                 </div>
@@ -238,7 +238,7 @@ const ViewSuperadminDoctor = () => {
                       <Award className="w-4 h-4 mr-3 text-slate-500" />
                       <div>
                         <p className="text-xs text-slate-500">Qualification</p>
-                        <p className="font-medium">{currentDoctor.qualification}</p>
+                        <p className="font-medium text-xs">{currentDoctor.qualification}</p>
                       </div>
                     </div>
                   )}
@@ -248,7 +248,7 @@ const ViewSuperadminDoctor = () => {
                       <GraduationCap className="w-4 h-4 mr-3 text-slate-500" />
                       <div>
                         <p className="text-xs text-slate-500">Designation</p>
-                        <p className="font-medium">{currentDoctor.designation}</p>
+                        <p className="font-medium text-xs">{currentDoctor.designation}</p>
                       </div>
                     </div>
                   )}
@@ -258,7 +258,7 @@ const ViewSuperadminDoctor = () => {
                       <Shield className="w-4 h-4 mr-3 text-slate-500" />
                       <div>
                         <p className="text-xs text-slate-500">KMC Number</p>
-                        <p className="font-medium">{currentDoctor.kmcNumber}</p>
+                        <p className="font-medium text-xs">{currentDoctor.kmcNumber}</p>
                       </div>
                     </div>
                   )}
@@ -268,7 +268,7 @@ const ViewSuperadminDoctor = () => {
                       <Building className="w-4 h-4 mr-3 text-slate-500" />
                       <div>
                         <p className="text-xs text-slate-500">Hospital</p>
-                        <p className="font-medium">{currentDoctor.hospitalName}</p>
+                        <p className="font-medium text-xs">{currentDoctor.hospitalName}</p>
                       </div>
                     </div>
                   )}
@@ -278,7 +278,7 @@ const ViewSuperadminDoctor = () => {
                       <Clock className="w-4 h-4 mr-3 text-slate-500" />
                       <div>
                         <p className="text-xs text-slate-500">Experience</p>
-                        <p className="font-medium">{currentDoctor.experience}</p>
+                        <p className="font-medium text-xs">{currentDoctor.experience}</p>
                       </div>
                     </div>
                   )}
@@ -314,7 +314,7 @@ const ViewSuperadminDoctor = () => {
                   Bio
                 </h3>
                 <div className="bg-slate-50 rounded-lg p-4">
-                  <p className="text-slate-700 leading-relaxed">{currentDoctor.bio}</p>
+                  <p className="text-slate-700 leading-relaxed text-xs">{currentDoctor.bio}</p>
                 </div>
               </div>
             )}
@@ -354,19 +354,19 @@ const ViewSuperadminDoctor = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
             <h3 className="text-sm font-semibold text-slate-800 mb-4">Confirm Delete</h3>
-            <p className="text-slate-600 mb-6">
+            <p className="text-slate-600 mb-6 text-xs">
               Are you sure you want to delete Dr. {currentDoctor.name}? This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
+                className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors text-xs"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs"
               >
                 Delete
               </button>

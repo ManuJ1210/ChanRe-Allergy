@@ -71,7 +71,7 @@ export default function EditCenter() {
           <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-8">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-slate-600">Loading center details...</p>
+              <p className="text-slate-600 text-xs">Loading center details...</p>
             </div>
           </div>
         </div>
@@ -86,15 +86,15 @@ export default function EditCenter() {
         <div className="mb-8">
           <button
             onClick={() => navigate('/dashboard/Superadmin/Centers/CentersList')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors text-xs"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Centers
           </button>
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-md font-bold text-slate-800 mb-2">
             Edit Healthcare Center
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-xs">
             Update center information and details
           </p>
         </div>
@@ -103,24 +103,24 @@ export default function EditCenter() {
         {updateSuccess && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
             <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700">Center updated successfully!</span>
+            <span className="text-green-700 text-xs">Center updated successfully!</span>
           </div>
         )}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
             <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700">{error}</span>
+            <span className="text-red-700 text-xs">{error}</span>
           </div>
         )}
 
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-6 border-b border-blue-100">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center">
               <Building2 className="h-5 w-5 mr-2 text-blue-500" />
               Center Information
             </h2>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-xs">
               Update the center details below
             </p>
           </div>
@@ -138,7 +138,7 @@ export default function EditCenter() {
                   value={form.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="ChanRe Allergy Center"
                 />
               </div>
@@ -154,7 +154,7 @@ export default function EditCenter() {
                   value={form.location}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Bangalore"
                 />
               </div>
@@ -170,7 +170,7 @@ export default function EditCenter() {
                   value={form.code}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Unique Center Code"
                 />
               </div>
@@ -185,7 +185,7 @@ export default function EditCenter() {
                   name="address"
                   value={form.address}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="123 Main St, Area, City, State, Pincode"
                 />
               </div>
@@ -201,7 +201,7 @@ export default function EditCenter() {
                   value={form.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="center@email.com"
                 />
               </div>
@@ -216,7 +216,7 @@ export default function EditCenter() {
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="1234567890"
                 />
               </div>
@@ -227,7 +227,7 @@ export default function EditCenter() {
               <button
                 type="submit"
                 disabled={updateLoading}
-                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-xs"
               >
                 {updateLoading ? (
                   <>

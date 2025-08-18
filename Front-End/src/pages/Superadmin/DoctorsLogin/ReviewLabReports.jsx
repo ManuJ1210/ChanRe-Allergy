@@ -282,7 +282,7 @@ const ReviewLabReports = () => {
   if (workingError) {
     return (
       <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-        {workingError}
+        <p className="text-xs">{workingError}</p>
       </div>
     );
   }
@@ -290,8 +290,8 @@ const ReviewLabReports = () => {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-800 mb-2">Review Lab Reports</h1>
-        <p className="text-gray-600">
+        <h1 className="text-md font-bold text-gray-800 mb-2">Review Lab Reports</h1>
+        <p className="text-gray-600 text-xs">
           Review completed lab reports and provide feedback to center admin doctors
         </p>
       </div>
@@ -300,27 +300,27 @@ const ReviewLabReports = () => {
       {success && (
         <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center">
           <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-          <span className="text-green-700">{message}</span>
+          <span className="text-green-700 text-xs">{message}</span>
         </div>
       )}
 
       {workingError && (
         <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center">
           <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
-          <span className="text-red-700">{workingError}</span>
+          <span className="text-red-700 text-xs">{workingError}</span>
         </div>
       )}
 
       {/* Reports List */}
       <div className="bg-white rounded-lg shadow">
         <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-800">Lab Reports</h2>
+          <h2 className="text-sm font-semibold text-gray-800">Lab Reports</h2>
         </div>
         <div className="p-4 sm:p-6">
           {labReports.length === 0 ? (
             <div className="text-center py-8">
               <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No lab reports available for review.</p>
+              <p className="text-gray-500 text-xs">No lab reports available for review.</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -334,7 +334,7 @@ const ReviewLabReports = () => {
                         <User className="h-5 w-5 text-blue-600" />
                       </div>
                       <div className="ml-3 min-w-0 flex-1">
-                        <div className="text-sm font-medium text-gray-900 truncate">
+                        <div className="text-xs font-medium text-gray-900 truncate">
                           {report.patientId?.name || 'N/A'}
                         </div>
                         <div className="text-xs text-gray-500">
@@ -347,14 +347,14 @@ const ReviewLabReports = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                       <div>
                         <p className="text-xs text-gray-500">Test Type</p>
-                        <p className="text-sm font-medium text-gray-900">{report.testType || 'N/A'}</p>
+                        <p className="text-xs font-medium text-gray-900">{report.testType || 'N/A'}</p>
                         {report.testDescription && (
                           <p className="text-xs text-gray-600">{report.testDescription}</p>
                         )}
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Requested By</p>
-                        <p className="text-sm font-medium text-gray-900">Dr. {report.doctorId?.name || 'N/A'}</p>
+                        <p className="text-xs font-medium text-gray-900">Dr. {report.doctorId?.name || 'N/A'}</p>
                         <p className="text-xs text-gray-600">{report.centerId?.name || report.centerName || 'N/A'}</p>
                       </div>
                     </div>
@@ -365,7 +365,7 @@ const ReviewLabReports = () => {
                         <p className="text-xs text-gray-500">Completed Date</p>
                         <div className="flex items-center">
                           <Calendar className="w-4 h-4 mr-2 text-gray-400" />
-                          <span className="text-sm text-gray-900">
+                          <span className="text-xs text-gray-900">
                             {report.completedDate || report.reportGeneratedDate || report.updatedAt ? 
                               new Date(report.completedDate || report.reportGeneratedDate || report.updatedAt).toLocaleDateString() 
                               : 'N/A'}
@@ -464,31 +464,31 @@ const ReviewLabReports = () => {
                               <User className="h-5 w-5 text-blue-600" />
                             </div>
                             <div className="ml-3 min-w-0">
-                              <div className="text-sm font-medium text-gray-900 truncate">
+                              <div className="text-xs font-medium text-gray-900 truncate">
                                 {report.patientId?.name || 'N/A'}
                               </div>
-                              <div className="text-sm text-gray-500">
+                              <div className="text-xs text-gray-500">
                                 {report.patientId?.age || 'N/A'} years
                               </div>
                             </div>
                           </div>
                         </td>
                         <td className="px-4 py-4">
-                          <div className="text-sm text-gray-900">{report.testType || 'N/A'}</div>
-                          <div className="text-sm text-gray-500">{report.testDescription || 'N/A'}</div>
+                          <div className="text-xs text-gray-900">{report.testType || 'N/A'}</div>
+                          <div className="text-xs text-gray-500">{report.testDescription || 'N/A'}</div>
                         </td>
                         <td className="px-4 py-4">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-xs text-gray-900">
                             Dr. {report.doctorId?.name || 'N/A'}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-xs text-gray-500">
                             {report.centerId?.name || report.centerName || 'N/A'}
                           </div>
                         </td>
                         <td className="px-4 py-4">
                           <div className="flex items-center">
                             <Calendar className="w-4 h-4 mr-2 text-gray-400" />
-                            <span className="text-sm text-gray-900">
+                            <span className="text-xs text-gray-900">
                               {report.completedDate || report.reportGeneratedDate || report.updatedAt ? 
                                 new Date(report.completedDate || report.reportGeneratedDate || report.updatedAt).toLocaleDateString() 
                                 : 'N/A'}
@@ -513,7 +513,7 @@ const ReviewLabReports = () => {
                             </span>
                             <button
                               onClick={() => handleViewPDF(report)}
-                              className="text-green-600 hover:text-green-900 flex items-center text-sm"
+                              className="text-green-600 hover:text-green-900 flex items-center text-xs"
                               title="View PDF Report"
                             >
                               <ExternalLink className="w-3 h-3 mr-1" />
@@ -521,11 +521,11 @@ const ReviewLabReports = () => {
                             </button>
                           </div>
                         </td>
-                        <td className="px-4 py-4 text-sm font-medium">
+                        <td className="px-4 py-4 text-xs font-medium">
                           <div className="flex items-center space-x-2">
                             <button
                               onClick={() => handleReviewReport(report)}
-                              className="text-blue-600 hover:text-blue-900 flex items-center"
+                              className="text-blue-600 hover:text-blue-900 flex items-center text-xs"
                             >
                               <Eye className="w-4 h-4 mr-1" />
                               Review
@@ -534,7 +534,7 @@ const ReviewLabReports = () => {
                             {report.reportFile && (
                               <button
                                 onClick={() => handleDownloadPDF(report)}
-                                className="text-purple-600 hover:text-purple-900 flex items-center"
+                                className="text-purple-600 hover:text-purple-900 flex items-center text-xs"
                                 title="Download PDF Report"
                               >
                                 <Download className="w-4 h-4 mr-1" />
@@ -570,19 +570,19 @@ const ReviewLabReports = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-gray-600">Patient</p>
-                    <p className="font-medium">{selectedReport.patientId?.name || 'N/A'}</p>
+                    <p className="font-medium text-xs">{selectedReport.patientId?.name || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Test Type</p>
-                    <p className="font-medium">{selectedReport.testType || 'N/A'}</p>
+                    <p className="font-medium text-xs">{selectedReport.testType || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Requested By</p>
-                    <p className="font-medium">Dr. {selectedReport.doctorId?.name || 'N/A'}</p>
+                    <p className="font-medium text-xs">Dr. {selectedReport.doctorId?.name || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Center</p>
-                    <p className="font-medium">{selectedReport.centerId?.name || selectedReport.centerName || 'N/A'}</p>
+                    <p className="font-medium text-xs">{selectedReport.centerId?.name || selectedReport.centerName || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -636,7 +636,7 @@ const ReviewLabReports = () => {
                       value={feedback.additionalTests}
                       onChange={(e) => setFeedback(prev => ({ ...prev, additionalTests: e.target.value }))}
                       rows="3"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Recommend any additional tests that should be performed..."
                     />
                   </div>
@@ -649,7 +649,7 @@ const ReviewLabReports = () => {
                       value={feedback.patientInstructions}
                       onChange={(e) => setFeedback(prev => ({ ...prev, patientInstructions: e.target.value }))}
                       rows="3"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Provide specific instructions for the patient..."
                     />
                   </div>
@@ -662,7 +662,7 @@ const ReviewLabReports = () => {
                       value={feedback.notes}
                       onChange={(e) => setFeedback(prev => ({ ...prev, notes: e.target.value }))}
                       rows="3"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Any additional notes or observations..."
                     />
                   </div>
@@ -673,13 +673,13 @@ const ReviewLabReports = () => {
             <div className="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
               <button
                 onClick={() => setShowFeedbackModal(false)}
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-xs"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSendFeedback}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center text-xs"
               >
                 <Send className="w-4 h-4 mr-2" />
                 Send Feedback

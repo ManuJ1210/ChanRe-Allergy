@@ -101,7 +101,7 @@ export default function EditCenterAdmin() {
           <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6 sm:p-8">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-slate-600 text-sm sm:text-base">Loading admin details...</p>
+              <p className="text-slate-600 text-xs">Loading admin details...</p>
             </div>
           </div>
         </div>
@@ -116,15 +116,15 @@ export default function EditCenterAdmin() {
         <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate('/dashboard/Superadmin/Centers/ManageAdmins')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-sm sm:text-base"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-xs"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Admins
           </button>
-          <h1 className="text-lg sm:text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-md font-bold text-slate-800 mb-2">
             {isNewAdmin ? 'Assign Center Admin' : 'Edit Center Admin'}
           </h1>
-          <p className="text-sm sm:text-base text-slate-600">
+          <p className="text-xs text-slate-600">
             {isNewAdmin ? 'Create a new administrator for this center' : 'Update administrator information'}
           </p>
         </div>
@@ -133,30 +133,30 @@ export default function EditCenterAdmin() {
         {addSuccess && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 flex items-center">
             <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700 text-sm sm:text-base">Admin created successfully</span>
+            <span className="text-green-700 text-xs">Admin created successfully</span>
           </div>
         )}
         {updateSuccess && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 flex items-center">
             <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700 text-sm sm:text-base">Admin updated successfully</span>
+            <span className="text-green-700 text-xs">Admin updated successfully</span>
           </div>
         )}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 flex items-center">
             <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700 text-sm sm:text-base">{error}</span>
+            <span className="text-red-700 text-xs">{error}</span>
           </div>
         )}
 
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-4 sm:p-6 border-b border-blue-100">
-            <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center">
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center">
               <User className="h-5 w-5 mr-2 text-blue-500" />
               Administrator Information
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 mt-1">
+            <p className="text-xs text-slate-600 mt-1">
               {isNewAdmin ? 'Fill in the details for the new administrator' : 'Update the administrator details below'}
             </p>
           </div>
@@ -174,7 +174,7 @@ export default function EditCenterAdmin() {
                   value={admin.name || ''}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter full name"
                 />
               </div>
@@ -190,7 +190,7 @@ export default function EditCenterAdmin() {
                   value={admin.qualification || ''}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter qualification"
                 />
               </div>
@@ -206,7 +206,7 @@ export default function EditCenterAdmin() {
                   value={admin.designation}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter designation"
                 />
               </div>
@@ -222,7 +222,7 @@ export default function EditCenterAdmin() {
                   value={admin.kmcNumber}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter KMC number"
                 />
               </div>
@@ -238,7 +238,7 @@ export default function EditCenterAdmin() {
                   value={admin.hospitalName}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter hospital name"
                 />
               </div>
@@ -254,7 +254,7 @@ export default function EditCenterAdmin() {
                   value={admin.centerCode}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter center code"
                 />
               </div>
@@ -270,7 +270,7 @@ export default function EditCenterAdmin() {
                   value={admin.phone}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter phone number"
                 />
               </div>
@@ -286,7 +286,7 @@ export default function EditCenterAdmin() {
                   value={admin.email}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter email address"
                 />
               </div>
@@ -302,7 +302,7 @@ export default function EditCenterAdmin() {
                   value={admin.username}
                   onChange={handleAdminChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter username"
                 />
               </div>
@@ -319,7 +319,7 @@ export default function EditCenterAdmin() {
                     value={admin.password}
                     onChange={handleAdminChange}
                     required={isNewAdmin}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder={isNewAdmin ? "Enter password" : "Enter new password (optional)"}
                   />
                   <button
@@ -338,7 +338,7 @@ export default function EditCenterAdmin() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
+                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-xs"
               >
                 {loading ? (
                   <>

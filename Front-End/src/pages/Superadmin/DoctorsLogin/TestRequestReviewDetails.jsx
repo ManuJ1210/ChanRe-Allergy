@@ -137,11 +137,11 @@ const TestRequestDetails = () => {
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h2 className="text-sm sm:text-lg font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
-              <p className="text-gray-600 mb-4 text-xs sm:text-base">{error}</p>
+              <h2 className="text-sm font-semibold text-gray-800 mb-2">Error Loading Test Request</h2>
+              <p className="text-gray-600 mb-4 text-xs">{error}</p>
               <button
-                onClick={() => navigate('/dashboard/superadmin/test-requests')}
-                className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-base"
+                onClick={() => navigate('/dashboard/superadmin/doctor/test-requests')}
+                className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs"
               >
                 Back to Test Requests
               </button>
@@ -159,11 +159,11 @@ const TestRequestDetails = () => {
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
             <div className="text-center">
               <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-sm sm:text-lg font-semibold text-gray-800 mb-2">No Test Request Found</h2>
-              <p className="text-gray-600 mb-4 text-xs sm:text-base">The requested test request could not be found.</p>
+              <h2 className="text-sm font-semibold text-gray-800 mb-2">No Test Request Found</h2>
+              <p className="text-gray-600 mb-4 text-xs">The requested test request could not be found.</p>
               <button
-                onClick={() => navigate('/dashboard/superadmin/test-requests')}
-                className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-base"
+                onClick={() => navigate('/dashboard/superadmin/doctor/test-requests')}
+                className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs"
               >
                 Back to Test Requests
               </button>
@@ -182,13 +182,13 @@ const TestRequestDetails = () => {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
               <button
-                onClick={() => navigate('/dashboard/superadmin/test-requests')}
-                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors text-xs sm:text-base"
+                onClick={() => navigate('/dashboard/superadmin/doctor/test-requests')}
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors text-xs"
               >
                 <ArrowLeft size={20} />
                 <span>Back to Test Requests</span>
               </button>
-              <h1 className="text-lg sm:text-xl font-bold text-gray-800">Test Request Details</h1>
+              <h1 className="text-md font-bold text-gray-800">Test Request Details</h1>
             </div>
           </div>
         </div>
@@ -197,8 +197,8 @@ const TestRequestDetails = () => {
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
           {/* Record Header */}
           <div className="text-center mb-6 sm:mb-8">
-            <h1 className="text-xl sm:text-xl font-bold text-gray-800 mb-2">TEST REQUEST DETAILS</h1>
-            <p className="text-gray-600 text-xs sm:text-base">Complete Information About This Test Request</p>
+            <h1 className="text-md font-bold text-gray-800 mb-2">TEST REQUEST DETAILS</h1>
+            <p className="text-gray-600 text-xs">Complete Information About This Test Request</p>
           </div>
 
           {/* Error Message */}
@@ -206,14 +206,14 @@ const TestRequestDetails = () => {
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
               <div className="flex items-center">
                 <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-                <p className="text-red-800 text-xs sm:text-base">{error}</p>
+                <p className="text-red-800 text-xs">{error}</p>
               </div>
             </div>
           )}
           
           {/* Test Request Information */}
           <div className="bg-blue-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-            <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
               <UserCheck className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
               Test Request Information
             </h2>
@@ -257,7 +257,7 @@ const TestRequestDetails = () => {
           {/* Superadmin Review Information */}
           {testRequest.superadminReview && (
             <div className="bg-yellow-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-              <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
                 <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-yellow-600" />
                 Superadmin Review Status
               </h2>
@@ -312,7 +312,7 @@ const TestRequestDetails = () => {
 
           {/* Patient Information */}
           <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-            <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
               <User className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
               Patient Information
             </h2>
@@ -340,7 +340,7 @@ const TestRequestDetails = () => {
 
           {/* Doctor Information */}
           <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-            <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
               <Stethoscope className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
               Doctor Information
             </h2>
@@ -361,7 +361,7 @@ const TestRequestDetails = () => {
 
           {/* Center Information */}
           <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-            <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
               <Building className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
               Center Information
             </h2>
@@ -379,7 +379,7 @@ const TestRequestDetails = () => {
 
           {/* Test Information */}
           <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-            <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
+            <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
               <TestTube className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
               Test Information
             </h2>
@@ -409,7 +409,7 @@ const TestRequestDetails = () => {
           {/* Lab Information */}
           {testRequest.assignedLabStaffName && (
             <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-              <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
                 <Stethoscope className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
                 Lab Information
               </h2>
@@ -432,7 +432,7 @@ const TestRequestDetails = () => {
           {/* Report Information */}
           {testRequest.reportGeneratedDate && (
             <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-              <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
                 <FileText className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
                 Report Information
               </h2>
@@ -470,7 +470,7 @@ const TestRequestDetails = () => {
           {/* Test Results */}
           {testRequest.testResults && testRequest.testResults !== 'Pending' && (
             <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-              <h2 className="text-sm sm:text-base font-semibold text-gray-800 mb-4 flex items-center">
+              <h2 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
                 <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
                 Test Results
               </h2>
@@ -498,8 +498,8 @@ const TestRequestDetails = () => {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <button
-              onClick={() => navigate('/dashboard/superadmin/test-requests')}
-              className="flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-xs sm:text-base w-full sm:w-auto"
+              onClick={() => navigate('/dashboard/superadmin/doctor/test-requests')}
+              className="flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-xs w-full sm:w-auto"
             >
               <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
               Back to Test Requests

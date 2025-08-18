@@ -60,8 +60,8 @@ const PatientMedications = () => {
                 <ArrowLeft className="w-6 h-6 text-gray-600" />
               </button>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Patient Medications</h1>
-                <p className="text-gray-600 mt-1">Complete medication history and prescriptions</p>
+                <h1 className="text-md font-bold text-gray-900">Patient Medications</h1>
+                <p className="text-gray-600 mt-1 text-xs">Complete medication history and prescriptions</p>
               </div>
             </div>
             <button
@@ -70,7 +70,7 @@ const PatientMedications = () => {
               className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 flex items-center shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50"
             >
               <RefreshCw className={`w-5 h-5 mr-2 ${dataLoading ? 'animate-spin' : ''}`} />
-              Refresh
+              <span className="text-xs">Refresh</span>
             </button>
           </div>
         </div>
@@ -79,7 +79,7 @@ const PatientMedications = () => {
         {dataError && (
           <div className="mb-6 bg-red-50 border-l-4 border-red-400 rounded-lg p-4 flex items-center shadow-sm">
             <AlertCircle className="h-6 w-6 text-red-500 mr-3" />
-            <span className="text-red-700 font-medium">{dataError}</span>
+            <span className="text-red-700 font-medium text-xs">{dataError}</span>
           </div>
         )}
 
@@ -88,8 +88,8 @@ const PatientMedications = () => {
           <div className="px-8 py-6 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Medication Records</h2>
-                <p className="text-gray-600 mt-1">All prescribed medications, dosages, and treatment plans</p>
+                <h2 className="text-sm font-bold text-gray-900">Medication Records</h2>
+                <p className="text-gray-600 mt-1 text-xs">All prescribed medications, dosages, and treatment plans</p>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">
@@ -105,8 +105,8 @@ const PatientMedications = () => {
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Pill className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">No Medications Available</h3>
-                <p className="text-gray-500 max-w-md mx-auto">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">No Medications Available</h3>
+                <p className="text-gray-500 max-w-md mx-auto text-xs">
                   No medication records found. Medications will appear here once prescribed.
                 </p>
               </div>
@@ -115,8 +115,8 @@ const PatientMedications = () => {
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Pill className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">No Medications Found</h3>
-                <p className="text-gray-500 max-w-md mx-auto">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">No Medications Found</h3>
+                <p className="text-gray-500 max-w-md mx-auto text-xs">
                   No medication records found for this patient.
                 </p>
               </div>
@@ -125,7 +125,7 @@ const PatientMedications = () => {
                 {/* Active Medications */}
                 {patientMedications.filter(med => !med.adverseEvent).length > 0 && (
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                    <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
                       <Pill className="w-5 h-5 mr-2 text-green-600" />
                       Active Medications
                     </h3>
@@ -140,7 +140,7 @@ const PatientMedications = () => {
                                   <Pill className="w-6 h-6 text-green-600" />
                                 </div>
                                 <div>
-                                  <h4 className="font-semibold text-gray-800 text-sm">{medication.drugName}</h4>
+                                  <h4 className="font-semibold text-gray-800 text-xs">{medication.drugName}</h4>
                                   <p className="text-xs text-gray-500">Prescribed on {new Date(medication.createdAt).toLocaleDateString()}</p>
                                 </div>
                               </div>
@@ -194,7 +194,7 @@ const PatientMedications = () => {
                 {/* Discontinued Medications */}
                 {patientMedications.filter(med => med.adverseEvent).length > 0 && (
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                    <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
                       <Clock className="w-5 h-5 mr-2 text-red-600" />
                       Discontinued Medications
                     </h3>
@@ -209,7 +209,7 @@ const PatientMedications = () => {
                                   <Pill className="w-6 h-6 text-red-600" />
                                 </div>
                                 <div>
-                                  <h4 className="font-semibold text-gray-800 text-sm">{medication.drugName}</h4>
+                                  <h4 className="font-semibold text-gray-800 text-xs">{medication.drugName}</h4>
                                   <p className="text-xs text-gray-500">Prescribed on {new Date(medication.createdAt).toLocaleDateString()}</p>
                                 </div>
                               </div>

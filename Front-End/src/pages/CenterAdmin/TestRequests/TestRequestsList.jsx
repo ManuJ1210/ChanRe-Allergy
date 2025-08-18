@@ -189,7 +189,7 @@ const TestRequestsList = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-slate-600 text-xs sm:text-base">
+            <p className="text-slate-600 text-xs">
               {!user?.centerId ? 'Loading user data...' : 'Loading test requests...'}
             </p>
           </div>
@@ -203,10 +203,10 @@ const TestRequestsList = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-xl sm:text-xl font-bold text-slate-800 mb-2 text-center sm:text-left">
+          <h1 className="text-md font-bold text-slate-800 mb-2 text-center sm:text-left">
             Test Requests Overview
           </h1>
-          <p className="text-slate-600 text-xs sm:text-base text-center sm:text-left">
+          <p className="text-slate-600 text-xs text-center sm:text-left">
             Monitor test requests for your center
           </p>
         </div>
@@ -220,7 +220,7 @@ const TestRequestsList = () => {
               </div>
               <div>
                 <p className="text-xs font-medium text-slate-600">Total Requests</p>
-                <p className="text-xl font-bold text-slate-800">{testRequests.length}</p>
+                <p className="text-sm font-bold text-slate-800">{testRequests.length}</p>
               </div>
             </div>
           </div>
@@ -232,7 +232,7 @@ const TestRequestsList = () => {
               </div>
               <div>
                 <p className="text-xs font-medium text-slate-600">Pending Review</p>
-                <p className="text-xl font-bold text-slate-800">
+                <p className="text-sm font-bold text-slate-800">
                   {testRequests.filter(tr => tr.status === 'Superadmin_Review').length}
                 </p>
               </div>
@@ -246,7 +246,7 @@ const TestRequestsList = () => {
               </div>
               <div>
                 <p className="text-xs font-medium text-slate-600">Approved</p>
-                <p className="text-xl font-bold text-slate-800">
+                <p className="text-sm font-bold text-slate-800">
                   {testRequests.filter(tr => tr.status === 'Superadmin_Approved').length}
                 </p>
               </div>
@@ -260,7 +260,7 @@ const TestRequestsList = () => {
               </div>
               <div>
                 <p className="text-xs font-medium text-slate-600">Rejected</p>
-                <p className="text-xl font-bold text-slate-800">
+                <p className="text-sm font-bold text-slate-800">
                   {testRequests.filter(tr => tr.status === 'Superadmin_Rejected').length}
                 </p>
               </div>
@@ -280,7 +280,7 @@ const TestRequestsList = () => {
                   placeholder="Search by patient name, doctor name, or test type..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-base"
+                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 />
               </form>
             </div>
@@ -290,7 +290,7 @@ const TestRequestsList = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-base"
+                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
               >
                 <option value="all">All Statuses</option>
                 <option value="Superadmin_Review">Pending Review</option>
@@ -303,7 +303,7 @@ const TestRequestsList = () => {
               <select
                 value={urgencyFilter}
                 onChange={(e) => setUrgencyFilter(e.target.value)}
-                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-base"
+                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
               >
                 <option value="all">All Urgencies</option>
                 <option value="Emergency">Emergency</option>
@@ -314,7 +314,7 @@ const TestRequestsList = () => {
               <select
                 value={centerFilter}
                 onChange={(e) => setCenterFilter(e.target.value)}
-                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-base"
+                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 disabled
               >
                 <option value={user?.centerId || 'all'}>
@@ -324,7 +324,7 @@ const TestRequestsList = () => {
 
               <button
                 onClick={handleFilterReset}
-                className="px-3 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors text-xs sm:text-base flex items-center"
+                className="px-3 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors text-xs flex items-center"
               >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Reset
@@ -432,7 +432,7 @@ const TestRequestsList = () => {
           {testRequests.length === 0 && !loading && (
             <div className="text-center py-12">
               <TestTube className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-500 text-xs sm:text-base">No test requests found</p>
+              <p className="text-slate-500 text-xs">No test requests found</p>
             </div>
           )}
         </div>

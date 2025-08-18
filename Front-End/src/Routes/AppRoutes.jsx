@@ -59,7 +59,7 @@ import PatientDetails from '../pages/Superadmin/DoctorsLogin/PatientDetails';
 import PatientLabReports from '../pages/Superadmin/DoctorsLogin/PatientLabReports';
 import SuperadminDoctorReviewLabReports from '../pages/Superadmin/DoctorsLogin/ReviewLabReports';
 import SuperadminDoctorPatientHistory from '../pages/Superadmin/DoctorsLogin/PatientHistory';
-
+import SuperadminDoctorPatientProfile from '../pages/Superadmin/DoctorsLogin/PatientProfile';
 
 
 // Lab Pages
@@ -226,7 +226,7 @@ export default function AppRoutes() {
         <Route path="superadmin/doctor/test-requests" element={<TestRequestReview />} />
         <Route path="superadmin/doctor/test-requests/:id" element={<TestRequestReviewDetails />} />
         <Route path="superadmin/doctor/patient/:patientId" element={<PatientDetails />} />
-        <Route path="superadmin/doctor/patient/:patientId/profile" element={<PatientProfile />} />
+        <Route path="superadmin/doctor/patient/:patientId/profile" element={<SuperadminDoctorPatientProfile />} />
         <Route path="superadmin/doctor/patient/:patientId/lab-reports" element={<PatientLabReports />} />
         <Route path="superadmin/doctor/patient/:patientId/history" element={<SuperadminDoctorPatientHistory />} />
         

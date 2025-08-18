@@ -146,7 +146,7 @@ const PatientDetails = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-6">
         <div className="max-w-7xl mx-auto">
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-600">{workingError}</p>
+            <p className="text-red-600 text-xs">{workingError}</p>
           </div>
         </div>
       </div>
@@ -167,8 +167,8 @@ const PatientDetails = () => {
                 <ArrowLeft className="w-6 h-6 text-gray-600" />
               </button>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Patient Details</h1>
-                <p className="text-gray-600 mt-1">Review patient information and lab reports</p>
+                <h1 className="text-md font-bold text-gray-900">Patient Details</h1>
+                <p className="text-gray-600 mt-1 text-xs">Review patient information and lab reports</p>
               </div>
             </div>
             <button
@@ -177,7 +177,7 @@ const PatientDetails = () => {
               className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 flex items-center shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50"
             >
               <RefreshCw className={`w-5 h-5 mr-2 ${workingLoading ? 'animate-spin' : ''}`} />
-              Refresh
+              <span className="text-xs">Refresh</span>
             </button>
           </div>
         </div>
@@ -186,7 +186,7 @@ const PatientDetails = () => {
         {workingError && (
           <div className="mb-6 bg-red-50 border-l-4 border-red-400 rounded-lg p-4 flex items-center shadow-sm">
             <AlertCircle className="h-6 w-6 text-red-500 mr-3" />
-            <span className="text-red-700 font-medium">{workingError}</span>
+            <span className="text-red-700 font-medium text-xs">{workingError}</span>
           </div>
         )}
 
@@ -198,7 +198,7 @@ const PatientDetails = () => {
               placeholder="Search patients by name, phone, or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             />
             <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
           </div>
@@ -209,8 +209,8 @@ const PatientDetails = () => {
           <div className="px-8 py-6 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Patients with Completed Lab Reports</h2>
-                <p className="text-gray-600 mt-1">Patients who have completed lab tests and reports</p>
+                <h2 className="text-sm font-bold text-gray-900">Patients with Completed Lab Reports</h2>
+                <p className="text-gray-600 mt-1 text-xs">Patients who have completed lab tests and reports</p>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
@@ -226,8 +226,8 @@ const PatientDetails = () => {
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <User className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">No Patients Found</h3>
-                <p className="text-gray-500 max-w-md mx-auto">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">No Patients Found</h3>
+                <p className="text-gray-500 max-w-md mx-auto text-xs">
                   {searchTerm ? 'No patients found matching your search.' : 'No patients with completed lab reports found.'}
                 </p>
               </div>
@@ -259,7 +259,7 @@ const PatientDetails = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                              <span className="text-blue-600 font-semibold">
+                              <span className="text-blue-600 font-semibold text-xs">
                                 {patient.name.charAt(0).toUpperCase()}
                               </span>
                             </div>
@@ -317,7 +317,7 @@ const PatientDetails = () => {
                 <textarea
                   value={feedbackMessage}
                   onChange={(e) => setFeedbackMessage(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                   rows="4"
                   placeholder="Enter your feedback for the lab report..."
                 />
@@ -325,7 +325,7 @@ const PatientDetails = () => {
               <div className="flex gap-3">
                 <button
                   onClick={submitFeedback}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-xs"
                 >
                   Send Feedback
                 </button>
@@ -335,7 +335,7 @@ const PatientDetails = () => {
                     setFeedbackMessage('');
                     setSelectedReport(null);
                   }}
-                  className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
+                  className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 text-xs"
                 >
                   Cancel
                 </button>

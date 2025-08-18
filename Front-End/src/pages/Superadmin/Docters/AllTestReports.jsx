@@ -187,12 +187,12 @@ const AllTestReports = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate('/dashboard/superadmin')}
-                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors text-xs"
               >
                 <ArrowLeft size={20} />
                 <span>Back to Dashboard</span>
               </button>
-              <h1 className="text-xl font-bold text-gray-800">All Completed Test Reports</h1>
+              <h1 className="text-md font-bold text-gray-800">All Completed Test Reports</h1>
             </div>
             <div className="flex items-center space-x-2 text-xs text-gray-500">
               <Clock className="h-4 w-4" />
@@ -206,7 +206,7 @@ const AllTestReports = () => {
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
             <div className="flex items-center">
               <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-              <p className="text-red-800">{error}</p>
+              <p className="text-red-800 text-xs">{error}</p>
             </div>
           </div>
         )}
@@ -220,7 +220,7 @@ const AllTestReports = () => {
               </div>
               <div className="ml-4">
                 <p className="text-xs font-medium text-gray-500">Total Reports</p>
-                <p className="text-xl font-bold text-gray-900">{allReports.length}</p>
+                <p className="text-sm font-bold text-gray-900">{allReports.length}</p>
               </div>
             </div>
           </div>
@@ -232,7 +232,7 @@ const AllTestReports = () => {
               </div>
               <div className="ml-4">
                 <p className="text-xs font-medium text-gray-500">Completed</p>
-                <p className="text-xl font-bold text-gray-900">
+                <p className="text-sm font-bold text-gray-900">
                   {allReports.filter(r => r.status === 'Completed').length}
                 </p>
               </div>
@@ -246,7 +246,7 @@ const AllTestReports = () => {
               </div>
               <div className="ml-4">
                 <p className="text-xs font-medium text-gray-500">Sent</p>
-                <p className="text-xl font-bold text-gray-900">
+                <p className="text-sm font-bold text-gray-900">
                   {allReports.filter(r => r.status === 'Report_Sent').length}
                 </p>
               </div>
@@ -260,7 +260,7 @@ const AllTestReports = () => {
               </div>
               <div className="ml-4">
                 <p className="text-xs font-medium text-gray-500">Centers</p>
-                <p className="text-xl font-bold text-gray-900">{uniqueCenters.length}</p>
+                <p className="text-sm font-bold text-gray-900">{uniqueCenters.length}</p>
               </div>
             </div>
           </div>
@@ -276,14 +276,14 @@ const AllTestReports = () => {
                 placeholder="Search by patient, test, doctor, center..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
               />
             </div>
             
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               <option value="">All Status</option>
               <option value="Completed">Completed</option>
@@ -293,7 +293,7 @@ const AllTestReports = () => {
             <select
               value={filterDate}
               onChange={(e) => setFilterDate(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               <option value="">All Time</option>
               <option value="today">Today</option>
@@ -306,7 +306,7 @@ const AllTestReports = () => {
             <select
               value={filterCenter}
               onChange={(e) => setFilterCenter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               <option value="">All Centers</option>
               {uniqueCenters.map(center => (
@@ -317,7 +317,7 @@ const AllTestReports = () => {
             <select
               value={filterDoctor}
               onChange={(e) => setFilterDoctor(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             >
               <option value="">All Doctors</option>
               {uniqueDoctors.map(doctor => (
@@ -329,7 +329,7 @@ const AllTestReports = () => {
           <div className="flex justify-end">
             <button
               onClick={fetchAllReports}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs"
             >
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
@@ -347,7 +347,7 @@ const AllTestReports = () => {
             <div className="p-8 text-center">
               <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-sm font-medium text-gray-900 mb-2">No completed reports found</h3>
-              <p className="text-gray-500">
+              <p className="text-gray-500 text-xs">
                 {searchTerm || filterStatus || filterDate || filterCenter || filterDoctor
                   ? 'Try adjusting your search criteria.' 
                   : 'Completed test reports will appear here once they are sent by the lab.'}

@@ -25,14 +25,14 @@ const Dashboard = () => {
   if (workingError) {
     return (
       <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-        {workingError}
+        <p className="text-xs">{workingError}</p>
       </div>
     );
   }
 
   return (
     <div className="p-6">
-      <h1 className="text-xl font-bold text-gray-800 mb-8">Superadmin Doctor Dashboard</h1>
+      <h1 className="text-md font-bold text-gray-800 mb-8">Superadmin Doctor Dashboard</h1>
       
       {/* Stats Cards - Focused on Patient Care */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -99,12 +99,12 @@ const Dashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-semibold text-gray-800 mb-2">Patient Details</h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 mb-4 text-xs">
                 View complete patient information, history, and followups
               </p>
               <button
                 onClick={() => window.location.href = '/dashboard/superadmin/doctor/patients'}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-xs"
               >
                 View Patients
               </button>
@@ -119,12 +119,12 @@ const Dashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-semibold text-gray-800 mb-2">Lab Reports</h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 mb-4 text-xs">
                 Review lab reports and provide feedback to center admin doctors
               </p>
               <button
                 onClick={() => window.location.href = '/dashboard/superadmin/doctor/lab-reports'}
-                className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors"
+                className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors text-xs"
               >
                 Review Reports
               </button>
@@ -139,12 +139,12 @@ const Dashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-semibold text-gray-800 mb-2">Patient History</h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 mb-4 text-xs">
                 Access complete patient medical history and followup records
               </p>
               <button
-                onClick={() => window.location.href = '/dashboard/superadmin/doctor/patient/profile'}
-                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+                onClick={() => window.location.href = '/dashboard/superadmin/doctor/patients'}
+                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors text-xs"
               >
                 View History
               </button>
@@ -159,11 +159,11 @@ const Dashboard = () => {
       {/* Recent Patients with Actions */}
       <div className="bg-white rounded-lg shadow">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-800">Recent Patients</h2>
+          <h2 className="text-sm font-semibold text-gray-800">Recent Patients</h2>
         </div>
         <div className="p-6">
           {assignedPatients.length === 0 ? (
-            <p className="text-gray-500 text-center py-4">No assigned patients found.</p>
+            <p className="text-gray-500 text-center py-4 text-xs">No assigned patients found.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
@@ -189,7 +189,7 @@ const Dashboard = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            <span className="text-blue-600 font-semibold">
+                            <span className="text-blue-600 font-semibold text-xs">
                               {patient.name.charAt(0).toUpperCase()}
                             </span>
                           </div>
@@ -216,7 +216,7 @@ const Dashboard = () => {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => window.location.href = `/dashboard/superadmin/doctor/patient/${patient._id}`}
-                            className="text-blue-600 hover:text-blue-900 flex items-center"
+                            className="text-blue-600 hover:text-blue-900 flex items-center text-xs"
                           >
                             <Eye className="w-4 h-4 mr-1" />
                             View Details

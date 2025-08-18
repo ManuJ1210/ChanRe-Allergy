@@ -160,7 +160,7 @@ const TestRequestsList = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-slate-600 text-xs sm:text-base">Loading test requests...</p>
+            <p className="text-slate-600 text-xs">Loading test requests...</p>
           </div>
         </div>
       </div>
@@ -172,10 +172,10 @@ const TestRequestsList = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-xl sm:text-xl font-bold text-slate-800 mb-2 text-center sm:text-left">
+          <h1 className="text-md font-bold text-slate-800 mb-2 text-center sm:text-left">
             Test Requests Overview
           </h1>
-          <p className="text-slate-600 text-xs sm:text-base text-center sm:text-left">
+          <p className="text-slate-600 text-xs text-center sm:text-left">
             Monitor all test requests across all centers
           </p>
         </div>
@@ -249,7 +249,7 @@ const TestRequestsList = () => {
                   placeholder="Search by patient name, doctor name, or test type..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-base"
+                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                 />
               </form>
             </div>
@@ -259,7 +259,7 @@ const TestRequestsList = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-base"
+                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
               >
                 <option value="all">All Statuses</option>
                 <option value="Superadmin_Review">Pending Review</option>
@@ -272,7 +272,7 @@ const TestRequestsList = () => {
               <select
                 value={urgencyFilter}
                 onChange={(e) => setUrgencyFilter(e.target.value)}
-                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-base"
+                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
               >
                 <option value="all">All Urgencies</option>
                 <option value="Emergency">Emergency</option>
@@ -283,7 +283,7 @@ const TestRequestsList = () => {
               <select
                 value={centerFilter}
                 onChange={(e) => setCenterFilter(e.target.value)}
-                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-base"
+                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
               >
                 <option value="all">All Centers</option>
                 {centers.map((center) => (
@@ -295,7 +295,7 @@ const TestRequestsList = () => {
 
               <button
                 onClick={handleFilterReset}
-                className="px-3 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors text-xs sm:text-base flex items-center"
+                className="px-3 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors text-xs flex items-center"
               >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Reset
@@ -386,7 +386,7 @@ const TestRequestsList = () => {
                     </td>
                     <td className="px-4 py-4">
                       <button
-                        onClick={() => navigate(`/dashboard/superadmin/test-requests/${testRequest._id}`)}
+                        onClick={() => navigate(`/dashboard/superadmin/doctor/test-requests/${testRequest._id}`)}
                         className="text-blue-600 hover:text-blue-700 text-xs font-medium flex items-center"
                       >
                         <Eye className="h-4 w-4 mr-1" />
@@ -403,7 +403,7 @@ const TestRequestsList = () => {
           {testRequests.length === 0 && !loading && (
             <div className="text-center py-12">
               <TestTube className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-500 text-xs sm:text-base">No test requests found</p>
+              <p className="text-slate-500 text-xs">No test requests found</p>
             </div>
           )}
         </div>

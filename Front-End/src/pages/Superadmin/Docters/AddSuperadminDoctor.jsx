@@ -82,15 +82,15 @@ const AddSuperadminDoctor = () => {
         <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate('/dashboard/Superadmin/Docters/SuperAdminDoctorList')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-sm sm:text-base"
+            className="flex items-center text-slate-600 hover:text-slate-800 mb-3 sm:mb-4 transition-colors text-xs"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Doctors
           </button>
-          <h1 className="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center sm:text-left">
+          <h1 className="text-md font-bold text-slate-800 mb-2 text-center sm:text-left">
             Add New Superadmin Doctor
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 text-center sm:text-left">
+          <p className="text-xs text-slate-600 text-center sm:text-left">
             Register a new doctor for superadmin management
           </p>
         </div>
@@ -99,24 +99,24 @@ const AddSuperadminDoctor = () => {
         {success && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-green-500 mr-3" />
-            <span className="text-green-700 text-sm sm:text-base">{message}</span>
+            <span className="text-green-700 text-xs">{message}</span>
           </div>
         )}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 flex items-center">
             <UserCheck className="h-5 w-5 text-red-500 mr-3" />
-            <span className="text-red-700 text-sm sm:text-base">{error}</span>
+            <span className="text-red-700 text-xs">{error}</span>
           </div>
         )}
 
         {/* Form */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100">
           <div className="p-4 sm:p-6 border-b border-blue-100">
-            <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center">
+            <h2 className="text-sm font-semibold text-slate-800 flex items-center">
               <UserCheck className="h-5 w-5 mr-2 text-blue-500" />
               Doctor Information
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 mt-1">
+            <p className="text-xs text-slate-600 mt-1">
               Fill in the doctor details below
             </p>
           </div>
@@ -134,7 +134,7 @@ const AddSuperadminDoctor = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter full name"
                 />
               </div>
@@ -150,7 +150,7 @@ const AddSuperadminDoctor = () => {
                   value={formData.mobile}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter mobile number"
                 />
               </div>
@@ -166,7 +166,7 @@ const AddSuperadminDoctor = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter email address"
                 />
               </div>
@@ -182,7 +182,7 @@ const AddSuperadminDoctor = () => {
                   value={formData.username}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter username"
                 />
               </div>
@@ -199,7 +199,7 @@ const AddSuperadminDoctor = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 pr-12 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 pr-12 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="Enter password"
                   />
                   <button
@@ -222,7 +222,7 @@ const AddSuperadminDoctor = () => {
                   name="qualification"
                   value={formData.qualification}
                   onChange={handleChange}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter qualification"
                 />
               </div>
@@ -237,7 +237,7 @@ const AddSuperadminDoctor = () => {
                   name="designation"
                   value={formData.designation}
                   onChange={handleChange}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter designation"
                 />
               </div>
@@ -252,7 +252,7 @@ const AddSuperadminDoctor = () => {
                   name="kmcNumber"
                   value={formData.kmcNumber}
                   onChange={handleChange}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter KMC number"
                 />
               </div>
@@ -267,7 +267,7 @@ const AddSuperadminDoctor = () => {
                   name="hospitalName"
                   value={formData.hospitalName}
                   onChange={handleChange}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter hospital name"
                 />
               </div>
@@ -282,7 +282,7 @@ const AddSuperadminDoctor = () => {
                   name="experience"
                   value={formData.experience}
                   onChange={handleChange}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                   placeholder="Enter experience (e.g., 5 years)"
                 />
               </div>
@@ -299,7 +299,7 @@ const AddSuperadminDoctor = () => {
                     type="text"
                     value={newSpecialization}
                     onChange={(e) => setNewSpecialization(e.target.value)}
-                    className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base"
+                    className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs"
                     placeholder="Add specialization"
                     onKeyPress={(e) => {
                       if (e.key === 'Enter') {
@@ -311,7 +311,7 @@ const AddSuperadminDoctor = () => {
                   <button
                     type="button"
                     onClick={handleAddSpecialization}
-                    className="px-3 sm:px-4 py-2 sm:py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 transition-colors text-sm sm:text-base w-full sm:w-auto"
+                    className="px-3 sm:px-4 py-2 sm:py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 transition-colors text-xs w-full sm:w-auto"
                   >
                     <Plus className="h-4 w-4" />
                     Add
@@ -325,7 +325,7 @@ const AddSuperadminDoctor = () => {
                         key={index}
                         className="flex items-center gap-2 bg-blue-100 text-blue-700 px-2 sm:px-3 py-1 rounded-full"
                       >
-                        <span className="text-xs sm:text-sm">{spec}</span>
+                        <span className="text-xs">{spec}</span>
                         <button
                           type="button"
                           onClick={() => handleRemoveSpecialization(index)}
@@ -350,7 +350,7 @@ const AddSuperadminDoctor = () => {
                 value={formData.bio}
                 onChange={handleChange}
                 rows="3"
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm sm:text-base resize-none"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-xs resize-none"
                 placeholder="Enter doctor bio"
               />
             </div>
@@ -359,7 +359,7 @@ const AddSuperadminDoctor = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
+                className="flex-1 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-xs"
               >
                 {loading ? (
                   <>
@@ -376,7 +376,7 @@ const AddSuperadminDoctor = () => {
               <button
                 type="button"
                 onClick={() => navigate('/dashboard/Superadmin/Docters/SuperAdminDoctorList')}
-                className="px-4 sm:px-6 py-2 sm:py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors text-sm sm:text-base w-full sm:w-auto"
+                className="px-4 sm:px-6 py-2 sm:py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors text-xs w-full sm:w-auto"
               >
                 Cancel
               </button>

@@ -26,10 +26,10 @@ export default function CentersList() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-xl font-bold text-slate-800 mb-2">
+          <h1 className="text-md font-bold text-slate-800 mb-2">
             Healthcare Centers Management
           </h1>
-          <p className="text-slate-600">
+          <p className="text-slate-600 text-xs">
             Manage and monitor all registered healthcare centers
           </p>
         </div>
@@ -39,17 +39,17 @@ export default function CentersList() {
           <div className="p-6 border-b border-blue-100">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h2 className="text-lg font-semibold text-slate-800 flex items-center">
+                <h2 className="text-sm font-semibold text-slate-800 flex items-center">
                   <Building2 className="h-5 w-5 mr-2 text-blue-500" />
                   Registered Centers
                 </h2>
-                <p className="text-slate-600 mt-1">
+                <p className="text-slate-600 mt-1 text-xs">
                   Total: {centers.length} centers
                 </p>
               </div>
               <button
                 onClick={() => navigate('/dashboard/Superadmin/Centers/AddCenter')}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 text-xs"
               >
                 <Plus className="h-4 w-4" />
                 Add New Center
@@ -63,7 +63,7 @@ export default function CentersList() {
           <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-8">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-slate-600">Loading centers...</p>
+              <p className="text-slate-600 text-xs">Loading centers...</p>
             </div>
           </div>
         )}
@@ -71,7 +71,7 @@ export default function CentersList() {
         {/* Error State */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-600">{error}</p>
+            <p className="text-red-600 text-xs">{error}</p>
           </div>
         )}
 
@@ -83,10 +83,10 @@ export default function CentersList() {
                 <div className="text-center">
                   <Building2 className="h-12 w-12 text-slate-400 mx-auto mb-4" />
                   <h3 className="text-sm font-medium text-slate-600 mb-2">No Centers Found</h3>
-                  <p className="text-slate-500 mb-4">Get started by adding your first healthcare center.</p>
+                  <p className="text-slate-500 mb-4 text-xs">Get started by adding your first healthcare center.</p>
                   <button
                     onClick={() => navigate('/dashboard/Superadmin/Centers/AddCenter')}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto"
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto text-xs"
                   >
                     <Plus className="h-4 w-4" />
                     Add Center
