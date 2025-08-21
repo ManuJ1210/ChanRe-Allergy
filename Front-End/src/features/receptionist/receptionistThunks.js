@@ -34,6 +34,44 @@ import {
   setAddHistorySuccess,
   setAddMedicationSuccess
 } from './receptionistSlice';
+// Billing: fetch test requests for billing
+export const fetchReceptionistBillingRequests = createAsyncThunk(
+  'receptionist/fetchBillingRequests',
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await API.get('/test-requests/billing/mine');
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch billing requests');
+    }
+  }
+);
+
+// Billing: generate bill
+export const generateReceptionistBill = createAsyncThunk(
+  'receptionist/generateBill',
+  async ({ requestId, payload }, { rejectWithValue }) => {
+    try {
+      const res = await API.put(`/test-requests/${requestId}/billing/generate`, payload);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to generate bill');
+    }
+  }
+);
+
+// Billing: mark paid
+export const markReceptionistBillPaid = createAsyncThunk(
+  'receptionist/markBillPaid',
+  async ({ requestId, paymentNotes }, { rejectWithValue }) => {
+    try {
+      const res = await API.put(`/test-requests/${requestId}/billing/paid`, { paymentNotes });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to mark bill paid');
+    }
+  }
+);
 
 // Fetch patients for receptionist
 export const fetchReceptionistPatients = createAsyncThunk(
@@ -606,6 +644,29 @@ export const fetchReceptionistGPE = createAsyncThunk(
     } catch (error) {
       console.error('❌ GPE fetch error:', error.response?.data || error.message);
       dispatch(setError(error.response?.data?.message || 'Failed to fetch GPE'));
+      throw error;
+    }
+  }
+);
+
+// Fetch test requests for a specific patient
+export const fetchReceptionistTestRequests = createAsyncThunk(
+  'receptionist/fetchTestRequests',
+  async (patientId, { dispatch }) => {
+    try {
+      if (!patientId) {
+        console.error('❌ No patient ID provided for test requests fetch');
+        return [];
+      }
+      
+      console.log('🔍 Fetching test requests for patient ID:', patientId);
+      // Use the correct endpoint for getting test requests by patient
+      const res = await API.get(`/test-requests/patient/${patientId}`);
+      console.log('✅ Test requests response:', res.data);
+      return res.data;
+    } catch (error) {
+      console.error('❌ Test requests fetch error:', error.response?.data || error.message);
+      dispatch(setError(error.response?.data?.message || 'Failed to fetch test requests'));
       throw error;
     }
   }

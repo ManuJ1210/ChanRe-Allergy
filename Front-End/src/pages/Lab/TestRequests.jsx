@@ -455,10 +455,10 @@ export default function TestRequests() {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h1 className="text-xl font-bold text-slate-800 mb-2">
+              <h1 className="text-md font-bold text-slate-800 mb-2">
                 Test Requests
               </h1>
-              <p className="text-slate-600">
+              <p className="text-xs text-slate-600">
                 Manage and track all test requests from doctors
               </p>
             </div>
@@ -473,7 +473,7 @@ export default function TestRequests() {
           </div>
           
           {lastRefreshTime && (
-            <p className="text-sm text-slate-500">
+            <p className="text-xs text-slate-500">
               Last updated: {lastRefreshTime.toLocaleTimeString()}
             </p>
           )}
@@ -499,47 +499,47 @@ export default function TestRequests() {
 
         {/* Status Counts */}
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
-          <h3 className="text-lg font-semibold text-slate-800 mb-4">Status Overview</h3>
+          <h3 className="text-sm font-semibold text-slate-800 mb-4">Status Overview</h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="text-center p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <div className="text-2xl font-bold text-yellow-600">
+              <div className="text-md font-bold text-yellow-600">
                 {testRequests.filter(req => 
                   ['Pending', 'pending', 'PENDING', 'pending'].includes(req.status)
                 ).length}
               </div>
-              <div className="text-sm text-yellow-700">Pending</div>
+              <div className="text-xs text-yellow-700">Pending</div>
             </div>
             <div className="text-center p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">
+              <div className="text-md font-bold text-blue-600">
                 {testRequests.filter(req => 
                   ['Assigned', 'assigned', 'ASSIGNED'].includes(req.status)
                 ).length}
               </div>
-              <div className="text-sm text-blue-700">Assigned</div>
+              <div className="text-xs text-blue-700">Assigned</div>
             </div>
             <div className="text-center p-4 bg-orange-50 border border-orange-200 rounded-lg">
-              <div className="text-2xl font-bold text-orange-600">
+              <div className="text-md font-bold text-orange-600">
                 {testRequests.filter(req => 
                   ['Sample_Collection_Scheduled', 'Sample_Collected', 'In_Lab_Testing', 'Testing_Completed', 'sample_collection_scheduled', 'sample_collected', 'in_lab_testing', 'testing_completed', 'In_Progress', 'in_progress'].includes(req.status)
                 ).length}
               </div>
-              <div className="text-sm text-orange-700">In Progress</div>
+              <div className="text-xs text-orange-700">In Progress</div>
             </div>
             <div className="text-center p-4 bg-green-50 border border-green-200 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-md font-bold text-green-600">
                 {testRequests.filter(req => 
                   ['Report_Generated', 'Report_Sent', 'Completed', 'feedback_sent', 'report_generated', 'report_sent', 'completed', 'FEEDBACK_SENT', 'Feedback_Sent', 'feedback_sent'].includes(req.status)
                 ).length}
               </div>
-              <div className="text-sm text-green-700">Completed</div>
+              <div className="text-xs text-green-700">Completed</div>
             </div>
             <div className="text-center p-4 bg-red-50 border border-red-200 rounded-lg">
-              <div className="text-2xl font-bold text-red-600">
+              <div className="text-md font-bold text-red-600">
                 {testRequests.filter(req => 
                   ['Cancelled', 'cancelled', 'CANCELLED'].includes(req.status)
                 ).length}
               </div>
-              <div className="text-sm text-red-700">Cancelled</div>
+              <div className="text-xs text-red-700">Cancelled</div>
             </div>
           </div>
         </div>
@@ -606,7 +606,7 @@ export default function TestRequests() {
 
         {/* Results Count */}
         <div className="mb-4">
-          <p className="text-slate-600">
+          <p className="text-xs text-slate-600">
             Showing {filteredRequests.length} of {testRequests.length} test requests
           </p>
         </div>
@@ -617,7 +617,7 @@ export default function TestRequests() {
             <div className="text-center py-12">
               <Microscope className="h-12 w-12 text-slate-400 mx-auto mb-4" />
               <h3 className="text-sm font-medium text-slate-900 mb-2">No test requests found</h3>
-              <p className="text-slate-600">
+              <p className="text-xs text-slate-600">
                 {testRequests.length === 0 
                   ? "No test requests have been created yet." 
                   : "No test requests match your current filters."}
@@ -642,26 +642,26 @@ export default function TestRequests() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                         <div>
-                          <h3 className="font-semibold text-slate-900 mb-1">Patient</h3>
-                          <p className="text-slate-600">{request.patientName}</p>
-                          <p className="text-sm text-slate-500">{request.patientPhone}</p>
+                          <h3 className="text-xs font-semibold text-slate-900 mb-1">Patient</h3>
+                          <p className="text-xs text-slate-600">{request.patientName}</p>
+                          <p className="text-xs text-slate-500">{request.patientPhone}</p>
                         </div>
                         <div>
-                          <h3 className="font-semibold text-slate-900 mb-1">Doctor</h3>
-                          <p className="text-slate-600">{request.doctorName}</p>
-                          <p className="text-sm text-slate-500">{request.centerName}</p>
+                          <h3 className="text-xs font-semibold text-slate-900 mb-1">Doctor</h3>
+                          <p className="text-xs text-slate-600">{request.doctorName}</p>
+                          <p className="text-xs text-slate-500">{request.centerName}</p>
                         </div>
                         <div>
-                          <h3 className="font-semibold text-slate-900 mb-1">Test Type</h3>
-                          <p className="text-slate-600">{request.testType}</p>
-                          <p className="text-sm text-slate-500">{request.testDescription}</p>
+                          <h3 className="text-xs font-semibold text-slate-900 mb-1">Test Type</h3>
+                          <p className="text-xs text-slate-600">{request.testType}</p>
+                          <p className="text-xs text-slate-500">{request.testDescription}</p>
                         </div>
                         <div>
-                          <h3 className="font-semibold text-slate-900 mb-1">Created</h3>
-                          <p className="text-slate-600">
+                          <h3 className="text-xs font-semibold text-slate-900 mb-1">Created</h3>
+                          <p className="text-xs text-slate-600">
                             {new Date(request.createdAt).toLocaleDateString()}
                           </p>
-                          <p className="text-sm text-slate-500">
+                          <p className="text-xs text-slate-500">
                             {new Date(request.createdAt).toLocaleTimeString()}
                           </p>
                         </div>
@@ -669,8 +669,8 @@ export default function TestRequests() {
 
                       {request.notes && (
                         <div className="mb-4">
-                          <h3 className="font-semibold text-slate-900 mb-1">Notes</h3>
-                          <p className="text-slate-600 text-sm">{request.notes}</p>
+                          <h3 className="text-xs font-semibold text-slate-900 mb-1">Notes</h3>
+                          <p className="text-xs text-slate-600">{request.notes}</p>
                         </div>
                       )}
                     </div>

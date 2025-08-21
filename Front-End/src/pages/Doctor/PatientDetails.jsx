@@ -196,7 +196,7 @@ const PatientDetails = () => {
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 mb-4 sm:mb-6">
           <div className="border-b border-blue-100">
             <nav className="flex flex-col sm:flex-row space-y-0 space-x-0 sm:space-x-8 px-4 sm:px-6">
-              {['overview', 'history', 'medications',  'test-requests'].map((tab) => (
+              {['overview', 'history', 'medications', 'follow-ups', 'test-requests'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -206,7 +206,7 @@ const PatientDetails = () => {
                       : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
                   }`}
                 >
-                  {tab === 'test-requests' ? 'Test Requests' : tab}
+                  {tab === 'test-requests' ? 'Test Requests' : tab === 'follow-ups' ? 'Follow-ups' : tab}
                 </button>
               ))}
             </nav>
@@ -255,7 +255,16 @@ const PatientDetails = () => {
 
             {activeTab === 'history' && (
               <div>
-                <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-4">Patient History</h3>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-800">Patient History</h3>
+                  <button
+                    onClick={() => navigate(`/dashboard/doctor/patients/add-history/${patientId}`)}
+                    className="bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center text-sm sm:text-base w-full sm:w-auto justify-center"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add History
+                  </button>
+                </div>
                 {history ? (
                   <div className="space-y-4 sm:space-y-6">
                                          {/* Medical Conditions */}
@@ -686,21 +695,47 @@ const PatientDetails = () => {
 
             {activeTab === 'medications' && (
               <div>
-                <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-4">Medications</h3>
-                {medications.length > 0 ? (
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-800">Patient Medications</h3>
+                  <button
+                    onClick={() => navigate(`/dashboard/doctor/patients/profile/add-medications/${patientId}`)}
+                    className="bg-green-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-green-600 flex items-center text-sm sm:text-base w-full sm:w-auto justify-center"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Medication
+                  </button>
+                </div>
+                {medications && medications.length > 0 ? (
                   <div className="space-y-3 sm:space-y-4">
-                    {medications.map((med, index) => (
-                      <div key={index} className="bg-slate-50 rounded-lg p-3 sm:p-4">
-                        <div className="flex justify-between items-start mb-2">
-                          <h4 className="font-medium text-slate-800 text-sm sm:text-base">{med.drugName}</h4>
-                          <span className="text-xs sm:text-sm text-slate-500">
-                            {new Date(med.createdAt).toLocaleDateString()}
-                          </span>
+                    {medications.map((medication, index) => (
+                      <div key={index} className="bg-slate-50 rounded-lg p-4 sm:p-6">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-3">
+                          <h4 className="font-semibold text-slate-800 text-base sm:text-lg">{medication.drugName}</h4>
+                          <span className="text-sm text-slate-500">{medication.prescribedDate}</span>
                         </div>
-                        <p className="text-slate-600 mb-1 text-xs sm:text-sm">Dose: {med.dose}</p>
-                        <p className="text-slate-600 mb-1 text-xs sm:text-sm">Duration: {med.duration}</p>
-                        {med.adverseEvent && (
-                          <p className="text-slate-600 text-xs sm:text-sm">Adverse Event: {med.adverseEvent}</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm sm:text-base">
+                          <div>
+                            <span className="font-medium text-slate-600">Dose:</span>
+                            <span className="ml-2 text-slate-800">{medication.dose}</span>
+                          </div>
+                          <div>
+                            <span className="font-medium text-slate-600">Frequency:</span>
+                            <span className="ml-2 text-slate-800">{medication.frequency}</span>
+                          </div>
+                          <div>
+                            <span className="font-medium text-slate-600">Duration:</span>
+                            <span className="ml-2 text-slate-800">{medication.duration}</span>
+                          </div>
+                          <div>
+                            <span className="font-medium text-slate-600">Prescribed By:</span>
+                            <span className="ml-2 text-slate-800">{medication.prescribedBy}</span>
+                          </div>
+                        </div>
+                        {medication.instructions && (
+                          <div className="mt-3 sm:mt-4">
+                            <span className="font-medium text-slate-600">Instructions:</span>
+                            <p className="mt-1 text-slate-800">{medication.instructions}</p>
+                          </div>
                         )}
                       </div>
                     ))}
@@ -709,8 +744,39 @@ const PatientDetails = () => {
                   <div className="text-center py-8">
                     <Pill className="h-12 w-12 text-slate-400 mx-auto mb-4" />
                     <p className="text-slate-500 text-sm sm:text-base">No medications found</p>
+                    <button
+                      onClick={() => navigate(`/dashboard/doctor/patients/profile/add-medications/${patientId}`)}
+                      className="mt-4 bg-green-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-green-600 text-sm sm:text-base w-full sm:w-auto"
+                    >
+                      Add First Medication
+                    </button>
                   </div>
                 )}
+              </div>
+            )}
+
+            {activeTab === 'follow-ups' && (
+              <div>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-800">Patient Follow-ups</h3>
+                  <button
+                    onClick={() => navigate(`/dashboard/doctor/patients/followup/add/${patientId}`)}
+                    className="bg-purple-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-purple-600 flex items-center text-sm sm:text-base w-full sm:w-auto justify-center"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Follow-up
+                  </button>
+                </div>
+                <div className="text-center py-8">
+                  <Clock className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                  <p className="text-slate-500 text-sm sm:text-base">Follow-up management coming soon</p>
+                  <button
+                    onClick={() => navigate(`/dashboard/doctor/patients/followup/add/${patientId}`)}
+                    className="mt-4 bg-purple-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-purple-600 text-sm sm:text-base w-full sm:w-auto"
+                  >
+                    Add Follow-up
+                  </button>
+                </div>
               </div>
             )}
 

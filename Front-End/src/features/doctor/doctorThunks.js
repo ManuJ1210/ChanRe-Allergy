@@ -130,7 +130,7 @@ export const fetchPatientDetails = createAsyncThunk(
         : String(patientId);
       
       const token = localStorage.getItem('token');
-      const response = await API.get(`/doctors/patient/${id}`, {
+      const response = await API.get(`/patient/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;

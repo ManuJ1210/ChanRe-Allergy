@@ -28,6 +28,11 @@ import {
   getTestRequestStats,
   downloadTestReport
 } from '../controllers/testRequestController.js';
+import {
+  getBillingRequestsForCurrentReceptionist,
+  generateBillForTestRequest,
+  markBillPaidForTestRequest
+} from '../controllers/testRequestController.js';
 
 const router = express.Router();
 
@@ -51,6 +56,11 @@ router.get('/doctor/completed', protect, ensureCenterIsolation, getCompletedTest
 
 // Get test requests for current lab staff (authenticated)
 router.get('/lab-staff', protect, ensureCenterIsolation, getTestRequestsForCurrentLabStaff);
+
+// Receptionist billing endpoints
+router.get('/billing/mine', protect, ensureCenterIsolation, getBillingRequestsForCurrentReceptionist);
+router.put('/:id/billing/generate', protect, ensureCenterIsolation, generateBillForTestRequest);
+router.put('/:id/billing/paid', protect, ensureCenterIsolation, markBillPaidForTestRequest);
 
 // Get test requests by doctor
 router.get('/doctor/:doctorId', protect, getTestRequestsByDoctor);

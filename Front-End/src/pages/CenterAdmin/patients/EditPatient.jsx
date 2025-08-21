@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getSinglePatient,
-  editPatient,
-} from "../../../features/patient/patientThunks";
-import { resetPatientState } from "../../../features/patient/patientSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from 'react-toastify';
+import API from "../../../services/api";
+import { Users, ArrowLeft, User, Mail, Phone, MapPin, Building, Save, Edit } from 'lucide-react';
 import { fetchPatientDetails } from "../../../features/centerAdmin/centerAdminThunks";
-import { ArrowLeft, User, Phone, Calendar, MapPin, Mail, Save } from 'lucide-react';
 
 export default function EditPatient() {
   const { id } = useParams();

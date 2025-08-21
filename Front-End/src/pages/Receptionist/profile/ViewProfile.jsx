@@ -12,14 +12,16 @@ import {
   fetchReceptionistAllergicBronchitis,
   fetchReceptionistAtopicDermatitis,
   fetchReceptionistGPE,
-  fetchReceptionistPrescriptions
+  fetchReceptionistPrescriptions,
+  fetchReceptionistTestRequests
 } from '../../../features/receptionist/receptionistThunks';
+import { setTestRequests } from '../../../features/receptionist/receptionistSlice';
 import ReceptionistLayout from '../ReceptionistLayout';
 import {
-  ArrowLeft, User, Phone, Calendar, MapPin, Activity, Pill, FileText, Eye, Edit, Plus, AlertCircle, Mail, UserCheck
+  ArrowLeft, User, Phone, Calendar, MapPin, Activity, Pill, FileText, Eye, Plus, AlertCircle, Mail, UserCheck
 } from 'lucide-react';
 
-const TABS = ["Overview", "Follow Up", "Prescription"];
+const TABS = ["Overview", "History", "Tests", "Medications", "Lab Reports", "Follow Up", "Prescription"];
 
 const ViewProfile = () => {
   const { id } = useParams();
@@ -36,6 +38,7 @@ const ViewProfile = () => {
     medications,
     history,
     tests,
+    testRequests,
     followUps,
     allergicRhinitis,
     atopicDermatitis,
@@ -68,11 +71,14 @@ const ViewProfile = () => {
       // Fetch all patient data
       const fetchData = async () => {
         try {
-          await Promise.all([
+          console.log('🔍 Starting to fetch patient data for ID:', id);
+          
+          const results = await Promise.all([
             dispatch(fetchReceptionistSinglePatient(id)),
             dispatch(fetchReceptionistPatientMedications(id)),
             dispatch(fetchReceptionistPatientHistory(id)),
             dispatch(fetchReceptionistPatientTests(id)),
+            dispatch(fetchReceptionistTestRequests(id)),
             dispatch(fetchReceptionistFollowUps(id)),
             dispatch(fetchReceptionistAllergicRhinitis(id)),
             dispatch(fetchReceptionistAllergicConjunctivitis(id)),
@@ -82,9 +88,10 @@ const ViewProfile = () => {
             dispatch(fetchReceptionistPrescriptions(id))
           ]);
 
+          console.log('✅ All patient data fetched successfully:', results);
           setDataFetched(true);
         } catch (error) {
-          console.error('Error fetching patient data:', error);
+          console.error('❌ Error fetching patient data:', error);
         }
       };
 
@@ -106,6 +113,8 @@ const ViewProfile = () => {
       historyLoading,
       historyError,
       tests: tests?.length || 0,
+      testRequests: testRequests?.length || 0,
+      testRequestsData: testRequests,
       followUps: followUps?.length || 0,
       allergicRhinitis: allergicRhinitis?.length || 0,
       atopicDermatitis: atopicDermatitis?.length || 0,
@@ -115,7 +124,17 @@ const ViewProfile = () => {
       prescriptions: prescriptions?.length || 0,
       dataFetched
     });
-  }, [patient, loading, error, medications, history, historyLoading, historyError, tests, followUps, allergicRhinitis, atopicDermatitis, allergicConjunctivitis, allergicBronchitis, gpe, prescriptions, dataFetched, id]);
+  }, [patient, loading, error, medications, history, historyLoading, historyError, tests, testRequests, followUps, allergicRhinitis, atopicDermatitis, allergicConjunctivitis, allergicBronchitis, gpe, prescriptions, dataFetched, id]);
+
+  // Monitor testRequests specifically
+  useEffect(() => {
+    console.log('🔍 TestRequests State Change:', {
+      testRequests,
+      testRequestsLength: testRequests?.length,
+      testRequestsType: typeof testRequests,
+      testRequestsIsArray: Array.isArray(testRequests)
+    });
+  }, [testRequests]);
 
   if (!id) return (
     <ReceptionistLayout>
@@ -244,23 +263,17 @@ const ViewProfile = () => {
 
               </div>
             </div>
-            <button
-              onClick={() => navigate(`/dashboard/receptionist/edit-patient/${patient?._id}`)}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
-            >
-              <Edit className="h-4 w-4" />
-              Edit Profile
-            </button>
+
           </div>
         </div>
 
         {/* Tabs */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-2 mb-8">
-          <div className="flex gap-2">
+          <div className="grid grid-cols-7 gap-1 w-full">
             {TABS.map((tab) => (
               <button
                 key={tab}
-                className={`px-6 py-3 rounded-lg font-medium transition-colors flex-1 ${activeTab === tab
+                className={`px-2 py-2 rounded-lg font-medium transition-colors whitespace-nowrap text-xs ${activeTab === tab
                     ? "bg-blue-500 text-white"
                     : "text-slate-600 hover:text-slate-800 hover:bg-slate-50"
                   }`}
@@ -335,7 +348,107 @@ const ViewProfile = () => {
                 </div>
               </div>
             </div>
+          </div>
+        )}
 
+        {activeTab === "History" && (
+          <div className="space-y-8">
+            {/* Medical History */}
+            <div className="bg-white rounded-xl shadow-sm border border-blue-100">
+              <div className="p-6 border-b border-blue-100 flex justify-between items-center">
+                <div>
+                  <h2 className="text-xl font-semibold text-slate-800 flex items-center">
+                    <FileText className="h-5 w-5 mr-2 text-blue-500" />
+                    Medical History
+                  </h2>
+                  <p className="text-slate-600 mt-1">
+                    Complete patient medical history and examination records
+                  </p>
+                </div>
+                <button
+                  onClick={() => navigate(`/dashboard/receptionist/patient-history/${patient._id}`)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+                >
+                  <Eye className="h-4 w-4" />
+                  View Full History
+                </button>
+              </div>
+              <div className="p-6">
+                {historyLoading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                    <p className="text-slate-600">Loading history...</p>
+                  </div>
+                ) : historyError ? (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p className="text-red-600">{historyError}</p>
+                  </div>
+                ) : !history || (Array.isArray(history) && history.length === 0) || (typeof history === 'object' && Object.keys(history).length === 0) ? (
+                  <div className="text-center py-8">
+                    <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                    <p className="text-slate-500">No history found</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="bg-slate-50 border-b border-slate-200">
+                          <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                            Date
+                          </th>
+                          <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                            Medical Conditions
+                          </th>
+                          <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                            Triggers
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-slate-200">
+                        {(Array.isArray(history) ? history : [history]).map((h, idx) => (
+                          <tr key={h._id || idx} className="hover:bg-slate-50">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center text-sm text-slate-900">
+                                <Calendar className="h-4 w-4 mr-2 text-slate-400" />
+                                {h.createdAt ? new Date(h.createdAt).toLocaleDateString() : "N/A"}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="text-sm text-slate-900">
+                                <div className="flex flex-wrap gap-1">
+                                  {h.hayFever && <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Hay Fever</span>}
+                                  {h.asthma && <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Asthma</span>}
+                                  {h.breathingProblems && <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Breathing Problems</span>}
+                                  {h.foodAllergies && <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">Food Allergies</span>}
+                                  {h.drugAllergy && <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium">Drug Allergy</span>}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="text-sm text-slate-900">
+                                <div className="flex flex-wrap gap-1">
+                                  {h.triggersUrtis && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">URTIs</span>}
+                                  {h.triggersColdWeather && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Cold Weather</span>}
+                                  {h.triggersPollen && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Pollen</span>}
+                                  {h.triggersSmoke && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Smoke</span>}
+                                  {h.triggersExercise && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Exercise</span>}
+                                  {h.triggersPets && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Pets</span>}
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "Tests" && (
+          <div className="space-y-8">
             {/* Investigations */}
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
               <div className="p-6 border-b border-blue-100">
@@ -420,7 +533,11 @@ const ViewProfile = () => {
                 )}
               </div>
             </div>
+          </div>
+        )}
 
+        {activeTab === "Medications" && (
+          <div className="space-y-8">
             {/* Medications */}
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
               <div className="p-6 border-b border-blue-100">
@@ -433,18 +550,6 @@ const ViewProfile = () => {
                 </p>
               </div>
               <div className="p-6">
-                {/* Assuming medLoading is not directly available from useSelector,
-                      but it's not used in the new code, so we'll keep it as is. */}
-                {/* {medLoading ? (
-                    <div className="text-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                      <p className="text-slate-600">Loading medications...</p>
-                    </div>
-                  ) : medError ? (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <p className="text-red-600">{medError}</p>
-                    </div>
-                  ) : */}
                 {medications.length === 0 ? (
                   <div className="text-center py-8">
                     <Pill className="h-12 w-12 text-slate-400 mx-auto mb-4" />
@@ -480,94 +585,138 @@ const ViewProfile = () => {
                 )}
               </div>
             </div>
+          </div>
+        )}
 
-            {/* History */}
+        {activeTab === "Lab Reports" && (
+          <div className="space-y-8">
+            {/* Lab Report Status */}
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
               <div className="p-6 border-b border-blue-100">
                 <h2 className="text-xl font-semibold text-slate-800 flex items-center">
-                  <FileText className="h-5 w-5 mr-2 text-blue-500" />
-                  Medical History
+                  <Activity className="h-5 w-5 mr-2 text-blue-500" />
+                  Lab Report Status
                 </h2>
                 <p className="text-slate-600 mt-1">
-                  Complete patient medical history and examination records
+                  Current status of laboratory tests and reports
                 </p>
               </div>
               <div className="p-6">
-                {historyLoading ? (
+                {loading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                    <p className="text-slate-600">Loading history...</p>
+                    <p className="text-slate-600">Loading lab reports...</p>
                   </div>
-                ) : historyError ? (
+                ) : error ? (
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <p className="text-red-600">{historyError}</p>
-                  </div>
-                ) : !history || (Array.isArray(history) && history.length === 0) || (typeof history === 'object' && Object.keys(history).length === 0) ? (
-                  <div className="text-center py-8">
-                    <FileText className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                    <p className="text-slate-500">No history found</p>
+                    <p className="text-red-600">{error}</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className="bg-slate-50 border-b border-slate-200">
-                          <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                            Date
-                          </th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                            Medical Conditions
-                          </th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                            Triggers
-                          </th>
-                          <th className="px-6 py-4 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
-                            Actions
-                          </th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Test Request ID</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Test Type</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Requested Date</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Lab Staff</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Completion Date</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Action</th>
                         </tr>
                       </thead>
-                      <tbody className="bg-white divide-y divide-slate-200">
-                        {(Array.isArray(history) ? history : [history]).map((h, idx) => (
-                          <tr key={h._id || idx} className="hover:bg-slate-50">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center text-sm text-slate-900">
-                                <Calendar className="h-4 w-4 mr-2 text-slate-400" />
-                                {h.createdAt ? new Date(h.createdAt).toLocaleDateString() : "N/A"}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className="text-sm text-slate-900">
-                                <div className="flex flex-wrap gap-1">
-                                  {h.hayFever && <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Hay Fever</span>}
-                                  {h.asthma && <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Asthma</span>}
-                                  {h.breathingProblems && <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Breathing Problems</span>}
-                                  {h.foodAllergies && <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">Food Allergies</span>}
-                                  {h.drugAllergy && <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium">Drug Allergy</span>}
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className="text-sm text-slate-900">
-                                <div className="flex flex-wrap gap-1">
-                                  {h.triggersUrtis && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">URTIs</span>}
-                                  {h.triggersColdWeather && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Cold Weather</span>}
-                                  {h.triggersPollen && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Pollen</span>}
-                                  {h.triggersSmoke && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Smoke</span>}
-                                  {h.triggersExercise && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Exercise</span>}
-                                  {h.triggersPets && <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">Pets</span>}
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 text-center text-sm font-medium">
-                              <button
-                                onClick={() => navigate(`/dashboard/receptionist/AddHistory/ViewHistory/${h._id}`)}
-                                className="text-blue-600 hover:text-blue-900 font-medium"
-                              >
-                                View Details
-                              </button>
+                      <tbody className="divide-y divide-slate-200">
+                        {testRequests && Array.isArray(testRequests) && testRequests.length > 0 ? (
+                          testRequests.map((request, idx) => {
+                            // Debug logging for each request
+                            console.log('🔍 Test Request Data:', {
+                              id: request._id,
+                              status: request.status,
+                              labTestingCompletedDate: request.labTestingCompletedDate,
+                              reportGeneratedDate: request.reportGeneratedDate,
+                              reportSentDate: request.reportSentDate,
+                              testingEndDate: request.testingEndDate,
+                              createdAt: request.createdAt,
+                              assignedLabStaffId: request.assignedLabStaffId,
+                              sampleCollectorId: request.sampleCollectorId,
+                              labTechnicianId: request.labTechnicianId,
+                              reportGeneratedBy: request.reportGeneratedBy
+                            });
+                            
+                            return (
+                              <tr key={request._id || idx} className="hover:bg-slate-50 transition-colors">
+                              <td className="px-4 py-3 text-sm text-slate-800">
+                                {request._id ? request._id.slice(-6) : 'N/A'}
+                              </td>
+                              <td className="px-4 py-3 text-sm text-slate-800">
+                                {request.testType || request.testName || 'General Test'}
+                              </td>
+                              <td className="px-4 py-3 text-sm text-slate-800">
+                                {request.createdAt ? new Date(request.createdAt).toLocaleDateString() : 'N/A'}
+                              </td>
+                              <td className="px-4 py-3 text-sm text-slate-800">
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  request.status === 'completed' || request.status === 'Completed' || request.status === 'Report_Sent'
+                                    ? 'bg-green-100 text-green-800'
+                                    : request.status === 'in_progress' || request.status === 'In Progress' || request.status === 'In_Lab_Testing'
+                                    ? 'bg-yellow-100 text-yellow-800'
+                                    : request.status === 'pending' || request.status === 'Pending'
+                                    ? 'bg-blue-100 text-blue-800'
+                                    : request.status === 'Billing_Pending'
+                                    ? 'bg-orange-100 text-orange-800'
+                                    : request.status === 'Billing_Generated'
+                                    ? 'bg-purple-100 text-purple-800'
+                                    : request.status === 'Billing_Paid'
+                                    ? 'bg-green-100 text-green-800'
+                                    : request.status === 'Sample_Collected'
+                                    ? 'bg-blue-100 text-blue-800'
+                                    : request.status === 'Report_Generated'
+                                    ? 'bg-green-100 text-green-800'
+                                    : request.status === 'Assigned'
+                                    ? 'bg-indigo-100 text-indigo-800'
+                                    : 'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {request.status === 'completed' || request.status === 'Completed' || request.status === 'Report_Sent' ? 'Completed' :
+                                   request.status === 'in_progress' || request.status === 'In Progress' || request.status === 'In_Lab_Testing' ? 'In Progress' :
+                                   request.status === 'pending' || request.status === 'Pending' ? 'Pending' :
+                                   request.status === 'Billing_Pending' ? 'Billing Pending' :
+                                   request.status === 'Billing_Generated' ? 'Bill Generated' :
+                                   request.status === 'Billing_Paid' ? 'Bill Paid' :
+                                   request.status === 'Sample_Collected' ? 'Sample Collected' :
+                                   request.status === 'Report_Generated' ? 'Report Ready' :
+                                   request.status === 'Assigned' ? 'Assigned to Lab' :
+                                   request.status || 'Unknown'}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 text-sm text-slate-800">
+                                {request.assignedLabStaffId?.staffName || 
+                                 request.sampleCollectorId?.staffName || 
+                                 request.labTechnicianId?.staffName || 
+                                 request.reportGeneratedBy?.staffName || 
+                                 'Not Assigned'}
+                              </td>
+                              <td className="px-4 py-3 text-sm text-slate-800">
+                                {request.labTestingCompletedDate ? new Date(request.labTestingCompletedDate).toLocaleDateString() :
+                                 request.reportGeneratedDate ? new Date(request.reportGeneratedDate).toLocaleDateString() :
+                                 request.reportSentDate ? new Date(request.reportSentDate).toLocaleDateString() :
+                                 request.testingEndDate ? new Date(request.testingEndDate).toLocaleDateString() :
+                                 request.status === 'completed' || request.status === 'Completed' || 
+                                 request.status === 'Report_Generated' || request.status === 'Report_Sent' ? 'Completed' : '-'}
+                              </td>
+                              <td className="px-4 py-3 text-sm text-slate-800">
+                                <span className="text-slate-400">Read Only</span>
+                              </td>
+                            </tr>
+                            );
+                          })
+                        ) : (
+                          <tr>
+                            <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
+                              <Activity className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                              <p>No lab reports found</p>
                             </td>
                           </tr>
-                        ))}
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -576,18 +725,13 @@ const ViewProfile = () => {
             </div>
           </div>
         )}
+
         {activeTab === "Follow Up" && (
           <div className="space-y-8">
             {/* Allergic Rhinitis */}
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-              <div className="p-6 border-b border-blue-100 flex justify-between items-center">
+              <div className="p-6 border-b border-blue-100">
                 <h2 className="text-xl font-semibold text-slate-800">Allergic Rhinitis</h2>
-                <button
-                  onClick={() => navigate(`/dashboard/receptionist/followup/allergic-rhinitis/add/${patient._id}`)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Add Follow Up
-                </button>
               </div>
               <div className="p-6">
                 <div className="overflow-x-auto">
@@ -615,7 +759,7 @@ const ViewProfile = () => {
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-800">
                               <button
-                                onClick={() => navigate(`/dashboard/receptionist/followup/allergic-rhinitis/view/${rhinitis._id}`)}
+                                onClick={() => navigate(`/dashboard/receptionist/view-allergic-rhinitis/${rhinitis._id}`)}
                                 className="text-blue-600 hover:text-blue-900 font-medium"
                               >
                                 View
@@ -639,14 +783,8 @@ const ViewProfile = () => {
 
             {/* Atopic Dermatitis */}
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-              <div className="p-6 border-b border-blue-100 flex justify-between items-center">
+              <div className="p-6 border-b border-blue-100">
                 <h2 className="text-xl font-semibold text-slate-800">Atopic Dermatitis</h2>
-                <button
-                  onClick={() => navigate(`/dashboard/receptionist/followup/atopic-dermatitis/add/${patient._id}`)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Add Follow Up
-                </button>
               </div>
               <div className="p-6">
                 <div className="overflow-x-auto">
@@ -676,7 +814,7 @@ const ViewProfile = () => {
                             <td className="px-4 py-3 text-sm text-slate-800">{dermatitis.updatedBy || 'N/A'}</td>
                             <td className="px-4 py-3 text-sm text-slate-800">
                               <button
-                                onClick={() => navigate(`/dashboard/receptionist/followup/atopic-dermatitis/view/${dermatitis._id}`)}
+                                onClick={() => navigate(`/dashboard/receptionist/view-atopic-dermatitis/${dermatitis._id}`)}
                                 className="text-blue-600 hover:text-blue-900 font-medium"
                               >
                                 View
@@ -700,14 +838,8 @@ const ViewProfile = () => {
 
             {/* Allergic Conjunctivitis */}
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-              <div className="p-6 border-b border-blue-100 flex justify-between items-center">
+              <div className="p-6 border-b border-blue-100">
                 <h2 className="text-xl font-semibold text-slate-800">Allergic Conjunctivitis</h2>
-                <button
-                  onClick={() => navigate(`/dashboard/receptionist/followup/allergic-conjunctivitis/add/${patient._id}`)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Add Follow Up
-                </button>
               </div>
               <div className="p-6">
                 <div className="overflow-x-auto">
@@ -735,7 +867,7 @@ const ViewProfile = () => {
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-800">
                               <button
-                                onClick={() => navigate(`/dashboard/receptionist/followup/allergic-conjunctivitis/view/${conjunctivitis._id}`)}
+                                onClick={() => navigate(`/dashboard/receptionist/view-allergic-conjunctivitis/${conjunctivitis._id}`)}
                                 className="text-blue-600 hover:text-blue-900 font-medium"
                               >
                                 View
@@ -759,14 +891,8 @@ const ViewProfile = () => {
 
             {/* Allergic Bronchitis */}
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-              <div className="p-6 border-b border-blue-100 flex justify-between items-center">
+              <div className="p-6 border-b border-blue-100">
                 <h2 className="text-xl font-semibold text-slate-800">Allergic Bronchitis</h2>
-                <button
-                  onClick={() => navigate(`/dashboard/receptionist/followup/allergic-bronchitis/add/${patient._id}`)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Add Follow Up
-                </button>
               </div>
               <div className="p-6">
                 <div className="overflow-x-auto">
@@ -794,7 +920,7 @@ const ViewProfile = () => {
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-800">
                               <button
-                                onClick={() => navigate(`/dashboard/receptionist/followup/allergic-bronchitis/view/${bronchitis._id}`)}
+                                onClick={() => navigate(`/dashboard/receptionist/view-allergic-bronchitis/${bronchitis._id}`)}
                                 className="text-blue-600 hover:text-blue-900 font-medium"
                               >
                                 View
@@ -818,14 +944,8 @@ const ViewProfile = () => {
 
             {/* GPE */}
             <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-              <div className="p-6 border-b border-blue-100 flex justify-between items-center">
+              <div className="p-6 border-b border-blue-100">
                 <h2 className="text-xl font-semibold text-slate-800">GPE</h2>
-                <button
-                  onClick={() => navigate(`/dashboard/receptionist/followup/gpe/add/${patient._id}`)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Add Follow Up
-                </button>
               </div>
               <div className="p-6">
                 <div className="overflow-x-auto">
@@ -853,7 +973,7 @@ const ViewProfile = () => {
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-800">
                               <button
-                                onClick={() => navigate(`/dashboard/receptionist/followup/gpe/view/${gpe._id}`)}
+                                onClick={() => navigate(`/dashboard/receptionist/view-gpe/${gpe._id}`)}
                                 className="text-blue-600 hover:text-blue-900 font-medium"
                               >
                                 View
@@ -878,25 +998,8 @@ const ViewProfile = () => {
         )}
         {activeTab === "Prescription" && (
           <div className="bg-white rounded-xl shadow-sm border border-blue-100">
-            <div className="p-6 border-b border-blue-100 flex justify-between items-center">
+            <div className="p-6 border-b border-blue-100">
               <h2 className="text-lg font-semibold text-slate-800">Prescription</h2>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    console.log('🔄 Manually refreshing prescriptions...');
-                    dispatch(fetchReceptionistPrescriptions(patient._id));
-                  }}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg font-medium transition-colors text-xs"
-                >
-                  Refresh
-                </button>
-                <button
-                  onClick={() => navigate(`/dashboard/receptionist/followup/prescription/add/${patient._id}`)}
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Add Prescription
-                </button>
-              </div>
             </div>
             <div className="p-6">
 
@@ -939,14 +1042,14 @@ const ViewProfile = () => {
                             {typeof prescription.updatedBy === 'string' ? prescription.updatedBy :
                               typeof prescription.updatedBy === 'object' && prescription.updatedBy?.name ? prescription.updatedBy.name : 'N/A'}
                           </td>
-                          <td className="px-4 py-3 text-xs text-slate-800">
-                            <button
-                              onClick={() => navigate(`/dashboard/receptionist/followup/prescription/view/${prescription._id}`)}
-                              className="text-blue-600 hover:text-blue-900 font-medium"
-                            >
-                              View
-                            </button>
-                          </td>
+                                                      <td className="px-4 py-3 text-xs text-slate-800">
+                              <button
+                                onClick={() => navigate(`/dashboard/receptionist/view-prescription/${prescription._id}`)}
+                                className="text-blue-600 hover:text-blue-900 font-medium"
+                              >
+                                View
+                              </button>
+                            </td>
                         </tr>
                       ))
                     ) : (

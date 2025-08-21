@@ -395,7 +395,7 @@ const TestRequests = () => {
                               const id = typeof test.patientId === 'object' && test.patientId !== null
                                 ? test.patientId._id || test.patientId.id || String(test.patientId)
                                 : String(test.patientId);
-                              navigate(`/dashboard/doctor/patient/${id}`);
+                              navigate(`/dashboard/doctor/patients/profile/${id}`);
                             }}
                             className="flex items-center text-blue-600 hover:text-blue-700 font-medium"
                           >

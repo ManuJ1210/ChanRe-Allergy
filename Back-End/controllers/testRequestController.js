@@ -389,8 +389,10 @@ export const createTestRequest = async (req, res) => {
       patientName: patient.name,
       patientPhone: patient.phone,
       patientAddress: patient.address,
-      status: 'Superadmin_Review',
-      workflowStage: 'superadmin_review',
+      // New flow: send to center receptionist for billing first
+      status: 'Billing_Pending',
+      workflowStage: 'billing',
+      billing: { status: 'not_generated' },
       superadminReview: {
         status: 'pending',
         approvedForLab: false
@@ -400,7 +402,7 @@ export const createTestRequest = async (req, res) => {
     const savedTestRequest = await newTestRequest.save();
     console.log('Test request saved:', savedTestRequest);
 
-    // ✅ NEW: Send notifications to superadmin, superadmin doctor, and lab
+    // ✅ NEW: Send notifications to superadmin, superadmin doctor, center admin, and center receptionists
     try {
       // Import Notification model dynamically to avoid circular dependencies
       const Notification = (await import('../models/Notification.js')).default;
@@ -419,20 +421,27 @@ export const createTestRequest = async (req, res) => {
         isSuperAdminStaff: true
       });
       
-      // 3. Find lab staff
-      const LabStaff = (await import('../models/LabStaff.js')).default;
-      const labStaff = await LabStaff.find({ 
+      // 3. Find center admin for this center
+      const centerAdmins = await User.find({ 
+        role: 'centeradmin', 
+        centerId: patient.centerId,
+        isDeleted: { $ne: true }
+      });
+      // 4. Find receptionists for this center
+      const receptionists = await User.find({ 
+        role: 'receptionist', 
+        centerId: patient.centerId,
         isDeleted: { $ne: true }
       });
       
-      // Create notifications for superadmins
+      // Create notifications for superadmins (visibility of request creation)
       for (const superadmin of superadmins) {
         const notification = new Notification({
           recipient: superadmin._id,
           sender: doctorId,
           type: 'test_request',
-          title: 'New Test Request',
-          message: `Dr. ${doctor.name} has requested ${testType} test for patient ${patient.name} from ${center ? center.name : 'Unknown Center'}`,
+          title: 'New Test Request (Billing Pending)',
+          message: `Dr. ${doctor.name} requested ${testType} for ${patient.name} at ${center ? center.name : 'Unknown Center'}. Awaiting billing by receptionist.`,
           data: {
             testRequestId: savedTestRequest._id,
             patientId: patient._id,
@@ -440,7 +449,7 @@ export const createTestRequest = async (req, res) => {
             centerId: patient.centerId,
             testType,
             urgency,
-            status: 'Pending'
+            status: 'Billing_Pending'
           },
           read: false
         });
@@ -448,14 +457,14 @@ export const createTestRequest = async (req, res) => {
         console.log(`✅ Notification sent to superadmin: ${superadmin.name}`);
       }
       
-      // Create notifications for superadmin doctors
+      // Create notifications for superadmin doctors (status visibility only)
       for (const superadminDoctor of superadminDoctors) {
         const notification = new Notification({
           recipient: superadminDoctor._id,
           sender: doctorId,
           type: 'test_request',
-          title: 'New Test Request for Review',
-          message: `Dr. ${doctor.name} has requested ${testType} test for patient ${patient.name}. Test requires superadmin doctor review before lab processing.`,
+          title: 'New Test Request (Billing Pending)',
+          message: `Dr. ${doctor.name} requested ${testType} for ${patient.name}. Awaiting billing by receptionist.`,
           data: {
             testRequestId: savedTestRequest._id,
             patientId: patient._id,
@@ -463,37 +472,54 @@ export const createTestRequest = async (req, res) => {
             centerId: patient.centerId,
             testType,
             urgency,
-            status: 'Pending',
-            requiresSuperadminReview: true
+            status: 'Billing_Pending'
           },
           read: false
         });
         await notification.save();
         console.log(`✅ Notification sent to superadmin doctor: ${superadminDoctor.name}`);
       }
-      
-      // Create notifications for lab staff
-      for (const labMember of labStaff) {
+
+      // Notify center admins
+      for (const admin of centerAdmins) {
         const notification = new Notification({
-          recipient: labMember._id,
+          recipient: admin._id,
           sender: doctorId,
           type: 'test_request',
-          title: 'New Test Request Pending',
-          message: `Dr. ${doctor.name} has requested ${testType} test for patient ${patient.name}. Test is pending superadmin review before lab assignment.`,
+          title: 'Test Request Awaiting Billing',
+          message: `New test request (${testType}) for ${patient.name} is awaiting billing at your center.`,
           data: {
             testRequestId: savedTestRequest._id,
             patientId: patient._id,
             doctorId: doctorId,
             centerId: patient.centerId,
-            testType,
-            urgency,
-            status: 'Pending',
-            awaitingSuperadminReview: true
+            status: 'Billing_Pending'
           },
           read: false
         });
         await notification.save();
-        console.log(`✅ Notification sent to lab staff: ${labMember.staffName}`);
+        console.log(`✅ Notification sent to center admin: ${admin.name}`);
+      }
+
+      // Notify receptionists for billing action
+      for (const receptionist of receptionists) {
+        const notification = new Notification({
+          recipient: receptionist._id,
+          sender: doctorId,
+          type: 'test_request',
+          title: 'New Test Request - Generate Bill',
+          message: `Please generate bill for ${patient.name} (${testType}).`,
+          data: {
+            testRequestId: savedTestRequest._id,
+            patientId: patient._id,
+            doctorId: doctorId,
+            centerId: patient.centerId,
+            status: 'Billing_Pending'
+          },
+          read: false
+        });
+        await notification.save();
+        console.log(`✅ Notification sent to receptionist: ${receptionist.name}`);
       }
       
       console.log('✅ All notifications sent successfully');
@@ -509,7 +535,7 @@ export const createTestRequest = async (req, res) => {
       .populate('assignedLabStaffId', 'staffName phone');
 
     res.status(201).json({
-      message: 'Test request created successfully and notifications sent to superadmin, superadmin doctor, and lab',
+      message: 'Test request created. Billing pending at center receptionist.',
       testRequest: populatedTestRequest
     });
   } catch (error) {
@@ -529,22 +555,16 @@ export const assignLabStaff = async (req, res) => {
       return res.status(404).json({ message: 'Test request not found' });
     }
 
-    // ✅ NEW: Check if test request has been approved by superadmin doctor
-    if (testRequest.status !== 'Superadmin_Approved') {
-      return res.status(400).json({ 
-        message: 'Test request must be approved by superadmin doctor before lab assignment',
+    // ✅ New: Ensure billing is paid before lab assignment
+    if (testRequest.status !== 'Billing_Paid' || testRequest.billing?.status !== 'paid') {
+      return res.status(400).json({
+        message: 'Billing must be marked as paid before assigning to lab',
         currentStatus: testRequest.status,
-        requiredStatus: 'Superadmin_Approved'
+        billingStatus: testRequest.billing?.status || 'not_generated'
       });
     }
 
-    // ✅ NEW: Check if superadmin review is complete and approved
-    if (!testRequest.superadminReview || testRequest.superadminReview.status !== 'approved') {
-      return res.status(400).json({ 
-        message: 'Test request must be reviewed and approved by superadmin doctor before lab assignment',
-        reviewStatus: testRequest.superadminReview?.status || 'not_reviewed'
-      });
-    }
+    // Superadmin approval no longer required before lab assignment in the new billing-first workflow
 
     testRequest.assignedLabStaffId = assignedLabStaffId;
     testRequest.assignedLabStaffName = assignedLabStaffName;
@@ -1071,5 +1091,207 @@ export const downloadTestReport = async (req, res) => {
     if (!res.headersSent) {
       res.status(500).json({ message: 'Failed to download test report', error: error.message });
     }
+  }
+};
+
+// ===================== Billing Workflow (Receptionist) =====================
+
+// Fetch billing-related test requests for current receptionist's center
+export const getBillingRequestsForCurrentReceptionist = async (req, res) => {
+  try {
+    if (!req.user || !req.user.centerId) {
+      return res.status(403).json({ message: 'Center-specific access required' });
+    }
+
+    const billingStatuses = ['Billing_Pending', 'Billing_Generated', 'Billing_Paid'];
+    const testRequests = await TestRequest.find({
+      centerId: req.user.centerId,
+      status: { $in: billingStatuses },
+      isActive: true
+    })
+      .populate('doctorId', 'name email phone')
+      .populate('patientId', 'name phone address age gender')
+      .populate('centerId', 'name code')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(testRequests);
+  } catch (error) {
+    console.error('Error fetching billing requests for receptionist:', error);
+    res.status(500).json({ message: 'Failed to fetch billing requests' });
+  }
+};
+
+// Generate bill for a test request (Receptionist action)
+export const generateBillForTestRequest = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { items = [], taxes = 0, discounts = 0, currency = 'INR', notes } = req.body;
+
+    const testRequest = await TestRequest.findById(id).populate('patientId', 'name').populate('centerId', 'name code');
+    if (!testRequest) {
+      return res.status(404).json({ message: 'Test request not found' });
+    }
+
+    if (!req.user?.centerId || String(req.user.centerId) !== String(testRequest.centerId)) {
+      return res.status(403).json({ message: 'You can only bill requests from your center' });
+    }
+
+    // Compute totals
+    const itemsWithTotals = items.map((it) => ({
+      name: it.name,
+      code: it.code,
+      quantity: Number(it.quantity || 1),
+      unitPrice: Number(it.unitPrice || 0),
+      total: Number(it.quantity || 1) * Number(it.unitPrice || 0)
+    }));
+    const subTotal = itemsWithTotals.reduce((sum, it) => sum + (it.total || 0), 0);
+    const totalAmount = Math.max(0, subTotal + Number(taxes || 0) - Number(discounts || 0));
+
+    // Generate a simple invoice number
+    const prefix = testRequest.centerCode || testRequest.centerId?.code || 'INV';
+    const invoiceNumber = `${prefix}-${new Date().toISOString().replace(/[-:T.Z]/g, '').slice(0, 14)}-${String(testRequest._id).slice(-5)}`;
+
+    testRequest.billing = {
+      status: 'generated',
+      amount: totalAmount,
+      currency,
+      items: itemsWithTotals,
+      taxes: Number(taxes || 0),
+      discounts: Number(discounts || 0),
+      invoiceNumber,
+      generatedAt: new Date(),
+      generatedBy: req.user.id || req.user._id,
+      notes
+    };
+    testRequest.status = 'Billing_Generated';
+    testRequest.workflowStage = 'billing';
+    testRequest.updatedAt = new Date();
+
+    const updated = await testRequest.save();
+
+    // Notify stakeholders
+    try {
+      const Notification = (await import('../models/Notification.js')).default;
+      const UserModel = (await import('../models/User.js')).default;
+
+      const recipients = await UserModel.find({
+        $or: [
+          { _id: testRequest.doctorId },
+          { role: 'centeradmin', centerId: testRequest.centerId },
+          { role: 'superadmin', isSuperAdminStaff: true }
+        ],
+        isDeleted: { $ne: true }
+      });
+
+      for (const r of recipients) {
+        const n = new Notification({
+          recipient: r._id,
+          sender: req.user.id || req.user._id,
+          type: 'test_request',
+          title: 'Bill Generated',
+          message: `Invoice ${invoiceNumber} generated for ${testRequest.patientName} - ${testRequest.testType}`,
+          data: { testRequestId: testRequest._id, invoiceNumber, amount: totalAmount, status: 'Billing_Generated' },
+          read: false
+        });
+        await n.save();
+      }
+    } catch (notifyErr) {
+      console.error('Billing generation notification error:', notifyErr);
+    }
+
+    const populated = await TestRequest.findById(updated._id)
+      .populate('doctorId', 'name email phone')
+      .populate('patientId', 'name phone address age gender')
+      .populate('centerId', 'name code');
+    res.status(200).json({ message: 'Bill generated successfully', testRequest: populated });
+  } catch (error) {
+    console.error('Error generating bill:', error);
+    res.status(500).json({ message: 'Failed to generate bill' });
+  }
+};
+
+// Mark bill as paid (Receptionist action)
+export const markBillPaidForTestRequest = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { paymentNotes } = req.body;
+
+    const testRequest = await TestRequest.findById(id).populate('centerId', 'name code');
+    if (!testRequest) {
+      return res.status(404).json({ message: 'Test request not found' });
+    }
+
+    if (!req.user?.centerId || String(req.user.centerId) !== String(testRequest.centerId)) {
+      return res.status(403).json({ message: 'You can only update billing for requests from your center' });
+    }
+
+    if (!testRequest.billing || testRequest.billing.status === 'not_generated') {
+      return res.status(400).json({ message: 'Generate bill before marking paid' });
+    }
+
+    testRequest.billing.status = 'paid';
+    testRequest.billing.paidAt = new Date();
+    testRequest.billing.paidBy = req.user.id || req.user._id;
+    if (paymentNotes) {
+      testRequest.billing.notes = [testRequest.billing.notes, paymentNotes].filter(Boolean).join('\n');
+    }
+    testRequest.status = 'Billing_Paid';
+    testRequest.updatedAt = new Date();
+
+    const updated = await testRequest.save();
+
+    // Notify stakeholders including lab that request is ready for processing
+    try {
+      const Notification = (await import('../models/Notification.js')).default;
+      const UserModel = (await import('../models/User.js')).default;
+      const LabStaffModel = (await import('../models/LabStaff.js')).default;
+
+      const recipients = await UserModel.find({
+        $or: [
+          { _id: testRequest.doctorId },
+          { role: 'centeradmin', centerId: testRequest.centerId },
+          { role: 'superadmin', isSuperAdminStaff: true }
+        ],
+        isDeleted: { $ne: true }
+      });
+      const labStaff = await LabStaffModel.find({ isDeleted: { $ne: true } }).lean();
+
+      for (const r of recipients) {
+        const n = new Notification({
+          recipient: r._id,
+          sender: req.user.id || req.user._id,
+          type: 'test_request',
+          title: 'Bill Paid',
+          message: `Billing paid for ${testRequest.patientName} - ${testRequest.testType}. Ready for lab.`,
+          data: { testRequestId: testRequest._id, status: 'Billing_Paid' },
+          read: false
+        });
+        await n.save();
+      }
+
+      for (const staff of labStaff) {
+        const n = new Notification({
+          recipient: staff._id,
+          sender: req.user.id || req.user._id,
+          type: 'test_request',
+          title: 'New Paid Test Request',
+          message: `Paid request ready: ${testRequest.patientName} - ${testRequest.testType}`,
+          data: { testRequestId: testRequest._id, status: 'Billing_Paid' },
+          read: false
+        });
+        await n.save();
+      }
+    } catch (notifyErr) {
+      console.error('Billing paid notification error:', notifyErr);
+    }
+
+    const populated = await TestRequest.findById(updated._id)
+      .populate('doctorId', 'name email phone')
+      .populate('patientId', 'name phone address age gender')
+      .populate('centerId', 'name code');
+    res.status(200).json({ message: 'Billing marked as paid', testRequest: populated });
+  } catch (error) {
+    console.error('Error marking bill paid:', error);
+    res.status(500).json({ message: 'Failed to mark bill paid' });
   }
 };
