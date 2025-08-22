@@ -144,7 +144,7 @@ import AddReceptionistPatient from '../pages/Receptionist/AddPatient';
 
 // Doctor Pages
 import DoctorDashboard from '../pages/Doctor/Dashboard';
-import DoctorPatientDetails from '../pages/Doctor/PatientDetails';
+
 import DoctorPatientList from '../pages/Doctor/patients/PatientList';
 import DoctorAddPatient from '../pages/Doctor/patients/AddPatient';
 import DoctorEditPatient from '../pages/Doctor/patients/EditPatient';
@@ -453,6 +453,7 @@ export default function AppRoutes() {
         {/* Doctor Followup Management */}
         <Route path="doctor/patients/followup/:id" element={<DoctorFollowUp />} />
         <Route path="doctor/patients/followup/add/:id" element={<DoctorAddFollowUp />} />
+        <Route path="doctor/patients/followup/view/:id" element={<DoctorFollowUp />} />
         <Route path="doctor/patients/followup/addallergicrhinitis/:patientId" element={<DoctorAddAllergicRhinitis />} />
         <Route path="doctor/patients/followup/viewallergicrhinitis/:id" element={<DoctorViewAllergicRhinitis />} />
         <Route path="doctor/patients/followup/addallergicconjunctivitis/:patientId" element={<DoctorAddAllergicConjunctivitis />} />
@@ -470,8 +471,11 @@ export default function AppRoutes() {
         {/* Doctor History Management */}
         <Route path="doctor/patients/view-history/:id" element={<DoctorViewHistory />} />
         
+        {/* Doctor Test Request Management */}
+        <Route path="doctor/patients/add-test-request/:id" element={<TestRequests />} />
+        <Route path="doctor/patients/test-request/:id" element={<TestRequestDetails />} />
+        
         {/* Doctor Legacy Routes (for backward compatibility) */}
-        <Route path="doctor/patient/:patientId" element={<DoctorPatientDetails />} />
         <Route path="doctor/add-patient" element={<DoctorAddPatient />} />
         <Route path="doctor/edit-patient/:id" element={<DoctorEditPatient />} />
         <Route path="doctor/add-history/:patientId" element={<DoctorAddHistory />} />

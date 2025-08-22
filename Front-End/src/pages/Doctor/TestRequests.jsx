@@ -213,11 +213,11 @@ const TestRequests = () => {
                   Refresh
                 </button>
                 <button
-                  onClick={() => navigate('/dashboard/doctor/new-test-request')}
+                  onClick={() => navigate('/dashboard/doctor/patients')}
                   className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center"
                 >
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Test Request
+                  <User className="h-4 w-4 mr-2" />
+                  Go to Patients
                 </button>
               </div>
             </div>
@@ -229,6 +229,18 @@ const TestRequests = () => {
             <p className="text-red-600">{testRequestsError}</p>
           </div>
         )}
+
+        {/* Info Message */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center">
+            <FileText className="h-5 w-5 text-blue-600 mr-2" />
+            <div>
+              <p className="text-blue-800 font-medium text-sm">How to create a new test request:</p>
+              <p className="text-blue-700 text-sm">1. Go to Patients → Select a patient → Click "Test Request" button</p>
+              <p className="text-blue-700 text-sm">2. Or use the "Go to Patients" button above to manage your patients</p>
+            </div>
+          </div>
+        </div>
 
         {/* Status Summary Cards */}
 

@@ -116,12 +116,16 @@ export const createReceptionistPatient = createAsyncThunk(
   async (patientData, { dispatch }) => {
     try {
       dispatch(setLoading(true));
+      console.log('🔍 Creating patient with data:', patientData);
       const res = await API.post('/patients', patientData);
+      console.log('✅ Patient created successfully:', res.data);
       dispatch(addPatient(res.data));
       dispatch(setAddSuccess(true));
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to add patient'));
+      console.error('❌ Error creating patient:', error.response?.data || error.message);
+      const errorMessage = error.response?.data?.message || 'Failed to add patient';
+      dispatch(setError(errorMessage));
       throw error;
     }
   }

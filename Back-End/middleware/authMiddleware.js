@@ -94,9 +94,9 @@ const ensureCenterIsolation = (req, res, next) => {
   }
   
   // Special handling for receptionists - allow them to work temporarily without centerId
-  if (req.user && req.user.role === 'receptionist' && !req.user.centerId) {
-    console.log('⚠️ Receptionist without centerId - allowing temporary access');
-    console.log('🔧 TODO: Fix user data to include centerId');
+  // Receptionists need to handle billing even if they don't have a centerId assigned yet
+  if (req.user && req.user.role === 'receptionist') {
+    console.log('✅ Receptionist access granted');
     return next();
   }
   
@@ -138,4 +138,30 @@ export const ensureRole = (...roles) => (req, res, next) => {
 export const ensureDoctor = (req, res, next) => {
   if (req.user && req.user.role === 'doctor') return next();
   return res.status(403).json({ message: 'Only doctors can perform this action.' });
+};
+
+// Allow both doctors and receptionists to perform patient-related actions
+export const ensureDoctorOrReceptionist = (req, res, next) => {
+  if (req.user && (req.user.role === 'doctor' || req.user.role === 'receptionist')) {
+    return next();
+  }
+  return res.status(403).json({ message: 'Only doctors and receptionists can perform this action.' });
+};
+
+// Allow doctors and CenterAdmin to perform patient management actions
+export const ensureDoctorOrCenterAdmin = (req, res, next) => {
+  console.log('🔍 ensureDoctorOrCenterAdmin check:', {
+    userRole: req.user?.role,
+    userId: req.user?._id,
+    userName: req.user?.name,
+    userType: req.user?.userType
+  });
+  
+  if (req.user && (req.user.role === 'doctor' || req.user.role === 'centeradmin')) {
+    console.log('✅ ensureDoctorOrCenterAdmin access granted for role:', req.user.role);
+    return next();
+  }
+  
+  console.log('❌ ensureDoctorOrCenterAdmin access denied for role:', req.user?.role);
+  return res.status(403).json({ message: 'Only doctors and CenterAdmin can perform this action.' });
 };

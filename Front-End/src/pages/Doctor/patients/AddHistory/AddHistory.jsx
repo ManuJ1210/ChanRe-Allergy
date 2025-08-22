@@ -197,7 +197,7 @@ export default function AddHistory() {
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => navigate(`/dashboard/doctor/patient/${patientId}`)}
+            onClick={() => navigate(`/dashboard/doctor/patients/profile/${patientId}`)}
             className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />

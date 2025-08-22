@@ -130,7 +130,7 @@ export const fetchPatientDetails = createAsyncThunk(
         : String(patientId);
       
       const token = localStorage.getItem('token');
-      const response = await API.get(`/patient/${id}`, {
+      const response = await API.get(`/patients/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -258,6 +258,87 @@ export const fetchPatientTestRequests = createAsyncThunk(
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient test requests');
+    }
+  }
+);
+
+// Fetch patient history
+export const fetchPatientHistory = createAsyncThunk(
+  'doctor/fetchPatientHistory',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      console.log('🔍 fetchPatientHistory thunk called with:', patientId);
+      const id = typeof patientId === 'object' && patientId !== null
+        ? patientId._id || patientId.id || String(patientId)
+        : String(patientId);
+      
+      console.log('🔍 fetchPatientHistory - processed ID:', id);
+      const token = localStorage.getItem('token');
+      console.log('🔍 fetchPatientHistory - token exists:', !!token);
+      
+      const response = await API.get(`/patients/${id}/history`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      console.log('✅ fetchPatientHistory - response received:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ fetchPatientHistory - error:', error);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient history');
+    }
+  }
+);
+
+// Fetch patient medications
+export const fetchPatientMedications = createAsyncThunk(
+  'doctor/fetchPatientMedications',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      console.log('🔍 fetchPatientMedications thunk called with:', patientId);
+      const id = typeof patientId === 'object' && patientId !== null
+        ? patientId._id || patientId.id || String(patientId)
+        : String(patientId);
+      
+      console.log('🔍 fetchPatientMedications - processed ID:', id);
+      const token = localStorage.getItem('token');
+      console.log('🔍 fetchPatientMedications - token exists:', !!token);
+      
+      const response = await API.get(`/patients/${id}/medications`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      console.log('✅ fetchPatientMedications - response received:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ fetchPatientMedications - error:', error);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient medications');
+    }
+  }
+);
+
+// Fetch patient follow-ups
+export const fetchPatientFollowUps = createAsyncThunk(
+  'doctor/fetchPatientFollowUps',
+  async (patientId, { rejectWithValue }) => {
+    try {
+      console.log('🔍 fetchPatientFollowUps thunk called with:', patientId);
+      const id = typeof patientId === 'object' && patientId !== null
+        ? patientId._id || patientId.id || String(patientId)
+        : String(patientId);
+      
+      console.log('🔍 fetchPatientFollowUps - processed ID:', id);
+      const token = localStorage.getItem('token');
+      console.log('🔍 fetchPatientFollowUps - token exists:', !!token);
+      
+      const response = await API.get(`/patients/${id}/follow-ups`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      console.log('✅ fetchPatientFollowUps - response received:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ fetchPatientFollowUps - error:', error);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch patient follow-ups');
     }
   }
 );

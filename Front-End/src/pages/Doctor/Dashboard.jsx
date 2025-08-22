@@ -195,11 +195,11 @@ const DoctorDashboard = () => {
               </button>
               
               <button
-                onClick={() => navigate('/dashboard/doctor/new-test-request')}
+                onClick={() => navigate('/dashboard/doctor/patients')}
                 className="flex items-center justify-center p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
               >
-                <FileText className="h-6 w-6 text-blue-600 mr-3" />
-                <span className="font-medium text-blue-800">New Test Request</span>
+                <User className="h-6 w-6 text-blue-600 mr-3" />
+                <span className="font-medium text-blue-800">Manage Patients</span>
               </button>
               
               <button

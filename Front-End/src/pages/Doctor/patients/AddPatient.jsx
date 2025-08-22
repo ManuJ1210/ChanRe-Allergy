@@ -10,9 +10,6 @@ const AddPatient = () => {
   const { user } = useSelector((state) => state.auth);
   
   const [loading, setLoading] = useState(false);
-  const [doctors, setDoctors] = useState([]);
-  const [doctorLoading, setDoctorLoading] = useState(true);
-  const [doctorError, setDoctorError] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -22,7 +19,6 @@ const AddPatient = () => {
     contact: "",
     email: "",
     centerCode: "",
-    assignedDoctor: "",
   });
   
   const [centerInfo, setCenterInfo] = useState({
@@ -50,25 +46,9 @@ const AddPatient = () => {
     return null;
   };
 
-  const fetchDoctors = async () => {
-    try {
-      setDoctorLoading(true);
-      const centerId = getCenterId();
-      if (centerId) {
-        const response = await API.get(`/doctors`);
-        setDoctors(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching doctors:', error);
-      setDoctorError('Failed to fetch doctors');
-    } finally {
-      setDoctorLoading(false);
-    }
-  };
+
 
   useEffect(() => {
-    fetchDoctors();
-    
     // Fetch center information and auto-populate
     const fetchCenterInfo = async () => {
       const centerId = getCenterId();
@@ -169,16 +149,17 @@ const AddPatient = () => {
       const patientData = {
         ...formData,
         centerId: getCenterId(),
+        assignedDoctor: user._id || user.id, // Automatically assign to the logged-in doctor
         registeredBy: user._id || user.id
       };
 
       const response = await API.post('/patients', patientData);
       
-      toast.success('Patient added successfully!');
+      toast.success(`Patient "${response.data.patient.name}" added successfully!`);
       
-      // Navigate to the new patient's profile
+      // Navigate to the patients list page
       setTimeout(() => {
-        navigate(`/dashboard/doctor/patients/profile/${response.data.patient._id}`);
+        navigate('/dashboard/doctor/patients');
       }, 1500);
       
     } catch (error) {
@@ -208,7 +189,7 @@ const AddPatient = () => {
             Add New Patient
           </h1>
           <p className="text-slate-600">
-            Register a new patient to your center
+            Register a new patient to your center. The patient will be automatically assigned to you.
           </p>
         </div>
 
@@ -354,34 +335,7 @@ const AddPatient = () => {
               />
             </div>
 
-            {/* Assigned Doctor */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                <User className="h-4 w-4 inline mr-2" />
-                Assign Doctor *
-              </label>
-              {doctorLoading ? (
-                <div className="flex items-center text-blue-600 text-sm">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                  Loading doctors...
-                </div>
-              ) : doctorError ? (
-                <div className="text-red-600 text-sm">Failed to load doctors</div>
-              ) : (
-                <select
-                  name="assignedDoctor"
-                  value={formData.assignedDoctor}
-                  onChange={handleChange}
-                  className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                >
-                  <option value="">Select Doctor</option>
-                  {doctors && doctors.length > 0 && doctors.map((doc) => (
-                    <option key={doc._id} value={doc._id}>{doc.name}</option>
-                  ))}
-                </select>
-              )}
-            </div>
+
 
             {/* Submit Button */}
             <div className="flex justify-end">
