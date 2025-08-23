@@ -80,6 +80,15 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
+// Debug endpoint to test server health
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    message: 'Server is running and healthy'
+  });
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/centers', centerRoutes);
 app.use('/api/center-admins', centerAdminRoutes);

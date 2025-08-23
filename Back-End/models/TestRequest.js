@@ -93,7 +93,7 @@ const testRequestSchema = new mongoose.Schema({
   billing: {
     status: {
       type: String,
-      enum: ['not_generated', 'generated', 'paid', 'cancelled'],
+      enum: ['not_generated', 'generated', 'payment_received', 'paid', 'cancelled'],
       default: 'not_generated'
     },
     amount: { type: Number, default: 0 },
@@ -114,7 +114,14 @@ const testRequestSchema = new mongoose.Schema({
     generatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     paidAt: Date,
     paidBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    notes: String
+    notes: String,
+    // ✅ NEW: Enhanced payment verification fields
+    paymentMethod: String,
+    transactionId: String,
+    receiptUpload: String,
+    verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    verifiedAt: Date,
+    verificationNotes: String
   },
   
   // Lab staff assignment

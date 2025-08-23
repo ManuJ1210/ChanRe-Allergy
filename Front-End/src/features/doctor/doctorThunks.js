@@ -183,18 +183,30 @@ export const fetchTestRequests = createAsyncThunk(
 // ✅ New: Create test request
 export const createTestRequest = createAsyncThunk(
   'doctor/createTestRequest',
-  async (testRequestData, { rejectWithValue }) => {
+  async (testRequestData, { rejectWithValue, getState }) => {
     try {
       const token = localStorage.getItem('token');
+      const state = getState();
+      const doctorId = state.auth.user?.id || state.auth.user?._id;
+      
+      // Add doctor ID to the request data
+      const requestDataWithDoctor = {
+        ...testRequestData,
+        doctorId: doctorId
+      };
+      
+      console.log('🔍 Sending test request data:', requestDataWithDoctor);
+      
       const response = await API.post(
         '/test-requests',
-        testRequestData,
+        requestDataWithDoctor,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       return response.data;
     } catch (error) {
+      console.error('❌ Error creating test request:', error.response?.data || error.message);
       return rejectWithValue(error.response?.data?.message || 'Failed to create test request');
     }
   }
@@ -226,7 +238,7 @@ export const downloadTestReport = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await API.get(
-        `/test-requests/${testRequestId}/download-report`,
+        `/test-requests/download-report/${testRequestId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

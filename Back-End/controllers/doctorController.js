@@ -349,6 +349,23 @@ export const getAssignedPatients = async (req, res) => {
   try {
     const doctorId = req.user._id;
     console.log('🔍 Fetching patients for doctor:', doctorId);
+    console.log('🔍 User centerId:', req.user.centerId);
+    console.log('🔍 User role:', req.user.role);
+    console.log('🔍 User type:', req.user.userType);
+    
+    // Basic validation
+    if (!req.user.centerId) {
+      console.log('❌ User has no centerId');
+      return res.status(400).json({ 
+        message: 'User not assigned to a center',
+        debug: {
+          userId: req.user._id,
+          userRole: req.user.role,
+          userType: req.user.userType,
+          hasCenterId: !!req.user.centerId
+        }
+      });
+    }
     
     // Ensure doctor can only see patients from their center
     const patients = await Patient.find({ 
@@ -364,19 +381,59 @@ export const getAssignedPatients = async (req, res) => {
 
     console.log(`📋 Found ${patients.length} patients for doctor in center: ${req.user.centerId}`);
     
+    // ✅ NEW: Check billing status for each patient
+    const patientsWithBillingStatus = await Promise.all(
+      patients.map(async (patient) => {
+        try {
+          // Check if patient has any test requests with pending billing
+          const pendingBillingTestRequest = await TestRequest.findOne({
+            patientId: patient._id,
+            status: { $in: ['Billing_Pending', 'Billing_Generated'] },
+            'billing.status': { $in: ['generated', 'payment_received'] } // Include payment_received status
+          }).select('status billing.status billing.amount');
+
+          const patientObj = patient.toObject();
+          
+          if (pendingBillingTestRequest) {
+            patientObj.billingStatus = 'pending';
+            patientObj.pendingTestRequest = {
+              status: pendingBillingTestRequest.status,
+              billingStatus: pendingBillingTestRequest.billing?.status || 'not_generated',
+              amount: pendingBillingTestRequest.billing?.amount || 0
+            };
+          } else {
+            patientObj.billingStatus = 'clear';
+            patientObj.pendingTestRequest = null;
+          }
+
+          return patientObj;
+        } catch (patientError) {
+          console.error(`❌ Error processing patient ${patient._id}:`, patientError);
+          // Return patient without billing status if there's an error
+          const patientObj = patient.toObject();
+          patientObj.billingStatus = 'error';
+          patientObj.pendingTestRequest = null;
+          return patientObj;
+        }
+      })
+    );
+
     // Log sample patient data for debugging
-    if (patients.length > 0) {
-      console.log('🏥 Sample patient center data:', {
-        patientId: patients[0]._id,
-        centerId: patients[0].centerId,
-        centerName: patients[0].centerId?.name,
-        centerCode: patients[0].centerId?.code
+    if (patientsWithBillingStatus.length > 0) {
+      console.log('🏥 Sample patient data with billing status:', {
+        patientId: patientsWithBillingStatus[0]._id,
+        centerId: patientsWithBillingStatus[0].centerId,
+        centerName: patientsWithBillingStatus[0].centerId?.name,
+        centerCode: patientsWithBillingStatus[0].centerId?.code,
+        billingStatus: patientsWithBillingStatus[0].billingStatus,
+        pendingTestRequest: patientsWithBillingStatus[0].pendingTestRequest
       });
     }
 
-    res.status(200).json(patients);
+    res.status(200).json(patientsWithBillingStatus);
   } catch (error) {
     console.error('❌ Error fetching assigned patients:', error);
+    console.error('❌ Error stack:', error.stack);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };

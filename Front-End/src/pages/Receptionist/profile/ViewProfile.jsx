@@ -57,55 +57,61 @@ const ViewProfile = () => {
   useEffect(() => {
     // Check if ID is valid (not undefined, null, or empty string)
     if (!id || id === 'undefined' || id === 'null' || id === '') {
+      console.log('❌ Invalid patient ID:', id);
       return;
     }
 
-    if (id && !dataFetched) {
-      // Check if user is authenticated
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/login');
-        return;
-      }
+    console.log('🔍 ViewProfile mounted with patient ID:', id);
 
-      // Fetch all patient data
-      const fetchData = async () => {
-        try {
-          console.log('🔍 Starting to fetch patient data for ID:', id);
-          
-          const results = await Promise.all([
-            dispatch(fetchReceptionistSinglePatient(id)),
-            dispatch(fetchReceptionistPatientMedications(id)),
-            dispatch(fetchReceptionistPatientHistory(id)),
-            dispatch(fetchReceptionistPatientTests(id)),
-            dispatch(fetchReceptionistTestRequests(id)),
-            dispatch(fetchReceptionistFollowUps(id)),
-            dispatch(fetchReceptionistAllergicRhinitis(id)),
-            dispatch(fetchReceptionistAllergicConjunctivitis(id)),
-            dispatch(fetchReceptionistAllergicBronchitis(id)),
-            dispatch(fetchReceptionistAtopicDermatitis(id)),
-            dispatch(fetchReceptionistGPE(id)),
-            dispatch(fetchReceptionistPrescriptions(id))
-          ]);
-
-          console.log('✅ All patient data fetched successfully:', results);
-          setDataFetched(true);
-        } catch (error) {
-          console.error('❌ Error fetching patient data:', error);
-        }
-      };
-
-      fetchData();
-    } else if (dataFetched) {
-      console.log('✅ Data already fetched, skipping');
+    // Check if user is authenticated
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.log('❌ No authentication token found');
+      navigate('/login');
+      return;
     }
-  }, [dispatch, id, dataFetched, navigate]);
+
+    // Fetch all patient data
+    const fetchData = async () => {
+      try {
+        console.log('🔍 Starting to fetch patient data for ID:', id);
+        
+        // Fetch patient data first
+        const patientResult = await dispatch(fetchReceptionistSinglePatient(id));
+        console.log('✅ Patient fetch result:', patientResult);
+        
+        // Then fetch all related data
+        await Promise.all([
+          dispatch(fetchReceptionistPatientMedications(id)),
+          dispatch(fetchReceptionistPatientHistory(id)),
+          dispatch(fetchReceptionistPatientTests(id)),
+          dispatch(fetchReceptionistTestRequests(id)),
+          dispatch(fetchReceptionistFollowUps(id)),
+          dispatch(fetchReceptionistAllergicRhinitis(id)),
+          dispatch(fetchReceptionistAllergicConjunctivitis(id)),
+          dispatch(fetchReceptionistAllergicBronchitis(id)),
+          dispatch(fetchReceptionistAtopicDermatitis(id)),
+          dispatch(fetchReceptionistGPE(id)),
+          dispatch(fetchReceptionistPrescriptions(id))
+        ]);
+
+        console.log('✅ All patient data fetched successfully');
+        setDataFetched(true);
+      } catch (error) {
+        console.error('❌ Error fetching patient data:', error);
+      }
+    };
+
+    fetchData();
+  }, [dispatch, id, navigate]);
 
   // Debug logging
   useEffect(() => {
     console.log('🔍 ViewProfile Debug Info:', {
       patientId: id,
       patient,
+      patientType: typeof patient,
+      patientKeys: patient ? Object.keys(patient) : null,
       loading,
       error,
       medications: medications?.length || 0,
@@ -148,7 +154,7 @@ const ViewProfile = () => {
     </ReceptionistLayout>
   );
 
-  if (patientLoading) return (
+  if (patientLoading || !dataFetched) return (
     <ReceptionistLayout>
       <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
         <div className="max-w-4xl mx-auto">
@@ -203,20 +209,19 @@ const ViewProfile = () => {
   }
 
   return (
-
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <button
-            onClick={() => navigate('/dashboard/receptionist/patients')}
-            className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Patients List
-          </button>
-
-        </div>
+    <ReceptionistLayout>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+        <div className="max-w-5xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <button
+              onClick={() => navigate('/dashboard/receptionist/patients')}
+              className="flex items-center text-slate-600 hover:text-slate-800 mb-4 transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Patients List
+            </button>
+          </div>
 
         {/* Patient Header */}
         <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6 mb-8">
@@ -470,6 +475,11 @@ const ViewProfile = () => {
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <p className="text-red-600">{error}</p>
                   </div>
+                ) : !tests || tests.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Activity className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                    <p className="text-slate-500">No investigations found</p>
+                  </div>
                 ) : (
                   <div className="overflow-x-auto max-w-full">
                     <table className="w-full min-w-max">
@@ -550,7 +560,12 @@ const ViewProfile = () => {
                 </p>
               </div>
               <div className="p-6">
-                {medications.length === 0 ? (
+                {loading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                    <p className="text-slate-600">Loading medications...</p>
+                  </div>
+                ) : !medications || medications.length === 0 ? (
                   <div className="text-center py-8">
                     <Pill className="h-12 w-12 text-slate-400 mx-auto mb-4" />
                     <p className="text-slate-500">No medications found</p>
@@ -611,6 +626,11 @@ const ViewProfile = () => {
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <p className="text-red-600">{error}</p>
                   </div>
+                ) : !testRequests || testRequests.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Activity className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                    <p className="text-slate-500">No lab reports found</p>
+                  </div>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full">
@@ -627,24 +647,8 @@ const ViewProfile = () => {
                       </thead>
                       <tbody className="divide-y divide-slate-200">
                         {testRequests && Array.isArray(testRequests) && testRequests.length > 0 ? (
-                          testRequests.map((request, idx) => {
-                            // Debug logging for each request
-                            console.log('🔍 Test Request Data:', {
-                              id: request._id,
-                              status: request.status,
-                              labTestingCompletedDate: request.labTestingCompletedDate,
-                              reportGeneratedDate: request.reportGeneratedDate,
-                              reportSentDate: request.reportSentDate,
-                              testingEndDate: request.testingEndDate,
-                              createdAt: request.createdAt,
-                              assignedLabStaffId: request.assignedLabStaffId,
-                              sampleCollectorId: request.sampleCollectorId,
-                              labTechnicianId: request.labTechnicianId,
-                              reportGeneratedBy: request.reportGeneratedBy
-                            });
-                            
-                            return (
-                              <tr key={request._id || idx} className="hover:bg-slate-50 transition-colors">
+                          testRequests.map((request, idx) => (
+                            <tr key={request._id || idx} className="hover:bg-slate-50 transition-colors">
                               <td className="px-4 py-3 text-sm text-slate-800">
                                 {request._id ? request._id.slice(-6) : 'N/A'}
                               </td>
@@ -707,8 +711,7 @@ const ViewProfile = () => {
                                 <span className="text-slate-400">Read Only</span>
                               </td>
                             </tr>
-                            );
-                          })
+                          ))
                         ) : (
                           <tr>
                             <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
@@ -1002,8 +1005,17 @@ const ViewProfile = () => {
               <h2 className="text-lg font-semibold text-slate-800">Prescription</h2>
             </div>
             <div className="p-6">
-
-              
+              {loading ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                  <p className="text-slate-600">Loading prescriptions...</p>
+                </div>
+              ) : !prescriptions || prescriptions.length === 0 ? (
+                <div className="text-center py-8">
+                  <Pill className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                  <p className="text-slate-500">No prescriptions found</p>
+                </div>
+              ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -1063,12 +1075,13 @@ const ViewProfile = () => {
                   </tbody>
                 </table>
               </div>
+              )}
             </div>
           </div>
         )}
       </div>
     </div>
-
+    </ReceptionistLayout>
   );
 };
 

@@ -77,6 +77,14 @@ export default function CenterAdminDashboard() {
               onClick: () => navigate('/dashboard/centeradmin/receptionist/addreceptionist')
     },
     {
+      title: 'Billing Management',
+      description: 'Monitor and verify billing',
+      icon: <FileText className="h-6 w-6" />,
+      color: 'bg-indigo-500',
+      hoverColor: 'hover:bg-indigo-600',
+              onClick: () => navigate('/dashboard/centeradmin/billing')
+    },
+    {
       title: 'View Patients',
       description: 'Manage all patients',
       icon: <Eye className="h-6 w-6" />,

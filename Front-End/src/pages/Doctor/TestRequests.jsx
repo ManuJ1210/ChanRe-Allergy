@@ -200,26 +200,26 @@ const TestRequests = () => {
                   Last updated: {lastRefreshTime.toLocaleTimeString()}
                 </p>
               </div>
-              <div className="flex space-x-3">
-                <button
-                  onClick={() => {
-                    dispatch(fetchTestRequests());
-                    setLastRefreshTime(new Date());
-                  }}
-                  disabled={testRequestsLoading}
-                  className="bg-slate-500 text-white px-4 py-2 rounded-lg hover:bg-slate-600 flex items-center disabled:opacity-50"
-                >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${testRequestsLoading ? 'animate-spin' : ''}`} />
-                  Refresh
-                </button>
-                <button
-                  onClick={() => navigate('/dashboard/doctor/patients')}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center"
-                >
-                  <User className="h-4 w-4 mr-2" />
-                  Go to Patients
-                </button>
-              </div>
+                             <div className="flex space-x-3">
+                 <button
+                   onClick={() => {
+                     dispatch(fetchTestRequests());
+                     setLastRefreshTime(new Date());
+                   }}
+                   disabled={testRequestsLoading}
+                   className="bg-slate-500 text-white px-4 py-2 rounded-lg hover:bg-slate-600 flex items-center disabled:opacity-50"
+                 >
+                   <RefreshCw className={`h-4 w-4 mr-2 ${testRequestsLoading ? 'animate-spin' : ''}`} />
+                   Refresh
+                 </button>
+                 <button
+                   onClick={() => navigate('/dashboard/doctor/add-test-request')}
+                   className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 flex items-center"
+                 >
+                   <Plus className="h-4 w-4 mr-2" />
+                   New Test Request
+                 </button>
+               </div>
             </div>
         </div>
 
@@ -230,19 +230,7 @@ const TestRequests = () => {
           </div>
         )}
 
-        {/* Info Message */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <div className="flex items-center">
-            <FileText className="h-5 w-5 text-blue-600 mr-2" />
-            <div>
-              <p className="text-blue-800 font-medium text-sm">How to create a new test request:</p>
-              <p className="text-blue-700 text-sm">1. Go to Patients → Select a patient → Click "Test Request" button</p>
-              <p className="text-blue-700 text-sm">2. Or use the "Go to Patients" button above to manage your patients</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Status Summary Cards */}
+        
 
 
         {/* Search and Filter Bar */}
@@ -318,12 +306,21 @@ const TestRequests = () => {
               <h3 className="text-lg  text-slate-600 mb-2">
                 {searchTerm || filterStatus || filterPriority ? 'No test requests found' : 'No test requests'}
               </h3>
-              <p className="text-slate-500">
+              <p className="text-slate-500 mb-6">
                 {searchTerm || filterStatus || filterPriority 
                   ? 'Try adjusting your search or filter criteria'
                   : 'Test requests will appear here once you create them'
                 }
               </p>
+              {!searchTerm && !filterStatus && !filterPriority && (
+                <button
+                  onClick={() => navigate('/dashboard/doctor/add-test-request')}
+                  className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 flex items-center mx-auto"
+                >
+                  <Plus className="h-5 w-5 mr-2" />
+                  Create Your First Test Request
+                </button>
+              )}
             </div>
           ) : (
             <div className="overflow-x-auto">

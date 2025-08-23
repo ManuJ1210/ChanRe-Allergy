@@ -65,7 +65,7 @@ export default function CompletedRequests() {
         return;
       }
 
-      const response = await API.get(`/test-requests/${requestId}/download-report`, {
+      const response = await API.get(`/test-requests/download-report/${requestId}`, {
         responseType: 'blob', // This is crucial for binary data
         headers: {
           'Accept': 'application/pdf',
@@ -149,7 +149,7 @@ export default function CompletedRequests() {
         return;
       }
 
-      const response = await API.get(`/test-requests/${requestId}/download-report`, {
+      const response = await API.get(`/test-requests/download-report/${requestId}`, {
         responseType: 'blob',
         headers: {
           'Accept': 'application/pdf',

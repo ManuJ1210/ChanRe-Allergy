@@ -1,5 +1,5 @@
 import express from 'express';
-import { protect, ensureCenterIsolation } from '../middleware/authMiddleware.js';
+import { protect, ensureCenterIsolation, checkSuperAdmin } from '../middleware/authMiddleware.js';
 import { pdfAuth } from '../middleware/pdfAuthMiddleware.js';
 import upload from '../middleware/uploadMiddleware.js';
 import {
@@ -26,12 +26,15 @@ import {
   cancelTestRequest,
   deleteTestRequest,
   getTestRequestStats,
-  downloadTestReport
+  downloadTestReport,
+  getAllBillingData,
+  getBillingDataForCenter
 } from '../controllers/testRequestController.js';
 import {
   getBillingRequestsForCurrentReceptionist,
   generateBillForTestRequest,
-  markBillPaidForTestRequest
+  markBillPaidForTestRequest,
+  verifyPaymentAndApproveForLab
 } from '../controllers/testRequestController.js';
 
 const router = express.Router();
@@ -57,11 +60,6 @@ router.get('/doctor/completed', protect, ensureCenterIsolation, getCompletedTest
 // Get test requests for current lab staff (authenticated)
 router.get('/lab-staff', protect, ensureCenterIsolation, getTestRequestsForCurrentLabStaff);
 
-// Receptionist billing endpoints
-router.get('/billing/mine', protect, ensureCenterIsolation, getBillingRequestsForCurrentReceptionist);
-router.put('/:id/billing/generate', protect, ensureCenterIsolation, generateBillForTestRequest);
-router.put('/:id/billing/paid', protect, ensureCenterIsolation, markBillPaidForTestRequest);
-
 // Get test requests by doctor
 router.get('/doctor/:doctorId', protect, getTestRequestsByDoctor);
 
@@ -75,10 +73,18 @@ router.get('/lab-staff/:labStaffId', protect, getTestRequestsByLabStaff);
 router.get('/patient/:patientId', protect, getTestRequestsByPatient);
 
 // Download test report (PDF) - Use regular protect middleware instead of pdfAuth
-router.get('/:id/download-report', protect, downloadTestReport);
+router.get('/download-report/:id', protect, downloadTestReport);
 
 // Get test request by ID
 router.get('/:id', protect, getTestRequestById);
+
+// Receptionist billing endpoints (moved to end to avoid route conflicts)
+router.get('/billing/mine', protect, ensureCenterIsolation, getBillingRequestsForCurrentReceptionist);
+router.put('/:id/billing/generate', protect, ensureCenterIsolation, generateBillForTestRequest);
+router.put('/:id/billing/paid', protect, ensureCenterIsolation, markBillPaidForTestRequest);
+
+// Center admin payment verification endpoint
+router.put('/:id/billing/verify', protect, ensureCenterIsolation, verifyPaymentAndApproveForLab);
 
 // Create new test request
 router.post('/', protect, ensureCenterIsolation, createTestRequest);
@@ -112,5 +118,9 @@ router.put('/:id/cancel', protect, cancelTestRequest);
 
 // Delete test request
 router.delete('/:id', protect, deleteTestRequest);
+
+// ✅ NEW: Billing data endpoints for superadmin and center admin
+router.get('/billing/all', protect, checkSuperAdmin, getAllBillingData);
+router.get('/billing/center/:centerId', protect, ensureCenterIsolation, getBillingDataForCenter);
 
 export default router;

@@ -11,6 +11,7 @@ import ErrorBoundary from '../components/ErrorBoundary';
 
 // Superadmin Pages
 import SuperadminDashboard from '../pages/Superadmin/Dashboard';
+import SuperadminBilling from '../pages/Superadmin/Billing';
 import CentersList from '../pages/Superadmin/Centers/CentersList';
 import AddCenter from '../pages/Superadmin/Centers/AddCenter';
 import EditCenter from '../pages/Superadmin/Centers/EditCenter';
@@ -85,6 +86,7 @@ import LabRouteProtection from '../components/LabRouteProtection';
 
 // Center Admin Pages
 import CenterAdminDashboard from '../pages/CenterAdmin/Dashboard';
+import CenterAdminBilling from '../pages/CenterAdmin/Billing';
 import CenterProfile from '../pages/CenterAdmin/CenterProfile';
 import CenterAdminAddPatient from '../pages/CenterAdmin/patients/AddPatient';
 import CenterAdminPatientList from '../pages/CenterAdmin/patients/PatientList';
@@ -169,8 +171,9 @@ import DoctorPrescriptionList from '../pages/Doctor/patients/FollowUp/Prescripti
 import DoctorAddPrescription from '../pages/Doctor/patients/FollowUp/Prescription/AddPrescription';
 import DoctorViewPrescription from '../pages/Doctor/patients/FollowUp/Prescription/ViewPrescription';
 import TestRequests from '../pages/Doctor/TestRequests';
+import AddTestRequest from '../pages/Doctor/AddTestRequest';
 import CompletedReports from '../pages/Doctor/CompletedReports';
-import TestRequestDetails from '../pages/Doctor/TestRequestDetails';
+
 import DoctorViewHistory from '../pages/Doctor/ViewHistory';
 import Notifications from '../pages/Doctor/Notifications';
 import Feedback from '../pages/Doctor/Feedback';
@@ -328,6 +331,9 @@ export default function AppRoutes() {
         <Route path="superadmin/test-requests" element={<TestRequestsList />} />
         <Route path="superadmin/test-requests/:id" element={<SuperadminTestRequestDetails />} />
         
+        {/* Billing Routes */}
+        <Route path="superadmin/billing" element={<SuperadminBilling />} />
+        
         {/* Doctors Routes */}
         <Route path="superadmin/doctors/superadmindoctorlist" element={<SuperAdminDoctorList />} />
         <Route path="superadmin/doctors/addsuperadmindoctor" element={<AddSuperAdminDoctor />} />
@@ -405,6 +411,8 @@ export default function AppRoutes() {
         <Route path="centeradmin/test-requests" element={<ErrorBoundary><CenterAdminTestRequestsList /></ErrorBoundary>} />
         <Route path="centeradmin/test-requests/:id" element={<ErrorBoundary><CenterAdminTestRequestDetails /></ErrorBoundary>} />
 
+        {/* Center Admin Billing Routes */}
+        <Route path="centeradmin/billing" element={<ErrorBoundary><CenterAdminBilling /></ErrorBoundary>} />
         
         {/* Center Admin Followup Routes (lowercase) */}
         <Route path="centeradmin/patients/followup/:id" element={<FollowUp />} />
@@ -472,8 +480,9 @@ export default function AppRoutes() {
         <Route path="doctor/patients/view-history/:id" element={<DoctorViewHistory />} />
         
         {/* Doctor Test Request Management */}
-        <Route path="doctor/patients/add-test-request/:id" element={<TestRequests />} />
-        <Route path="doctor/patients/test-request/:id" element={<TestRequestDetails />} />
+        <Route path="doctor/patients/add-test-request/:id" element={<AddTestRequest />} />
+        <Route path="doctor/patients/test-request/:id" element={<TestRequests />} />
+        <Route path="doctor/add-test-request" element={<AddTestRequest />} />
         
         {/* Doctor Legacy Routes (for backward compatibility) */}
         <Route path="doctor/add-patient" element={<DoctorAddPatient />} />
@@ -485,7 +494,7 @@ export default function AppRoutes() {
         {/* Doctor Test Management */}
         <Route path="doctor/test-requests" element={<TestRequests />} />
         <Route path="doctor/completed-reports" element={<CompletedReports />} />
-        <Route path="doctor/test-request/:id" element={<TestRequestDetails />} />
+        <Route path="doctor/test-request/:id" element={<TestRequests />} />
         <Route path="doctor/ViewHistory/:patientId" element={<DoctorViewHistory />} />
         
         {/* Doctor Other Features */}

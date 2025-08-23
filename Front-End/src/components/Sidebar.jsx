@@ -18,6 +18,7 @@ import {
   FaClipboardList,
   FaUserPlus,
   FaPlus,
+  FaMoneyBillWave,
 } from 'react-icons/fa';
 
 export default function Sidebar(props) {
@@ -114,6 +115,12 @@ export default function Sidebar(props) {
                   { to: "/dashboard/superadmin/test-requests", label: "View All Requests" },
                 ]}
                 currentPath={location.pathname}
+              />
+              <SidebarLink
+                to="/dashboard/superadmin/billing"
+                label="Billing Management"
+                icon={<FaMoneyBillWave />}
+                isActive={isActive("/dashboard/superadmin/billing")}
               />
               <SidebarGroup
                 label="Follow Ups"
@@ -218,6 +225,12 @@ export default function Sidebar(props) {
                 label="Center Profile"
                 icon={<FaHospitalAlt />}
                 isActive={isActive("/dashboard/centeradmin/center-profile")}
+              />
+              <SidebarLink
+                to="/dashboard/centeradmin/billing"
+                label="Billing Management"
+                icon={<FaMoneyBillWave />}
+                isActive={isActive("/dashboard/centeradmin/billing")}
               />
 
             </>

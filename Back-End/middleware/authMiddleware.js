@@ -5,7 +5,7 @@ import SuperAdminDoctor from '../models/SuperAdminDoctor.js';
 import SuperAdminReceptionist from '../models/SuperAdminReceptionist.js';
 
 
-const protect = async (req, res, next) => {
+export const protect = async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -43,6 +43,17 @@ const protect = async (req, res, next) => {
       // Preserve the userType from the JWT token
       user.userType = decoded.userType;
       
+      // Debug logging for user object
+      console.log('🔍 Auth Middleware - User authenticated:', {
+        id: user._id,
+        role: user.role,
+        userType: user.userType,
+        centerId: user.centerId,
+        centerIdType: typeof user.centerId,
+        name: user.name,
+        email: user.email
+      });
+      
       req.user = user;
       next();
     } catch (error) {
@@ -54,7 +65,7 @@ const protect = async (req, res, next) => {
   }
 };
 
-const checkSuperAdmin = (req, res, next) => {
+export const checkSuperAdmin = (req, res, next) => {
   if (req.user && (req.user.role === 'superadmin' || req.user.isSuperAdminStaff === true)) {
     next();
   } else {
@@ -63,7 +74,7 @@ const checkSuperAdmin = (req, res, next) => {
 };
 
 // Check if user has access to center-specific data
-const checkCenterAccess = (req, res, next) => {
+export const checkCenterAccess = (req, res, next) => {
   if (req.user && req.user.role === 'superadmin') {
     return next();
   }
@@ -71,7 +82,7 @@ const checkCenterAccess = (req, res, next) => {
 };
 
 // Ensure center isolation for data access
-const ensureCenterIsolation = (req, res, next) => {
+export const ensureCenterIsolation = (req, res, next) => {
   // Debug logging
   console.log('🔍 Center Isolation Debug - User:', {
     id: req.user?._id,
@@ -96,7 +107,13 @@ const ensureCenterIsolation = (req, res, next) => {
   // Special handling for receptionists - allow them to work temporarily without centerId
   // Receptionists need to handle billing even if they don't have a centerId assigned yet
   if (req.user && req.user.role === 'receptionist') {
-    console.log('✅ Receptionist access granted');
+    console.log('✅ Receptionist access granted for user:', {
+      id: req.user._id,
+      role: req.user.role,
+      centerId: req.user.centerId,
+      centerIdType: typeof req.user.centerId,
+      note: 'Receptionist can access billing endpoints regardless of centerId'
+    });
     return next();
   }
   
@@ -120,7 +137,7 @@ const ensureCenterIsolation = (req, res, next) => {
   next();
 };
 
-export { protect, checkSuperAdmin, checkCenterAccess, ensureCenterIsolation };
+
  
 // Require specific roles
 export const ensureRole = (...roles) => (req, res, next) => {
@@ -165,3 +182,32 @@ export const ensureDoctorOrCenterAdmin = (req, res, next) => {
   console.log('❌ ensureDoctorOrCenterAdmin access denied for role:', req.user?.role);
   return res.status(403).json({ message: 'Only doctors and CenterAdmin can perform this action.' });
 };
+
+// Allow center admin, center receptionist, and center doctor to perform patient management actions
+export const ensureCenterStaffOrDoctor = (req, res, next) => {
+  console.log('🔍 ensureCenterStaffOrDoctor check:', {
+    userRole: req.user?.role,
+    userId: req.user?._id,
+    userName: req.user?.name,
+    userType: req.user?.userType,
+    centerId: req.user?.centerId
+  });
+  
+  // Allow center admin, center receptionist, and center doctor
+  if (req.user && (
+    req.user.role === 'centeradmin' || 
+    req.user.role === 'receptionist' || 
+    req.user.role === 'doctor'
+  )) {
+    console.log('✅ ensureCenterStaffOrDoctor access granted for role:', req.user.role);
+    return next();
+  }
+  
+  console.log('❌ ensureCenterStaffOrDoctor access denied for role:', req.user?.role);
+  return res.status(403).json({ 
+    message: 'Only center admin, center receptionist, and center doctor can perform this action.' 
+  });
+};
+
+
+

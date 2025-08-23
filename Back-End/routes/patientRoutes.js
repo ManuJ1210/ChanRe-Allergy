@@ -15,7 +15,7 @@ import {
   addSampleData,
   testEndpoint
 } from '../controllers/patientController.js';
-import { protect, ensureCenterIsolation, ensureDoctor, ensureDoctorOrReceptionist, ensureDoctorOrCenterAdmin } from '../middleware/authMiddleware.js';
+import { protect, ensureCenterIsolation, ensureDoctor, ensureDoctorOrReceptionist, ensureCenterStaffOrDoctor } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -24,27 +24,27 @@ router.use(protect);
 // Apply center isolation middleware to ensure data security
 router.use(ensureCenterIsolation);
 
-// Patient Routes - Doctors, receptionists, and CenterAdmin can create patients
-router.post('/', ensureDoctorOrCenterAdmin, addPatient);
+// Patient Routes - Center admin, center receptionist, and center doctor can create patients
+router.post('/', ensureCenterStaffOrDoctor, addPatient);
 router.get('/', getPatients);
 router.get('/receptionist/mine', getPatientsByReceptionist);
 router.get('/doctor/:doctorId', getPatientsByDoctor);
 router.get('/:id', getPatientById);
-// Doctors and CenterAdmin can update/delete patients
-router.put('/:id', ensureDoctorOrCenterAdmin, updatePatient);
-router.delete('/:id', ensureDoctorOrCenterAdmin, deletePatient);
+// Center admin, center receptionist, and center doctor can update/delete patients
+router.put('/:id', ensureCenterStaffOrDoctor, updatePatient);
+router.delete('/:id', ensureCenterStaffOrDoctor, deletePatient);
 
-// Test Routes for Patient - Doctors and CenterAdmin can add tests
-router.post('/:id/tests', ensureDoctorOrCenterAdmin, addTestToPatient);
+// Test Routes for Patient - Center admin, center receptionist, and center doctor can add tests
+router.post('/:id/tests', ensureCenterStaffOrDoctor, addTestToPatient);
 router.get('/:id/show-tests', getPatientAndTests);
 
-// Patient Data Routes - Doctors and CenterAdmin can access
-router.get('/:id/history', ensureDoctorOrCenterAdmin, getPatientHistory);
-router.get('/:id/medications', ensureDoctorOrCenterAdmin, getPatientMedications);
-router.get('/:id/follow-ups', ensureDoctorOrCenterAdmin, getPatientFollowUps);
+// Patient Data Routes - Center admin, center receptionist, and center doctor can access
+router.get('/:id/history', ensureCenterStaffOrDoctor, getPatientHistory);
+router.get('/:id/medications', ensureCenterStaffOrDoctor, getPatientMedications);
+router.get('/:id/follow-ups', ensureCenterStaffOrDoctor, getPatientFollowUps);
 
 // Temporary route for adding sample data (remove in production)
-router.post('/:id/add-sample-data', ensureDoctorOrCenterAdmin, addSampleData);
+router.post('/:id/add-sample-data', ensureCenterStaffOrDoctor, addSampleData);
 
 // Test endpoint (remove in production)
 router.get('/test', testEndpoint);

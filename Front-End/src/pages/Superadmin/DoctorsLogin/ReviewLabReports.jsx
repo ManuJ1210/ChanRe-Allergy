@@ -97,7 +97,7 @@ const ReviewLabReports = () => {
       let pdfUrl;
       
       // Use the correct endpoint for lab reports
-      pdfUrl = `http://localhost:5000/api/test-requests/${report._id}/download-report`;
+              pdfUrl = `http://localhost:5000/api/test-requests/download-report/${report._id}`;
       console.log('🔍 Using correct PDF endpoint:', pdfUrl);
       
       console.log('🔍 Fetching PDF from:', pdfUrl);
@@ -216,7 +216,7 @@ const ReviewLabReports = () => {
       }
       
       // Use the correct endpoint for lab reports
-      const downloadUrl = `http://localhost:5000/api/test-requests/${report._id}/download-report`;
+              const downloadUrl = `http://localhost:5000/api/test-requests/download-report/${report._id}`;
       
       const response = await fetch(downloadUrl, {
         method: 'GET',
