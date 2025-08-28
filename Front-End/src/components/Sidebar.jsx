@@ -262,7 +262,7 @@ export default function Sidebar(props) {
             </>
           )}
 
-          {role === 'doctor' && (
+          {role === 'doctor' && !userInfo?.isSuperAdminStaff && (
             <>
               <SidebarLink
                 to="/dashboard/doctor/dashboard"

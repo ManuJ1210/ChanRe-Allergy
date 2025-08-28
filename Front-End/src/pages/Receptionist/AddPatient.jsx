@@ -119,12 +119,8 @@ export default function AddPatient() {
     setDoctorLoading(true);
     setDoctorError("");
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch('http://localhost:5000/api/doctors', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await response.json();
-      setDoctors(data);
+      const response = await API.get('/doctors');
+      setDoctors(response.data);
     } catch (err) {
       setDoctorError("Failed to load doctors");
     } finally {

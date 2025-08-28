@@ -51,7 +51,8 @@ export const protect = async (req, res, next) => {
         centerId: user.centerId,
         centerIdType: typeof user.centerId,
         name: user.name,
-        email: user.email
+        email: user.email,
+        username: user.username
       });
       
       req.user = user;
@@ -89,7 +90,9 @@ export const ensureCenterIsolation = (req, res, next) => {
     role: req.user?.role,
     userType: req.user?.userType,
     centerId: req.user?.centerId,
-    name: req.user?.name
+    centerIdType: typeof req.user?.centerId,
+    name: req.user?.name,
+    username: req.user?.username
   });
   
   // Superadmin can access all data
@@ -110,6 +113,7 @@ export const ensureCenterIsolation = (req, res, next) => {
     console.log('✅ Receptionist access granted for user:', {
       id: req.user._id,
       role: req.user.role,
+      username: req.user.username,
       centerId: req.user.centerId,
       centerIdType: typeof req.user.centerId,
       note: 'Receptionist can access billing endpoints regardless of centerId'
@@ -133,7 +137,16 @@ export const ensureCenterIsolation = (req, res, next) => {
     });
   }
   
-  console.log('✅ Center isolation passed');
+  // Normalize centerId to always be a string for consistent comparison
+  if (req.user.centerId && typeof req.user.centerId === 'object' && req.user.centerId._id) {
+    req.user.centerId = req.user.centerId._id;
+    console.log('✅ Normalized centerId from object to string:', req.user.centerId);
+  }
+  
+  console.log('✅ Center isolation passed - Final centerId:', {
+    centerId: req.user.centerId,
+    centerIdType: typeof req.user.centerId
+  });
   next();
 };
 
@@ -171,6 +184,7 @@ export const ensureDoctorOrCenterAdmin = (req, res, next) => {
     userRole: req.user?.role,
     userId: req.user?._id,
     userName: req.user?.name,
+    username: req.user?.username,
     userType: req.user?.userType
   });
   
@@ -189,6 +203,7 @@ export const ensureCenterStaffOrDoctor = (req, res, next) => {
     userRole: req.user?.role,
     userId: req.user?._id,
     userName: req.user?.name,
+    username: req.user?.username,
     userType: req.user?.userType,
     centerId: req.user?.centerId
   });

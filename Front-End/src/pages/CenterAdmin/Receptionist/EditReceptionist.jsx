@@ -5,6 +5,7 @@ import { updateReceptionistThunk } from '../../../features/centerAdmin/centerAdm
 import { resetCenterAdminState } from '../../../features/centerAdmin/centerAdminSlice';
 import { Eye, EyeOff, UserCheck, ArrowLeft, Save } from 'lucide-react';
 import { toast } from 'react-toastify';
+import API from '../../../services/api';
 
 const EditReceptionist = () => {
   const { id } = useParams();
@@ -51,12 +52,8 @@ const EditReceptionist = () => {
 
   const fetchReceptionist = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/receptionists/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await response.json();
-      setFormData({ ...data, password: '' });
+      const response = await API.get(`/receptionists/${id}`);
+      setFormData({ ...response.data, password: '' });
     } catch (err) {
       console.error('Failed to fetch receptionist:', err);
       toast.error('Failed to fetch receptionist details', {

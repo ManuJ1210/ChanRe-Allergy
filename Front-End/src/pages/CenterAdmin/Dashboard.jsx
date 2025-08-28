@@ -11,6 +11,7 @@ import {
   Plus,
   Eye
 } from 'lucide-react';
+import API from '../../services/api';
 
 export default function CenterAdminDashboard() {
   const navigate = useNavigate();
@@ -27,20 +28,8 @@ export default function CenterAdminDashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/dashboard/centeradmin/stats', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          setStats(data);
-        } else {
-          console.error('Failed to fetch stats');
-        }
+        const response = await API.get('/dashboard/centeradmin/stats');
+        setStats(response.data);
       } catch (error) {
         console.error('Error fetching stats:', error);
       } finally {
