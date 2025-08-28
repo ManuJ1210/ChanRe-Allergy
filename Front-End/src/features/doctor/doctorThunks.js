@@ -233,13 +233,51 @@ export const addPatientMedication = createAsyncThunk(
   async (medicationData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await API.post('/medications/add', medicationData, {
+      const response = await API.post('/medications', medicationData, {
           headers: { Authorization: `Bearer ${token}` },
       });
       toast.success('Medication added successfully!');
       return response.data;
     } catch (error) {
       const errorMsg = error.response?.data?.message || 'Failed to add medication';
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
+
+// ✅ Submit patient tests (for doctors)
+export const submitPatientTests = createAsyncThunk(
+  'doctor/submitPatientTests',
+  async ({ patientId, testData }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      // Since backend expects one test at a time, create multiple test entries
+      const testResults = [];
+      const currentDate = new Date().toISOString();
+      
+      // Convert testData object to individual test submissions
+      for (const [testName, result] of Object.entries(testData)) {
+        if (result && result.trim() !== '') {
+          const testEntry = {
+            testType: testName,
+            testDate: currentDate,
+            results: result,
+            status: 'completed'
+          };
+          
+          const response = await API.post(`/patients/${patientId}/tests`, testEntry, {
+          headers: { Authorization: `Bearer ${token}` },
+          });
+          testResults.push(response.data);
+        }
+      }
+      
+      toast.success(`${testResults.length} test report(s) submitted successfully!`);
+      return testResults;
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || 'Failed to submit test reports';
       toast.error(errorMsg);
       return rejectWithValue(errorMsg);
     }
@@ -418,12 +456,41 @@ export const createTestRequest = createAsyncThunk(
   async (testRequestData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await API.post('/test-requests', testRequestData, {
+      
+      // Get current user info to extract doctorId
+      const userDataString = localStorage.getItem('user');
+      let doctorId = null;
+      
+      if (userDataString) {
+        try {
+          const userData = JSON.parse(userDataString);
+          doctorId = userData._id || userData.id;
+          console.log('🔍 createTestRequest: Current user ID:', doctorId);
+        } catch (parseError) {
+          console.error('❌ createTestRequest: Failed to parse user data:', parseError);
+        }
+      }
+      
+      if (!doctorId) {
+        console.error('❌ createTestRequest: No doctor ID found in localStorage');
+        return rejectWithValue('Doctor authentication failed. Please log in again.');
+      }
+      
+      // Add doctorId to the request data
+      const requestDataWithDoctor = {
+        ...testRequestData,
+        doctorId: doctorId
+      };
+      
+      console.log('📤 createTestRequest: Sending data:', requestDataWithDoctor);
+      
+      const response = await API.post('/test-requests', requestDataWithDoctor, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success('Test request created successfully!');
       return response.data;
     } catch (error) {
+      console.error('❌ createTestRequest: Error:', error);
       return rejectWithValue(error.response?.data?.message || 'Failed to create test request');
     }
   }
@@ -681,17 +748,89 @@ export const fetchPrescriptions = createAsyncThunk(
   'doctor/fetchPrescriptions',
   async (patientId, { rejectWithValue }) => {
     try {
+      // Validate patient ID
+      if (!patientId || patientId === 'undefined' || patientId === 'null') {
+        console.warn('❌ fetchPrescriptions: Invalid patient ID:', patientId);
+        return [];
+      }
+
       const id = typeof patientId === 'object' && patientId !== null
         ? patientId._id || patientId.id || String(patientId)
         : String(patientId);
       
+      console.log('🔍 fetchPrescriptions: Fetching prescriptions for patient ID:', id);
+      
       const token = localStorage.getItem('token');
-      const response = await API.get(`/prescriptions?patientId=${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      
+      // Try the new RESTful endpoint first, fallback to query parameter
+      let response;
+      try {
+        console.log('🔍 fetchPrescriptions: Trying RESTful endpoint first');
+        response = await API.get(`/prescriptions/patient/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch (restError) {
+        console.log('🔍 fetchPrescriptions: RESTful endpoint failed, trying query parameter');
+        response = await API.get(`/prescriptions?patientId=${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+      
+      console.log('✅ fetchPrescriptions: Success, found', response.data?.length || 0, 'prescriptions');
       return response.data;
     } catch (error) {
+      console.error('❌ fetchPrescriptions: Error:', error);
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch prescriptions');
+    }
+  }
+);
+
+// ✅ Fetch single prescription by ID (for doctors)
+export const fetchSinglePrescription = createAsyncThunk(
+  'doctor/fetchSinglePrescription',
+  async (prescriptionId, { rejectWithValue }) => {
+    try {
+      // Validate prescription ID
+      if (!prescriptionId || prescriptionId === 'undefined' || prescriptionId === 'null') {
+        console.warn('❌ fetchSinglePrescription: Invalid prescription ID:', prescriptionId);
+        return rejectWithValue('Invalid prescription ID');
+      }
+
+      console.log('🔍 fetchSinglePrescription: Fetching prescription with ID:', prescriptionId);
+      
+      const token = localStorage.getItem('token');
+      
+      // Try the RESTful endpoint first, fallback to patient endpoint if it looks like a patient ID
+      let response;
+      try {
+        response = await API.get(`/prescriptions/${prescriptionId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch (notFoundError) {
+        // If we get a 404, it might be because we're getting a patient ID instead of prescription ID
+        // Try to fetch prescriptions by patient ID and return the latest one
+        console.log('🔍 fetchSinglePrescription: Prescription not found, trying as patient ID');
+        try {
+          const patientPrescriptions = await API.get(`/prescriptions/patient/${prescriptionId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (patientPrescriptions.data && patientPrescriptions.data.length > 0) {
+            // Return the most recent prescription
+            const sortedPrescriptions = patientPrescriptions.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            return sortedPrescriptions[0];
+          } else {
+            return rejectWithValue('No prescriptions found for this patient');
+          }
+        } catch (fallbackError) {
+          return rejectWithValue('Prescription not found');
+        }
+      }
+      
+      console.log('✅ fetchSinglePrescription: Success');
+      return response.data;
+    } catch (error) {
+      console.error('❌ fetchSinglePrescription: Error:', error);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch prescription');
     }
   }
 );

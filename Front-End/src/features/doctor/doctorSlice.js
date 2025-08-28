@@ -25,10 +25,14 @@ import {
   addAtopicDermatitis,
   addAllergicBronchitis,
   addGPE,
+  addPatientHistory,
+  addPatientMedication,
+  submitPatientTests,
   fetchAllergicBronchitis,
   fetchAtopicDermatitis,
   fetchGPE,
   fetchPrescriptions,
+  fetchSinglePrescription,
   fetchDoctorNotifications,
   markNotificationAsRead,
   markAllNotificationsAsRead,
@@ -61,11 +65,17 @@ const initialState = {
   atopicDermatitis: [],
   gpe: [],
   prescriptions: [],
+  singlePrescription: null,
   addAllergicRhinitisSuccess: false,
   addAllergicConjunctivitisSuccess: false,
   addAtopicDermatitisSuccess: false,
   addAllergicBronchitisSuccess: false,
   addGPESuccess: false,
+  addHistorySuccess: false,
+  addMedicationSuccess: false,
+  testSubmitting: false,
+  testSubmitSuccess: false,
+  testSubmitError: null,
   patientsLoading: false,
   patientDetailsLoading: false,
   testRequestsLoading: false,
@@ -609,6 +619,72 @@ const doctorSlice = createSlice({
       .addCase(fetchPrescriptions.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Failed to fetch prescriptions';
+      })
+
+      // Fetch single prescription
+      .addCase(fetchSinglePrescription.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSinglePrescription.fulfilled, (state, action) => {
+        state.loading = false;
+        state.singlePrescription = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchSinglePrescription.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to fetch prescription';
+      })
+
+      // Add patient history
+      .addCase(addPatientHistory.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.addHistorySuccess = false;
+      })
+      .addCase(addPatientHistory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.addHistorySuccess = true;
+        state.error = null;
+      })
+      .addCase(addPatientHistory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to add patient history';
+        state.addHistorySuccess = false;
+      })
+
+      // Add patient medication
+      .addCase(addPatientMedication.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.addMedicationSuccess = false;
+      })
+      .addCase(addPatientMedication.fulfilled, (state, action) => {
+        state.loading = false;
+        state.addMedicationSuccess = true;
+        state.error = null;
+      })
+      .addCase(addPatientMedication.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to add medication';
+        state.addMedicationSuccess = false;
+      })
+
+      // Submit patient tests
+      .addCase(submitPatientTests.pending, (state) => {
+        state.testSubmitting = true;
+        state.testSubmitError = null;
+        state.testSubmitSuccess = false;
+      })
+      .addCase(submitPatientTests.fulfilled, (state, action) => {
+        state.testSubmitting = false;
+        state.testSubmitSuccess = true;
+        state.testSubmitError = null;
+      })
+      .addCase(submitPatientTests.rejected, (state, action) => {
+        state.testSubmitting = false;
+        state.testSubmitError = action.payload || 'Failed to submit test reports';
+        state.testSubmitSuccess = false;
       });
   },
 });

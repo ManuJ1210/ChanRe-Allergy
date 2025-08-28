@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { addPatientMedication } from "../../../../features/centerAdmin/centerAdminThunks";
-import { resetCenterAdminState } from "../../../../features/centerAdmin/centerAdminSlice";
+import { addPatientMedication } from "../../../../features/doctor/doctorThunks";
+import { resetDoctorState } from "../../../../features/doctor/doctorSlice";
 import { Pill, Save, ArrowLeft, CheckCircle } from "lucide-react";
 
 export default function AddMedications() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error, addMedicationSuccess } = useSelector((state) => state.centerAdmin);
+  const { loading, error, addMedicationSuccess } = useSelector((state) => state.doctor);
   
   const [formData, setFormData] = useState({
     drugName: "",
@@ -25,11 +25,11 @@ export default function AddMedications() {
   React.useEffect(() => {
     if (addMedicationSuccess) {
       setTimeout(() => {
-        dispatch(resetCenterAdminState());
-        navigate('/dashboard/CenterAdmin/patients/PatientList');
+        dispatch(resetDoctorState());
+        navigate(`/dashboard/Doctor/patients/profile/ViewProfile/${id}`);
       }, 1500);
     }
-  }, [addMedicationSuccess, dispatch, navigate]);
+  }, [addMedicationSuccess, dispatch, navigate, id]);
 
   React.useEffect(() => {
     setFormData(prev => ({ ...prev, patientId: id }));
