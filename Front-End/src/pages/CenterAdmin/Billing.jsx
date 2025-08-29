@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import API from '../../services/api';
 import { 
   Search, 
   Filter, 
@@ -96,8 +97,6 @@ const CenterAdminBilling = () => {
     try {
       setLoading(true);
       
-      console.log('🚀 Fetching real billing data for center admin');
-      
       // Safety check: ensure localUser exists
       if (!localUser) {
         console.error('localUser is not available');
@@ -111,11 +110,8 @@ const CenterAdminBilling = () => {
       
       // If centerId is an object, extract the _id property
       if (centerId && typeof centerId === 'object' && centerId._id) {
-        console.log('CenterId is an object, extracting _id:', centerId);
         centerId = centerId._id;
       }
-      
-      console.log('Final centerId for API call:', centerId);
       
       if (!centerId) {
         toast.error('Center ID not found. Please check your user profile.');
@@ -123,36 +119,64 @@ const CenterAdminBilling = () => {
         return;
       }
       
-      const response = await fetch(`/api/test-requests/billing/center/${centerId}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await API.get(`/test-requests/billing/center/${centerId}`);
       
-      if (response.ok) {
-        const data = await response.json();
-        console.log('✅ Real billing data received:', data.billingRequests?.length || 0, 'items');
-        
-        // Ensure we have an array of billing requests
-        if (data && Array.isArray(data.billingRequests)) {
-          setBillingData(data.billingRequests);
-        } else if (data && Array.isArray(data)) {
-          // If the response is directly an array
-          setBillingData(data);
-        } else {
-          console.warn('Unexpected billing data format:', data);
-          setBillingData([]);
-        }
+      // Ensure we have an array of billing requests
+      if (response.data && Array.isArray(response.data.billingRequests)) {
+        setBillingData(response.data.billingRequests);
+      } else if (response.data && Array.isArray(response.data)) {
+        // If the response is directly an array
+        setBillingData(response.data);
       } else {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('API Error:', errorData);
-        toast.error(`Failed to fetch billing data: ${errorData.message || 'Unknown error'}`);
+        console.warn('Unexpected billing data format:', response.data);
         setBillingData([]);
       }
     } catch (error) {
       console.error('Error fetching real billing data:', error);
-      toast.error('Error fetching billing data');
+      
+      // Handle different types of errors
+      if (error.response) {
+        // Server responded with error status
+        const status = error.response.status;
+        const errorData = error.response.data;
+        console.error('API Error Response:', { status, data: errorData });
+        
+        if (status === 404) {
+          toast.error('Billing endpoint not found. Please check server configuration.');
+        } else if (status === 401) {
+          // More specific 401 error handling
+          const hasToken = !!localStorage.getItem('token');
+          const hasUser = !!localStorage.getItem('user');
+          
+          if (!hasToken && !hasUser) {
+            toast.error('You are not logged in. Please login to access billing data.');
+          } else if (!hasToken) {
+            toast.error('Authentication token missing. Please login again.');
+          } else {
+            toast.error('Authentication failed. Your session may have expired. Please login again.');
+          }
+          
+          // Optionally redirect to login after a delay
+          setTimeout(() => {
+            if (window.location.pathname !== '/login') {
+              window.location.href = '/login';
+            }
+          }, 3000);
+        } else if (status === 403) {
+          toast.error('Access denied. You do not have permission to view billing data.');
+        } else {
+          toast.error(`Failed to fetch billing data: ${errorData?.message || `Server error (${status})`}`);
+        }
+      } else if (error.request) {
+        // Network error or no response from server
+        console.error('Network Error:', error.request);
+        toast.error('Unable to connect to server. Please check your internet connection.');
+      } else {
+        // Other error (like parsing error)
+        console.error('Other Error:', error.message);
+        toast.error(`Error fetching billing data: ${error.message}`);
+      }
+      
       setBillingData([]);
     } finally {
       setLoading(false);
@@ -215,37 +239,26 @@ const CenterAdminBilling = () => {
       }
       
       // Use the correct endpoint to get center by admin ID
-      const response = await fetch(`/api/centers/by-admin/${user._id}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await API.get(`/centers/by-admin/${user._id}`);
       
-      if (response.ok) {
-        const centerData = await response.json();
-        console.log('Center info fetched:', centerData);
-        if (centerData._id) {
-          // Update the user object with centerId
-          const updatedUser = { ...user, centerId: centerData._id };
-          console.log('Updated user with centerId:', updatedUser);
-          
-          // Update the local state temporarily
-          // In a real app, you'd dispatch an action to update the Redux store
-          setLocalUser(updatedUser);
-          
-          // Now fetch billing data with the centerId
-          // We need to wait for the state update to take effect
-          setTimeout(() => {
-            fetchBillingData();
-          }, 100);
-        } else {
-          console.error('Center data missing _id:', centerData);
-          toast.error('Invalid center data received');
-        }
+      console.log('Center info fetched:', response.data);
+      if (response.data._id) {
+        // Update the user object with centerId
+        const updatedUser = { ...user, centerId: response.data._id };
+        console.log('Updated user with centerId:', updatedUser);
+        
+        // Update the local state temporarily
+        // In a real app, you'd dispatch an action to update the Redux store
+        setLocalUser(updatedUser);
+        
+        // Now fetch billing data with the centerId
+        // We need to wait for the state update to take effect
+        setTimeout(() => {
+          fetchBillingData();
+        }, 100);
       } else {
-        console.error('Failed to fetch center info');
-        toast.error('Failed to fetch center information');
+        console.error('Center data missing _id:', response.data);
+        toast.error('Invalid center data received');
       }
     } catch (error) {
       console.error('Error fetching center info:', error);
@@ -401,28 +414,21 @@ const CenterAdminBilling = () => {
     if (!selectedBillingForVerification) return;
 
     try {
-      const response = await fetch(`/api/test-requests/${selectedBillingForVerification._id}/billing/verify`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          verificationNotes: verificationNotes
-        })
+      const response = await API.put(`/test-requests/${selectedBillingForVerification._id}/billing/verify`, {
+        verificationNotes: verificationNotes
       });
 
-      if (response.ok) {
-        toast.success('Payment verified successfully');
-        setShowVerificationModal(false);
-        fetchBillingData(); // Refresh data
-      } else {
-        const errorData = await response.json();
-        toast.error(errorData.message || 'Failed to verify payment');
-      }
+      toast.success('Payment verified successfully');
+      setShowVerificationModal(false);
+      fetchBillingData(); // Refresh data
     } catch (error) {
       console.error('Error verifying payment:', error);
-      toast.error('Error verifying payment');
+      
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Error verifying payment');
+      }
     }
   };
 
