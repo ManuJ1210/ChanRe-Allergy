@@ -7,22 +7,12 @@ export const isDevelopment = import.meta.env.DEV ||
 
 export const isProduction = !isDevelopment;
 
-// Debug current environment
-console.log('Environment Debug:', {
-  isDevelopment,
-  isProduction,
-  hostname: window.location.hostname,
-  origin: window.location.origin,
-  VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
-  DEV: import.meta.env.DEV
-});
-
 // Force correct API base URL logic
 const getApiBaseUrl = () => {
   // Check hostname for development first
   const hostname = window.location.hostname;
   if (hostname === 'localhost' || hostname === '127.0.0.1' || import.meta.env.DEV) {
-    return 'http://localhost:5000/api';
+    return import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
   }
   
   // For any other domain (production), ALWAYS use relative path
@@ -44,25 +34,16 @@ export const API_CONFIG = {
   },
 };
 
-// Debug API configuration
-console.log('API Configuration:', {
-  BASE_URL: API_CONFIG.BASE_URL,
-  calculatedBaseURL: isDevelopment ? 'http://localhost:5000/api' : '/api',
-  envVariable: import.meta.env.VITE_API_BASE_URL,
-  isDevelopment,
-  hostname: window.location.hostname
-});
-
 // Server Configuration
 export const SERVER_CONFIG = {
   // Frontend URL
   FRONTEND_URL: import.meta.env.VITE_FRONTEND_URL || (isDevelopment 
-    ? 'http://localhost:5173'
+    ? import.meta.env.VITE_DEV_FRONTEND_URL || 'http://localhost:5173'
     : window.location.origin),
     
   // Backend URL  
   BACKEND_URL: import.meta.env.VITE_BACKEND_URL || (isDevelopment
-    ? 'http://localhost:5000'
+    ? import.meta.env.VITE_DEV_BACKEND_URL || 'http://localhost:5000'
     : window.location.origin),
 };
 
@@ -80,9 +61,7 @@ export const DEBUG_CONFIG = {
 
 // Helper function to log only in development
 export const debugLog = (...args) => {
-  if (DEBUG_CONFIG.ENABLE_LOGGING) {
-    console.log(...args);
-  }
+  // Disabled logging for cleaner console
 };
 
 // Helper function to get the full API URL

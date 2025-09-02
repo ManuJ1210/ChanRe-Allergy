@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_CONFIG } from '../config/environment.js';
+import { API_CONFIG } from '../config/environment';
 
 const API = axios.create({
   baseURL: API_CONFIG.BASE_URL,
@@ -37,6 +37,8 @@ API.interceptors.request.use((config) => {
     if (!token && storedToken) {
       token = storedToken;
     }
+    
+
     
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

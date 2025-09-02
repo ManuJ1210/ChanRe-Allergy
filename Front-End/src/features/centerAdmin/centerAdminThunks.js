@@ -289,9 +289,12 @@ export const addFollowUp = createAsyncThunk(
     try {
       const res = await API.post('/followups', data);
       dispatch(setAddFollowUpSuccess(true));
+      toast.success('Follow-up scheduled successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to add follow up'));
+      const errorMsg = error.response?.data?.message || 'Failed to add follow up';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -399,11 +402,18 @@ export const fetchHistory = createAsyncThunk(
   'centerAdmin/fetchHistory',
   async (patientId, { dispatch }) => {
     try {
+      if (!patientId) {
+        dispatch(setHistory([]));
+        return [];
+      }
+      dispatch(setHistoryLoading(true));
       const res = await API.get(`/history/${patientId}`);
       dispatch(setHistory(res.data));
+      dispatch(setHistoryLoading(false));
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to fetch history'));
+      dispatch(setHistoryError(error.response?.data?.message || 'Failed to fetch history'));
+      dispatch(setHistoryLoading(false));
       throw error;
     }
   }
@@ -599,9 +609,12 @@ export const addAllergicRhinitis = createAsyncThunk(
     try {
       const res = await API.post('/allergic-rhinitis', data);
       dispatch(setAddAllergicRhinitisSuccess(true));
+      toast.success('Allergic Rhinitis record added successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to add allergic rhinitis'));
+      const errorMsg = error.response?.data?.message || 'Failed to add allergic rhinitis';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -612,20 +625,14 @@ export const fetchAllergicRhinitis = createAsyncThunk(
   'centerAdmin/fetchAllergicRhinitis',
   async (patientId, { dispatch }) => {
     try {
-      console.log('fetchAllergicRhinitis called with patientId:', patientId);
       
       if (!patientId) {
-        console.log('No patientId provided, returning empty array');
         return [];
       }
       
-      console.log('Making API call to:', `/allergic-rhinitis?patientId=${patientId}`);
       const res = await API.get(`/allergic-rhinitis?patientId=${patientId}`);
-      console.log('API response:', res.data);
       return res.data;
     } catch (error) {
-      console.error('fetchAllergicRhinitis error:', error);
-      console.error('Error response:', error.response);
       dispatch(setError(error.response?.data?.message || 'Failed to fetch allergic rhinitis'));
       throw error;
     }
@@ -688,9 +695,12 @@ export const addAllergicConjunctivitis = createAsyncThunk(
     try {
       const res = await API.post('/allergic-conjunctivitis', data);
       dispatch(setAddAllergicConjunctivitisSuccess(true));
+      toast.success('Allergic Conjunctivitis record added successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to add allergic conjunctivitis'));
+      const errorMsg = error.response?.data?.message || 'Failed to add allergic conjunctivitis';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -703,9 +713,12 @@ export const addAtopicDermatitis = createAsyncThunk(
     try {
       const res = await API.post('/atopic-dermatitis', data);
       dispatch(setAddAtopicDermatitisSuccess(true));
+      toast.success('Atopic Dermatitis record added successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to add atopic dermatitis'));
+      const errorMsg = error.response?.data?.message || 'Failed to add atopic dermatitis';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -718,9 +731,12 @@ export const addAllergicBronchitis = createAsyncThunk(
     try {
       const res = await API.post('/allergic-bronchitis', data);
       dispatch(setAddAllergicBronchitisSuccess(true));
+      toast.success('Allergic Bronchitis record added successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to add allergic bronchitis'));
+      const errorMsg = error.response?.data?.message || 'Failed to add allergic bronchitis';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -764,9 +780,12 @@ export const addGPE = createAsyncThunk(
     try {
       const res = await API.post('/gpe', data);
       dispatch(setAddGPESuccess(true));
+      toast.success('GPE record added successfully!');
       return res.data;
     } catch (error) {
-      dispatch(setError(error.response?.data?.message || 'Failed to add GPE'));
+      const errorMsg = error.response?.data?.message || 'Failed to add GPE';
+      dispatch(setError(errorMsg));
+      toast.error(errorMsg);
       throw error;
     }
   }
@@ -830,12 +849,9 @@ export const fetchSinglePrescription = createAsyncThunk(
     try {
       // Validate prescription ID
       if (!prescriptionId || prescriptionId === 'undefined' || prescriptionId === 'null') {
-        console.warn('❌ fetchSinglePrescription: Invalid prescription ID:', prescriptionId);
         return rejectWithValue('Invalid prescription ID');
       }
 
-      console.log('🔍 fetchSinglePrescription: Fetching prescription with ID:', prescriptionId);
-      
       // Try the RESTful endpoint first, fallback to patient endpoint if it looks like a patient ID
       let response;
       try {
@@ -843,7 +859,6 @@ export const fetchSinglePrescription = createAsyncThunk(
       } catch (notFoundError) {
         // If we get a 404, it might be because we're getting a patient ID instead of prescription ID
         // Try to fetch prescriptions by patient ID and return the latest one
-        console.log('🔍 fetchSinglePrescription: Prescription not found, trying as patient ID');
         try {
           const patientPrescriptions = await API.get(`/prescriptions/patient/${prescriptionId}`);
           if (patientPrescriptions.data && patientPrescriptions.data.length > 0) {
@@ -857,11 +872,8 @@ export const fetchSinglePrescription = createAsyncThunk(
           return rejectWithValue('Prescription not found');
         }
       }
-      
-      console.log('✅ fetchSinglePrescription: Success');
       return response.data;
     } catch (error) {
-      console.error('❌ fetchSinglePrescription: Error:', error);
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch prescription');
     }
   }
@@ -963,67 +975,76 @@ export const deletePatient = createAsyncThunk(
 );
 
 // ===============================
-// BILLING APIS
+// BILLING VERIFICATION APIS (Center Admin)
 // ===============================
 
-// Fetch billing data for center
-export const fetchCenterAdminBillingData = createAsyncThunk(
-  'centerAdmin/fetchBillingData',
-  async (centerId, { rejectWithValue }) => {
+// Fetch billing requests that need verification (Center Admin receives them from Receptionist)
+export const fetchCenterAdminBillingRequests = createAsyncThunk(
+  'centerAdmin/fetchBillingRequests',
+  async (_, { rejectWithValue }) => {
     try {
-      const res = await API.get(`/test-requests/billing/center/${centerId}`);
+      // Fetch test requests with billing that need center admin verification
+      const res = await API.get('/test-requests/billing/pending-verification');
       return res.data;
     } catch (error) {
-      console.error('Center billing data fetch error:', error.response?.data || error.message);
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch billing data');
+      console.error('Center admin billing requests fetch error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch billing requests for verification');
     }
   }
 );
 
-// Generate bill for a test request (center admin)
-export const generateCenterBill = createAsyncThunk(
-  'centerAdmin/generateBill',
-  async ({ requestId, billData }, { rejectWithValue }) => {
-    try {
-      const res = await API.put(`/test-requests/${requestId}/billing/generate`, billData);
-      toast.success('Bill generated successfully!');
-      return res.data;
-    } catch (error) {
-      const errorMsg = error.response?.data?.message || 'Failed to generate bill';
-      toast.error(errorMsg);
-      return rejectWithValue(errorMsg);
-    }
-  }
-);
-
-// Mark bill as paid (center admin)
-export const markCenterBillPaid = createAsyncThunk(
-  'centerAdmin/markBillPaid',
-  async ({ requestId, paymentData }, { rejectWithValue }) => {
-    try {
-      const res = await API.put(`/test-requests/${requestId}/billing/paid`, paymentData);
-      toast.success('Bill marked as paid!');
-      return res.data;
-    } catch (error) {
-      const errorMsg = error.response?.data?.message || 'Failed to mark bill as paid';
-      toast.error(errorMsg);
-      return rejectWithValue(errorMsg);
-    }
-  }
-);
-
-// Verify payment (center admin)
-export const verifyCenterPayment = createAsyncThunk(
+// Verify and approve payment (Center Admin verifies what Receptionist marked as paid)
+export const verifyCenterAdminPayment = createAsyncThunk(
   'centerAdmin/verifyPayment',
-  async ({ requestId, verificationNotes }, { rejectWithValue }) => {
+  async ({ requestId, verificationData }, { rejectWithValue }) => {
     try {
-      const res = await API.put(`/test-requests/${requestId}/billing/verify`, { verificationNotes });
+      const res = await API.put(`/billing/test-requests/${requestId}/mark-paid`, {
+        paymentMethod: verificationData.paymentMethod || 'cash',
+        transactionId: verificationData.transactionId || 'verified_by_admin',
+        receiptUpload: verificationData.receiptUpload,
+        verificationNotes: verificationData.verificationNotes
+      });
+      
       toast.success('Payment verified successfully!');
       return res.data;
     } catch (error) {
       const errorMsg = error.response?.data?.message || 'Failed to verify payment';
       toast.error(errorMsg);
       return rejectWithValue(errorMsg);
+    }
+  }
+);
+
+// Reject payment verification (if Center Admin finds issues)
+export const rejectCenterAdminPayment = createAsyncThunk(
+  'centerAdmin/rejectPayment', 
+  async ({ requestId, rejectionReason }, { rejectWithValue }) => {
+    try {
+      const res = await API.put(`/test-requests/${requestId}/billing/reject`, {
+        rejectionReason,
+        rejectedBy: 'center_admin',
+        rejectionDate: new Date().toISOString()
+      });
+      toast.success('Payment verification rejected!');
+      return res.data;
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || 'Failed to reject payment';
+      toast.error(errorMsg);
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
+
+// Fetch billing summary/stats for center admin dashboard
+export const fetchCenterAdminBillingSummary = createAsyncThunk(
+  'centerAdmin/fetchBillingSummary',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await API.get('/test-requests/billing/center-admin-summary');
+      return res.data;
+    } catch (error) {
+      console.error('Center admin billing summary fetch error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch billing summary');
     }
   }
 );

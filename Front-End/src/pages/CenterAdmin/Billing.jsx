@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import API from '../../services/api';
+import { API_CONFIG, SERVER_CONFIG } from '../../config/environment';
 import { 
   Search, 
   Filter, 
@@ -16,7 +17,8 @@ import {
   Clock,
   AlertCircle,
   Shield,
-  TrendingUp
+  TrendingUp,
+  Receipt
 } from 'lucide-react';
 
 const CenterAdminBilling = () => {
@@ -34,6 +36,8 @@ const CenterAdminBilling = () => {
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [verificationNotes, setVerificationNotes] = useState('');
   const [selectedBillingForVerification, setSelectedBillingForVerification] = useState(null);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
+  const [selectedReceipt, setSelectedReceipt] = useState(null);
   const [localUser, setLocalUser] = useState(null);
 
   // Helper function to safely get user information for debugging
@@ -97,6 +101,14 @@ const CenterAdminBilling = () => {
     try {
       setLoading(true);
       
+      // Safety check: ensure user is authenticated
+      if (!user || !localUser) {
+        console.log('User not authenticated, skipping billing data fetch');
+        setBillingData([]);
+        setLoading(false);
+        return;
+      }
+      
       // Safety check: ensure localUser exists
       if (!localUser) {
         console.error('localUser is not available');
@@ -119,7 +131,7 @@ const CenterAdminBilling = () => {
         return;
       }
       
-      const response = await API.get(`/test-requests/billing/center/${centerId}`);
+             const response = await API.get(`/billing/center`);
       
       // Ensure we have an array of billing requests
       if (response.data && Array.isArray(response.data.billingRequests)) {
@@ -186,6 +198,13 @@ const CenterAdminBilling = () => {
   useEffect(() => {
     console.log('User effect triggered:', user);
     
+    // Clear local user state when user is null (logout)
+    if (!user) {
+      setLocalUser(null);
+      setBillingData([]);
+      return;
+    }
+    
     try {
       // Initialize localUser with the Redux user
       if (user && !localUser) {
@@ -226,11 +245,23 @@ const CenterAdminBilling = () => {
       console.error('Error in user effect:', error);
       toast.error('Error processing user data');
     }
+
+    // Cleanup function to handle component unmounting
+    return () => {
+      // This will run when the component unmounts or when dependencies change
+      console.log('Cleaning up user effect');
+    };
   }, [user, localUser, localUser?.centerId, localUser?.center?.id]);
 
   // Fetch center information if centerId is not available
   const fetchCenterInfo = async () => {
     try {
+      // Safety check: ensure user is authenticated
+      if (!user) {
+        console.log('User not authenticated, skipping center info fetch');
+        return;
+      }
+      
       // Safety check: ensure user has an _id
       if (!user?._id) {
         console.error('User missing _id:', user);
@@ -409,12 +440,62 @@ const CenterAdminBilling = () => {
     setShowVerificationModal(true);
   };
 
+  // View receipt
+  const viewReceipt = (receiptFileName) => {
+    setSelectedReceipt(receiptFileName);
+    setShowReceiptModal(true);
+  };
+
+  // ✅ NEW: Download invoice PDF
+  const handleDownloadInvoice = async (testRequestId) => {
+    try {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/billing/test-requests/${testRequestId}/invoice`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate invoice');
+      }
+      
+      // Get the filename from the response headers
+      const contentDisposition = response.headers.get('content-disposition');
+      const filename = contentDisposition ? 
+        contentDisposition.split('filename=')[1]?.replace(/"/g, '') : 
+        `invoice-${testRequestId}.pdf`;
+      
+      // Create blob and download
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('Invoice downloaded successfully!');
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+      toast.error('Failed to download invoice');
+    }
+  };
+
+  // Close receipt modal
+  const closeReceiptModal = () => {
+    setShowReceiptModal(false);
+    setSelectedReceipt(null);
+  };
+
   // Verify payment
   const verifyPayment = async () => {
     if (!selectedBillingForVerification) return;
 
     try {
-      const response = await API.put(`/test-requests/${selectedBillingForVerification._id}/billing/verify`, {
+              const response = await API.put(`/billing/test-requests/${selectedBillingForVerification._id}/mark-paid`, {
         verificationNotes: verificationNotes
       });
 
@@ -476,6 +557,31 @@ const CenterAdminBilling = () => {
   };
 
   const totals = calculateTotals();
+
+  // Safety check: if user is not authenticated, show loading or redirect
+  if (!user) {
+    return (
+      <div className="p-6 bg-gray-50 min-h-screen">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <Clock className="h-5 w-5 text-blue-400" />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-blue-800">
+                  Authentication Required
+                </h3>
+                <div className="mt-2 text-sm text-blue-700">
+                  <p>Please log in to access the billing management system.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Safety check: if there's a critical error, show a simple error message
   if (!localUser && user) {
@@ -774,18 +880,31 @@ const CenterAdminBilling = () => {
                               
                               {/* Verify Payment Button - Only show for payment_received status */}
                               {item.billing?.status === 'payment_received' && (
-                                <button
-                                  onClick={() => openVerificationModal(item)}
-                                  className="text-green-600 hover:text-green-900 p-1"
-                                  title="Verify Payment"
-                                >
-                                  <Shield className="w-4 h-4" />
-                                </button>
+                                <>
+                                  <button
+                                    onClick={() => openVerificationModal(item)}
+                                    className="text-green-600 hover:text-green-900 p-1"
+                                    title="Verify Payment"
+                                  >
+                                    <Shield className="w-4 h-4" />
+                                  </button>
+                                  
+                                  {/* Receipt Indicator - Show if receipt is uploaded */}
+                                  {item.billing?.receiptUpload && (
+                                    <button
+                                      onClick={() => viewReceipt(item.billing.receiptUpload)}
+                                      className="text-blue-600 hover:text-blue-900 p-1"
+                                      title="View Receipt"
+                                    >
+                                      <Receipt className="w-4 h-4" />
+                                    </button>
+                                  )}
+                                </>
                               )}
                               
                               {item.billing?.invoiceNumber && (
                                 <button
-                                  onClick={() => downloadInvoice(item._id)}
+                                  onClick={() => handleDownloadInvoice(item._id)}
                                   className="text-purple-600 hover:text-purple-900 p-1"
                                   title="Download Invoice"
                                 >
@@ -1007,11 +1126,60 @@ const CenterAdminBilling = () => {
                           <p>Patient: <strong>{selectedBillingForVerification.patientName}</strong></p>
                           <p>Test Type: <strong>{selectedBillingForVerification.testType}</strong></p>
                           <p>Amount: <strong>₹{selectedBillingForVerification.billing?.amount?.toLocaleString()}</strong></p>
+                          <p>Payment Method: <strong>{selectedBillingForVerification.billing?.paymentMethod || 'Not specified'}</strong></p>
                           <p>Transaction ID: <strong>{selectedBillingForVerification.billing?.transactionId}</strong></p>
+                          <p>Payment Date: <strong>{selectedBillingForVerification.billing?.paidAt ? new Date(selectedBillingForVerification.billing.paidAt).toLocaleDateString() : 'Not specified'}</strong></p>
                         </div>
                       </div>
                     </div>
                   </div>
+
+                  {/* Receipt Upload Section */}
+                  {selectedBillingForVerification.billing?.receiptUpload && (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <Receipt className="h-5 w-5 text-green-400" />
+                        </div>
+                        <div className="ml-3">
+                          <h3 className="text-sm font-medium text-green-800">
+                            Receipt Uploaded by Receptionist
+                          </h3>
+                          <div className="mt-2 text-sm text-green-700">
+                            <p>Receipt File: <strong>{selectedBillingForVerification.billing.receiptUpload}</strong></p>
+                            <div className="mt-2">
+                              <button
+                                onClick={() => viewReceipt(selectedBillingForVerification.billing.receiptUpload)}
+                                className="inline-flex items-center px-3 py-1.5 bg-green-100 text-green-700 rounded-md text-xs font-medium hover:bg-green-200 transition-colors duration-200"
+                              >
+                                <Eye className="h-3 w-3 mr-1" />
+                                View Receipt
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Payment Notes Section */}
+                  {selectedBillingForVerification.billing?.notes && (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <FileText className="h-5 w-5 text-gray-400" />
+                        </div>
+                        <div className="ml-3">
+                          <h3 className="text-sm font-medium text-gray-800">
+                            Payment Notes from Receptionist
+                          </h3>
+                          <div className="mt-2 text-sm text-gray-700">
+                            <p className="whitespace-pre-wrap">{selectedBillingForVerification.billing.notes}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <div>
                     <label htmlFor="verificationNotes" className="block text-sm font-medium text-gray-700 mb-2">
@@ -1062,6 +1230,149 @@ const CenterAdminBilling = () => {
                   >
                     <Shield className="w-4 h-4 mr-2" />
                     Verify Payment
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Receipt Viewing Modal */}
+        {showReceiptModal && selectedReceipt && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+              <div className="mt-3">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-medium text-gray-900">Receipt Details</h3>
+                  <button
+                    onClick={closeReceiptModal}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <span className="sr-only">Close</span>
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex">
+                      <div className="flex-shrink-0">
+                        <Receipt className="h-5 w-5 text-blue-400" />
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-blue-800">
+                          Receipt Information
+                        </h3>
+                        <div className="mt-2 text-sm text-blue-700">
+                          <p>File Name: <strong>{selectedReceipt}</strong></p>
+                          <p>Uploaded by: <strong>Receptionist</strong></p>
+                          <p>Upload Date: <strong>{selectedBillingForVerification?.billing?.paidAt ? new Date(selectedBillingForVerification.billing.paidAt).toLocaleDateString() : 'Not specified'}</strong></p>
+                          <p>File Type: <strong>{selectedReceipt?.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp)$/) ? 'Image' : 'PDF'}</strong></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <div className="text-center">
+                      <h4 className="text-sm font-medium text-gray-800 mb-4">Receipt Preview</h4>
+                      
+                      {/* Receipt Display */}
+                      <div className="mb-4">
+                        {selectedReceipt && (
+                          <div className="max-w-md mx-auto">
+                            {/* Check if it's an image file */}
+                            {selectedReceipt.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp)$/) ? (
+                              <div className="border border-gray-300 rounded-lg overflow-hidden">
+                                                <img 
+                  src={`${SERVER_CONFIG.BACKEND_URL}/uploads/receipts/${selectedReceipt}`}
+                  alt="Receipt"
+                  className="w-full h-auto max-h-96 object-contain"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'block';
+                  }}
+                />
+                                <div className="hidden p-4 text-center text-gray-500">
+                                  <Receipt className="h-12 w-12 mx-auto mb-2" />
+                                  <p>Image could not be loaded</p>
+                                </div>
+                              </div>
+                            ) : (
+                              /* For PDF files, show a PDF icon with download option */
+                              <div className="border border-gray-300 rounded-lg p-6 bg-white">
+                                <Receipt className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                                <p className="text-sm text-gray-600 mb-4">
+                                  PDF Receipt: <strong>{selectedReceipt}</strong>
+                                </p>
+                                <button
+                                  onClick={() => {
+                                    const url = `${SERVER_CONFIG.BACKEND_URL}/uploads/receipts/${selectedReceipt}`;
+                                    window.open(url, '_blank');
+                                  }}
+                                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                                >
+                                  <Download className="h-4 w-4 mr-2" />
+                                  View PDF
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Download Button */}
+                      <div className="space-y-2">
+                        <button
+                          onClick={() => {
+                            const url = `${SERVER_CONFIG.BACKEND_URL}/uploads/receipts/${selectedReceipt}`;
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.download = selectedReceipt;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }}
+                          className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+                        >
+                          <Download className="h-4 w-4 mr-2" />
+                          Download Receipt
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div className="flex">
+                      <div className="flex-shrink-0">
+                        <AlertCircle className="h-5 w-5 text-yellow-400" />
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-yellow-800">
+                          Receipt Verification
+                        </h3>
+                        <div className="mt-2 text-sm text-yellow-700">
+                          <p>Please verify that:</p>
+                          <ul className="list-disc list-inside mt-1">
+                            <li>The receipt matches the payment amount</li>
+                            <li>The receipt is from the correct date</li>
+                            <li>The receipt shows the correct payment method</li>
+                            <li>The receipt is clear and legible</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex justify-end space-x-3">
+                  <button
+                    onClick={closeReceiptModal}
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                  >
+                    Close
                   </button>
                 </div>
               </div>
